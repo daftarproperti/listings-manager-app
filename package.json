@@ -15,6 +15,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:production": "tsc && vite build --mode production",
     "serve": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
