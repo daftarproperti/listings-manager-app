@@ -1,4 +1,4 @@
-# app.yaml
+app.yaml
 dist
 dist-ssr
 *.local

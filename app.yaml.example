@@ -1,7 +1,8 @@
-service: tele-app
-runtime: python39
-
+runtime: nodejs18
 handlers:
-- url: /
-  static_files: index.html
-  upload: index.html
+  - url: /(.*\..+)$
+    static_files: dist/\1
+    upload: dist/.*\..+$
+  - url: /.*
+    static_files: dist/index.html
+    upload: dist/index.html
