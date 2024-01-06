@@ -11,7 +11,7 @@ const verifyTelegramWebAppData = () => {
   if (tele?.initData) {
     const initData = new URLSearchParams(tele.initData)
     const hash = initData.get('hash')
-    let dataToCheck: string[] = []
+    const dataToCheck: string[] = []
 
     initData.sort()
     initData.forEach(
@@ -32,14 +32,14 @@ const verifyTelegramWebAppData = () => {
 }
 
 const isOpenedFromTelegram =
-  verifyTelegramWebAppData() || import.meta.env.VITE_ENV === "development"
+  verifyTelegramWebAppData() || import.meta.env.VITE_ENV === 'development'
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: (
       <>
-        <Header title='Koleksi Saya' />
+        <Header title="Koleksi Saya" />
         <List />,
       </>
     ),
@@ -48,7 +48,7 @@ const router = createBrowserRouter([
     path: '/detail/:id',
     element: (
       <>
-        <Header title='Rincian Listing' />
+        <Header title="Rincian Listing" />
         <Detail />,
       </>
     ),
@@ -57,11 +57,11 @@ const router = createBrowserRouter([
 
 function App() {
   return isOpenedFromTelegram ? (
-    <main className="bg-white text-gray-950 shadow-xl min-h-screen max-w-md mx-auto">
+    <main className="mx-auto min-h-screen max-w-md bg-white text-gray-950 shadow-xl">
       <RouterProvider router={router} />
     </main>
   ) : (
-    <main className="min-h-screen w-full flex justify-center items-center">
+    <main className="flex min-h-screen w-full items-center justify-center">
       <h1>Authentication Error</h1>
     </main>
   )
