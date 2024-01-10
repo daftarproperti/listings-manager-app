@@ -1,35 +1,10 @@
-import CryptoJS from 'crypto-js'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import Header from 'components/Header'
-
-import List from 'components/screen/List'
-import Detail from 'components/screen/Detail'
-
-const tele = window.Telegram?.WebApp
-const verifyTelegramWebAppData = () => {
-  if (tele?.initData) {
-    const initData = new URLSearchParams(tele.initData)
-    const hash = initData.get('hash')
-    const dataToCheck: string[] = []
-
-    initData.sort()
-    initData.forEach(
-      (val, key) => key !== 'hash' && dataToCheck.push(`${key}=${val}`),
-    )
-
-    const secret = CryptoJS.HmacSHA256(
-      import.meta.env.VITE_TELEGRAM_BOT_TOKEN,
-      'WebAppData',
-    )
-    const _hash = CryptoJS.HmacSHA256(dataToCheck.join('\n'), secret).toString(
-      CryptoJS.enc.Hex,
-    )
-
-    return _hash === hash
-  }
-  return false
-}
+import DetailPage from 'pages/detail'
+import List from 'pages/list'
+import { verifyTelegramWebAppData } from 'utils'
 
 const isOpenedFromTelegram =
   verifyTelegramWebAppData() || import.meta.env.VITE_ENV === 'development'
@@ -40,7 +15,7 @@ const router = createBrowserRouter([
     element: (
       <>
         <Header title="Koleksi Saya" />
-        <List />,
+        <List />
       </>
     ),
   },
@@ -49,16 +24,20 @@ const router = createBrowserRouter([
     element: (
       <>
         <Header title="Rincian Listing" />
-        <Detail />,
+        <DetailPage />
       </>
     ),
   },
 ])
 
+const queryClient = new QueryClient()
+
 function App() {
   return isOpenedFromTelegram ? (
-    <main className="mx-auto min-h-screen max-w-md bg-white text-gray-950 shadow-xl">
-      <RouterProvider router={router} />
+    <main className="mx-auto min-h-screen max-w-md bg-white font-inter text-gray-950 shadow-xl">
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
     </main>
   ) : (
     <main className="flex min-h-screen w-full items-center justify-center">
