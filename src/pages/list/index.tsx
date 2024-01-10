@@ -22,7 +22,7 @@ const Chip = ({ icon, text }: { icon?: ReactNode; text: string }) => {
   )
 }
 
-export default function List() {
+const ListPage = () => {
   const navigate = useNavigate()
 
   const { data, isLoading } = useGetPropertyList()
@@ -78,7 +78,7 @@ export default function List() {
           </ul>
         )}
       </div>
-      <div className="fixed bottom-0 w-full max-w-md bg-white px-4 py-2">
+      <div className="fixed bottom-0 w-full max-w-lg bg-white px-4 py-2">
         <button className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-500 px-20 py-3">
           <PlusIcon className="w-[18px] text-white" />
           <div className="whitespace-nowrap text-base leading-6 text-white">
@@ -89,3 +89,5 @@ export default function List() {
     </div>
   )
 }
+
+export default ListPage

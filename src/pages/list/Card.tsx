@@ -1,11 +1,8 @@
 import { Property } from 'api/types'
-import BathIconSVG from 'assets/icons/BathIconSVG'
-import BedIconSVG from 'assets/icons/BedIconSVG'
-import HouseIconSVG from 'assets/icons/HouseIconSVG'
-import LotIconSVG from 'assets/icons/LotIconSVG'
+import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
 import { classNames, formatCurrencyToIDRText } from 'utils'
 
-export default function Card({ data }: { data: Property }) {
+const Card = ({ data }: { data: Property }) => {
   return (
     <div className="flex flex-col rounded-lg border">
       <div className="flex justify-between gap-0">
@@ -79,9 +76,11 @@ export default function Card({ data }: { data: Property }) {
           </div>
           <div className="flex grow basis-[0%] flex-col self-stretch">
             <div className="text-sm font-semibold leading-5 text-slate-800">
-              Yayuk Timoho
+              {data.contacts?.name}
             </div>
-            <div className="text-sm leading-5 text-slate-500">08223226588</div>
+            <div className="text-sm leading-5 text-slate-500">
+              {data.contacts?.phoneNumber}
+            </div>
           </div>
         </div>
         <button
@@ -94,3 +93,5 @@ export default function Card({ data }: { data: Property }) {
     </div>
   )
 }
+
+export default Card

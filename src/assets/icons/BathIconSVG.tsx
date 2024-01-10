@@ -1,4 +1,4 @@
-export default function BathIconSVG({ className }: { className?: string }) {
+export const BathIconSVG = ({ className }: { className?: string }) => {
   return (
     <svg
       width="16"

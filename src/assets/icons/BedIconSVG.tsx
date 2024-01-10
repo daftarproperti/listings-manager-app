@@ -1,4 +1,4 @@
-export default function BedIconSVG({ className }: { className?: string }) {
+export const BedIconSVG = ({ className }: { className?: string }) => {
   return (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
       <path

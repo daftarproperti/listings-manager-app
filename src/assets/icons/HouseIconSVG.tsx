@@ -1,4 +1,4 @@
-export default function HouseIconSVG({ className }: { className?: string }) {
+export const HouseIconSVG = ({ className }: { className?: string }) => {
   return (
     <svg
       width="18"

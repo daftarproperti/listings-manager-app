@@ -1,4 +1,4 @@
-export default function LotIconSVG({ className }: { className?: string }) {
+export const LotIconSVG = ({ className }: { className?: string }) => {
   return (
     <svg
       width="14"
