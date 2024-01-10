@@ -31,7 +31,7 @@ export default function List() {
 
   return (
     <div className="relative w-full">
-      <div className="p-4">
+      <div className="p-4 pb-20">
         <div className="relative mb-4">
           <MagnifyingGlassIcon className="absolute left-2 top-[50%] h-4 w-4 -translate-y-[50%] text-slate-400" />
           <input
