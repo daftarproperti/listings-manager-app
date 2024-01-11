@@ -6,7 +6,7 @@ axios.defaults.headers.common['X-INIT-DATA'] =
   import.meta.env.VITE_X_INIT_DATA || tele?.initData
 
 axios.interceptors.response.use(null, (error: AxiosError) => {
-  if (error.response?.status === 403) {
-    window.location.href = '/error'
-  }
+  window.location.href = `/error?message=${JSON.stringify(
+    error.response?.data,
+  )}`
 })
