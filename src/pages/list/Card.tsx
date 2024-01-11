@@ -6,18 +6,19 @@ const Card = ({ data }: { data: Property }) => {
   return (
     <div className="flex flex-col rounded-lg border">
       <div className="flex justify-between gap-0">
-        {data.contacts?.profilePictureURL && (
+        {/* Image URL param is not available yet */}
+        {/* {data.pictureURL && (
           <div className="relative flex w-1/2 flex-col overflow-hidden p-2">
             <img
               loading="lazy"
-              src={data.contacts?.profilePictureURL}
+              src={data.pictureURL}
               className="absolute inset-0 h-full w-full rounded-tl-lg object-cover object-center"
             />
             <span className="relative w-fit justify-center rounded-xl border-2 border-solid border-sky-500 bg-indigo-900 px-1.5 py-0.5 text-xs leading-4 text-indigo-50 shadow-sm">
               PRIVATE
             </span>
           </div>
-        )}
+        )} */}
         <div className="flex flex-col px-3 py-0.5">
           <div className="text-xs leading-4 text-slate-500">{data.title}</div>
           <div className="mt-2 flex flex-col">
