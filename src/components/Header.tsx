@@ -1,7 +1,7 @@
 import { ArrowLeftIcon } from '@heroicons/react/24/solid'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-export default function Header({ title = 'Judul Halaman' }) {
+const Header = ({ title = 'Judul Halaman' }) => {
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -17,3 +17,5 @@ export default function Header({ title = 'Judul Halaman' }) {
     </header>
   )
 }
+
+export default Header
