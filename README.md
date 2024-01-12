@@ -17,9 +17,9 @@ yarn dev
 
 Please install and turn on [eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) extension, or if you prefer turning it off, run
 ```
-yarn lint
+yarn lint --fix
 ```
-Before committing, to ensure all writings are within the lint standard.
+And fix all warnings / errors before committing to ensure all writings are within the lint standard.
 
 ### Build
 
