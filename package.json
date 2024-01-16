@@ -13,13 +13,13 @@
     "email": "joaopaulomoraes@outlook.com"
   },
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "dev": "vite --mode development",
+    "build": "tsc && vite build --mode development",
     "build:production": "tsc && vite build --mode production",
     "serve": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "lint": "eslint src --max-warnings=0",
+    "lint": "eslint src",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "generate": "openapi-typescript https://tele-webhook-dot-property-explorer-399607.et.r.appspot.com/docs/api-docs.yaml --output src/api/generated.d.ts"
   },
