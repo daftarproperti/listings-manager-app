@@ -15,6 +15,8 @@ export interface paths {
   "/api/tele-app/properties/{id}": {
     /** Get property by id */
     get: operations["show"];
+    /** Update property */
+    post: operations["update"];
   };
 }
 
@@ -22,6 +24,48 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    UpdatePropertyRequest: {
+      /** @example Rumah dijual di daerah pasteur */
+      title?: string;
+      /** @example Jl. Pendidikan No. 1 */
+      address?: string;
+      /** @example Rumah bagus */
+      description?: string;
+      /** @example 100000 */
+      price?: number;
+      /** @example 1000 */
+      lotSize?: number;
+      /** @example 2000 */
+      buildingSize?: number;
+      /** @example 4 */
+      carCount?: number;
+      /** @example 3 */
+      bedroomCount?: number;
+      /** @example 2 */
+      bathroomCount?: number;
+      /** @example 2 */
+      floorCount?: number;
+      /** @example Utara */
+      facing?: string;
+      /** @example SHM */
+      ownership?: string;
+      /** @example Bandung */
+      city?: string;
+      pictureUrls?: string[];
+      coordinate?: {
+        latitude?: number;
+        longitude?: number;
+      };
+      contacts?: {
+        name?: string;
+        profilePictureURL?: string;
+        phoneNumber?: string;
+        sourceURL?: string;
+        provider?: string;
+      };
+      /** @example false */
+      isPrivate?: boolean;
+    };
     Property: {
       id?: string;
       title?: string;
@@ -37,6 +81,7 @@ export interface components {
       facing?: string;
       ownership?: string;
       city?: string;
+      pictureUrls?: string[];
       coordinate?: {
         latitude?: number;
         longitude?: number;
@@ -48,6 +93,8 @@ export interface components {
         sourceURL?: string;
         provider?: string;
       };
+      userCanEdit?: boolean;
+      isPrivate?: boolean;
     };
   };
   responses: never;
@@ -85,6 +132,37 @@ export interface operations {
       path: {
         /** @description Property Id */
         id: string;
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Property"];
+        };
+      };
+      /** @description Property not found */
+      404: {
+        content: {
+          "application/json": {
+            /** @example Property not found */
+            error?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Update property */
+  update: {
+    parameters: {
+      path: {
+        /** @description Property Id */
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["UpdatePropertyRequest"];
       };
     };
     responses: {

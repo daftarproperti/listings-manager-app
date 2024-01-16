@@ -1,26 +1,16 @@
-import { ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
 import {
   AdjustmentsHorizontalIcon,
   Bars3BottomLeftIcon,
   MagnifyingGlassIcon,
   PlusIcon,
 } from '@heroicons/react/24/solid'
+import { useNavigate } from 'react-router-dom'
 
-import Card from './Card'
 import { useGetPropertyList } from 'api/queries'
+import BottomStickyButton from 'components/button/BottomStickyButton'
+import Chip from 'components/Chip'
+import Card from './Card'
 import { Property } from 'api/types'
-
-const Chip = ({ icon, text }: { icon?: ReactNode; text: string }) => {
-  return (
-    <button className="group flex items-center justify-center gap-1 rounded-lg border border-solid border-primary-500 bg-white px-3.5 py-2 text-white transition-all hover:bg-primary-500">
-      {icon}
-      <div className="grow self-stretch whitespace-nowrap text-sm leading-5 text-primary-500 group-hover:text-white">
-        {text}
-      </div>
-    </button>
-  )
-}
 
 const ListPage = () => {
   const navigate = useNavigate()
@@ -45,18 +35,20 @@ const ListPage = () => {
         <div className="mb-4">
           <div className="flex flex-row gap-2">
             <Chip
+              to=""
               icon={
                 <AdjustmentsHorizontalIcon className="w-5 overflow-hidden text-primary-500 group-hover:text-white" />
               }
               text="Filter"
             />
             <Chip
+              to=""
               icon={
                 <Bars3BottomLeftIcon className="w-5 overflow-hidden text-primary-500 group-hover:text-white" />
               }
               text="Urutkan"
             />
-            <Chip text="Private" />
+            <Chip to="" text="Private" />
           </div>
         </div>
         {isLoading && (
@@ -78,14 +70,12 @@ const ListPage = () => {
           </ul>
         )}
       </div>
-      <div className="fixed bottom-0 w-full max-w-lg bg-white px-4 py-2">
-        <button className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-500 px-20 py-3">
-          <PlusIcon className="w-[18px] text-white" />
-          <div className="whitespace-nowrap text-base leading-6 text-white">
-            Tambah listing baru
-          </div>
-        </button>
-      </div>
+      <BottomStickyButton>
+        <PlusIcon className="w-[18px] text-white" />
+        <div className="whitespace-nowrap text-base leading-6 text-white">
+          Tambah listing baru
+        </div>
+      </BottomStickyButton>
     </div>
   )
 }
