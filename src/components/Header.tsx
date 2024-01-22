@@ -6,7 +6,7 @@ const Header = ({ title = 'Judul Halaman' }) => {
   const navigate = useNavigate()
 
   return (
-    <header className="flex h-14 w-full flex-row items-center space-x-3 bg-primary-50 px-4">
+    <header className="flex h-14 w-full flex-row items-center space-x-3 border-b border-slate-300 bg-primary-50 px-4">
       {location.pathname !== '/' && (
         <ArrowLeftIcon
           className="h-4 w-4 cursor-pointer"
