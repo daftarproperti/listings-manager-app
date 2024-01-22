@@ -20,6 +20,9 @@ export default {
         'primary-900': '#144194',
         'primary-950': '#11295A',
       },
+      maxHeight: {
+        46: '186px',
+      },
     },
   },
   plugins: [],

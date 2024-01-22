@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useQuery } from '@tanstack/react-query'
 
-import { PropertyListRes } from './types'
+import { PropertyListRes, PropertyDetailRes } from './types'
 
 export const useGetPropertyList = () =>
   useQuery<PropertyListRes>({
@@ -13,10 +13,9 @@ export const useGetPropertyList = () =>
   })
 
 export const useGetPropertyDetail = ({ id }: { id: string }) =>
-  useQuery<PropertyListRes>({
+  useQuery<PropertyDetailRes>({
     queryKey: ['useGetPropertyDetail'],
-    queryFn: async () => {
-      return (await axios.get(`/properties/${id}`)).data
-    },
+    queryFn: async () => (await axios.get(`/properties/${id}`)).data,
     retry: false,
+    staleTime: 0,
   })

@@ -1,0 +1,15 @@
+.swiper-pagination-horizontal{
+    width: 100% !important;
+    height: 12px;
+}
+.swiper-pagination-bullet {
+    @apply bg-gray-300; 
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin: 0 4px;
+}
+.swiper-pagination-bullet-active {
+    @apply bg-white;
+}
