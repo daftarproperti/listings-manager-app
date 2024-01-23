@@ -1,14 +1,26 @@
 import { clsx } from 'clsx'
-
+import { useEffect } from 'react'
 import { useGetPropertyDetail } from 'api/queries'
 import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
+import { formatCurrencyToIDRText } from 'utils'
+import { useNavigate, useLocation } from 'react-router-dom'
 import RenderDescription from 'pages/detail/Description'
 import SwiperSlider from 'pages/detail/SwiperSlider'
-import { formatCurrencyToIDRText } from 'utils'
 import ShareButton from './ShareButton'
 
 function Detail({ id }: { id: string }) {
-  const { data, isFetching } = useGetPropertyDetail({ id })
+  const { data, isFetching, refetch } = useGetPropertyDetail({ id })
+  const navigate = useNavigate()
+  const navigateToEditForm = (id: string) => {
+    navigate(`/edit/${id}`)
+  }
+  const location = useLocation()
+  const updateSuccess = location.state?.updateSuccess
+  useEffect(() => {
+    if (updateSuccess) {
+      refetch()
+    }
+  }, [updateSuccess, refetch])
 
   if (isFetching) {
     return (
@@ -29,9 +41,16 @@ function Detail({ id }: { id: string }) {
           data?.pictureUrls?.length === undefined && 'pt-4',
         )}
       >
-        <span className="relative w-fit justify-center rounded-xl border-2 border-solid border-sky-500 bg-indigo-900 px-1.5 py-0.5 text-xs leading-4 text-indigo-50 shadow-sm">
-          PRIVATE
-        </span>
+        {updateSuccess && (
+          <div className="mb-4 rounded-lg bg-primary-50 p-4 text-sm text-green-800">
+            Data berhasil diubah!
+          </div>
+        )}
+        {data?.isPrivate && (
+          <span className="relative w-fit justify-center rounded-xl border-2 border-solid border-sky-500 bg-indigo-900 px-1.5 py-0.5 text-xs leading-4 text-indigo-50 shadow-sm">
+            PRIVATE
+          </span>
+        )}
         <h1 className="pt-2 text-lg font-semibold leading-7 text-slate-500">
           {data?.title}
         </h1>
@@ -99,9 +118,14 @@ function Detail({ id }: { id: string }) {
         </button>
       </div>
       <div className="flex items-stretch gap-4 bg-sky-50 px-4 py-2">
-        <button className="grow items-stretch justify-center whitespace-nowrap rounded-lg border border-solid border-[color:var(--Blue-Ribbon-500,#2A91FF)] bg-white px-11 py-2.5 text-center text-sm leading-5 text-blue-500">
-          Perbaharui
-        </button>
+        {data?.userCanEdit && (
+          <button
+            onClick={() => navigateToEditForm(id)}
+            className="inline-block w-1/2 grow items-stretch justify-center whitespace-nowrap rounded-lg border border-solid border-[color:var(--Blue-Ribbon-500,#2A91FF)] bg-white px-11 py-2.5 text-center text-sm leading-5 text-blue-500"
+          >
+            Perbaharui
+          </button>
+        )}
         <ShareButton
           url="/detail/{id}"
           title={data?.title || 'Default Title'}

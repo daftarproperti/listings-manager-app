@@ -26,7 +26,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({ url, title }) => {
   return (
     <button
       onClick={handleShare}
-      className="grow items-stretch justify-center whitespace-nowrap rounded-lg bg-blue-500 px-14 py-2.5 text-center text-sm leading-5 text-white"
+      className="inline-block w-1/2 grow items-stretch justify-center whitespace-nowrap rounded-lg bg-blue-500 px-3 py-2.5 text-center text-sm leading-5 text-white"
     >
       Bagikan
     </button>

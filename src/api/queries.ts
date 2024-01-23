@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation } from '@tanstack/react-query'
 
-import { PropertyListRes, PropertyDetailRes } from './types'
+import { PropertyListRes, PropertyDetailRes, UpdatePropertyRes } from './types'
 
 export const useGetPropertyList = () =>
   useQuery<PropertyListRes>({
@@ -19,3 +19,17 @@ export const useGetPropertyDetail = ({ id }: { id: string }) =>
     retry: false,
     staleTime: 0,
   })
+
+interface UpdatePropertyParams {
+  propertyId: string
+  updateData: FormData
+}
+export const useUpdateProperty = () => {
+  const mutation = useMutation<UpdatePropertyRes, Error, UpdatePropertyParams>({
+    mutationFn: async ({ propertyId, updateData }) => {
+      const response = await axios.post(`/properties/${propertyId}`, updateData)
+      return response.data
+    },
+  })
+  return mutation
+}

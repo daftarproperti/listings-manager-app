@@ -17,6 +17,8 @@ export interface paths {
     get: operations["show"];
     /** Update property */
     post: operations["update"];
+    /** Delete property */
+    delete: operations["delete"];
   };
 }
 
@@ -45,6 +47,8 @@ export interface components {
       bathroomCount?: number;
       /** @example 2 */
       floorCount?: number;
+      /** @example 2200 */
+      electricPower?: number;
       /** @example Utara */
       facing?: string;
       /** @example SHM */
@@ -78,6 +82,7 @@ export interface components {
       bedroomCount?: number;
       bathroomCount?: number;
       floorCount?: number;
+      electricPower?: number;
       facing?: string;
       ownership?: string;
       city?: string;
@@ -115,6 +120,36 @@ export interface operations {
    * @description Returns list of property
    */
   index: {
+    parameters: {
+      query?: {
+        /** @description If set to true, it will only return user's collection */
+        collection?: boolean;
+        /** @description Minimum price */
+        "price[min]"?: number;
+        /** @description Maximum price */
+        "price[max]"?: number;
+        /** @description Property type */
+        type?: "house" | "apartment" | "land";
+        /** @description Bedroom count */
+        bedroom_count?: number;
+        /** @description Bathroom count */
+        bathroom_count?: number;
+        /** @description Minimum lot size */
+        "lot_size[min]"?: number;
+        /** @description Maximum lot size */
+        "lot_size[max]"?: number;
+        /** @description Minimum building size */
+        "building_size[min]"?: number;
+        /** @description Maximum building size */
+        "building_size[max]"?: number;
+        /** @description Ownership */
+        ownership?: "shm" | "hgb" | "girik" | "lainnya";
+        /** @description Car count */
+        car_count?: number;
+        /** @description Electricity */
+        electric_power?: number;
+      };
+    };
     responses: {
       /** @description success */
       200: {
@@ -178,6 +213,26 @@ export interface operations {
           "application/json": {
             /** @example Property not found */
             error?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Delete property */
+  delete: {
+    parameters: {
+      path: {
+        /** @description Property Id */
+        id: string;
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": {
+            /** @example Property deleted successfully */
+            message?: string;
           };
         };
       };

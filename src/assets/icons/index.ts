@@ -1,4 +1,6 @@
 export * from './BathIconSVG'
 export * from './BedIconSVG'
+export * from './CancelIconSVG'
 export * from './HouseIconSVG'
 export * from './LotIconSVG'
+export * from './ArrowDownIconSVG'

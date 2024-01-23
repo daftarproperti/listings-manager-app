@@ -5,6 +5,7 @@ import ListPage from './list'
 import DetailPage from './detail'
 import ErrorPage from './Error'
 import FilterPage from './filter'
+import EditPropertyPage from './edit'
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,15 @@ const router = createBrowserRouter([
       <>
         <Header title="Filter" />
         <FilterPage />
+      </>
+    ),
+  },
+  {
+    path: '/edit/:id',
+    element: (
+      <>
+        <Header title="Data Properti" />
+        <EditPropertyPage />
       </>
     ),
   },

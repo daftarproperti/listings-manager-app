@@ -468,17 +468,17 @@
   resolved "https://registry.npmjs.org/@swc/types/-/types-0.1.5.tgz"
   integrity sha512-myfUej5naTBWnqOCc/MdVOLVjXUXtIA+NpDrDBKJtLLg2shUjBu3cZmB/85RyitKc55+lUUyl7oRfLOvkr2hsw==
 
-"@tanstack/query-core@5.17.9":
-  version "5.17.9"
-  resolved "https://registry.npmjs.org/@tanstack/query-core/-/query-core-5.17.9.tgz"
-  integrity sha512-8xcvpWIPaRMDNLMvG9ugcUJMgFK316ZsqkPPbsI+TMZsb10N9jk0B6XgPk4/kgWC2ziHyWR7n7wUhxmD0pChQw==
+"@tanstack/query-core@5.17.19":
+  version "5.17.19"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.17.19.tgz#212515ccc7a6b913afee6b71ce3e7df2c4d85f7d"
+  integrity sha512-Lzw8FUtnLCc9Jwz0sw9xOjZB+/mCCmJev38v2wHMUl/ioXNIhnNWeMxu0NKUjIhAd62IRB3eAtvxAGDJ55UkyA==
 
-"@tanstack/react-query@^5.17.9":
-  version "5.17.9"
-  resolved "https://registry.npmjs.org/@tanstack/react-query/-/react-query-5.17.9.tgz"
-  integrity sha512-M5E9gwUq1Stby/pdlYjBlL24euIVuGbWKIFCbtnQxSdXI4PgzjTSdXdV3QE6fc+itF+TUvX/JPTKIwq8yuBXcg==
+"@tanstack/react-query@^5.17.19":
+  version "5.17.19"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.17.19.tgz#d6fc243faa469bb84952dd810faea47dabe389fc"
+  integrity sha512-qaQENB6/03Gj3dFZGvdmUoqeUGlGm7P1p0RmaR04Bf1Ib1T9lLGimcC9T3oCFbrx0b2ZF21ngjFZNjj9uPJMcg==
   dependencies:
-    "@tanstack/query-core" "5.17.9"
+    "@tanstack/query-core" "5.17.19"
 
 "@testing-library/dom@^9.0.0":
   version "9.3.3"
@@ -2844,6 +2844,11 @@ react-draggable-bottom-sheet@^1.15.0:
     "@azabraao/react-draggable" "^4.5.1"
     clsx "^1.2.1"
     use-callback-ref "^1.3.0"
+
+react-hook-form@^7.49.3:
+  version "7.49.3"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.49.3.tgz#576a4567f8a774830812f4855e89f5da5830435c"
+  integrity sha512-foD6r3juidAT1cOZzpmD/gOKt7fRsDhXXZ0y28+Al1CHgX+AY1qIN9VSIIItXRq1dN68QrRwl1ORFlwjBaAqeQ==
 
 react-is@^16.13.1:
   version "16.13.1"
