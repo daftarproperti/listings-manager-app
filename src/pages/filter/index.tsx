@@ -1,9 +1,9 @@
+import { clsx } from 'clsx'
 import { ReactNode } from 'react'
 import CurrencyInput from 'react-currency-input-field'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import BottomStickyButton from 'components/button/BottomStickyButton'
-import { classNames } from 'utils'
 import { FILTER_OPTIONS } from './dummy'
 
 const ButtonFilterChip = ({
@@ -16,7 +16,7 @@ const ButtonFilterChip = ({
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) => (
   <button
     {...props}
-    className={classNames(
+    className={clsx(
       `w-fit cursor-pointer justify-center whitespace-nowrap rounded-3xl border border-solid border-primary-500 px-3 py-2 text-sm leading-5 hover:bg-primary-500 hover:text-white`,
       isActive ? 'bg-primary-500 text-white' : 'bg-white text-primary-500',
     )}

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { clsx } from 'clsx'
+
 import useImageOrientation from '../utils/useImageOrientation'
 
 interface ImageWithAuthProps extends React.ImgHTMLAttributes<HTMLImageElement> {
@@ -17,9 +19,9 @@ const ImageWithAuth: React.FC<ImageWithAuthProps> = ({
 }) => {
   const [imageSrc, setImageSrc] = useState<string | null>(null)
   const [isImageError, setIsImageError] = useState(false)
-  const orientation = useOrientation
-    ? useImageOrientation(imageSrc || 'object-cover')
-    : ''
+  const orientation = useImageOrientation(
+    useOrientation ? imageSrc || 'object-cover' : undefined,
+  )
 
   useEffect(() => {
     const fetchImage = async () => {
@@ -52,9 +54,11 @@ const ImageWithAuth: React.FC<ImageWithAuthProps> = ({
     <img
       {...props}
       loading="lazy"
-      className={`h-full max-h-46 w-full  ${
-        !noRounded ? 'rounded-tl-lg' : ''
-      } object-cover object-center ${orientation}`}
+      className={clsx(
+        'h-full max-h-46 w-full object-cover object-center',
+        !noRounded && 'rounded-tl-lg',
+        orientation,
+      )}
       src={imageSrc ?? undefined}
       onError={() => setIsImageError(true)}
       alt={props.alt}
@@ -66,9 +70,10 @@ const ImageWithAuth: React.FC<ImageWithAuthProps> = ({
       imageContent
     ) : (
       <div
-        className={`inset-0 flex h-16 items-center justify-center ${
-          !noRounded ? 'rounded-tl-lg' : ''
-        } bg-slate-300`}
+        className={clsx(
+          'inset-0 flex h-16 items-center justify-center bg-slate-300',
+          !noRounded && 'rounded-tl-lg',
+        )}
       >
         <p className="text-xs text-slate-500">Image Loading</p>
       </div>
@@ -79,9 +84,10 @@ const ImageWithAuth: React.FC<ImageWithAuthProps> = ({
         imageContent
       ) : (
         <div
-          className={`absolute inset-0 flex items-center justify-center ${
-            !noRounded ? 'rounded-tl-lg' : ''
-          } bg-slate-300`}
+          className={clsx(
+            'absolute inset-0 flex items-center justify-center bg-slate-300',
+            !noRounded && 'rounded-tl-lg',
+          )}
         >
           <p className="text-xs text-slate-500">Image not found</p>
         </div>

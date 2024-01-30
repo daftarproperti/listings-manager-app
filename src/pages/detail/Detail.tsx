@@ -1,10 +1,11 @@
+import { clsx } from 'clsx'
+
 import { useGetPropertyDetail } from 'api/queries'
 import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
-import { formatCurrencyToIDRText } from 'utils'
-
 import RenderDescription from 'pages/detail/Description'
-import ShareButton from './ShareButton'
 import SwiperSlider from 'pages/detail/SwiperSlider'
+import { formatCurrencyToIDRText } from 'utils'
+import ShareButton from './ShareButton'
 
 function Detail({ id }: { id: string }) {
   const { data, isFetching } = useGetPropertyDetail({ id })
@@ -23,9 +24,10 @@ function Detail({ id }: { id: string }) {
         <SwiperSlider pictures={data?.pictureUrls} />
       )}
       <div
-        className={`px-4 ${
-          data?.pictureUrls?.length === undefined ? 'pt-4' : ''
-        }`}
+        className={clsx(
+          'px-4',
+          data?.pictureUrls?.length === undefined && 'pt-4',
+        )}
       >
         <span className="relative w-fit justify-center rounded-xl border-2 border-solid border-sky-500 bg-indigo-900 px-1.5 py-0.5 text-xs leading-4 text-indigo-50 shadow-sm">
           PRIVATE

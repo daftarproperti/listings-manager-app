@@ -1,7 +1,9 @@
-import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
-import { classNames, formatCurrencyToIDRText } from 'utils'
-import ImageWithAuth from 'components/ImageWithAuth'
+import { clsx } from 'clsx'
+
 import { Property } from 'api/types'
+import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
+import ImageWithAuth from 'components/ImageWithAuth'
+import { formatCurrencyToIDRText } from 'utils'
 
 const Card = ({ data }: { data: Property }) => {
   return (
@@ -27,7 +29,7 @@ const Card = ({ data }: { data: Property }) => {
           </div>
           <div className="mt-1 flex flex-col flex-wrap content-start border-t border-solid border-t-slate-200 py-2">
             <div
-              className={classNames(
+              className={clsx(
                 'grid gap-2',
                 data.pictureUrls ? 'grid-cols-2' : 'grid-cols-4',
               )}
