@@ -50,12 +50,12 @@ export const FILTER_OPTIONS = {
       },
       {
         label: 'Tanah',
-        value: 'lot',
+        value: 'land',
       },
-      {
-        label: 'Ruko',
-        value: 'shophouse',
-      },
+      // {
+      //   label: 'Ruko',
+      //   value: 'shophouse',
+      // },
     ],
   },
   bedroomCount: {
@@ -116,17 +116,17 @@ export const FILTER_OPTIONS = {
         label: 'HGB',
         value: 'hgb',
       },
-      {
-        label: 'Strata',
-        value: 'strata',
-      },
+      // {
+      //   label: 'Strata',
+      //   value: 'strata',
+      // },
       {
         label: 'Girik',
         value: 'girik',
       },
       {
         label: 'Lainnya',
-        value: 'other',
+        value: 'lainnya',
       },
     ],
   },

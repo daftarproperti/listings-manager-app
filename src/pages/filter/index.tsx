@@ -25,6 +25,21 @@ const ButtonFilterChip = ({
   </button>
 )
 
+const filterKeyStrings = {
+  minPrice: 'price[min]',
+  maxPrice: 'price[max]',
+  propertyType: 'type',
+  bedroomCount: 'bedroom_count',
+  bathroomCount: 'bathroom_count',
+  minLotSize: 'lot_size[min]',
+  maxLotSize: 'lot_size[max]',
+  minBuildingSize: 'building_size[min]',
+  maxBuildingSize: 'building_size[max]',
+  ownership: 'ownership',
+  carCount: 'car_count',
+  electricPower: 'electric_power',
+}
+
 const FilterPage = () => {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -55,8 +70,10 @@ const FilterPage = () => {
             lang="ID"
             decimalSeparator=","
             groupSeparator="."
-            value={searchParams.get('minp') ?? ''}
-            onValueChange={(value) => controlSearchParams('minp', value)}
+            value={searchParams.get(filterKeyStrings.minPrice) ?? ''}
+            onValueChange={(value) =>
+              controlSearchParams(filterKeyStrings.minPrice, value)
+            }
             className="flex grow justify-between gap-1 rounded-lg border border-solid border-slate-400 bg-white px-3 py-2.5"
           />
           <CurrencyInput
@@ -64,16 +81,20 @@ const FilterPage = () => {
             prefix="Rp "
             decimalSeparator=","
             groupSeparator="."
-            value={searchParams.get('maxp') ?? ''}
-            onValueChange={(value) => controlSearchParams('maxp', value)}
+            value={searchParams.get(filterKeyStrings.maxPrice) ?? ''}
+            onValueChange={(value) =>
+              controlSearchParams(filterKeyStrings.maxPrice, value)
+            }
             className="flex grow justify-between gap-1 rounded-lg border border-solid border-slate-400 bg-white px-3 py-2.5"
           />
         </div>
         <div className="mt-2 inline-grid grid-cols-3 gap-2">
           {FILTER_OPTIONS.priceRange.options.map((option, index) => {
             const isActive =
-              searchParams.get('minp') === option.minValue.toString() &&
-              searchParams.get('maxp') === option.maxValue.toString()
+              searchParams.get(filterKeyStrings.minPrice) ===
+                option.minValue.toString() &&
+              searchParams.get(filterKeyStrings.maxPrice) ===
+                option.maxValue.toString()
             return (
               <ButtonFilterChip
                 key={index}
@@ -81,11 +102,17 @@ const FilterPage = () => {
                 isActive={isActive}
                 onClick={() => {
                   if (isActive) {
-                    searchParams.delete('minp')
-                    searchParams.delete('maxp')
+                    searchParams.delete(filterKeyStrings.minPrice)
+                    searchParams.delete(filterKeyStrings.maxPrice)
                   } else {
-                    searchParams.set('minp', option.minValue.toString())
-                    searchParams.set('maxp', option.maxValue.toString())
+                    searchParams.set(
+                      filterKeyStrings.minPrice,
+                      option.minValue.toString(),
+                    )
+                    searchParams.set(
+                      filterKeyStrings.maxPrice,
+                      option.maxValue.toString(),
+                    )
                   }
                   setSearchParams(searchParams, { replace: true })
                 }}
@@ -100,14 +127,18 @@ const FilterPage = () => {
         </div>
         <div className="mt-2 flex gap-2">
           {FILTER_OPTIONS.propertyType.options.map((option, index) => {
-            const isActive = searchParams.get('pt') === option.value
+            const isActive =
+              searchParams.get(filterKeyStrings.propertyType) === option.value
             return (
               <ButtonFilterChip
                 key={index}
                 type="button"
                 isActive={isActive}
                 onClick={() =>
-                  controlSearchParams('pt', isActive ? undefined : option.value)
+                  controlSearchParams(
+                    filterKeyStrings.propertyType,
+                    isActive ? undefined : option.value,
+                  )
                 }
               >
                 {option.label}
@@ -120,14 +151,18 @@ const FilterPage = () => {
         </div>
         <div className="mt-2 flex gap-2">
           {FILTER_OPTIONS.bedroomCount.options.map((option, index) => {
-            const isActive = searchParams.get('bd') === option.value
+            const isActive =
+              searchParams.get(filterKeyStrings.bedroomCount) === option.value
             return (
               <ButtonFilterChip
                 key={index}
                 type="button"
                 isActive={isActive}
                 onClick={() =>
-                  controlSearchParams('bd', isActive ? undefined : option.value)
+                  controlSearchParams(
+                    filterKeyStrings.bedroomCount,
+                    isActive ? undefined : option.value,
+                  )
                 }
               >
                 {option.label}
@@ -140,14 +175,18 @@ const FilterPage = () => {
         </div>
         <div className="mt-2 flex gap-2">
           {FILTER_OPTIONS.bathroomCount.options.map((option, index) => {
-            const isActive = searchParams.get('bt') === option.value
+            const isActive =
+              searchParams.get(filterKeyStrings.bathroomCount) === option.value
             return (
               <ButtonFilterChip
                 key={index}
                 type="button"
                 isActive={isActive}
                 onClick={() =>
-                  controlSearchParams('bt', isActive ? undefined : option.value)
+                  controlSearchParams(
+                    filterKeyStrings.bathroomCount,
+                    isActive ? undefined : option.value,
+                  )
                 }
               >
                 {option.label}
@@ -164,9 +203,12 @@ const FilterPage = () => {
               placeholder="Minimum"
               type="number"
               className="h-full w-full rounded-lg border-none p-3 py-3.5 ring-0"
-              value={searchParams.get('minl') ?? ''}
+              value={searchParams.get(filterKeyStrings.minLotSize) ?? ''}
               onChange={(event) =>
-                controlSearchParams('minl', event.target.value)
+                controlSearchParams(
+                  filterKeyStrings.minLotSize,
+                  event.target.value,
+                )
               }
             />
             <span className="absolute right-2 top-[50%] -translate-y-[50%] text-gray-400">
@@ -177,9 +219,12 @@ const FilterPage = () => {
             <input
               placeholder="Maximum"
               type="number"
-              value={searchParams.get('maxl') ?? ''}
+              value={searchParams.get(filterKeyStrings.maxLotSize) ?? ''}
               onChange={(event) =>
-                controlSearchParams('maxl', event.target.value)
+                controlSearchParams(
+                  filterKeyStrings.maxLotSize,
+                  event.target.value,
+                )
               }
               className="h-full w-full rounded-lg border-none p-3 py-3.5 ring-0"
             />
@@ -196,9 +241,12 @@ const FilterPage = () => {
             <input
               placeholder="Minimum"
               type="number"
-              value={searchParams.get('minb') ?? ''}
+              value={searchParams.get(filterKeyStrings.minBuildingSize) ?? ''}
               onChange={(event) =>
-                controlSearchParams('minb', event.target.value)
+                controlSearchParams(
+                  filterKeyStrings.minBuildingSize,
+                  event.target.value,
+                )
               }
               className="h-full w-full rounded-lg border-none p-3 py-3.5 ring-0"
             />
@@ -210,9 +258,12 @@ const FilterPage = () => {
             <input
               placeholder="Maximum"
               type="number"
-              value={searchParams.get('maxb') ?? ''}
+              value={searchParams.get(filterKeyStrings.maxBuildingSize) ?? ''}
               onChange={(event) =>
-                controlSearchParams('maxb', event.target.value)
+                controlSearchParams(
+                  filterKeyStrings.maxBuildingSize,
+                  event.target.value,
+                )
               }
               className="h-full w-full rounded-lg border-none p-3 py-3.5 ring-0"
             />
@@ -226,14 +277,18 @@ const FilterPage = () => {
         </div>
         <div className="mt-2 flex gap-2">
           {FILTER_OPTIONS.certificate.options.map((option, index) => {
-            const isActive = searchParams.get('ct') === option.value
+            const isActive =
+              searchParams.get(filterKeyStrings.ownership) === option.value
             return (
               <ButtonFilterChip
                 key={index}
                 type="button"
                 isActive={isActive}
                 onClick={() =>
-                  controlSearchParams('ct', isActive ? undefined : option.value)
+                  controlSearchParams(
+                    filterKeyStrings.ownership,
+                    isActive ? undefined : option.value,
+                  )
                 }
               >
                 {option.label}
@@ -246,14 +301,18 @@ const FilterPage = () => {
         </div>
         <div className="mt-2 flex gap-2">
           {FILTER_OPTIONS.garageCarCapacity.options.map((option, index) => {
-            const isActive = searchParams.get('cr') === option.value
+            const isActive =
+              searchParams.get(filterKeyStrings.carCount) === option.value
             return (
               <ButtonFilterChip
                 key={index}
                 type="button"
                 isActive={isActive}
                 onClick={() =>
-                  controlSearchParams('cr', isActive ? undefined : option.value)
+                  controlSearchParams(
+                    filterKeyStrings.carCount,
+                    isActive ? undefined : option.value,
+                  )
                 }
               >
                 {option.label}
@@ -266,14 +325,18 @@ const FilterPage = () => {
         </div>
         <div className="mt-2 inline-grid grid-cols-4 gap-2">
           {FILTER_OPTIONS.electricity.options.map((option, index) => {
-            const isActive = searchParams.get('el') === option.value
+            const isActive =
+              searchParams.get(filterKeyStrings.electricPower) === option.value
             return (
               <ButtonFilterChip
                 key={index}
                 type="button"
                 isActive={isActive}
                 onClick={() =>
-                  controlSearchParams('el', isActive ? undefined : option.value)
+                  controlSearchParams(
+                    filterKeyStrings.electricPower,
+                    isActive ? undefined : option.value,
+                  )
                 }
               >
                 {option.label}

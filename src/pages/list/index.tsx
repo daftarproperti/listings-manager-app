@@ -4,7 +4,7 @@ import {
   MagnifyingGlassIcon,
   PlusIcon,
 } from '@heroicons/react/24/solid'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { useGetPropertyList } from 'api/queries'
@@ -16,13 +16,21 @@ import Card from './Card'
 
 const ListPage = () => {
   const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const [isFilterBottomSheetOpen, setIsFilterBottomBarOpen] = useState(false)
 
-  const { data, isLoading } = useGetPropertyList()
+  const { data, mutate, isPending } = useGetPropertyList()
 
   const onClickCard = (item: Property) => navigate(`/detail/${item.id}`)
+
+  useEffect(
+    () =>
+      mutate({
+        searchParams,
+      }),
+    [searchParams],
+  )
 
   return (
     <div className="relative w-full">
@@ -53,15 +61,26 @@ const ListPage = () => {
               text="Urutkan"
               onClick={() => setIsFilterBottomBarOpen(true)}
             />
-            <LinkChip to="" text="Private" />
+            <ButtonChip
+              text="Private"
+              isActive={searchParams.get('collection') === 'true'}
+              onClick={() => {
+                const newSearchParams = new URLSearchParams(searchParams)
+                if (newSearchParams.get('collection')) {
+                  newSearchParams.delete('collection')
+                } else {
+                  newSearchParams.set('collection', 'true')
+                }
+                setSearchParams(newSearchParams, { replace: true })
+              }}
+            />
           </div>
         </div>
-        {isLoading && (
-          <div className="m-auto mt-[50%] flex h-full items-center justify-center">
+        {isPending ? (
+          <span className="mt-[50%] flex h-full -translate-y-1/2 items-center justify-center">
             Loading...
-          </div>
-        )}
-        {data?.properties && (
+          </span>
+        ) : data?.properties?.length ? (
           <ul role="list" className="space-y-4">
             {data.properties.map((property, index) => (
               <div
@@ -73,6 +92,11 @@ const ListPage = () => {
               </div>
             ))}
           </ul>
+        ) : (
+          <div className="mt-[50%] flex h-full -translate-y-1/2 flex-col items-center justify-center">
+            <span className="mb-4">Data Tidak Tersedia</span>
+            <ButtonChip text="Reset" onClick={() => navigate('/')} />
+          </div>
         )}
       </div>
       <div className="fixed bottom-0 w-full max-w-lg bg-white px-4 py-2">

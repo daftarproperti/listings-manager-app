@@ -4,12 +4,11 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 import { PropertyListRes, PropertyDetailRes, UpdatePropertyRes } from './types'
 
 export const useGetPropertyList = () =>
-  useQuery<PropertyListRes>({
-    queryKey: ['useGetPropertyList'],
-    queryFn: async () => {
-      return (await axios.get('/properties')).data
+  useMutation<PropertyListRes, Error, { searchParams?: URLSearchParams }>({
+    mutationFn: async ({ searchParams }) => {
+      const url = `/properties?${searchParams}`
+      return (await axios.get(url)).data
     },
-    retry: false,
   })
 
 export const useGetPropertyDetail = ({ id }: { id: string }) =>
