@@ -146,7 +146,7 @@ export interface operations {
         ownership?: "shm" | "hgb" | "girik" | "lainnya";
         /** @description Car count */
         car_count?: number;
-        /** @description Electricity */
+        /** @description Electric Power */
         electric_power?: number;
       };
     };

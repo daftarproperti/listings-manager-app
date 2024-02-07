@@ -4,8 +4,8 @@ import {
   MagnifyingGlassIcon,
   PlusIcon,
 } from '@heroicons/react/24/solid'
-import { useEffect, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom'
 
 import { useGetPropertyList } from 'api/queries'
 import { Property } from 'api/types'
@@ -31,6 +31,9 @@ const ListPage = () => {
       }),
     [searchParams],
   )
+
+  const location = useLocation()
+  const updateSuccess = location.state?.updateSuccess
 
   return (
     <div className="relative w-full">
@@ -76,6 +79,11 @@ const ListPage = () => {
             />
           </div>
         </div>
+        {updateSuccess && (
+          <div className="mb-4 rounded-lg bg-primary-50 p-4 text-sm text-green-800">
+            Data berhasil dihapus.
+          </div>
+        )}
         {isPending ? (
           <span className="mt-[50%] flex h-full -translate-y-1/2 items-center justify-center">
             Loading...

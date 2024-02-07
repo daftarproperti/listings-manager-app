@@ -9,3 +9,5 @@ export type UpdatePropertyRequest =
   components['schemas']['UpdatePropertyRequest']
 export type UpdatePropertyRes =
   operations['update']['responses']['200']['content']['application/json']
+export type DeletePropertyRes =
+  operations['delete']['responses']['200']['content']['application/json']

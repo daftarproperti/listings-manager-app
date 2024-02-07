@@ -8,7 +8,13 @@ import RenderDescription from 'pages/detail/Description'
 import SwiperSlider from 'pages/detail/SwiperSlider'
 import ShareButton from './ShareButton'
 
-function Detail({ id }: { id: string }) {
+function Detail({
+  id,
+  setCanEdit,
+}: {
+  id: string
+  setCanEdit: (canEdit: boolean) => void
+}) {
   const { data, isFetching, refetch } = useGetPropertyDetail({ id })
   const navigate = useNavigate()
   const navigateToEditForm = (id: string) => {
@@ -16,11 +22,16 @@ function Detail({ id }: { id: string }) {
   }
   const location = useLocation()
   const updateSuccess = location.state?.updateSuccess
+
   useEffect(() => {
     if (updateSuccess) {
       refetch()
     }
   }, [updateSuccess, refetch])
+
+  useEffect(() => {
+    setCanEdit(data?.userCanEdit ?? false)
+  }, [data?.userCanEdit, setCanEdit])
 
   if (isFetching) {
     return (

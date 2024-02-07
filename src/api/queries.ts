@@ -1,7 +1,12 @@
 import axios from 'axios'
 import { useQuery, useMutation } from '@tanstack/react-query'
 
-import { PropertyListRes, PropertyDetailRes, UpdatePropertyRes } from './types'
+import {
+  PropertyListRes,
+  PropertyDetailRes,
+  UpdatePropertyRes,
+  DeletePropertyRes,
+} from './types'
 
 export const useGetPropertyList = () =>
   useMutation<PropertyListRes, Error, { searchParams?: URLSearchParams }>({
@@ -31,4 +36,13 @@ export const useUpdateProperty = () => {
     },
   })
   return mutation
+}
+
+export const useDeleteProperty = () => {
+  return useMutation<DeletePropertyRes, Error, { id: string }>({
+    mutationFn: async ({ id }) => {
+      const response = await axios.delete(`/properties/${id}`)
+      return response.data
+    },
+  })
 }
