@@ -18,7 +18,7 @@ function Detail({
   const { data, isFetching, refetch } = useGetPropertyDetail({ id })
   const navigate = useNavigate()
   const navigateToEditForm = (id: string) => {
-    navigate(`/edit/${id}`)
+    navigate(`/edit/${id}`, { replace: true })
   }
   const location = useLocation()
   const updateSuccess = location.state?.updateSuccess

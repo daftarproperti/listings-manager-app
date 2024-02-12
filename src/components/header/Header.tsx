@@ -11,7 +11,7 @@ type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = ({
   title = 'Judul Halaman',
-  canEdit = false
+  canEdit = false,
 }) => {
   const { id } = useParams<{ id: string }>()
   const location = useLocation()
@@ -28,9 +28,7 @@ const Header: React.FC<HeaderProps> = ({
         )}
         <h2 className="font-semibold">{title}</h2>
       </div>
-      {id !== undefined && canEdit && (
-        <DotsHeaderButton propertyId={id}/>
-      )}
+      {id !== undefined && canEdit && <DotsHeaderButton propertyId={id} />}
     </header>
   )
 }

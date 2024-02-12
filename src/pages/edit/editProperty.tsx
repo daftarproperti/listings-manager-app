@@ -4,6 +4,7 @@ import { useGetPropertyDetail, useUpdateProperty } from 'api/queries'
 import { PROPERTY_OPTIONS } from './dummy'
 import { UpdatePropertyRequest } from 'api/types'
 import { useNavigate } from 'react-router-dom'
+import { onSubmit } from './handleFormSubmit'
 import InputField from 'components/input/InputField'
 import SelectField from 'components/input/SelectField'
 import TextareaField from 'components/input/TextareaField'
@@ -45,80 +46,6 @@ function PropertyForm({ id }: { id: string }) {
     }
   }, [propertyDetails, reset])
 
-  const onSubmit = async (formData: UpdatePropertyRequest) => {
-    setIsSubmitting(true)
-    const dataToSubmit = new FormData()
-
-    Object.keys(formData).forEach((key) => {
-      const value = formData[key as keyof typeof formData]
-
-      if (key !== 'pictureUrls' && !key.startsWith('contacts')) {
-        if (key === 'price' && typeof value === 'string') {
-          formData[key] = parseFloat(value)
-        } else if (
-          typeof value === 'string' &&
-          (key === 'lotSize' ||
-            key === 'buildingSize' ||
-            key === 'bedroomCount' ||
-            key === 'bathroomCount' ||
-            key === 'floorCount')
-        ) {
-          formData[key] = parseInt(value, 10)
-        }
-
-        if (value !== null && value !== undefined) {
-          dataToSubmit.append(key, value.toString())
-        }
-
-        if (key === 'isPrivate') {
-          const valueIsPrivate = formData.isPrivate ? 1 : 0
-          dataToSubmit.append('isPrivate', valueIsPrivate.toString())
-        }
-      }
-
-      if (key.startsWith('contacts')) {
-        if (typeof value === 'object' && value !== null) {
-          Object.keys(value).forEach((contactKey: string) => {
-            const contactValue = (value as any)[contactKey]
-            if (contactValue !== null && contactValue !== undefined) {
-              dataToSubmit.append(
-                `contacts[${contactKey}]`,
-                contactValue.toString(),
-              )
-            }
-          })
-        }
-      }
-      if (key === 'pictureUrls') {
-        formExistingImages.forEach((url: string, index: number) => {
-          dataToSubmit.append(`pictureUrls[${index}]`, url)
-        })
-
-        formNewImageFiles.forEach((file, index) => {
-          const newIndex = formExistingImages.length + index
-          dataToSubmit.append(`pictureUrls[${newIndex}]`, file)
-        })
-      }
-    })
-
-    try {
-      mutate(
-        {
-          propertyId: (formData as any).id,
-          updateData: dataToSubmit,
-        },
-        {
-          onSuccess: () =>
-            navigate(`/detail/${id}`, { state: { updateSuccess: true } }),
-        },
-      )
-    } catch (error) {
-      console.error('Error submitting form:', error)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
   if (isLoading)
     return (
       <div className="h-12 w-full justify-center p-6 text-center">
@@ -133,7 +60,20 @@ function PropertyForm({ id }: { id: string }) {
     )
 
   return (
-    <form className="mx-auto max-w-lg" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="mx-auto max-w-lg"
+      onSubmit={handleSubmit((formData) =>
+        onSubmit(
+          id,
+          formData,
+          mutate,
+          navigate,
+          setIsSubmitting,
+          formExistingImages,
+          formNewImageFiles,
+        ),
+      )}
+    >
       <div className="items-start justify-center whitespace-nowrap border-b border-solid border-b-[color:var(--slate-200,#E2E8F0)] bg-slate-50 py-3 pl-4 pr-16 text-sm font-semibold leading-5 text-slate-500">
         Lengkapi data dibawah ini
       </div>
