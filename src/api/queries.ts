@@ -11,6 +11,16 @@ import type {
   UpdatePropertyRes,
 } from './types'
 
+export const checkAuth = async () => {
+  try {
+    // TODO: use auth specific endpoint that is lighter, like /auth
+    const response = await axios.get('/properties')
+    return response.status === 200
+  } catch (error) {
+    return false
+  }
+}
+
 export const useGetPropertyList = () =>
   useMutation<PropertyListRes, Error, { searchParams?: URLSearchParams }>({
     mutationFn: async ({ searchParams }) => {

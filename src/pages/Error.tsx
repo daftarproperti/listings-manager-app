@@ -1,13 +1,12 @@
 import { Link, useSearchParams } from 'react-router-dom'
 import { safeJSONParse } from 'utils'
 
-const ErrorPage = () => {
+const ErrorPage = ({ message }: { message: string }) => {
   const [searchParams] = useSearchParams()
-  const errorJSON = safeJSONParse(searchParams.get('message') ?? '')
   return (
     <main className="flex min-h-screen w-full flex-col items-center justify-center">
       <h1 className="text-xl font-bold">
-        {errorJSON?.error || 'Authentication Error'}
+        {message}
       </h1>
       <Link to="/">
         <div className="mt-8 flex items-center gap-2 rounded-lg border bg-primary-500 px-4 py-2 text-white shadow">
