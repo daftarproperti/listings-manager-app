@@ -25,7 +25,7 @@ const ListPage = () => {
 
   const [isFilterBottomSheetOpen, setIsFilterBottomBarOpen] = useState(false)
 
-  const { data, mutate, isPending } = useGetPropertyList()
+  const { data, mutate, isPending, error, isError } = useGetPropertyList()
 
   const onClickCard = (item: Property) => navigate(`/detail/${item.id}`)
 
@@ -89,7 +89,11 @@ const ListPage = () => {
             Data berhasil dihapus.
           </div>
         )}
-        {isPending ? (
+        {isError ? (
+          <div className="mt-[50%] flex h-full -translate-y-1/2 flex-col items-center justify-center">
+            <span className="mb-4">Error: {error.message}</span>
+          </div>
+        ) : isPending ? (
           <span className="mt-[50%] flex h-full -translate-y-1/2 items-center justify-center">
             Loading...
           </span>

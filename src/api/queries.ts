@@ -17,7 +17,13 @@ export const useGetPropertyList = () =>
       const url = searchParams?.size
         ? `/properties?${searchParams}`
         : '/properties'
-      return (await axios.get(url)).data
+
+      const response = await axios.get(url)
+      if (!response.data || typeof response.data !== 'object') {
+        throw new Error('Invalid response format');
+      }
+
+      return response.data;
     },
   })
 
