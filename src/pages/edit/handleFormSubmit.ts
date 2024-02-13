@@ -65,23 +65,24 @@ export const onSubmit = async (
     }
   })
 
-  try {
-    mutate(
-      {
-        propertyId: id,
-        updateData: dataToSubmit,
+  mutate(
+    {
+      propertyId: id,
+      updateData: dataToSubmit,
+    },
+    {
+      onSuccess: () =>
+        navigate(`/detail/${id}`, {
+          state: { updateSuccess: true },
+          replace: true,
+        }),
+      onSettled: () => {
+        setIsSubmitting(false)
       },
-      {
-        onSuccess: () =>
-          navigate(`/detail/${id}`, {
-            state: { updateSuccess: true },
-            replace: true,
-          }),
+      onError: (error: unknown) => {
+        console.error('Error submitting form:', error)
+        setIsSubmitting(false)
       },
-    )
-  } catch (error) {
-    console.error('Error submitting form:', error)
-  } finally {
-    setIsSubmitting(false)
-  }
+    },
+  )
 }

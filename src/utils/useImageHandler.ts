@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
-export const useImageHandler = (propertyDetails: any) => {
+export const useImageHandler = (
+  propertyDetails: any,
+  triggerAlert: (message: string) => void,
+) => {
   const [selectedImages, setSelectedImages] = useState<string[]>([])
   const [existingImages, setExistingImages] = useState<string[]>([])
   const [newImageFiles, setNewImageFiles] = useState<File[]>([])
@@ -13,6 +16,14 @@ export const useImageHandler = (propertyDetails: any) => {
 
   const handleImageChange = (e: any) => {
     const files = Array.from(e.target.files) as File[]
+    const totalImagesAfterAddingNew =
+      existingImages.length + newImageFiles.length + files.length
+
+    if (totalImagesAfterAddingNew > 10) {
+      triggerAlert('Jumlah gambar yang bisa ditambahkan maksimal 10 gambar.')
+      return
+    }
+
     const fileUrls = files.map((file) => URL.createObjectURL(file))
     setNewImageFiles((prevFiles) => [...prevFiles, ...files])
     setSelectedImages((prevImages) => [...prevImages, ...fileUrls])
