@@ -16,7 +16,7 @@ const Card = ({ data }: { data: Property }) => {
         {!!data.pictureUrls?.length && (
           <ImageWithAuth link={data.pictureUrls[0]} />
         )}
-        <div className="flex flex-1 flex-col px-3 py-0.5">
+        <div className="flex flex-1 flex-col px-3 py-2">
           <div className="text-xs leading-4 text-slate-500">{data.title}</div>
           <div className="mt-2 flex flex-col">
             <div className="text-2xl font-semibold leading-8 text-slate-800">
