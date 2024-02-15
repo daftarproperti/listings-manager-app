@@ -1,0 +1,6 @@
+# Container for tele-app CI.
+
+FROM node:18.19.0-bullseye
+
+WORKDIR /usr/src/tele-app
+COPY ./ ./

@@ -18,6 +18,7 @@
     "build:production": "tsc && vite build --mode production",
     "serve": "vite preview",
     "test": "vitest",
+    "test:run": "vitest run",
     "test:ui": "vitest --ui",
     "lint": "eslint src",
     "typecheck": "tsc --project tsconfig.json --noEmit",
