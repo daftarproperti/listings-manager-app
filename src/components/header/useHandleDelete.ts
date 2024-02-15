@@ -1,6 +1,7 @@
-import { useState } from 'react'
 import { useDeleteProperty } from 'api/queries'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const useHandleDelete = (propertyId: string) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -18,9 +19,10 @@ const useHandleDelete = (propertyId: string) => {
       {
         onSuccess: () => {
           navigate(`/`, { state: { updateSuccess: true } })
+          toast('Data Berhasil Dihapus', { type: 'success' })
         },
         onError: (error) => {
-          console.error('Failed to delete property', error)
+          toast(`Failed to delete property ${error}`, { type: 'error' })
         },
       },
     )

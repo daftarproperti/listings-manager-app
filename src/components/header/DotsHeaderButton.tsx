@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
 import { MoreIconSVG, TrashIconSVG } from 'assets/icons'
-import useHandleDelete from './useHandleDelete'
+import React, { useState } from 'react'
+
 import ConfirmationDialog from './ConfirmationDialog'
+import useHandleDelete from './useHandleDelete'
 
 interface DotsButtonProps {
   propertyId?: string

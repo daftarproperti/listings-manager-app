@@ -1,5 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RouterProvider } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import 'index.css'
 
 import routes from './routes'
@@ -10,6 +12,7 @@ const App = () => (
   <main className="mx-auto min-h-screen max-w-lg bg-white font-inter text-gray-950 shadow-xl">
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={routes} />
+      <ToastContainer position="top-center" />
     </QueryClientProvider>
   </main>
 )

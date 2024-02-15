@@ -1,11 +1,12 @@
+import Header from 'components/header/Header'
 import { createBrowserRouter } from 'react-router-dom'
 
-import Header from 'components/header/Header'
-import ListPage from './list'
-import DetailPage from './detail'
 import ErrorPage from './Error'
-import FilterPage from './filter'
+import AddPage from './add'
+import DetailPage from './detail'
 import EditPropertyPage from './edit'
+import FilterPage from './filter'
+import ListPage from './list'
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,15 @@ const router = createBrowserRouter([
     element: (
       <>
         <DetailPage />
+      </>
+    ),
+  },
+  {
+    path: '/add',
+    element: (
+      <>
+        <Header title="Tambah Listing Baru" />
+        <AddPage />
       </>
     ),
   },

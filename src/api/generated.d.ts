@@ -11,6 +11,8 @@ export interface paths {
      * @description Returns list of property
      */
     get: operations["index"];
+    /** Create property */
+    post: operations["create"];
   };
   "/api/tele-app/properties/{id}": {
     /** Get property by id */
@@ -26,6 +28,50 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    PropertyRequest: {
+      /** @example Rumah dijual di daerah pasteur */
+      title?: string;
+      /** @example Jl. Pendidikan No. 1 */
+      address?: string;
+      /** @example Rumah bagus */
+      description?: string;
+      /** @example 100000 */
+      price?: number;
+      /** @example 1000 */
+      lotSize?: number;
+      /** @example 2000 */
+      buildingSize?: number;
+      /** @example 4 */
+      carCount?: number;
+      /** @example 3 */
+      bedroomCount?: number;
+      /** @example 2 */
+      bathroomCount?: number;
+      /** @example 2 */
+      floorCount?: number;
+      /** @example 2200 */
+      electricPower?: number;
+      /** @example Utara */
+      facing?: string;
+      /** @example SHM */
+      ownership?: string;
+      /** @example Bandung */
+      city?: string;
+      pictureUrls?: string[];
+      coordinate?: {
+        latitude?: number;
+        longitude?: number;
+      };
+      contacts?: {
+        name?: string;
+        profilePictureURL?: string;
+        phoneNumber?: string;
+        sourceURL?: string;
+        provider?: string;
+      };
+      /** @example false */
+      isPrivate?: boolean;
+    };
     UpdatePropertyRequest: {
       /** @example Rumah dijual di daerah pasteur */
       title?: string;
@@ -161,6 +207,22 @@ export interface operations {
       };
     };
   };
+  /** Create property */
+  create: {
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["UpdatePropertyRequest"];
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Property"];
+        };
+      };
+    };
+  };
   /** Get property by id */
   show: {
     parameters: {
@@ -197,7 +259,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "multipart/form-data": components["schemas"]["UpdatePropertyRequest"];
+        "multipart/form-data": components["schemas"]["PropertyRequest"];
       };
     };
     responses: {

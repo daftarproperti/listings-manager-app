@@ -1,7 +1,7 @@
+import Header from 'components/header/Header'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import Header from 'components/header/Header'
 import Detail from './Detail'
 
 const DetailPage = () => {

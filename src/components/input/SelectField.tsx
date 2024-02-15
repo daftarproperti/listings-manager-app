@@ -1,11 +1,16 @@
-import React from 'react'
 import { ArrowDownIconSVG } from 'assets/icons'
+import React from 'react'
+import type { FieldError, UseFormRegisterReturn } from 'react-hook-form'
+
 type SelectFieldProps = {
   label: string
-  registerHook: any
-  selectOptions: any
+  registerHook: UseFormRegisterReturn<string>
+  selectOptions: {
+    label: string
+    value: string
+  }[]
   defaultOption: string
-  errorFieldName?: any
+  errorFieldName?: FieldError
   errorMessage?: string
 }
 
@@ -24,10 +29,10 @@ const SelectField: React.FC<SelectFieldProps> = ({
       </span>
       <select
         {...registerHook}
-        className="select-hide group-hover:active mt-1 w-full appearance-none items-start justify-center self-stretch whitespace-nowrap rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-white px-3 py-2.5 text-lg leading-7 text-gray-800"
+        className="mt-1 w-full appearance-none items-start justify-center self-stretch whitespace-nowrap rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-white px-3 py-2.5 text-lg leading-7 text-gray-800"
       >
         <option value="">{defaultOption}</option>
-        {selectOptions.options.map((option: any, index: number) => (
+        {selectOptions.map((option, index) => (
           <option key={index} value={option.value}>
             {option.label}
           </option>

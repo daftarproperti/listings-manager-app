@@ -1,9 +1,11 @@
 import React from 'react'
+import type { FieldError, UseFormRegisterReturn } from 'react-hook-form'
+
 type TextareaFieldProps = {
   label: string
-  registerHook: any
+  registerHook: UseFormRegisterReturn<string>
   placeholderValue: string
-  errorFieldName?: any
+  errorFieldName?: FieldError
   errorMessage?: string
 }
 

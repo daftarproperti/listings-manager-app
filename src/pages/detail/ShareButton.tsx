@@ -1,4 +1,5 @@
 import React from 'react'
+import { toast } from 'react-toastify'
 
 interface ShareButtonProps {
   url: string
@@ -13,12 +14,12 @@ const ShareButton: React.FC<ShareButtonProps> = ({ url, title }) => {
           title,
           url,
         })
-        console.log('Content shared successfully')
+        toast('Content shared successfully', { type: 'success' })
       } catch (error) {
-        console.error('Error sharing content', error)
+        toast(`Error sharing content ${error}`, { type: 'error' })
       }
     } else {
-      console.log('Web Share is not supported in this browser.')
+      toast('Web Share is not supported in this browser.', { type: 'error' })
       // Implement fallback sharing functionality here
     }
   }

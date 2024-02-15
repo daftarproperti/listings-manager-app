@@ -4,14 +4,19 @@ import {
   MagnifyingGlassIcon,
   PlusIcon,
 } from '@heroicons/react/24/solid'
-import { useState, useEffect } from 'react'
-import { useNavigate, useSearchParams, useLocation } from 'react-router-dom'
-
 import { useGetPropertyList } from 'api/queries'
-import { Property } from 'api/types'
+import { type Property } from 'api/types'
 import SortBottomSheet from 'components/SortBottomSheet'
 import ButtonChip from 'components/button/ButtonChip'
 import LinkChip from 'components/button/LinkChip'
+import { useEffect, useState } from 'react'
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom'
+
 import Card from './Card'
 
 const ListPage = () => {
@@ -108,12 +113,15 @@ const ListPage = () => {
         )}
       </div>
       <div className="fixed bottom-0 w-full max-w-lg bg-white px-4 py-2">
-        <button className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-500 px-20 py-3">
+        <Link
+          to="/add"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-500 px-20 py-3"
+        >
           <PlusIcon className="w-[18px] text-white" />
           <div className=" text-base leading-6 text-white">
             Tambah listing baru
           </div>
-        </button>
+        </Link>
       </div>
       <SortBottomSheet
         isOpen={isFilterBottomSheetOpen}

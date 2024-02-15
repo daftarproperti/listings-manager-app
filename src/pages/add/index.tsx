@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useGetPropertyDetail, useUpdateProperty } from 'api/queries'
+import { useAddProperty } from 'api/queries'
 import { type UpdatePropertyRequest } from 'api/types'
+import BottomStickyButton from 'components/button/BottomStickyButton'
 import { addEditFormSchema } from 'components/form/addEditSchema'
 import CurrencyInputField from 'components/input/CurrencyInputField'
 import InputCheckboxField from 'components/input/InputCheckboxField'
@@ -11,16 +10,16 @@ import InputField from 'components/input/InputField'
 import InputFileField from 'components/input/InputFileField'
 import SelectField from 'components/input/SelectField'
 import TextareaField from 'components/input/TextareaField'
-import BottomStickyButton from 'components/button/BottomStickyButton'
+import transformPropertyObjectToFormData from 'components/input/transformObjectToFormdata'
+import { PROPERTY_OPTIONS } from 'pages/edit/dummy'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
-import { PROPERTY_OPTIONS } from './dummy'
-import { onSubmit } from './handleFormSubmit'
-
-function PropertyForm({ id }: { id: string }) {
+const AddPage = () => {
   const {
     register,
     formState: { errors },
-    reset,
     handleSubmit,
     control,
   } = useForm<UpdatePropertyRequest>({
@@ -30,11 +29,7 @@ function PropertyForm({ id }: { id: string }) {
     },
     resolver: zodResolver(addEditFormSchema),
   })
-  const {
-    data: propertyDetails,
-    isLoading,
-    isError,
-  } = useGetPropertyDetail({ id: id })
+
   const [formExistingImages, setFormExistingImages] = useState<string[]>([])
   const [formNewImageFiles, setFormNewImageFiles] = useState<File[]>([])
   const handleExistingImagesChange = (existingImages: string[]) => {
@@ -43,66 +38,53 @@ function PropertyForm({ id }: { id: string }) {
   const handleNewFiles = (newFiles: File[]) => {
     setFormNewImageFiles(newFiles)
   }
-  const { mutate } = useUpdateProperty()
+  const { mutate, isPending } = useAddProperty()
   const navigate = useNavigate()
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  useEffect(() => {
-    if (propertyDetails) {
-      reset(propertyDetails)
-    }
-  }, [propertyDetails, reset])
-
-  if (isLoading)
-    return (
-      <div className="h-12 w-full justify-center p-6 text-center">
-        Loading...
-      </div>
-    )
-  if (isError)
-    return (
-      <div className="h-12 w-full justify-center p-6 text-center">
-        Error loading property details.
-      </div>
-    )
+  const onSubmit = async (data: UpdatePropertyRequest) => {
+    const addNewPropertyPayload = transformPropertyObjectToFormData({
+      data,
+      formExistingImages,
+      formNewImageFiles,
+    })
+    mutate(addNewPropertyPayload, {
+      onSuccess() {
+        toast('Listing berhasil ditambahkan!', { type: 'success' })
+        navigate(-1)
+      },
+      onError(error) {
+        toast(`Mohon maaf, telah terjadi kesalahan (${error?.message})`, {
+          type: 'error',
+        })
+      },
+    })
+  }
 
   return (
-    <form
-      className="mx-auto max-w-lg"
-      onSubmit={handleSubmit((data) =>
-        onSubmit(
-          id,
-          data,
-          mutate,
-          navigate,
-          setIsSubmitting,
-          formExistingImages,
-          formNewImageFiles,
-        ),
-      )}
-    >
+    <form className="mx-auto max-w-lg" onSubmit={handleSubmit(onSubmit)}>
       <div className="items-start justify-center whitespace-nowrap border-b border-solid border-b-[color:var(--slate-200,#E2E8F0)] bg-slate-50 py-3 pl-4 pr-16 text-sm font-semibold leading-5 text-slate-500">
         Lengkapi data dibawah ini
       </div>
       <div className="bg-slate-50 p-4">
         <InputFileField
           registerHook={register('pictureUrls')}
-          dataProperty={propertyDetails}
+          dataProperty={undefined}
           onNewFiles={handleNewFiles}
           onExistingImagesChange={handleExistingImagesChange}
-          errorFieldName={errors.pictureUrls}
         />
         <InputField
           label="Judul listing"
           registerHook={register('title', { required: true })}
           placeholderValue="Tulis Judul"
           errorFieldName={errors.title}
+          errorMessage="Judul listing harus diisi"
         />
         <InputField
           label="Alamat"
           registerHook={register('address', { required: true })}
           placeholderValue="Isi alamat lengkap"
           errorFieldName={errors.address}
+          errorMessage="Alamat harus diisi"
         />
         <SelectField
           label="Kota"
@@ -138,6 +120,7 @@ function PropertyForm({ id }: { id: string }) {
             registerHook={register('lotSize', { required: true })}
             placeholderValue="Luas Tanah"
             errorFieldName={errors.lotSize}
+            errorMessage="Luas Tanah harus diisi"
           />
           <InputField
             halfWidth={true}
@@ -145,13 +128,13 @@ function PropertyForm({ id }: { id: string }) {
             registerHook={register('buildingSize', { required: true })}
             placeholderValue="Luas Bangunan"
             errorFieldName={errors.buildingSize}
+            errorMessage="Luas Bangunan harus diisi"
           />
         </div>
         <InputField
           label="Bangunan Menghadap"
           registerHook={register('facing')}
           placeholderValue="Silahkan isi"
-          errorFieldName={errors.facing}
         />
         <div className="flex w-full">
           <InputField
@@ -161,6 +144,7 @@ function PropertyForm({ id }: { id: string }) {
             registerHook={register('bedroomCount', { required: true })}
             placeholderValue="Silahkan isi"
             errorFieldName={errors.bedroomCount}
+            errorMessage="Kamar Tidur harus diisi"
           />
           <InputField
             halfWidth={true}
@@ -168,6 +152,7 @@ function PropertyForm({ id }: { id: string }) {
             registerHook={register('bathroomCount', { required: true })}
             placeholderValue="Silahkan isi"
             errorFieldName={errors.bathroomCount}
+            errorMessage="Kamar Mandi harus diisi"
           />
         </div>
         <div className="flex w-full">
@@ -223,11 +208,11 @@ function PropertyForm({ id }: { id: string }) {
           inputID="isPrivate"
         />
       </div>
-      <BottomStickyButton type="submit" disabled={isSubmitting}>
+      <BottomStickyButton type="submit" disabled={isPending}>
         Simpan
       </BottomStickyButton>
     </form>
   )
 }
 
-export default PropertyForm
+export default AddPage

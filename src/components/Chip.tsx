@@ -1,5 +1,5 @@
-import { ReactNode } from 'react'
-import { Link, LinkProps } from 'react-router-dom'
+import { type ReactNode } from 'react'
+import { Link, type LinkProps } from 'react-router-dom'
 
 type ChipProps = LinkProps & {
   icon?: ReactNode

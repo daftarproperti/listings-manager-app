@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 
 export const useImageHandler = (
-  propertyDetails: any,
+  propertyDetails: { pictureUrls: string[] },
   triggerAlert: (message: string) => void,
 ) => {
   const [selectedImages, setSelectedImages] = useState<string[]>([])
@@ -14,19 +14,23 @@ export const useImageHandler = (
     }
   }, [propertyDetails])
 
-  const handleImageChange = (e: any) => {
-    const files = Array.from(e.target.files) as File[]
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
     const totalImagesAfterAddingNew =
-      existingImages.length + newImageFiles.length + files.length
+      existingImages.length + newImageFiles.length + (files?.length ?? 0)
 
     if (totalImagesAfterAddingNew > 10) {
       triggerAlert('Jumlah gambar yang bisa ditambahkan maksimal 10 gambar.')
       return
     }
 
-    const fileUrls = files.map((file) => URL.createObjectURL(file))
-    setNewImageFiles((prevFiles) => [...prevFiles, ...files])
-    setSelectedImages((prevImages) => [...prevImages, ...fileUrls])
+    if (files) {
+      const fileList = Array.from(files) as File[]
+      const fileUrls = fileList.map((file) => URL.createObjectURL(file))
+
+      setNewImageFiles((prevFiles) => [...prevFiles, ...fileList])
+      setSelectedImages((prevImages) => [...prevImages, ...fileUrls])
+    }
   }
 
   const removeImage = (index: number, isExistingImage: boolean) => {

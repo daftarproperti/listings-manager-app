@@ -1,7 +1,7 @@
-import React from 'react'
 import { ArrowLeftIcon } from '@heroicons/react/24/solid'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useParams } from 'react-router-dom'
+import React from 'react'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+
 import DotsHeaderButton from './DotsHeaderButton'
 
 type HeaderProps = {

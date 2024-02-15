@@ -1,7 +1,9 @@
 import React from 'react'
+import type { UseFormRegisterReturn } from 'react-hook-form'
+
 type TextareaFieldProps = {
   label: string
-  registerHook: any
+  registerHook: UseFormRegisterReturn<string>
   inputID: string
 }
 

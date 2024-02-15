@@ -1,11 +1,13 @@
 import React from 'react'
+import { type FieldError, type UseFormRegisterReturn } from 'react-hook-form'
+
 type InputFieldProps = {
   halfWidth?: boolean
   leftPosition?: boolean
   label: string
-  registerHook: any
+  registerHook: UseFormRegisterReturn<string>
   placeholderValue: string
-  errorFieldName?: any
+  errorFieldName?: FieldError
   errorMessage?: string
 }
 
@@ -34,7 +36,7 @@ const InputField: React.FC<InputFieldProps> = ({
       />
       {errorFieldName && (
         <span className="self-stretch text-sm leading-5 text-red-500">
-          {errorMessage}
+          {errorMessage || errorFieldName?.message}
         </span>
       )}
     </div>

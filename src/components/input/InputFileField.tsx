@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react'
 import { CancelIconSVG } from 'assets/icons'
+import React, { useEffect, useState } from 'react'
+import type { FieldError, Merge, UseFormRegisterReturn } from 'react-hook-form'
 import { useImageHandler } from 'utils'
 import AlertDialog from 'components/AlertDialog'
 
 type InputFileProps = {
-  registerHook: any
+  registerHook: UseFormRegisterReturn<string>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dataProperty: any
-  onNewFiles: any
-  onExistingImagesChange: any
+  onNewFiles: (newFiles: File[]) => void
+  onExistingImagesChange: (existingImages: string[]) => void
+  errorFieldName?: Merge<FieldError, (FieldError | undefined)[]>
 }
 
 const InputFileField: React.FC<InputFileProps> = ({
@@ -15,6 +18,7 @@ const InputFileField: React.FC<InputFileProps> = ({
   dataProperty,
   onNewFiles,
   onExistingImagesChange,
+  errorFieldName,
 }) => {
   const [alertMessage, setAlertMessage] = useState('')
   const [isAlertOpen, setIsAlertOpen] = useState(false)
@@ -54,11 +58,11 @@ const InputFileField: React.FC<InputFileProps> = ({
         />
         <div className="my-2 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3">
           {existingImages.map((url, index) => (
-            <div key={`existing-${index}`} className="w-30 relative">
+            <div key={`existing-${index}`} className="relative">
               <img
                 src={url}
                 alt={`Existing Image ${index}`}
-                className="h-30 w-30 rounded-lg object-cover"
+                className="rounded-lg object-cover"
               />
               <button
                 type="button"
@@ -70,11 +74,11 @@ const InputFileField: React.FC<InputFileProps> = ({
             </div>
           ))}
           {selectedImages.map((image, index) => (
-            <div key={index} className="w-30 relative">
+            <div key={index} className="relative">
               <img
                 src={image}
                 alt={`Preview ${index}`}
-                className="h-30 w-30 rounded-lg object-cover"
+                className="rounded-lg object-cover"
               />
               <button
                 type="button"
@@ -92,6 +96,11 @@ const InputFileField: React.FC<InputFileProps> = ({
           </span>
         </label>
       </div>
+      {errorFieldName && (
+        <span className="self-stretch text-sm leading-5 text-red-500">
+          {errorFieldName?.message}
+        </span>
+      )}
       <AlertDialog
         isOpen={isAlertOpen}
         setIsOpen={setIsAlertOpen}

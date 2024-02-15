@@ -1,9 +1,9 @@
 import { clsx } from 'clsx'
-import { ReactNode } from 'react'
+import BottomStickyButton from 'components/button/BottomStickyButton'
+import { type ReactNode } from 'react'
 import CurrencyInput from 'react-currency-input-field'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
-import BottomStickyButton from 'components/button/BottomStickyButton'
 import { FILTER_OPTIONS } from './dummy'
 
 const ButtonFilterChip = ({

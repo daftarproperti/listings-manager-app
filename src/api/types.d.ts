@@ -1,4 +1,4 @@
-import { components, operations } from './generated'
+import { type components, type operations } from './generated'
 
 export type PropertyListRes =
   operations['index']['responses']['200']['content']['application/json']
@@ -7,7 +7,14 @@ export type PropertyDetailRes =
   operations['show']['responses']['200']['content']['application/json']
 export type UpdatePropertyRequest =
   components['schemas']['UpdatePropertyRequest']
+export type UpdatePropertyParams = {
+  propertyId: string
+  updateData: FormData
+}
 export type UpdatePropertyRes =
   operations['update']['responses']['200']['content']['application/json']
+export type AddPropertyRequest = FormData
+export type AddPropertyResponse =
+  operations['create']['responses']['200']['content']['application/json']
 export type DeletePropertyRes =
   operations['delete']['responses']['200']['content']['application/json']

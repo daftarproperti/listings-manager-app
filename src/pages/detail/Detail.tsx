@@ -1,11 +1,12 @@
-import { clsx } from 'clsx'
-import { useEffect } from 'react'
 import { useGetPropertyDetail } from 'api/queries'
 import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
-import { formatCurrencyToIDRText } from 'utils'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { clsx } from 'clsx'
 import RenderDescription from 'pages/detail/Description'
 import SwiperSlider from 'pages/detail/SwiperSlider'
+import { useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { formatCurrencyToIDRText } from 'utils'
+
 import ShareButton from './ShareButton'
 
 function Detail({

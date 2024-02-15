@@ -1,68 +1,27 @@
-import { UpdatePropertyRequest } from 'api/types'
-import { NavigateFunction } from 'react-router-dom'
+import { type UseMutateFunction } from '@tanstack/react-query'
+import { type UpdatePropertyRequest, type UpdatePropertyRes } from 'api/types'
+import transformPropertyObjectToFormData from 'components/input/transformObjectToFormdata'
+import { type NavigateFunction } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
+interface UpdatePropertyParams {
+  propertyId: string
+  updateData: FormData
+}
 export const onSubmit = async (
   id: string,
   formData: UpdatePropertyRequest,
-  mutate: any,
+  mutate: UseMutateFunction<UpdatePropertyRes, Error, UpdatePropertyParams>,
   navigate: NavigateFunction,
   setIsSubmitting: (isSubmitting: boolean) => void,
   formExistingImages: string[],
   formNewImageFiles: File[],
 ) => {
   setIsSubmitting(true)
-  const dataToSubmit = new FormData()
-
-  Object.keys(formData).forEach((key) => {
-    const value = formData[key as keyof typeof formData]
-
-    if (key !== 'pictureUrls' && !key.startsWith('contacts')) {
-      if (key === 'price' && typeof value === 'string') {
-        formData[key] = parseFloat(value)
-      } else if (
-        typeof value === 'string' &&
-        (key === 'lotSize' ||
-          key === 'buildingSize' ||
-          key === 'bedroomCount' ||
-          key === 'bathroomCount' ||
-          key === 'floorCount')
-      ) {
-        formData[key] = parseInt(value, 10)
-      }
-
-      if (value !== null && value !== undefined) {
-        dataToSubmit.append(key, value.toString())
-      }
-
-      if (key === 'isPrivate') {
-        const valueIsPrivate = formData.isPrivate ? 1 : 0
-        dataToSubmit.append('isPrivate', valueIsPrivate.toString())
-      }
-    }
-
-    if (key.startsWith('contacts')) {
-      if (typeof value === 'object' && value !== null) {
-        Object.keys(value).forEach((contactKey: string) => {
-          const contactValue = (value as any)[contactKey]
-          if (contactValue !== null && contactValue !== undefined) {
-            dataToSubmit.append(
-              `contacts[${contactKey}]`,
-              contactValue.toString(),
-            )
-          }
-        })
-      }
-    }
-    if (key === 'pictureUrls') {
-      formExistingImages.forEach((url: string, index: number) => {
-        dataToSubmit.append(`pictureUrls[${index}]`, url)
-      })
-
-      formNewImageFiles.forEach((file, index) => {
-        const newIndex = formExistingImages.length + index
-        dataToSubmit.append(`pictureUrls[${newIndex}]`, file)
-      })
-    }
+  const dataToSubmit = transformPropertyObjectToFormData({
+    data: formData,
+    formExistingImages,
+    formNewImageFiles,
   })
 
   mutate(
@@ -71,16 +30,18 @@ export const onSubmit = async (
       updateData: dataToSubmit,
     },
     {
-      onSuccess: () =>
+      onSuccess: () => {
         navigate(`/detail/${id}`, {
           state: { updateSuccess: true },
           replace: true,
-        }),
+        })
+        toast('Data Berhasil Diubah!', { type: 'success' })
+      },
       onSettled: () => {
         setIsSubmitting(false)
       },
       onError: (error: unknown) => {
-        console.error('Error submitting form:', error)
+        toast(`Error submitting form: ${error}`, { type: 'error' })
         setIsSubmitting(false)
       },
     },

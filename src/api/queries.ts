@@ -1,17 +1,22 @@
+import { useMutation, useQuery } from '@tanstack/react-query'
 import axios from 'axios'
-import { useQuery, useMutation } from '@tanstack/react-query'
 
-import {
-  PropertyListRes,
-  PropertyDetailRes,
-  UpdatePropertyRes,
+import type {
+  AddPropertyRequest,
+  AddPropertyResponse,
   DeletePropertyRes,
+  PropertyDetailRes,
+  PropertyListRes,
+  UpdatePropertyParams,
+  UpdatePropertyRes,
 } from './types'
 
 export const useGetPropertyList = () =>
   useMutation<PropertyListRes, Error, { searchParams?: URLSearchParams }>({
     mutationFn: async ({ searchParams }) => {
-      const url = `/properties?${searchParams}`
+      const url = searchParams?.size
+        ? `/properties?${searchParams}`
+        : '/properties'
       return (await axios.get(url)).data
     },
   })
@@ -24,10 +29,6 @@ export const useGetPropertyDetail = ({ id }: { id: string }) =>
     staleTime: 0,
   })
 
-interface UpdatePropertyParams {
-  propertyId: string
-  updateData: FormData
-}
 export const useUpdateProperty = () => {
   const mutation = useMutation<UpdatePropertyRes, Error, UpdatePropertyParams>({
     mutationFn: async ({ propertyId, updateData }) => {
@@ -46,3 +47,11 @@ export const useDeleteProperty = () => {
     },
   })
 }
+
+export const useAddProperty = () =>
+  useMutation<AddPropertyResponse, Error, AddPropertyRequest>({
+    mutationFn: async (formData) => {
+      const response = await axios.post('/properties', formData)
+      return response.data
+    },
+  })

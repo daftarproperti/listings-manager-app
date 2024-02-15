@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react'
+import { type Dispatch, type SetStateAction } from 'react'
 import BottomSheet from 'react-draggable-bottom-sheet'
 import { useSearchParams } from 'react-router-dom'
 

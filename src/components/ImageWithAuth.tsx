@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { clsx } from 'clsx'
+import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 import useImageOrientation from '../utils/useImageOrientation'
 
@@ -40,10 +41,10 @@ const ImageWithAuth: React.FC<ImageWithAuthProps> = ({
           }
           reader.readAsDataURL(blob)
         } else {
-          console.error('Failed to fetch image:', response.status)
+          toast(`Failed to fetch image: ${response.status}`, { type: 'error' })
         }
       } catch (error) {
-        console.error('Error fetching image:', error)
+        toast(`Error fetching image:', ${error}`, { type: 'error' })
       }
     }
 

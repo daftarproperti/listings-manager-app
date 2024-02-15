@@ -1,7 +1,6 @@
-import { clsx } from 'clsx'
-
-import { Property } from 'api/types'
+import { type Property } from 'api/types'
 import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
+import { clsx } from 'clsx'
 import ImageWithAuth from 'components/ImageWithAuth'
 import { formatCurrencyToIDRText } from 'utils'
 
