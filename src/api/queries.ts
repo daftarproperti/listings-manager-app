@@ -9,6 +9,9 @@ import type {
   PropertyListRes,
   UpdatePropertyParams,
   UpdatePropertyRes,
+  UpdateProfileParams,
+  UpdateProfileRes,
+  UserProfileResponse,
 } from './types'
 
 export const checkAuth = async () => {
@@ -30,10 +33,10 @@ export const useGetPropertyList = () =>
 
       const response = await axios.get(url)
       if (!response.data || typeof response.data !== 'object') {
-        throw new Error('Invalid response format');
+        throw new Error('Invalid response format')
       }
 
-      return response.data;
+      return response.data
     },
   })
 
@@ -68,6 +71,22 @@ export const useAddProperty = () =>
   useMutation<AddPropertyResponse, Error, AddPropertyRequest>({
     mutationFn: async (formData) => {
       const response = await axios.post('/properties', formData)
+      return response.data
+    },
+  })
+
+export const useGetUserProfile = () =>
+  useQuery<UserProfileResponse>({
+    queryKey: ['getUserProfile'],
+    queryFn: async () => (await axios.get('/users/profile')).data,
+    retry: false,
+    staleTime: 0,
+  })
+
+export const useUpdateUserProfile = () =>
+  useMutation<UpdateProfileRes, Error, UpdateProfileParams>({
+    mutationFn: async ({ userData }) => {
+      const response = await axios.post('/users/profile', userData)
       return response.data
     },
   })

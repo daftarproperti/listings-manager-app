@@ -18,3 +18,12 @@ export type AddPropertyResponse =
   operations['create']['responses']['200']['content']['application/json']
 export type DeletePropertyRes =
   operations['delete']['responses']['200']['content']['application/json']
+export type UpdateProfileParams = {
+  userData: FormData
+}
+export type UpdateProfileRequest =
+  components['schemas']['TelegramUserProfileRequest']
+export type UpdateProfileRes =
+  operations['updateProfile']['responses']['200']['content']['application/json']
+export type UserProfileResponse =
+  operations['profile']['responses']['200']['content']['application/json']

@@ -22,6 +22,15 @@ export interface paths {
     /** Delete property */
     delete: operations["delete"];
   };
+  "/api/tele-app/users/profile": {
+    /**
+     * Get profile
+     * @description Returns user profile
+     */
+    get: operations["profile"];
+    /** Update profile */
+    post: operations["updateProfile"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -72,49 +81,22 @@ export interface components {
       /** @example false */
       isPrivate?: boolean;
     };
-    UpdatePropertyRequest: {
-      /** @example Rumah dijual di daerah pasteur */
-      title?: string;
-      /** @example Jl. Pendidikan No. 1 */
-      address?: string;
-      /** @example Rumah bagus */
-      description?: string;
-      /** @example 100000 */
-      price?: number;
-      /** @example 1000 */
-      lotSize?: number;
-      /** @example 2000 */
-      buildingSize?: number;
-      /** @example 4 */
-      carCount?: number;
-      /** @example 3 */
-      bedroomCount?: number;
-      /** @example 2 */
-      bathroomCount?: number;
-      /** @example 2 */
-      floorCount?: number;
-      /** @example 2200 */
-      electricPower?: number;
-      /** @example Utara */
-      facing?: string;
-      /** @example SHM */
-      ownership?: string;
-      /** @example Bandung */
+    TelegramUserProfileRequest: {
+      /** @example Jono Doe */
+      name?: string;
+      /** @example 081111111111 */
+      phone_number?: string;
+      /** @example Surabaya */
       city?: string;
-      pictureUrls?: string[];
-      coordinate?: {
-        latitude?: number;
-        longitude?: number;
-      };
-      contacts?: {
-        name?: string;
-        profilePictureURL?: string;
-        phoneNumber?: string;
-        sourceURL?: string;
-        provider?: string;
-      };
-      /** @example false */
-      isPrivate?: boolean;
+      /** @example Agen terpercaya */
+      description?: string;
+      /** @example Agen XXX */
+      company?: string;
+      /**
+       * Format: binary
+       * @example \x00\x00\x00\x04\x00\x00\x00\x04
+       */
+      picture?: string;
     };
     Property: {
       id?: string;
@@ -144,8 +126,29 @@ export interface components {
         sourceURL?: string;
         provider?: string;
       };
+      user?: {
+        name?: string;
+        profilePictureURL?: string;
+        phoneNumber?: string;
+      };
       userCanEdit?: boolean;
       isPrivate?: boolean;
+    };
+    TelegramUserProfile: {
+      /** @example 123 */
+      id?: number;
+      /** @example John Doe */
+      name?: string;
+      /** @example 0811111 */
+      phoneNumber?: string;
+      /** @example New York */
+      city?: string;
+      /** @example I am a programmer */
+      description?: string;
+      /** @example https://example.com/image.jpg */
+      pricture?: string;
+      /** @example Google */
+      company?: string;
     };
   };
   responses: never;
@@ -194,6 +197,10 @@ export interface operations {
         car_count?: number;
         /** @description Electric Power */
         electric_power?: number;
+        /** @description Sort By */
+        sort?: "price" | "bedroom_count" | "lot_size";
+        /** @description Order By */
+        order?: "asc" | "desc";
       };
     };
     responses: {
@@ -211,7 +218,7 @@ export interface operations {
   create: {
     requestBody: {
       content: {
-        "multipart/form-data": components["schemas"]["UpdatePropertyRequest"];
+        "multipart/form-data": components["schemas"]["PropertyRequest"];
       };
     };
     responses: {
@@ -296,6 +303,36 @@ export interface operations {
             /** @example Property deleted successfully */
             message?: string;
           };
+        };
+      };
+    };
+  };
+  /**
+   * Get profile
+   * @description Returns user profile
+   */
+  profile: {
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TelegramUserProfile"];
+        };
+      };
+    };
+  };
+  /** Update profile */
+  updateProfile: {
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["TelegramUserProfileRequest"];
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TelegramUserProfile"];
         };
       };
     };

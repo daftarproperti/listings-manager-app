@@ -1,6 +1,7 @@
 import Header from 'components/header/Header'
 import { createBrowserRouter, LoaderFunction, Outlet } from 'react-router-dom'
-import { useState, useEffect, ReactNode } from 'react'
+import { useState, useEffect, type ReactNode } from 'react'
+import { checkAuth } from 'api/queries'
 
 import ErrorPage from './Error'
 import LoadingPage from './Loading'
@@ -9,10 +10,10 @@ import DetailPage from './detail'
 import EditPropertyPage from './edit'
 import FilterPage from './filter'
 import ListPage from './list'
-import { checkAuth } from 'api/queries'
+import EditUserPage from './user'
 
 const AuthenticatedPage = ({ children }: { children: ReactNode }) => {
-  const [isAuth, setIsAuth] = useState<boolean | undefined>(undefined);
+  const [isAuth, setIsAuth] = useState<boolean | undefined>(undefined)
 
   // Initialize authentication state just once
   useEffect(() => {
@@ -20,19 +21,17 @@ const AuthenticatedPage = ({ children }: { children: ReactNode }) => {
       if (isAuth !== undefined) {
         return
       }
-      setIsAuth(await checkAuth());
+      setIsAuth(await checkAuth())
     }
     initAuth()
   }, [])
 
-  return (
-    isAuth === undefined ? (
-      <LoadingPage message="Authenticating..." />
-    ) : isAuth ? (
-      children
-    ) : (
-      <ErrorPage message="Authentication Failure" />
-    )
+  return isAuth === undefined ? (
+    <LoadingPage message="Authenticating..." />
+  ) : isAuth ? (
+    children
+  ) : (
+    <ErrorPage message="Authentication Failure" />
   )
 }
 
@@ -90,6 +89,15 @@ const router = createBrowserRouter([
         ),
       },
     ],
+  },
+  {
+    path: '/user',
+    element: (
+      <>
+        <Header title="Data Pribadi" />
+        <EditUserPage />
+      </>
+    ),
   },
 ])
 

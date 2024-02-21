@@ -3,6 +3,7 @@ import React from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import DotsHeaderButton from './DotsHeaderButton'
+import CogHeaderButton from './CogHeaderButton'
 
 type HeaderProps = {
   title?: string
@@ -29,6 +30,7 @@ const Header: React.FC<HeaderProps> = ({
         <h2 className="font-semibold">{title}</h2>
       </div>
       {id !== undefined && canEdit && <DotsHeaderButton propertyId={id} />}
+      {id === undefined && <CogHeaderButton />}
     </header>
   )
 }

@@ -21,7 +21,10 @@ export const addEditFormSchema = z.object({
   isPrivate: z.boolean(),
   lotSize: z.string().or(z.number()),
   ownership: z.string(),
-  pictureUrls: z.instanceof(FileList).optional().nullable(),
+  pictureUrls: z
+    .array(z.union([z.instanceof(File), z.string()]))
+    .optional()
+    .nullable(),
   price: z
     .string()
     .transform((val) => Number(val.replace(/\D/g, '')))

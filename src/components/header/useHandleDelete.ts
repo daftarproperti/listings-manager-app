@@ -18,7 +18,7 @@ const useHandleDelete = (propertyId: string) => {
       { id: propertyId },
       {
         onSuccess: () => {
-          navigate(`/`, { state: { updateSuccess: true } })
+          navigate(`/`)
           toast('Data Berhasil Dihapus', { type: 'success' })
         },
         onError: (error) => {

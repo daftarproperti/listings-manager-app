@@ -10,12 +10,7 @@ import SortBottomSheet from 'components/SortBottomSheet'
 import ButtonChip from 'components/button/ButtonChip'
 import LinkChip from 'components/button/LinkChip'
 import { useEffect, useState } from 'react'
-import {
-  Link,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 
 import Card from './Card'
 
@@ -36,9 +31,6 @@ const ListPage = () => {
       }),
     [searchParams],
   )
-
-  const location = useLocation()
-  const updateSuccess = location.state?.updateSuccess
 
   return (
     <div className="relative w-full">
@@ -84,11 +76,6 @@ const ListPage = () => {
             />
           </div>
         </div>
-        {updateSuccess && (
-          <div className="mb-4 rounded-lg bg-primary-50 p-4 text-sm text-green-800">
-            Data berhasil dihapus.
-          </div>
-        )}
         {isError ? (
           <div className="mt-[50%] flex h-full -translate-y-1/2 flex-col items-center justify-center">
             <span className="mb-4">Error: {error.message}</span>
