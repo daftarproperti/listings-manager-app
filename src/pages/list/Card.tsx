@@ -66,16 +66,16 @@ const Card = ({ data }: { data: Property }) => {
           <div className="aspect-square w-8 max-w-full shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate-300">
             <img
               loading="lazy"
-              src={data.contacts?.profilePictureURL}
+              src={data.user?.profilePictureURL}
               className="h-full w-full object-contain object-center"
             />
           </div>
           <div className="flex grow basis-[0%] flex-col self-stretch">
             <div className="text-sm font-semibold leading-5 text-slate-800">
-              {data.contacts?.name}
+              {data.user?.name}
             </div>
             <div className="text-sm leading-5 text-slate-500">
-              {data.contacts?.phoneNumber}
+              {data.user?.phoneNumber}
             </div>
           </div>
         </div>

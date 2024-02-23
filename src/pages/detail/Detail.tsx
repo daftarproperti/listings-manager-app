@@ -109,25 +109,30 @@ function Detail({
           <div className="aspect-square w-8 max-w-full shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate-300">
             <img
               loading="lazy"
-              srcSet={data?.contacts?.profilePictureURL}
+              srcSet={data?.user?.profilePictureURL}
               className="my-auto aspect-square w-8 max-w-full shrink-0 items-center justify-center overflow-hidden object-contain object-center"
             />
           </div>
           <span className="flex grow basis-[0%] flex-col items-stretch self-stretch">
             <div className="whitespace-nowrap text-sm font-semibold leading-5 text-slate-800">
-              {data?.contacts?.name}
+              {data?.user?.name}
             </div>
             <div className="whitespace-nowrap text-sm leading-5 text-slate-500">
-              {data?.contacts?.phoneNumber}
+              {data?.user?.phoneNumber}
             </div>
           </span>
         </div>
-        <button
-          onClick={(e) => e.stopPropagation()}
-          className="items-stretch justify-center whitespace-nowrap rounded-lg bg-blue-500 px-4 py-2 text-center text-sm leading-5 text-slate-50"
-        >
-          Hubungi
-        </button>
+        {data?.user?.phoneNumber && (
+          <a
+            href={`tel:${data.user.phoneNumber}`}
+            className="items-stretch justify-center whitespace-nowrap rounded-lg bg-blue-500 px-4 py-2 text-center text-sm leading-5 text-slate-50"
+            onClick={(e) => {
+              e.stopPropagation()
+            }}
+          >
+            Hubungi
+          </a>
+        )}
       </div>
       <div className="flex items-stretch gap-4 bg-sky-50 px-4 py-2">
         {data?.userCanEdit && (
