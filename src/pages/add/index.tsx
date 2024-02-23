@@ -65,7 +65,7 @@ const AddPage = () => {
       <div className="items-start justify-center whitespace-nowrap border-b border-solid border-b-[color:var(--slate-200,#E2E8F0)] bg-slate-50 py-3 pl-4 pr-16 text-sm font-semibold leading-5 text-slate-500">
         Lengkapi data dibawah ini
       </div>
-      <div className="bg-slate-50 p-4">
+      <div className="bg-slate-50 px-4 pb-24">
         <InputFileField
           registerHook={register('pictureUrls')}
           dataProperty={undefined}
@@ -181,31 +181,6 @@ const AddPage = () => {
           registerHook={register('ownership')}
           selectOptions={PROPERTY_OPTIONS.ownership.options}
           defaultOption="Pilih Jenis Sertifikat"
-        />
-      </div>
-      <div className="w-full items-stretch justify-center whitespace-nowrap border-b border-solid border-b-[color:var(--gray-200,#E5E7EB)] bg-blue-100 py-3 pl-4 pr-14 pt-4 text-lg leading-7 text-gray-800">
-        Keterangan Agen
-      </div>
-      <div className="bg-slate-50 p-4 pb-24">
-        <InputField
-          label="Nama"
-          registerHook={register('contacts.name')}
-          placeholderValue="Tulis nama"
-        />
-        <InputField
-          label="Nomor HP"
-          registerHook={register('contacts.phoneNumber')}
-          placeholderValue="Isi dengan awalan 0"
-        />
-        <InputField
-          label="Perusahaan"
-          registerHook={register('contacts.provider')}
-          placeholderValue="Silahkan isi"
-        />
-        <InputCheckboxField
-          label="Listing Private?"
-          registerHook={register('isPrivate')}
-          inputID="isPrivate"
         />
       </div>
       <BottomStickyButton type="submit" disabled={isPending}>

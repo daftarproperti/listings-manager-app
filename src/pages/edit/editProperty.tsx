@@ -21,6 +21,7 @@ function PropertyForm({ id }: { id: string }) {
     register,
     formState: { errors },
     reset,
+    watch,
     handleSubmit,
     control,
   } = useForm<UpdatePropertyRequest>({
@@ -46,6 +47,9 @@ function PropertyForm({ id }: { id: string }) {
   const { mutate } = useUpdateProperty()
   const navigate = useNavigate()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const navigateToUserForm = () => {
+    navigate(`/user`)
+  }
 
   useEffect(() => {
     if (propertyDetails) {
@@ -197,31 +201,39 @@ function PropertyForm({ id }: { id: string }) {
           selectOptions={PROPERTY_OPTIONS.ownership.options}
           defaultOption="Pilih Jenis Sertifikat"
         />
-      </div>
-      <div className="w-full items-stretch justify-center whitespace-nowrap border-b border-solid border-b-[color:var(--gray-200,#E5E7EB)] bg-blue-100 py-3 pl-4 pr-14 pt-4 text-lg leading-7 text-gray-800">
-        Keterangan Agen
-      </div>
-      <div className="bg-slate-50 p-4 pb-24">
-        <InputField
-          label="Nama"
-          registerHook={register('contacts.name')}
-          placeholderValue="Tulis nama"
-        />
-        <InputField
-          label="Nomor HP"
-          registerHook={register('contacts.phoneNumber')}
-          placeholderValue="Isi dengan awalan 0"
-        />
-        <InputField
-          label="Perusahaan"
-          registerHook={register('contacts.provider')}
-          placeholderValue="Silahkan isi"
-        />
         <InputCheckboxField
           label="Listing Private?"
           registerHook={register('isPrivate')}
           inputID="isPrivate"
         />
+      </div>
+      <div className="w-full items-stretch justify-center whitespace-nowrap border-b border-solid border-b-[color:var(--gray-200,#E5E7EB)] bg-blue-100 py-3 pl-4 pr-14 pt-4 text-lg leading-7 text-gray-800">
+        Keterangan Agen
+      </div>
+      <div className="bg-slate-50 p-4 pb-24">
+        <table>
+          <tr>
+            <td className="pr-4">Nama</td>
+            <td>: {watch('user.name')}</td>
+          </tr>
+          <tr>
+            <td className="pr-4">Nomor HP</td>
+            <td>: {watch('user.phoneNumber')}</td>
+          </tr>
+          <tr>
+            <td className="pr-4">Perusahaan</td>
+            <td>: {watch('user.company')}</td>
+          </tr>
+        </table>
+        <br />
+        <p>
+          <a
+            className="cursor-pointer text-blue-500"
+            onClick={() => navigateToUserForm()}
+          >
+            Ubah Data Pribadi
+          </a>
+        </p>
       </div>
       <BottomStickyButton type="submit" disabled={isSubmitting}>
         Simpan
