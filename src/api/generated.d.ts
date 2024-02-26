@@ -85,7 +85,7 @@ export interface components {
       /** @example Jono Doe */
       name?: string;
       /** @example 081111111111 */
-      phone_number?: string;
+      phoneNumber?: string;
       /** @example Surabaya */
       city?: string;
       /** @example Agen terpercaya */
@@ -180,25 +180,25 @@ export interface operations {
         /** @description Property type */
         type?: "house" | "apartment" | "land";
         /** @description Bedroom count */
-        bedroom_count?: number;
+        bedroomCount?: number;
         /** @description Bathroom count */
-        bathroom_count?: number;
+        bathroomCount?: number;
         /** @description Minimum lot size */
-        "lot_size[min]"?: number;
+        "lotSize[min]"?: number;
         /** @description Maximum lot size */
-        "lot_size[max]"?: number;
+        "lotSize[max]"?: number;
         /** @description Minimum building size */
-        "building_size[min]"?: number;
+        "buildingSize[min]"?: number;
         /** @description Maximum building size */
-        "building_size[max]"?: number;
+        "buildingSize[max]"?: number;
         /** @description Ownership */
         ownership?: "shm" | "hgb" | "girik" | "lainnya";
         /** @description Car count */
-        car_count?: number;
+        carCount?: number;
         /** @description Electric Power */
-        electric_power?: number;
+        electricPower?: number;
         /** @description Sort By */
-        sort?: "price" | "bedroom_count" | "lot_size";
+        sort?: "price" | "bedroomCount" | "lotSize";
         /** @description Order By */
         order?: "asc" | "desc";
       };

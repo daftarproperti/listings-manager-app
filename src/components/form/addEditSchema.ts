@@ -1,33 +1,66 @@
 import { z } from 'zod'
 
 export const addEditFormSchema = z.object({
-  address: z.string(),
-  bathroomCount: z.string().or(z.number()),
-  bedroomCount: z.string().or(z.number()),
-  buildingSize: z.string().or(z.number()),
-  carCount: z.string().or(z.number()),
-  city: z.string(),
+  address: z.string().refine((value) => String(value).length > 0),
+  bathroomCount: z
+    .string()
+    .or(z.number())
+    .refine((value) => String(value).length > 0),
+  bedroomCount: z
+    .string()
+    .or(z.number())
+    .refine((value) => String(value).length > 0),
+  buildingSize: z
+    .string()
+    .or(z.number())
+    .refine((value) => String(value).length > 0),
+  carCount: z
+    .string()
+    .or(z.number())
+    .refine((value) => String(value).length > 0),
+  city: z.string().refine((value) => String(value).length > 0),
   contacts: z
     .object({
-      name: z.string().nullable(),
-      phoneNumber: z.string().or(z.number()).nullable(),
-      provider: z.string().nullable(),
+      name: z
+        .string()
+        .nullable()
+        .refine((value) => !value || String(value).length > 0),
+      phoneNumber: z
+        .string()
+        .or(z.number())
+        .nullable()
+        .refine((value) => !value || String(value).length > 0),
+      provider: z
+        .string()
+        .nullable()
+        .refine((value) => !value || String(value).length > 0),
     })
     .optional(),
-  description: z.string(),
-  electricPower: z.string().or(z.number()),
-  facing: z.string(),
-  floorCount: z.string().or(z.number()),
+  description: z.string().refine((value) => String(value).length > 0),
+  electricPower: z
+    .string()
+    .or(z.number())
+    .refine((value) => String(value).length > 0),
+  facing: z.string().refine((value) => String(value).length > 0),
+  floorCount: z
+    .string()
+    .or(z.number())
+    .refine((value) => String(value).length > 0),
   isPrivate: z.boolean(),
-  lotSize: z.string().or(z.number()),
-  ownership: z.string(),
+  lotSize: z
+    .string()
+    .or(z.number())
+    .refine((value) => String(value).length > 0),
+  ownership: z.string().refine((value) => String(value).length > 0),
   pictureUrls: z
     .array(z.union([z.instanceof(File), z.string()]))
+    .or(z.instanceof(FileList))
     .optional()
     .nullable(),
   price: z
     .string()
     .transform((val) => Number(val.replace(/\D/g, '')))
-    .or(z.number()),
-  title: z.string(),
+    .or(z.number())
+    .refine((value) => String(value).length > 0),
+  title: z.string().refine((value) => String(value).length > 0),
 })

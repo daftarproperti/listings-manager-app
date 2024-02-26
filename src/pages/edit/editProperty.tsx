@@ -212,18 +212,20 @@ function PropertyForm({ id }: { id: string }) {
       </div>
       <div className="bg-slate-50 p-4 pb-24">
         <table>
-          <tr>
-            <td className="pr-4">Nama</td>
-            <td>: {watch('user.name')}</td>
-          </tr>
-          <tr>
-            <td className="pr-4">Nomor HP</td>
-            <td>: {watch('user.phoneNumber')}</td>
-          </tr>
-          <tr>
-            <td className="pr-4">Perusahaan</td>
-            <td>: {watch('user.company')}</td>
-          </tr>
+          <tbody>
+            <tr>
+              <td className="pr-4">Nama</td>
+              <td>: {watch('user.name')}</td>
+            </tr>
+            <tr>
+              <td className="pr-4">Nomor HP</td>
+              <td>: {watch('user.phoneNumber')}</td>
+            </tr>
+            <tr>
+              <td className="pr-4">Perusahaan</td>
+              <td>: {watch('user.company')}</td>
+            </tr>
+          </tbody>
         </table>
         <br />
         <p>

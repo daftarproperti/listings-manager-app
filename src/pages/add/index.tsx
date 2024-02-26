@@ -71,6 +71,7 @@ const AddPage = () => {
           dataProperty={undefined}
           onNewFiles={handleNewFiles}
           onExistingImagesChange={handleExistingImagesChange}
+          errorFieldName={errors.pictureUrls}
         />
         <InputField
           label="Judul listing"
@@ -181,6 +182,11 @@ const AddPage = () => {
           registerHook={register('ownership')}
           selectOptions={PROPERTY_OPTIONS.ownership.options}
           defaultOption="Pilih Jenis Sertifikat"
+        />
+        <InputCheckboxField
+          label="Listing Private?"
+          registerHook={register('isPrivate')}
+          inputID="isPrivate"
         />
       </div>
       <BottomStickyButton type="submit" disabled={isPending}>

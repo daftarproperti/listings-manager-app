@@ -29,15 +29,15 @@ const filterKeyStrings = {
   minPrice: 'price[min]',
   maxPrice: 'price[max]',
   propertyType: 'type',
-  bedroomCount: 'bedroom_count',
-  bathroomCount: 'bathroom_count',
-  minLotSize: 'lot_size[min]',
-  maxLotSize: 'lot_size[max]',
-  minBuildingSize: 'building_size[min]',
-  maxBuildingSize: 'building_size[max]',
+  bedroomCount: 'bedroomCount',
+  bathroomCount: 'bathroomCount',
+  minLotSize: 'lotSize[min]',
+  maxLotSize: 'lotSize[max]',
+  minBuildingSize: 'buildingSize[min]',
+  maxBuildingSize: 'buildingSize[max]',
   ownership: 'ownership',
-  carCount: 'car_count',
-  electricPower: 'electric_power',
+  carCount: 'carCount',
+  electricPower: 'electricPower',
 }
 
 const FilterPage = () => {
