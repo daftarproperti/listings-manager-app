@@ -22,7 +22,7 @@
     "test:ui": "vitest --ui",
     "lint": "eslint src",
     "typecheck": "tsc --project tsconfig.json --noEmit",
-    "generate": "openapi-typescript https://tele-webhook-dot-property-explorer-399607.et.r.appspot.com/docs/api-docs.yaml --output src/api/generated.d.ts"
+    "generate": "openapi-typescript ../daftarproperti/storage/api-docs/api-docs.yaml --output src/api/generated.d.ts"
   },
   "eslintIgnore": [
     "src/api/generated.d.ts"
