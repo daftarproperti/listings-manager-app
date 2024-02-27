@@ -1,8 +1,8 @@
 import { clsx } from 'clsx'
 import BottomStickyButton from 'components/button/BottomStickyButton'
 import { type ReactNode } from 'react'
-import CurrencyInput from 'react-currency-input-field'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { NumericFormat } from 'react-number-format'
 
 import { FILTER_OPTIONS } from './dummy'
 
@@ -64,26 +64,27 @@ const FilterPage = () => {
           Harga
         </div>
         <div className="mt-1 flex justify-between gap-2">
-          <CurrencyInput
+          <NumericFormat
             placeholder="Rp Minimum"
-            prefix="Rp "
-            lang="ID"
+            thousandSeparator="."
             decimalSeparator=","
-            groupSeparator="."
+            prefix="Rp "
+            decimalScale={2}
             value={searchParams.get(filterKeyStrings.minPrice) ?? ''}
-            onValueChange={(value) =>
-              controlSearchParams(filterKeyStrings.minPrice, value)
+            onValueChange={(event) =>
+              controlSearchParams(filterKeyStrings.minPrice, event.value)
             }
             className="flex grow justify-between gap-1 rounded-lg border border-solid border-slate-400 bg-white px-3 py-2.5"
           />
-          <CurrencyInput
-            placeholder="Rp Maximum"
-            prefix="Rp "
+          <NumericFormat
+            thousandSeparator="."
             decimalSeparator=","
-            groupSeparator="."
+            prefix="Rp "
+            decimalScale={2}
+            placeholder="Rp Maximum"
             value={searchParams.get(filterKeyStrings.maxPrice) ?? ''}
-            onValueChange={(value) =>
-              controlSearchParams(filterKeyStrings.maxPrice, value)
+            onValueChange={(event) =>
+              controlSearchParams(filterKeyStrings.maxPrice, event.value)
             }
             className="flex grow justify-between gap-1 rounded-lg border border-solid border-slate-400 bg-white px-3 py-2.5"
           />
