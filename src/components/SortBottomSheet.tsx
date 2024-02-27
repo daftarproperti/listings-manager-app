@@ -5,15 +5,18 @@ import { useSearchParams } from 'react-router-dom'
 const SORT_OPTIONS = [
   {
     label: 'Harga Termurah',
-    value: 'cheap',
+    value: 'price',
+    order: 'asc',
   },
   {
     label: 'Harga termahal',
-    value: 'expensive',
+    value: 'price',
+    order: 'desc',
   },
   {
     label: 'Jumlah kamar tidur terbanyak',
-    value: 'bed',
+    value: 'bedroomCount',
+    order: 'desc',
   },
 ]
 
@@ -48,6 +51,21 @@ const SortBottomSheet = ({
   setIsOpen: Dispatch<SetStateAction<boolean>>
 }) => {
   const [searchParams, setSearchParams] = useSearchParams()
+
+  const onClickApplyFilter = (v: (typeof SORT_OPTIONS)[0]) => {
+    if (
+      searchParams.get('sort') === v.value &&
+      searchParams.get('order') === v.order
+    ) {
+      searchParams.delete('sort')
+      searchParams.delete('order')
+    } else {
+      searchParams.set('sort', v.value)
+      searchParams.set('order', v.order)
+    }
+    setSearchParams(searchParams)
+  }
+
   return (
     <BottomSheet
       isOpen={isFilterBottomSheetOpen}
@@ -65,21 +83,15 @@ const SortBottomSheet = ({
           <div className="text-2xl font-semibold leading-8">
             Urutkan berdasarkan
           </div>
-          {SORT_OPTIONS.map((v, i) => (
+          {SORT_OPTIONS.map((option, index) => (
             <SortOptionsComponent
-              key={i}
-              title={v.label}
-              isSelected={searchParams.get('s') === v.value}
-              onClick={() => {
-                if (searchParams.get('s') === v.value) {
-                  searchParams.delete('s')
-                } else {
-                  searchParams.set('s', v.value)
-                }
-                setSearchParams(searchParams, {
-                  replace: !!searchParams.get('s'),
-                })
-              }}
+              key={index}
+              title={option.label}
+              isSelected={
+                searchParams.get('sort') === option.value &&
+                searchParams.get('order') === option.order
+              }
+              onClick={() => onClickApplyFilter(option)}
             />
           ))}
         </div>
