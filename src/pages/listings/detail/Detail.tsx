@@ -1,25 +1,25 @@
-import { useGetPropertyDetail } from 'api/queries'
+import { useGetListingDetail } from 'api/queries'
 import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
 import { clsx } from 'clsx'
-import RenderDescription from 'pages/detail/Description'
-import SwiperSlider from 'pages/detail/SwiperSlider'
+import RenderDescription from 'pages/listings/detail/Description'
+import SwiperSlider from 'pages/listings/detail/SwiperSlider'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { formatCurrencyToIDRText } from 'utils'
 
 import ShareButton from './ShareButton'
 
-function Detail({
+function ListingDetail({
   id,
   setCanEdit,
 }: {
   id: string
   setCanEdit: (canEdit: boolean) => void
 }) {
-  const { data, isFetching, refetch } = useGetPropertyDetail({ id })
+  const { data, isFetching, refetch } = useGetListingDetail({ id })
   const navigate = useNavigate()
   const navigateToEditForm = (id: string) => {
-    navigate(`/edit/${id}`, { replace: true })
+    navigate(`/listings/edit/${id}`, { replace: true })
   }
   const location = useLocation()
   const updateSuccess = location.state?.updateSuccess
@@ -152,4 +152,4 @@ function Detail({
   )
 }
 
-export default Detail
+export default ListingDetail

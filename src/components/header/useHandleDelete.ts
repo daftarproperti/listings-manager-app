@@ -1,11 +1,11 @@
-import { useDeleteProperty } from 'api/queries'
+import { useDeleteListing } from 'api/queries'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
-const useHandleDelete = (propertyId: string) => {
+const useHandleDelete = (listingId: string) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const deleteProperty = useDeleteProperty()
+  const deleteListing = useDeleteListing()
   const navigate = useNavigate()
 
   const handleDeleteInitiation = () => {
@@ -14,15 +14,15 @@ const useHandleDelete = (propertyId: string) => {
 
   const handleDeleteConfirmation = () => {
     setIsDialogOpen(false)
-    deleteProperty.mutate(
-      { id: propertyId },
+    deleteListing.mutate(
+      { id: listingId },
       {
         onSuccess: () => {
           navigate(`/`)
           toast('Data Berhasil Dihapus', { type: 'success' })
         },
         onError: (error) => {
-          toast(`Failed to delete property ${error}`, { type: 'error' })
+          toast(`Failed to delete listing ${error}`, { type: 'error' })
         },
       },
     )

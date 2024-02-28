@@ -5,19 +5,6 @@ export type PropertyListRes =
 export type Property = components['schemas']['Property']
 export type PropertyDetailRes =
   operations['show']['responses']['200']['content']['application/json']
-export type UpdatePropertyRequest =
-  components['schemas']['UpdatePropertyRequest']
-export type UpdatePropertyParams = {
-  propertyId: string
-  updateData: FormData
-}
-export type UpdatePropertyRes =
-  operations['update']['responses']['200']['content']['application/json']
-export type AddPropertyRequest = FormData
-export type AddPropertyResponse =
-  operations['create']['responses']['200']['content']['application/json']
-export type DeletePropertyRes =
-  operations['delete']['responses']['200']['content']['application/json']
 export type UpdateProfileParams = {
   userData: FormData
 }
@@ -27,3 +14,20 @@ export type UpdateProfileRes =
   operations['updateProfile']['responses']['200']['content']['application/json']
 export type UserProfileResponse =
   operations['profile']['responses']['200']['content']['application/json']
+export type ListingListRes =
+  operations['listings.index']['responses']['200']['content']['application/json']
+export type Listing = components['schemas']['Listing']
+export type ListingDetailRes =
+  operations['listings.show']['responses']['200']['content']['application/json']
+export type UpdateListingParams = {
+  listingId: string
+  updateData: FormData
+}
+export type UpdateListingRes =
+  operations['listings.update']['responses']['200']['content']['application/json']
+export type UpdateListingRequest = components['schemas']['ListingRequest']
+export type DeleteListingRes =
+  operations['listings.delete']['responses']['200']['content']['application/json']
+export type AddListingRequest = FormData
+export type AddListingResponse =
+  operations['listings.create']['responses']['200']['content']['application/json']

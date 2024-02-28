@@ -1,4 +1,4 @@
-export const PROPERTY_OPTIONS = {
+export const LISTING_OPTIONS = {
   cities: {
     options: [
       {

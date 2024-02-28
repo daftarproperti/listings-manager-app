@@ -18,8 +18,12 @@ export const onSubmit = async (
   const dataToSubmit = new FormData()
 
   Object.entries(formData).forEach(([key, value]) => {
-    if (key !== 'picture') {
-      dataToSubmit.append(key, value != null ? value : '')
+    if (key !== 'picture' && key !== 'isPublicProfile') {
+      dataToSubmit.append(key, value != null ? String(value) : '')
+    }
+    if (key === 'isPublicProfile') {
+      const valueIsPublic = formData.isPublicProfile ? 1 : 0
+      dataToSubmit.append('isPublicProfile', valueIsPublic.toString())
     }
   })
 

@@ -43,7 +43,7 @@ const InputSingleFileField: React.FC<InputSingleFileProps> = ({
   return (
     <div>
       <div className="text-lg font-semibold leading-7 text-gray-800">Foto</div>
-      <div className="mb-10 flex flex-col">
+      <div className="mb-4 flex flex-col">
         <input
           id="image-upload"
           type="file"

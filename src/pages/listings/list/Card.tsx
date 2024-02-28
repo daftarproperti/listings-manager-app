@@ -1,10 +1,10 @@
-import { type Property } from 'api/types'
+import { type Listing } from 'api/types'
 import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
 import { clsx } from 'clsx'
 import ImageWithAuth from 'components/ImageWithAuth'
 import { formatCurrencyToIDRText } from 'utils'
 
-const Card = ({ data }: { data: Property }) => {
+const Card = ({ data }: { data: Listing }) => {
   return (
     <div className="flex flex-col rounded-lg border">
       <div className="relative flex justify-between gap-0">

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { PROPERTY_OPTIONS } from 'pages/edit/dummy'
+import { LISTING_OPTIONS } from 'pages/listings/edit/dummy'
 import { type UpdateProfileRequest } from 'api/types'
 import { useGetUserProfile, useUpdateUserProfile } from 'api/queries'
 import { useNavigate } from 'react-router-dom'
@@ -9,6 +9,7 @@ import SelectField from 'components/input/SelectField'
 import TextareaField from 'components/input/TextareaField'
 import InputSingleFileField from 'components/input/InputSingleFileField'
 import BottomStickyButton from 'components/button/BottomStickyButton'
+import InputCheckboxField from 'components/input/InputCheckboxField'
 
 import { onSubmit } from './handleUserForm'
 
@@ -70,7 +71,7 @@ function EditUser() {
           <SelectField
             label="Daerah Operasi"
             registerHook={register('city', { required: true })}
-            selectOptions={PROPERTY_OPTIONS.cities.options}
+            selectOptions={LISTING_OPTIONS.cities.options}
             defaultOption="Pilih Kota"
             errorFieldName={errors.city}
             errorMessage="Kota harus diisi"
@@ -86,6 +87,13 @@ function EditUser() {
             existingImageUrl={picture}
             onImageUpload={handleNewFile}
           />
+          <div className="mb-10">
+            <InputCheckboxField
+              label="Tampilkan profil Anda?"
+              registerHook={register('isPublicProfile')}
+              inputID="isPrivate"
+            />
+          </div>
         </div>
         <BottomStickyButton type="submit" disabled={isSubmitting || isLoading}>
           Simpan

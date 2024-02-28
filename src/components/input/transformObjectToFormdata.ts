@@ -1,11 +1,11 @@
-import { type UpdatePropertyRequest } from 'api/types'
+import { type UpdateListingRequest } from 'api/types'
 
-const transformPropertyObjectToFormData = ({
+const transformListingObjectToFormData = ({
   data,
   formExistingImages,
   formNewImageFiles,
 }: {
-  data: UpdatePropertyRequest
+  data: UpdateListingRequest
   formExistingImages: string[]
   formNewImageFiles: File[]
 }) => {
@@ -62,4 +62,4 @@ const transformPropertyObjectToFormData = ({
   return formData
 }
 
-export default transformPropertyObjectToFormData
+export default transformListingObjectToFormData

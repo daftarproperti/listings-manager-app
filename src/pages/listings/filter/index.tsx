@@ -28,7 +28,7 @@ const ButtonFilterChip = ({
 const filterKeyStrings = {
   minPrice: 'price[min]',
   maxPrice: 'price[max]',
-  propertyType: 'type',
+  listingType: 'type',
   bedroomCount: 'bedroomCount',
   bathroomCount: 'bathroomCount',
   minLotSize: 'lotSize[min]',
@@ -124,12 +124,12 @@ const FilterPage = () => {
           })}
         </div>
         <div className="mt-6 w-full text-lg font-semibold leading-7 text-black">
-          Tipe properti
+          Tipe Listing
         </div>
         <div className="mt-2 flex gap-2">
-          {FILTER_OPTIONS.propertyType.options.map((option, index) => {
+          {FILTER_OPTIONS.listingType.options.map((option, index) => {
             const isActive =
-              searchParams.get(filterKeyStrings.propertyType) === option.value
+              searchParams.get(filterKeyStrings.listingType) === option.value
             return (
               <ButtonFilterChip
                 key={index}
@@ -137,7 +137,7 @@ const FilterPage = () => {
                 isActive={isActive}
                 onClick={() =>
                   controlSearchParams(
-                    filterKeyStrings.propertyType,
+                    filterKeyStrings.listingType,
                     isActive ? undefined : option.value,
                   )
                 }

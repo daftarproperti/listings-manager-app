@@ -5,11 +5,11 @@ import { checkAuth } from 'api/queries'
 
 import ErrorPage from './Error'
 import LoadingPage from './Loading'
-import AddPage from './add'
-import DetailPage from './detail'
-import EditPropertyPage from './edit'
-import FilterPage from './filter'
-import ListPage from './list'
+import AddPage from './listings/add'
+import ListingDetailPage from './listings/detail'
+import EditListingPage from './listings/edit'
+import FilterPage from './listings/filter'
+import ListingListPage from './listings/list'
 import EditUserPage from './user'
 
 const AuthenticatedPage = ({ children }: { children: ReactNode }) => {
@@ -49,20 +49,20 @@ const router = createBrowserRouter([
         element: (
           <>
             <Header title="Koleksi Saya" />
-            <ListPage />
+            <ListingListPage />
           </>
         ),
       },
       {
-        path: '/detail/:id',
+        path: '/listings/:id',
         element: (
           <>
-            <DetailPage />
+            <ListingDetailPage />
           </>
         ),
       },
       {
-        path: '/add',
+        path: '/listings/add',
         element: (
           <>
             <Header title="Tambah Listing Baru" />
@@ -71,7 +71,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/filter',
+        path: '/listings/filter',
         element: (
           <>
             <Header title="Filter" />
@@ -80,11 +80,11 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/edit/:id',
+        path: '/listings/edit/:id',
         element: (
           <>
-            <Header title="Data Properti" />
-            <EditPropertyPage />
+            <Header title="Data Listing" />
+            <EditListingPage />
           </>
         ),
       },

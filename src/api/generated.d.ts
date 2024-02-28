@@ -5,6 +5,23 @@
 
 
 export interface paths {
+  "/api/tele-app/listings": {
+    /**
+     * Get listing items
+     * @description Returns listing items
+     */
+    get: operations["listings.index"];
+    /** Create listing */
+    post: operations["listings.create"];
+  };
+  "/api/tele-app/listings/{id}": {
+    /** Get listing by id */
+    get: operations["listings.show"];
+    /** Update listing */
+    post: operations["listings.update"];
+    /** Delete listing */
+    delete: operations["listings.delete"];
+  };
   "/api/tele-app/properties": {
     /**
      * Get list of property
@@ -37,6 +54,50 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    ListingRequest: {
+      /** @example Rumah dijual di daerah pasteur */
+      title?: string;
+      /** @example Jl. Pendidikan No. 1 */
+      address?: string;
+      /** @example Rumah bagus */
+      description?: string;
+      /** @example 100000 */
+      price?: number;
+      /** @example 1000 */
+      lotSize?: number;
+      /** @example 2000 */
+      buildingSize?: number;
+      /** @example 4 */
+      carCount?: number;
+      /** @example 3 */
+      bedroomCount?: number;
+      /** @example 2 */
+      bathroomCount?: number;
+      /** @example 2 */
+      floorCount?: number;
+      /** @example 2200 */
+      electricPower?: number;
+      /** @example Utara */
+      facing?: string;
+      /** @example SHM */
+      ownership?: string;
+      /** @example Bandung */
+      city?: string;
+      pictureUrls?: string[];
+      coordinate?: {
+        latitude?: number;
+        longitude?: number;
+      };
+      contacts?: {
+        name?: string;
+        profilePictureURL?: string;
+        phoneNumber?: string;
+        sourceURL?: string;
+        provider?: string;
+      };
+      /** @example false */
+      isPrivate?: boolean;
+    };
     PropertyRequest: {
       /** @example Rumah dijual di daerah pasteur */
       title?: string;
@@ -97,6 +158,44 @@ export interface components {
        * @example \x00\x00\x00\x04\x00\x00\x00\x04
        */
       picture?: string;
+      /** @example true */
+      isPublicProfile?: boolean;
+    };
+    Listing: {
+      id?: string;
+      title?: string;
+      address?: string;
+      description?: string;
+      price?: number;
+      lotSize?: number;
+      buildingSize?: number;
+      carCount?: number;
+      bedroomCount?: number;
+      bathroomCount?: number;
+      floorCount?: number;
+      electricPower?: number;
+      facing?: string;
+      ownership?: string;
+      city?: string;
+      pictureUrls?: string[];
+      coordinate?: {
+        latitude?: number;
+        longitude?: number;
+      };
+      contacts?: {
+        name?: string;
+        profilePictureURL?: string;
+        phoneNumber?: string;
+        sourceURL?: string;
+        provider?: string;
+      };
+      user?: {
+        name?: string;
+        profilePictureURL?: string;
+        phoneNumber?: string;
+      };
+      userCanEdit?: boolean;
+      isPrivate?: boolean;
     };
     Property: {
       id?: string;
@@ -149,6 +248,8 @@ export interface components {
       pricture?: string;
       /** @example Google */
       company?: string;
+      /** @example true */
+      isPublicProfile?: boolean;
     };
   };
   responses: never;
@@ -164,6 +265,149 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  /**
+   * Get listing items
+   * @description Returns listing items
+   */
+  "listings.index": {
+    parameters: {
+      query?: {
+        /** @description If set to true, it will only return user's collection */
+        collection?: boolean;
+        /** @description Minimum price */
+        "price[min]"?: number;
+        /** @description Maximum price */
+        "price[max]"?: number;
+        /** @description Property type */
+        type?: "house" | "apartment" | "land";
+        /** @description Bedroom count */
+        bedroomCount?: number;
+        /** @description Bathroom count */
+        bathroomCount?: number;
+        /** @description Minimum lot size */
+        "lotSize[min]"?: number;
+        /** @description Maximum lot size */
+        "lotSize[max]"?: number;
+        /** @description Minimum building size */
+        "buildingSize[min]"?: number;
+        /** @description Maximum building size */
+        "buildingSize[max]"?: number;
+        /** @description Ownership */
+        ownership?: "shm" | "hgb" | "girik" | "lainnya";
+        /** @description Car count */
+        carCount?: number;
+        /** @description Electric Power */
+        electricPower?: number;
+        /** @description Sort By */
+        sort?: "price" | "bedroomCount" | "lotSize";
+        /** @description Order By */
+        order?: "asc" | "desc";
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": {
+            listings?: components["schemas"]["Listing"][];
+          };
+        };
+      };
+    };
+  };
+  /** Create listing */
+  "listings.create": {
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["PropertyRequest"];
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Listing"];
+        };
+      };
+    };
+  };
+  /** Get listing by id */
+  "listings.show": {
+    parameters: {
+      path: {
+        /** @description Listing Id */
+        id: string;
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Listing"];
+        };
+      };
+      /** @description Listing not found */
+      404: {
+        content: {
+          "application/json": {
+            /** @example Listing not found */
+            error?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Update listing */
+  "listings.update": {
+    parameters: {
+      path: {
+        /** @description Listing Id */
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["PropertyRequest"];
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Listing"];
+        };
+      };
+      /** @description Listing not found */
+      404: {
+        content: {
+          "application/json": {
+            /** @example Listing not found */
+            error?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Delete listing */
+  "listings.delete": {
+    parameters: {
+      path: {
+        /** @description Listing Id */
+        id: string;
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": {
+            /** @example Listing deleted successfully */
+            message?: string;
+          };
+        };
+      };
+    };
+  };
   /**
    * Get list of property
    * @description Returns list of property

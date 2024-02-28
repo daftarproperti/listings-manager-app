@@ -7,7 +7,7 @@ import AlertDialog from 'components/AlertDialog'
 type InputFileProps = {
   registerHook: UseFormRegisterReturn<string>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  dataProperty: any
+  dataListing: any
   onNewFiles: (newFiles: File[]) => void
   onExistingImagesChange: (existingImages: string[]) => void
   errorFieldName?: Merge<FieldError, (FieldError | undefined)[]>
@@ -15,7 +15,7 @@ type InputFileProps = {
 
 const InputFileField: React.FC<InputFileProps> = ({
   registerHook,
-  dataProperty,
+  dataListing,
   onNewFiles,
   onExistingImagesChange,
   errorFieldName,
@@ -34,7 +34,7 @@ const InputFileField: React.FC<InputFileProps> = ({
     newImageFiles,
     handleImageChange,
     removeImage,
-  } = useImageHandler(dataProperty, triggerAlert)
+  } = useImageHandler(dataListing, triggerAlert)
 
   useEffect(() => {
     onNewFiles(newImageFiles)

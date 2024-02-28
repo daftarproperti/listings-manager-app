@@ -2,17 +2,17 @@ import Header from 'components/header/Header'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import Detail from './Detail'
+import ListingDetail from './Detail'
 
-const DetailPage = () => {
+const ListingDetailPage = () => {
   const { id } = useParams()
   const [canEdit, setCanEdit] = useState<boolean>(false)
 
   return (
     <>
       <Header title="Rincian Listing" canEdit={canEdit} />
-      {id && <Detail id={id} setCanEdit={setCanEdit} />}
+      {id && <ListingDetail id={id} setCanEdit={setCanEdit} />}
     </>
   )
 }
-export default DetailPage
+export default ListingDetailPage

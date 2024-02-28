@@ -1,24 +1,24 @@
 import { type UseMutateFunction } from '@tanstack/react-query'
-import { type UpdatePropertyRequest, type UpdatePropertyRes } from 'api/types'
-import transformPropertyObjectToFormData from 'components/input/transformObjectToFormdata'
+import {
+  type UpdateListingRequest,
+  type UpdateListingRes,
+  type UpdateListingParams,
+} from 'api/types'
+import transformListingObjectToFormData from 'components/input/transformObjectToFormdata'
 import { type NavigateFunction } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
-interface UpdatePropertyParams {
-  propertyId: string
-  updateData: FormData
-}
 export const onSubmit = async (
   id: string,
-  formData: UpdatePropertyRequest,
-  mutate: UseMutateFunction<UpdatePropertyRes, Error, UpdatePropertyParams>,
+  formData: UpdateListingRequest,
+  mutate: UseMutateFunction<UpdateListingRes, Error, UpdateListingParams>,
   navigate: NavigateFunction,
   setIsSubmitting: (isSubmitting: boolean) => void,
   formExistingImages: string[],
   formNewImageFiles: File[],
 ) => {
   setIsSubmitting(true)
-  const dataToSubmit = transformPropertyObjectToFormData({
+  const dataToSubmit = transformListingObjectToFormData({
     data: formData,
     formExistingImages,
     formNewImageFiles,
@@ -26,12 +26,12 @@ export const onSubmit = async (
 
   mutate(
     {
-      propertyId: id,
+      listingId: id,
       updateData: dataToSubmit,
     },
     {
       onSuccess: () => {
-        navigate(`/detail/${id}`, {
+        navigate(`/listings/${id}`, {
           state: { updateSuccess: true },
           replace: true,
         })

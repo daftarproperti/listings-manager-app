@@ -38,7 +38,7 @@ export const FILTER_OPTIONS = {
       },
     ],
   },
-  propertyType: {
+  listingType: {
     options: [
       {
         label: 'Rumah',
