@@ -33,8 +33,8 @@ export const FILTER_OPTIONS = {
         label: '> 1M',
         minValue: 1000000000,
         minStringValue: 'Rp 1.000.000.000',
-        maxValue: 2000000000,
-        maxStringValue: 'Rp 2.000.000.000',
+        maxValue: '',
+        maxStringValue: '',
       },
     ],
   },
@@ -77,8 +77,8 @@ export const FILTER_OPTIONS = {
         value: '4',
       },
       {
-        label: '> 5',
-        value: '> 5',
+        label: '5 +',
+        value: '5 +',
       },
     ],
   },
@@ -101,8 +101,8 @@ export const FILTER_OPTIONS = {
         value: '4',
       },
       {
-        label: '> 5',
-        value: '> 5',
+        label: '5 +',
+        value: '5 +',
       },
     ],
   },
@@ -130,7 +130,7 @@ export const FILTER_OPTIONS = {
       },
     ],
   },
-  garageCarCapacity: {
+  carCount: {
     options: [
       {
         label: '1',
@@ -149,8 +149,8 @@ export const FILTER_OPTIONS = {
         value: '4',
       },
       {
-        label: '> 5',
-        value: '> 5',
+        label: '5 +',
+        value: '5 +',
       },
     ],
   },

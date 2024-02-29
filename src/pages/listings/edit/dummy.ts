@@ -59,15 +59,19 @@ export const LISTING_OPTIONS = {
     options: [
       {
         label: 'SHM',
-        value: 'SHM',
+        value: 'shm',
       },
       {
-        label: 'SHGB',
-        value: 'SHGB',
+        label: 'HGB',
+        value: 'hgb',
       },
       {
-        label: 'Others',
-        value: 'Others',
+        label: 'Girik',
+        value: 'girik',
+      },
+      {
+        label: 'Lainnya',
+        value: 'lainnya',
       },
     ],
   },

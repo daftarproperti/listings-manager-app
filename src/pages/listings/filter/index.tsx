@@ -45,10 +45,20 @@ const FilterPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
 
   const controlSearchParams = (key: string, value?: string) => {
+    searchParams.delete(key)
+    searchParams.delete(`${key}[min]`)
+
     if (value) {
-      searchParams.set(key, value)
-    } else {
-      searchParams.delete(key)
+      if (
+        value === '5 +' &&
+        (key === 'bedroomCount' ||
+          key === 'bathroomCount' ||
+          key === 'carCount')
+      ) {
+        searchParams.set(`${key}[min]`, '5')
+      } else {
+        searchParams.set(key, value)
+      }
     }
     setSearchParams(searchParams, { replace: true })
   }
@@ -63,7 +73,7 @@ const FilterPage = () => {
         <div className="w-full text-lg font-semibold leading-7 text-slate-500">
           Harga
         </div>
-        <div className="mt-1 flex justify-between gap-2">
+        <div className="mt-1 flex w-full justify-between">
           <NumericFormat
             placeholder="Rp Minimum"
             thousandSeparator="."
@@ -74,7 +84,7 @@ const FilterPage = () => {
             onValueChange={(event) =>
               controlSearchParams(filterKeyStrings.minPrice, event.value)
             }
-            className="flex grow justify-between gap-1 rounded-lg border border-solid border-slate-400 bg-white px-3 py-2.5"
+            className="mr-2 w-1/2 justify-between gap-1 rounded-lg border border-solid border-slate-400 bg-white px-3 py-2.5"
           />
           <NumericFormat
             thousandSeparator="."
@@ -86,7 +96,7 @@ const FilterPage = () => {
             onValueChange={(event) =>
               controlSearchParams(filterKeyStrings.maxPrice, event.value)
             }
-            className="flex grow justify-between gap-1 rounded-lg border border-solid border-slate-400 bg-white px-3 py-2.5"
+            className="ml-2 w-1/2 justify-between gap-1 rounded-lg border border-solid border-slate-400 bg-white px-3 py-2.5"
           />
         </div>
         <div className="mt-2 inline-grid grid-cols-3 gap-2">
@@ -152,8 +162,19 @@ const FilterPage = () => {
         </div>
         <div className="mt-2 flex gap-2">
           {FILTER_OPTIONS.bedroomCount.options.map((option, index) => {
-            const isActive =
-              searchParams.get(filterKeyStrings.bedroomCount) === option.value
+            const isGreaterThanFive = option.value === '5 +'
+            const exactValue = searchParams.get(filterKeyStrings.bedroomCount)
+            const minValue = searchParams.get(
+              `${filterKeyStrings.bedroomCount}[min]`,
+            )
+
+            let isActive: boolean
+            if (isGreaterThanFive) {
+              isActive = minValue === '5'
+            } else {
+              isActive = exactValue === option.value && minValue === null
+            }
+
             return (
               <ButtonFilterChip
                 key={index}
@@ -176,8 +197,18 @@ const FilterPage = () => {
         </div>
         <div className="mt-2 flex gap-2">
           {FILTER_OPTIONS.bathroomCount.options.map((option, index) => {
-            const isActive =
-              searchParams.get(filterKeyStrings.bathroomCount) === option.value
+            const isGreaterThanFive = option.value === '5 +'
+            const exactValue = searchParams.get(filterKeyStrings.bathroomCount)
+            const minValue = searchParams.get(
+              `${filterKeyStrings.bathroomCount}[min]`,
+            )
+
+            let isActive: boolean
+            if (isGreaterThanFive) {
+              isActive = minValue === '5'
+            } else {
+              isActive = exactValue === option.value && minValue === null
+            }
             return (
               <ButtonFilterChip
                 key={index}
@@ -301,9 +332,19 @@ const FilterPage = () => {
           Kapasitas garasi mobil
         </div>
         <div className="mt-2 flex gap-2">
-          {FILTER_OPTIONS.garageCarCapacity.options.map((option, index) => {
-            const isActive =
-              searchParams.get(filterKeyStrings.carCount) === option.value
+          {FILTER_OPTIONS.carCount.options.map((option, index) => {
+            const isGreaterThanFive = option.value === '5 +'
+            const exactValue = searchParams.get(filterKeyStrings.carCount)
+            const minValue = searchParams.get(
+              `${filterKeyStrings.carCount}[min]`,
+            )
+
+            let isActive: boolean
+            if (isGreaterThanFive) {
+              isActive = minValue === '5'
+            } else {
+              isActive = exactValue === option.value && minValue === null
+            }
             return (
               <ButtonFilterChip
                 key={index}
