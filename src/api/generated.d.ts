@@ -236,6 +236,8 @@ export interface components {
     TelegramUserProfile: {
       /** @example 123 */
       id?: number;
+      /** @example id-123 */
+      publicId?: string;
       /** @example John Doe */
       name?: string;
       /** @example 0811111 */
@@ -272,6 +274,8 @@ export interface operations {
   "listings.index": {
     parameters: {
       query?: {
+        /** @description Search listing by keyword */
+        q?: string;
         /** @description If set to true, it will only return user's collection */
         collection?: boolean;
         /** @description Minimum price */
@@ -282,8 +286,16 @@ export interface operations {
         type?: "house" | "apartment" | "land";
         /** @description Bedroom count */
         bedroomCount?: number;
+        /** @description Minimum Bedroom count */
+        "bedroomCount[min]"?: number;
+        /** @description Maximum Bedroom count */
+        "bedroomCount[max]"?: number;
         /** @description Bathroom count */
         bathroomCount?: number;
+        /** @description Minimum Bathroom count */
+        "bathroomCount[min]"?: number;
+        /** @description Maximum Bathroom count */
+        "bathroomCount[max]"?: number;
         /** @description Minimum lot size */
         "lotSize[min]"?: number;
         /** @description Maximum lot size */
@@ -296,6 +308,10 @@ export interface operations {
         ownership?: "shm" | "hgb" | "girik" | "lainnya";
         /** @description Car count */
         carCount?: number;
+        /** @description Minimum Car count */
+        "carCount[min]"?: number;
+        /** @description Maximum Car count */
+        "carCount[max]"?: number;
         /** @description Electric Power */
         electricPower?: number;
         /** @description Sort By */
@@ -319,7 +335,7 @@ export interface operations {
   "listings.create": {
     requestBody: {
       content: {
-        "multipart/form-data": components["schemas"]["PropertyRequest"];
+        "multipart/form-data": components["schemas"]["ListingRequest"];
       };
     };
     responses: {
@@ -367,7 +383,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "multipart/form-data": components["schemas"]["PropertyRequest"];
+        "multipart/form-data": components["schemas"]["ListingRequest"];
       };
     };
     responses: {

@@ -10,6 +10,7 @@ import TextareaField from 'components/input/TextareaField'
 import InputSingleFileField from 'components/input/InputSingleFileField'
 import BottomStickyButton from 'components/button/BottomStickyButton'
 import InputCheckboxField from 'components/input/InputCheckboxField'
+import { toast } from 'react-toastify'
 
 import { onSubmit } from './handleUserForm'
 
@@ -26,6 +27,7 @@ function EditUser() {
   const navigate = useNavigate()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const picture = watch('picture')
+  const viteBaseURL = import.meta.env.VITE_BASE_URL.replace('/api/tele-app', '')
 
   const [newImageFile, setNewImageFile] = useState<File | null>(null)
   const handleNewFile = (file: File | null) => {
@@ -37,6 +39,18 @@ function EditUser() {
       reset(userDetails)
     }
   }, [userDetails, reset])
+
+  const handleCopyText = () => {
+    const inputElement = document.getElementById('publicUrlInput') as HTMLInputElement | null
+  
+    if (inputElement && navigator.clipboard) {
+      navigator.clipboard.writeText(inputElement.value).then(() => {
+        toast(`Successfully copied to clipboard`, { type: 'info' })
+      }).catch((err) => {
+        toast(`Failed to copy to clipboard`, { type: 'error' })
+      })
+    }
+  }
 
   return (
     <div>
@@ -90,10 +104,30 @@ function EditUser() {
           />
           <div className="mb-10">
             <InputCheckboxField
-              label="Tampilkan profil Anda?"
+              label="Public URL"
               registerHook={register('isPublicProfile')}
               inputID="isPrivate"
+              showTooltip
+              tooltipContent='Generates a shareable URL containing your profile and listings. URL will be usable after the changes is saved'
             />
+            {watch('isPublicProfile') ? (
+              <div className="flex items-center mt-2">
+                <input
+                  id="publicUrlInput"
+                  type="text"
+                  value={`${viteBaseURL}/public/agent/${userDetails?.publicId || ''}`}
+                  readOnly
+                  className="border-none bg-slate-50 p-2 mr-2"
+                />
+                <button
+                  type="button"
+                  onClick={handleCopyText}
+                  className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                >
+                  Copy
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
         <BottomStickyButton type="submit" disabled={isSubmitting || isLoading}>
