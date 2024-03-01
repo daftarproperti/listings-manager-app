@@ -7,6 +7,7 @@ type TextareaFieldProps = {
   placeholderValue: string
   errorFieldName?: FieldError
   errorMessage?: string
+  additionalClassName?: string
 }
 
 const TextareaField: React.FC<TextareaFieldProps> = ({
@@ -15,16 +16,23 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
   placeholderValue,
   errorFieldName,
   errorMessage,
+  additionalClassName,
 }) => {
+  const baseClassName =
+    'mt-1 min-h-[127px] w-full items-start justify-center self-stretch whitespace-nowrap rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-white px-3 py-2.5 text-lg leading-7 text-gray-800'
+  const textareaClassName = `${baseClassName} ${
+    additionalClassName || ''
+  }`.trim()
+
   return (
-    <div className="mt-3 w-full self-stretch">
+    <div className="w-full self-stretch pt-3">
       <span className="text-lg font-semibold leading-7 text-gray-800">
         {label}
       </span>
       <textarea
         {...registerHook}
         placeholder={placeholderValue}
-        className="mt-1 min-h-[127px] w-full items-start justify-center self-stretch whitespace-nowrap rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-white px-3 py-2.5 text-lg leading-7 text-gray-800"
+        className={textareaClassName}
       />
       {errorFieldName && (
         <span className="self-stretch text-sm leading-5 text-red-500">

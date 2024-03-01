@@ -11,6 +11,7 @@ import EditListingPage from './listings/edit'
 import FilterPage from './listings/filter'
 import ListingListPage from './listings/list'
 import EditUserPage from './user'
+import SimpleForm from './listings/add/SimpleForm'
 
 const AuthenticatedPage = ({ children }: { children: ReactNode }) => {
   const [isAuth, setIsAuth] = useState<boolean | undefined>(undefined)
@@ -65,8 +66,17 @@ const router = createBrowserRouter([
         path: '/listings/add',
         element: (
           <>
-            <Header title="Tambah Listing Baru" />
+            <Header title="Tambah Listing Lengkap" />
             <AddPage />
+          </>
+        ),
+      },
+      {
+        path: '/listings/add/simpleform',
+        element: (
+          <>
+            <Header title="Tambah Listing Cara Cepat" />
+            <SimpleForm />
           </>
         ),
       },

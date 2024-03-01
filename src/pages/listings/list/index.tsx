@@ -10,7 +10,8 @@ import SortBottomSheet from 'components/SortBottomSheet'
 import ButtonChip from 'components/button/ButtonChip'
 import LinkChip from 'components/button/LinkChip'
 import { useEffect, useState } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import NewListingSheet from 'components/NewListingSheet'
 
 import Card from './Card'
 
@@ -19,6 +20,7 @@ const ListingListPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
 
   const [isFilterBottomSheetOpen, setIsFilterBottomBarOpen] = useState(false)
+  const [isNewListingSheetOpen, setIsNewListingSheetOpen] = useState(false)
 
   const { data, mutate, isPending, error, isError } = useGetListingList()
 
@@ -104,19 +106,23 @@ const ListingListPage = () => {
         )}
       </div>
       <div className="fixed bottom-0 w-full max-w-lg bg-white px-4 py-2">
-        <Link
-          to="/listings/add"
+        <button
+          onClick={() => setIsNewListingSheetOpen(true)}
           className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-500 px-20 py-3"
         >
           <PlusIcon className="w-[18px] text-white" />
           <div className=" text-base leading-6 text-white">
             Tambah listing baru
           </div>
-        </Link>
+        </button>
       </div>
       <SortBottomSheet
         isOpen={isFilterBottomSheetOpen}
         setIsOpen={setIsFilterBottomBarOpen}
+      />
+      <NewListingSheet
+        isOpen={isNewListingSheetOpen}
+        setIsOpen={setIsNewListingSheetOpen}
       />
     </div>
   )
