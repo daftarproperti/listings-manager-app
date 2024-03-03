@@ -1,0 +1,23 @@
+image: node:18-bullseye
+pipelines:
+  branches:
+    main:
+      - step:
+          name: Build
+          caches:
+            - node
+          script:
+            - cp .env.development.example .env
+            - yarn install
+            - yarn build
+          artifacts:
+            - .env
+            - dist/**
+      - step:
+          name: Deploy
+          script:
+            - pipe: atlassian/google-app-engine-deploy:1.5.0
+              variables:
+                KEY_FILE: $KEY_FILE
+                PROJECT: daftar-properti-dev
+                STOP_PREVIOUS_VERSION: "true"

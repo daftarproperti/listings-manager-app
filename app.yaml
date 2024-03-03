@@ -1,5 +1,5 @@
 runtime: nodejs18
-service: tele-app
+service: dp-app
 handlers:
   - url: /(.*\..+)$
     static_files: dist/\1
