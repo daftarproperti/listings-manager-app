@@ -5,3 +5,9 @@ services:
       context: ..
       dockerfile: test-env/Dockerfile-app
     command: test-env/run-tests.sh
+    volumes:
+      - yarn-cache:/usr/local/share/.cache/yarn
+
+volumes:
+  yarn-cache:
+    external: true
