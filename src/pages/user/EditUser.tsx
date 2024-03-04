@@ -43,6 +43,7 @@ function EditUser() {
       <form
         className="mx-auto max-w-lg"
         onSubmit={handleSubmit((formData) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { picture, ...otherData } = formData
           onSubmit(otherData, mutate, navigate, setIsSubmitting, newImageFile)
         })}

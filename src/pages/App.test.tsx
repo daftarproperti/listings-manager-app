@@ -17,7 +17,7 @@ describe('App', () => {
   })
 
   test('authentication failure', async () => {
-    vi.mocked(axios.get).mockImplementation((url) => {
+    vi.mocked(axios.get).mockImplementation(() => {
       return Promise.reject(new Error('Page not found'))
     })
 
