@@ -30,28 +30,28 @@ export const LISTING_OPTIONS = {
   electric_power: {
     options: [
       {
-        label: '450 W',
-        value: '450',
+        label: '250 V',
+        value: '250v',
       },
       {
-        label: '900 W',
-        value: '900',
+        label: '450 V',
+        value: '450v',
       },
       {
-        label: '1300 W',
-        value: '1300',
+        label: '900 V',
+        value: '900v',
       },
       {
-        label: '2200 W',
-        value: '2200',
+        label: '1300 V',
+        value: '1300v',
       },
       {
-        label: '5500 W',
-        value: '5500',
+        label: '2200 V',
+        value: '2200v',
       },
       {
-        label: '6600 W',
-        value: '6600',
+        label: '3500 V',
+        value: '3500v',
       },
     ],
   },
@@ -64,6 +64,10 @@ export const LISTING_OPTIONS = {
       {
         label: 'HGB',
         value: 'hgb',
+      },
+      {
+        label: 'Strata',
+        value: 'strata',
       },
       {
         label: 'Girik',

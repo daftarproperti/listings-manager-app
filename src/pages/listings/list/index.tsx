@@ -70,6 +70,17 @@ const ListingListPage = () => {
     if (isFetchMoreInView) fetchNextPage()
   }, [isFetchMoreInView])
 
+  const countActiveFilters = () => {
+    let activeFilters = 0
+    for (const [, value] of searchParams.entries()) {
+      if (value) {
+        activeFilters++
+      }
+    }
+    return activeFilters
+  }
+  const activeFilterCount = countActiveFilters()
+
   return (
     <div className="relative w-full">
       <div className="p-4 pb-20">
@@ -92,6 +103,13 @@ const ListingListPage = () => {
               <AdjustmentsHorizontalIcon className="w-5 overflow-hidden text-primary-500 group-hover:text-white" />
             }
             text="Filter"
+            additionalInfo={
+              activeFilterCount > 0 && (
+                <span className="absolute left-5 top-4 inline-flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-xs leading-none text-red-100">
+                  {activeFilterCount}
+                </span>
+              )
+            }
           />
           <ButtonChip
             icon={

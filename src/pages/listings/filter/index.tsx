@@ -50,16 +50,17 @@ const FilterPage = () => {
 
     if (value) {
       if (
-        value === '5 +' &&
-        (key === 'bedroomCount' ||
-          key === 'bathroomCount' ||
-          key === 'carCount')
+        key === 'bedroomCount' ||
+        key === 'bathroomCount' ||
+        key === 'carCount'
       ) {
-        searchParams.set(`${key}[min]`, '5')
+        const minCountValue = value.replace('+', '')
+        searchParams.set(`${key}[min]`, minCountValue)
       } else {
         searchParams.set(key, value)
       }
     }
+
     setSearchParams(searchParams, { replace: true })
   }
 
@@ -162,30 +163,28 @@ const FilterPage = () => {
         </div>
         <div className="mt-2 flex gap-2">
           {FILTER_OPTIONS.bedroomCount.options.map((option, index) => {
-            const isGreaterThanFive = option.value === '5 +'
-            const exactValue = searchParams.get(filterKeyStrings.bedroomCount)
             const minValue = searchParams.get(
               `${filterKeyStrings.bedroomCount}[min]`,
             )
-
-            let isActive: boolean
-            if (isGreaterThanFive) {
-              isActive = minValue === '5'
-            } else {
-              isActive = exactValue === option.value && minValue === null
-            }
+            const optionMinValue = option.value.replace('+', '')
+            const isActive = minValue === optionMinValue
 
             return (
               <ButtonFilterChip
                 key={index}
                 type="button"
                 isActive={isActive}
-                onClick={() =>
-                  controlSearchParams(
-                    filterKeyStrings.bedroomCount,
-                    isActive ? undefined : option.value,
-                  )
-                }
+                onClick={() => {
+                  if (isActive) {
+                    searchParams.delete(`${filterKeyStrings.bedroomCount}[min]`)
+                  } else {
+                    searchParams.set(
+                      `${filterKeyStrings.bedroomCount}[min]`,
+                      optionMinValue,
+                    )
+                  }
+                  setSearchParams(searchParams, { replace: true })
+                }}
               >
                 {option.label}
               </ButtonFilterChip>
@@ -197,29 +196,29 @@ const FilterPage = () => {
         </div>
         <div className="mt-2 flex gap-2">
           {FILTER_OPTIONS.bathroomCount.options.map((option, index) => {
-            const isGreaterThanFive = option.value === '5 +'
-            const exactValue = searchParams.get(filterKeyStrings.bathroomCount)
             const minValue = searchParams.get(
               `${filterKeyStrings.bathroomCount}[min]`,
             )
-
-            let isActive: boolean
-            if (isGreaterThanFive) {
-              isActive = minValue === '5'
-            } else {
-              isActive = exactValue === option.value && minValue === null
-            }
+            const optionMinValue = option.value.replace('+', '')
+            const isActive = minValue === optionMinValue
             return (
               <ButtonFilterChip
                 key={index}
                 type="button"
                 isActive={isActive}
-                onClick={() =>
-                  controlSearchParams(
-                    filterKeyStrings.bathroomCount,
-                    isActive ? undefined : option.value,
-                  )
-                }
+                onClick={() => {
+                  if (isActive) {
+                    searchParams.delete(
+                      `${filterKeyStrings.bathroomCount}[min]`,
+                    )
+                  } else {
+                    searchParams.set(
+                      `${filterKeyStrings.bathroomCount}[min]`,
+                      optionMinValue,
+                    )
+                  }
+                  setSearchParams(searchParams, { replace: true })
+                }}
               >
                 {option.label}
               </ButtonFilterChip>
@@ -333,29 +332,27 @@ const FilterPage = () => {
         </div>
         <div className="mt-2 flex gap-2">
           {FILTER_OPTIONS.carCount.options.map((option, index) => {
-            const isGreaterThanFive = option.value === '5 +'
-            const exactValue = searchParams.get(filterKeyStrings.carCount)
             const minValue = searchParams.get(
               `${filterKeyStrings.carCount}[min]`,
             )
-
-            let isActive: boolean
-            if (isGreaterThanFive) {
-              isActive = minValue === '5'
-            } else {
-              isActive = exactValue === option.value && minValue === null
-            }
+            const optionMinValue = option.value.replace('+', '')
+            const isActive = minValue === optionMinValue
             return (
               <ButtonFilterChip
                 key={index}
                 type="button"
                 isActive={isActive}
-                onClick={() =>
-                  controlSearchParams(
-                    filterKeyStrings.carCount,
-                    isActive ? undefined : option.value,
-                  )
-                }
+                onClick={() => {
+                  if (isActive) {
+                    searchParams.delete(`${filterKeyStrings.carCount}[min]`)
+                  } else {
+                    searchParams.set(
+                      `${filterKeyStrings.carCount}[min]`,
+                      optionMinValue,
+                    )
+                  }
+                  setSearchParams(searchParams, { replace: true })
+                }}
               >
                 {option.label}
               </ButtonFilterChip>

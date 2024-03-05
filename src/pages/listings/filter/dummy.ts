@@ -61,48 +61,48 @@ export const FILTER_OPTIONS = {
   bedroomCount: {
     options: [
       {
-        label: '1',
-        value: '1',
+        label: '1+',
+        value: '1+',
       },
       {
-        label: '2',
-        value: '2',
+        label: '2+',
+        value: '2+',
       },
       {
-        label: '3',
-        value: '3',
+        label: '3+',
+        value: '3+',
       },
       {
-        label: '4',
-        value: '4',
+        label: '4+',
+        value: '4+',
       },
       {
-        label: '5 +',
-        value: '5 +',
+        label: '5+',
+        value: '5+',
       },
     ],
   },
   bathroomCount: {
     options: [
       {
-        label: '1',
-        value: '1',
+        label: '1+',
+        value: '1+',
       },
       {
-        label: '2',
-        value: '2',
+        label: '2+',
+        value: '2+',
       },
       {
-        label: '3',
-        value: '3',
+        label: '3+',
+        value: '3+',
       },
       {
-        label: '4',
-        value: '4',
+        label: '4+',
+        value: '4+',
       },
       {
-        label: '5 +',
-        value: '5 +',
+        label: '5+',
+        value: '5+',
       },
     ],
   },
@@ -116,10 +116,10 @@ export const FILTER_OPTIONS = {
         label: 'HGB',
         value: 'hgb',
       },
-      // {
-      //   label: 'Strata',
-      //   value: 'strata',
-      // },
+      {
+        label: 'Strata',
+        value: 'strata',
+      },
       {
         label: 'Girik',
         value: 'girik',
@@ -133,24 +133,24 @@ export const FILTER_OPTIONS = {
   carCount: {
     options: [
       {
-        label: '1',
-        value: '1',
+        label: '1+',
+        value: '1+',
       },
       {
-        label: '2',
-        value: '2',
+        label: '2+',
+        value: '2+',
       },
       {
-        label: '3',
-        value: '3',
+        label: '3+',
+        value: '3+',
       },
       {
-        label: '4',
-        value: '4',
+        label: '4+',
+        value: '4+',
       },
       {
-        label: '5 +',
-        value: '5 +',
+        label: '5+',
+        value: '5+',
       },
     ],
   },

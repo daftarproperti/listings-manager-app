@@ -5,9 +5,15 @@ import { Link, type LinkProps } from 'react-router-dom'
 const LinkChip = ({
   icon,
   text,
+  additionalInfo,
   disabled,
   ...props
-}: { icon?: ReactNode; text: string; disabled?: boolean } & LinkProps) => {
+}: {
+  icon?: ReactNode
+  text: string
+  additionalInfo?: ReactNode
+  disabled?: boolean
+} & LinkProps) => {
   return (
     <Link
       {...props}
@@ -25,6 +31,7 @@ const LinkChip = ({
         )}
       >
         {text}
+        {additionalInfo}
       </div>
     </Link>
   )
