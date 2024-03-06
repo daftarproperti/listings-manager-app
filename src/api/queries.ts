@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 
 import type {
@@ -19,7 +19,7 @@ import type {
 export const checkAuth = async () => {
   try {
     // TODO: use auth specific endpoint that is lighter, like /auth
-    const response = await axios.get('/listings')
+    const response = await axios.get('/listings?source=tele_app_auth')
     return response.status === 200
   } catch (error) {
     return false
@@ -92,18 +92,46 @@ export const useUpdateUserProfile = () =>
       return response.data
     },
   })
-export const useGetListingList = () =>
-  useMutation<ListingListRes, Error, { searchParams?: URLSearchParams }>({
-    mutationFn: async ({ searchParams }) => {
-      const url = searchParams?.size ? `/listings?${searchParams}` : '/listings'
 
+export const useGetListingList = ({
+  searchParams,
+}: {
+  searchParams?: URLSearchParams
+}) =>
+  useInfiniteQuery<ListingListRes>({
+    queryKey: ['useGetListingListInfite', searchParams],
+    queryFn: async ({ pageParam }) => {
+      let url = '/listings'
+      if (searchParams?.size) {
+        url += `?${searchParams}`
+        if (pageParam) {
+          url += `&page=${pageParam}`
+        }
+      } else if (pageParam) {
+        url += `?page=${pageParam}`
+      }
       const response = await axios.get(url)
       if (!response.data || typeof response.data !== 'object') {
         throw new Error('Invalid response format')
       }
-
       return response.data
     },
+    initialPageParam: searchParams?.get('page') ?? null,
+    getNextPageParam: (lastPage) => {
+      // Note: links and meta is not available in swagger schema yet
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const nextFetchLink: string = lastPage?.links?.next
+      if (!nextFetchLink) {
+        return null
+      } else {
+        return new URL(nextFetchLink).searchParams.get('page') ?? null
+      }
+    },
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    retry: false,
   })
 
 export const useGetListingDetail = ({ id }: { id: string }) =>

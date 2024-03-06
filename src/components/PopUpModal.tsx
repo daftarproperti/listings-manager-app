@@ -1,19 +1,13 @@
-import React from 'react';
+import React from 'react'
 
 interface PopUpModalProps {
-  mouseX: number;
-  mouseY: number;
-  onRequestClose: () => void;
-  tooltipContent: string;
+  mouseX: number
+  mouseY: number
+  tooltipContent: string
 }
 
-const PopUpModal = ({
-  mouseX,
-  mouseY,
-  onRequestClose,
-  tooltipContent,
-}: PopUpModalProps) => {
-  const offset = 20;
+const PopUpModal = ({ mouseX, mouseY, tooltipContent }: PopUpModalProps) => {
+  const offset = 20
 
   const modalStyle: React.CSSProperties = {
     position: 'fixed',
@@ -25,13 +19,13 @@ const PopUpModal = ({
     backgroundColor: '#fff',
     padding: '10px',
     zIndex: 9999,
-  };
+  }
 
   return (
     <div style={modalStyle}>
       <p>{tooltipContent}</p>
     </div>
-  );
-};
+  )
+}
 
-export default PopUpModal;
+export default PopUpModal

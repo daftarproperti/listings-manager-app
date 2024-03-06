@@ -41,14 +41,19 @@ function EditUser() {
   }, [userDetails, reset])
 
   const handleCopyText = () => {
-    const inputElement = document.getElementById('publicUrlInput') as HTMLInputElement | null
-  
+    const inputElement = document.getElementById(
+      'publicUrlInput',
+    ) as HTMLInputElement | null
+
     if (inputElement && navigator.clipboard) {
-      navigator.clipboard.writeText(inputElement.value).then(() => {
-        toast(`Successfully copied to clipboard`, { type: 'info' })
-      }).catch((err) => {
-        toast(`Failed to copy to clipboard`, { type: 'error' })
-      })
+      navigator.clipboard
+        .writeText(inputElement.value)
+        .then(() => {
+          toast(`Successfully copied to clipboard`, { type: 'info' })
+        })
+        .catch(() => {
+          toast(`Failed to copy to clipboard`, { type: 'error' })
+        })
     }
   }
 
@@ -108,21 +113,23 @@ function EditUser() {
               registerHook={register('isPublicProfile')}
               inputID="isPrivate"
               showTooltip
-              tooltipContent='Generates a shareable URL containing your profile and listings. URL will be usable after the changes is saved'
+              tooltipContent="Generates a shareable URL containing your profile and listings. URL will be usable after the changes is saved"
             />
             {watch('isPublicProfile') ? (
-              <div className="flex items-center mt-2">
+              <div className="mt-2 flex items-center">
                 <input
                   id="publicUrlInput"
                   type="text"
-                  value={`${viteBaseURL}/public/agent/${userDetails?.publicId || ''}`}
+                  value={`${viteBaseURL}/public/agent/${
+                    userDetails?.publicId || ''
+                  }`}
                   readOnly
-                  className="border-none bg-slate-50 p-2 mr-2"
+                  className="mr-2 border-none bg-slate-50 p-2"
                 />
                 <button
                   type="button"
                   onClick={handleCopyText}
-                  className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+                  className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
                 >
                   Copy
                 </button>

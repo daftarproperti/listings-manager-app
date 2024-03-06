@@ -7,7 +7,7 @@ const ButtonChip = ({
   isActive,
   ...props
 }: {
-  text: string
+  text?: string
   icon?: ReactNode
   isActive?: boolean
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
@@ -15,19 +15,24 @@ const ButtonChip = ({
     <button
       {...props}
       className={clsx(
-        'group flex items-center justify-center gap-1 rounded-lg border border-solid border-primary-500 bg-white px-3.5 py-2 text-white transition-all hover:bg-primary-500',
+        'group flex items-center justify-center gap-1 rounded-lg border border-solid border-primary-500 bg-white px-3.5 py-2 text-white transition-all',
         isActive && '!bg-primary-500',
+        props.disabled ? 'border-none !bg-slate-300' : 'hover:bg-primary-500',
+        props.className,
       )}
     >
       {icon}
-      <div
-        className={clsx(
-          'grow self-stretch text-sm leading-5 text-primary-500 group-hover:text-white',
-          isActive && '!text-white',
-        )}
-      >
-        {text}
-      </div>
+      {text && (
+        <div
+          className={clsx(
+            'grow self-stretch text-sm leading-5 text-primary-500',
+            isActive && '!text-white',
+            props.disabled ? 'text-slate-100' : 'group-hover:text-white',
+          )}
+        >
+          {text}
+        </div>
+      )}
     </button>
   )
 }

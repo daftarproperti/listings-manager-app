@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import type { UseFormRegisterReturn } from 'react-hook-form'
-import PopUpModal from '../PopUpModal';
+
+import PopUpModal from '../PopUpModal'
 
 type TextareaFieldProps = {
   label: string
@@ -18,13 +19,12 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
   tooltipContent,
 }) => {
   const tooltipRef = useRef<HTMLSpanElement>(null)
-  const [isTooltipOpen, setIsTooltipOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
 
   const handleTap = () => {
-    setIsModalOpen(true);
-  };
+    setIsModalOpen(true)
+  }
 
   useEffect(() => {
     if (showTooltip && tooltipRef.current) {
@@ -32,14 +32,12 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
 
       const handleMouseOver = (e: MouseEvent) => {
         setCursorPosition({ x: e.clientX, y: e.clientY })
-        setIsTooltipOpen(true)
         setIsModalOpen(true)
-      };
+      }
 
       const handleMouseOut = () => {
-        setIsTooltipOpen(false)
         setIsModalOpen(false)
-      };
+      }
 
       tooltipElement.addEventListener('mouseover', handleMouseOver)
       tooltipElement.addEventListener('mouseout', handleMouseOut)
@@ -65,7 +63,7 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
       {showTooltip && (
         <span
           ref={tooltipRef}
-          className="text-gray-400 cursor-pointer ml-2"
+          className="ml-2 cursor-pointer text-gray-400"
           onClick={handleTap}
           data-tip={tooltipContent}
           data-event="click"
@@ -78,7 +76,6 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
         <PopUpModal
           mouseX={cursorPosition.x}
           mouseY={cursorPosition.y}
-          onRequestClose={() => setIsModalOpen(false)}
           tooltipContent={tooltipContent}
         />
       )}
