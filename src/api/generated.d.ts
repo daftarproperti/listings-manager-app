@@ -22,6 +22,14 @@ export interface paths {
     /** Delete listing */
     delete: operations["listings.delete"];
   };
+  "/api/photo/{fileId}/{fileName}": {
+    /** Show image */
+    get: operations["image.show"];
+  };
+  "/api/tele-app/upload/image": {
+    /** Upload Image */
+    post: operations["image.upload"];
+  };
   "/api/tele-app/properties": {
     /**
      * Get list of property
@@ -54,6 +62,10 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    ImageUploadRequest: {
+      /** Format: binary */
+      image?: string;
+    };
     ListingRequest: {
       /** @example Rumah dijual di daerah pasteur */
       title?: string;
@@ -419,6 +431,46 @@ export interface operations {
           "application/json": {
             /** @example Listing deleted successfully */
             message?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Show image */
+  "image.show": {
+    parameters: {
+      path: {
+        /** @description File Id */
+        fileId: number;
+        /** @description Filename */
+        fileName: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "image/*": string;
+        };
+      };
+    };
+  };
+  /** Upload Image */
+  "image.upload": {
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["ImageUploadRequest"];
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": {
+            /** @example 123 */
+            fileId?: number;
+            /** @example image.jpg */
+            fileName?: string;
           };
         };
       };

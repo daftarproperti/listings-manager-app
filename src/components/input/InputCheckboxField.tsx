@@ -7,8 +7,8 @@ type TextareaFieldProps = {
   label: string
   registerHook: UseFormRegisterReturn<string>
   inputID: string
-  showTooltip: boolean
-  tooltipContent: string
+  showTooltip?: boolean
+  tooltipContent?: string
 }
 
 const TextareaField: React.FC<TextareaFieldProps> = ({
@@ -76,7 +76,7 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
         <PopUpModal
           mouseX={cursorPosition.x}
           mouseY={cursorPosition.y}
-          tooltipContent={tooltipContent}
+          tooltipContent={tooltipContent ?? ''}
         />
       )}
     </div>
