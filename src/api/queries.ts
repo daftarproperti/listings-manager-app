@@ -16,6 +16,21 @@ import type {
   UserProfileResponse,
 } from './types'
 
+// If x-init-data is in local storage (as a result of login widget), attach it
+// on every request.
+axios.interceptors.request.use(
+  (config) => {
+    const xInitData = localStorage.getItem('x-init-data')
+    if (xInitData) {
+      config.headers['X-INIT-DATA'] = xInitData
+    }
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  },
+)
+
 export const checkAuth = async () => {
   try {
     // TODO: use auth specific endpoint that is lighter, like /auth

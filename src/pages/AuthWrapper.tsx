@@ -1,5 +1,4 @@
 import { checkAuth } from 'api/queries'
-import axios from 'axios'
 import { type ReactNode, useEffect, useState } from 'react'
 
 import LoadingPage from './Loading'
@@ -21,10 +20,6 @@ const AuthenticationWrapper = ({ children }: { children: ReactNode }) => {
     }
     initAuth()
   }, [])
-
-  useEffect(() => {
-    if (xInitData) axios.defaults.headers.common['X-INIT-DATA'] = xInitData
-  }, [xInitData])
 
   return isAuth === undefined ? (
     <LoadingPage message="Authenticating..." />
