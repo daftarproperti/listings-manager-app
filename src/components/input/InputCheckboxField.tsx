@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import type { UseFormRegisterReturn } from 'react-hook-form'
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid'
 
 import PopUpModal from '../PopUpModal'
 
@@ -59,19 +60,19 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
       />
       <label htmlFor={inputID} className="ml-2 text-gray-900">
         {label}
+        {showTooltip && (
+          <span
+            ref={tooltipRef}
+            className="ml-2 cursor-pointer text-gray-400"
+            onClick={handleTap}
+            data-tip={tooltipContent}
+            data-event="click"
+            data-event-off="mouseout"
+          >
+            <QuestionMarkCircleIcon className="mt-[-4px] inline h-5 w-5" />
+          </span>
+        )}
       </label>
-      {showTooltip && (
-        <span
-          ref={tooltipRef}
-          className="ml-2 cursor-pointer text-gray-400"
-          onClick={handleTap}
-          data-tip={tooltipContent}
-          data-event="click"
-          data-event-off="mouseout"
-        >
-          ( ? )
-        </span>
-      )}
       {isModalOpen && (
         <PopUpModal
           mouseX={cursorPosition.x}
