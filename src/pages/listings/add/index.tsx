@@ -61,7 +61,11 @@ const AddPage = () => {
   }
 
   return (
-    <form className="mx-auto max-w-lg" onSubmit={handleSubmit(onSubmit)}>
+    <form className="mx-auto max-w-lg pt-16" onSubmit={handleSubmit(onSubmit)}>
+      <div className="bg-fire-bush-100 p-4 text-xs">
+        Anda dapat dengan mudah menambahkan listing dengan cara menyalin dan
+        menempelkan seluruh informasi listing Anda pada bot chat Telegram Anda.
+      </div>
       <div className="items-start justify-center whitespace-nowrap border-b border-solid border-b-[color:var(--slate-200,#E2E8F0)] bg-slate-50 py-3 pl-4 pr-16 text-sm font-semibold leading-5 text-slate-500">
         Lengkapi data dibawah ini
       </div>

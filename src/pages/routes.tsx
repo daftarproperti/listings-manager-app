@@ -1,4 +1,5 @@
 import Header from 'components/header/Header'
+import FooterIcons from 'components/footer/FooterIcons'
 import { createBrowserRouter, Outlet } from 'react-router-dom'
 
 import AuthenticationWrapper from './AuthWrapper'
@@ -9,6 +10,7 @@ import FilterPage from './listings/filter'
 import ListingListPage from './listings/list'
 import EditUserPage from './user'
 import SimpleForm from './listings/add/SimpleForm'
+import PropertyListPage from './properties/list'
 
 const router = createBrowserRouter([
   {
@@ -23,8 +25,9 @@ const router = createBrowserRouter([
         path: '/',
         element: (
           <>
-            <Header title="Koleksi Saya" />
+            <Header title="Listing Saya" />
             <ListingListPage />
+            <FooterIcons />
           </>
         ),
       },
@@ -78,6 +81,16 @@ const router = createBrowserRouter([
           <>
             <Header title="Data Pribadi" />
             <EditUserPage />
+          </>
+        ),
+      },
+      {
+        path: '/properties',
+        element: (
+          <>
+            <Header title="Daftar Properti" isWithoutBackButton={true} />
+            <PropertyListPage />
+            <FooterIcons />
           </>
         ),
       },

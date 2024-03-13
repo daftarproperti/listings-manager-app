@@ -19,6 +19,7 @@ export default {
         'primary-800': '#1149BC',
         'primary-900': '#144194',
         'primary-950': '#11295A',
+        'fire-bush-100': '#FBEFCA',
       },
       maxHeight: {
         46: '186px',

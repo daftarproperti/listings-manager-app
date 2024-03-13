@@ -13,7 +13,7 @@ const SimpleForm = () => {
     console.log(data)
   }
   return (
-    <div>
+    <div className="pt-16">
       <form className="mx-auto max-w-lg" onSubmit={handleSubmit(onSubmit)}>
         <div className="items-start justify-center whitespace-nowrap border-b border-solid border-b-[color:var(--slate-200,#E2E8F0)] bg-slate-50 py-3 pl-4 pr-16 text-sm font-semibold leading-5 text-slate-500">
           Salin dan tempel informasi listing Anda di bawah ini
@@ -24,7 +24,7 @@ const SimpleForm = () => {
             registerHook={register('information', { required: true })}
             placeholderValue="Tulis keterangan untuk listing ini"
             errorMessage="Informasi Listing harus diisi"
-            additionalClassName="min-h-96"
+            additionalClassName="min-h-[400px]"
           />
         </div>
         <BottomStickyButton type="submit">Simpan</BottomStickyButton>

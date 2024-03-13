@@ -70,7 +70,7 @@ const FilterPage = () => {
 
   return (
     <form onSubmit={onSubmit} className="relative w-full bg-slate-100">
-      <div className="p-4 pb-24">
+      <div className="p-4 pb-24 pt-20">
         <div className="w-full text-lg font-semibold leading-7 text-slate-500">
           Harga
         </div>

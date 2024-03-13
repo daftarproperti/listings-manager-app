@@ -14,8 +14,7 @@ import LinkChip from 'components/button/LinkChip'
 import { Fragment, useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { XCircleIcon } from '@heroicons/react/24/outline'
-
-import Card from './Card'
+import Card from 'components/Card'
 
 const ListingListPage = () => {
   const navigate = useNavigate()
@@ -83,64 +82,54 @@ const ListingListPage = () => {
 
   return (
     <div className="relative w-full">
-      <div className="p-4 pb-20">
-        <div className="relative mb-4">
-          <MagnifyingGlassIcon className="absolute left-2 top-[50%] h-4 w-4 -translate-y-[50%] text-slate-400" />
-          <input
-            type="text"
-            name="listing-search"
-            id="listing-search"
-            className="block w-full rounded border border-slate-400 p-4 py-1.5 pl-8 text-gray-900 sm:text-sm sm:leading-6"
-            placeholder="Cari Rumah Dimana?"
-            value={searchText}
-            onChange={handleChangeSearchText}
-          />
-        </div>
-        <div className="flex flex-row gap-2">
-          <LinkChip
-            to={`/listings/filter?${searchParams}`}
-            icon={
-              <AdjustmentsHorizontalIcon className="w-5 overflow-hidden text-primary-500 group-hover:text-white" />
-            }
-            text="Filter"
-            additionalInfo={
-              activeFilterCount > 0 && (
-                <span className="absolute left-5 top-4 inline-flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-xs leading-none text-red-100">
-                  {activeFilterCount}
-                </span>
-              )
-            }
-          />
-          <ButtonChip
-            icon={
-              <Bars3BottomLeftIcon className="w-5 overflow-hidden text-primary-500 group-hover:text-white" />
-            }
-            text="Urutkan"
-            onClick={() => setIsFilterBottomBarOpen(true)}
-          />
-          <ButtonChip
-            text="Private"
-            isActive={searchParams?.get('collection') === 'true'}
-            onClick={() => {
-              const newSearchParams = new URLSearchParams(searchParams)
-              if (newSearchParams.get('collection')) {
-                newSearchParams.delete('collection')
-              } else {
-                newSearchParams.set('collection', 'true')
-              }
-              setSearchParams(newSearchParams, { replace: true })
-            }}
-          />
-          {searchParams?.size > 0 && (
-            <ButtonChip
-              text="Reset"
-              icon={<XCircleIcon className="w-5" />}
-              isActive
-              onClick={() => onClickReset(true)}
+      <div className="pb-6 pt-20">
+        <div className="px-4 py-2 pt-0">
+          <div className="relative mb-4">
+            <MagnifyingGlassIcon className="absolute left-2 top-[50%] h-4 w-4 -translate-y-[50%] text-slate-400" />
+            <input
+              type="text"
+              name="listing-search"
+              id="listing-search"
+              className="block w-full rounded border border-slate-300 p-4 py-2 pl-8 text-lg text-gray-900"
+              placeholder="Kata kunci pencarian"
+              value={searchText}
+              onChange={handleChangeSearchText}
             />
-          )}
+          </div>
+          <div className="flex flex-row gap-2">
+            <LinkChip
+              to={`/listings/filter?${searchParams}`}
+              icon={
+                <AdjustmentsHorizontalIcon className="w-5 overflow-hidden text-primary-500 group-hover:text-white" />
+              }
+              text="Filter"
+              additionalInfo={
+                activeFilterCount > 0 && (
+                  <span className="absolute left-5 top-4 inline-flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-xs leading-none text-red-100">
+                    {activeFilterCount}
+                  </span>
+                )
+              }
+            />
+            <ButtonChip
+              icon={
+                <Bars3BottomLeftIcon className="w-5 overflow-hidden text-primary-500 group-hover:text-white" />
+              }
+              text="Urutkan"
+              onClick={() => setIsFilterBottomBarOpen(true)}
+            />
+            {searchParams?.size > 0 && (
+              <ButtonChip
+                text="Reset"
+                icon={<XCircleIcon className="w-5" />}
+                isActive
+                onClick={() => onClickReset(true)}
+              />
+            )}
+          </div>
         </div>
-        <div className="mt-4">
+
+        <div className="mt-2 bg-slate-100 p-4 pb-36">
           {isError ? (
             <div className="mt-[50%] flex h-full -translate-y-1/2 flex-col items-center justify-center">
               <span className="mb-4">Error: {error.message}</span>
@@ -162,7 +151,7 @@ const ListingListPage = () => {
                             onClick={() => onClickCard(listing)}
                             className="cursor-pointer"
                           >
-                            <Card data={listing} />
+                            <Card data={listing} fromPage="listings" />
                           </div>
                         ))
                       ) : (
@@ -187,17 +176,16 @@ const ListingListPage = () => {
           )}
         </div>
       </div>
-      <div className="fixed bottom-0 w-full max-w-lg bg-white px-4 py-2">
+      <div className="fixed bottom-36 h-0 w-full max-w-lg text-right">
         <button
-          onClick={() => setIsNewListingSheetOpen(true)}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-500 px-20 py-3"
+          // onClick={() => setIsNewListingSheetOpen(true)}
+          onClick={() => navigate('/listings/add')}
+          className="mr-4 inline-block h-14 w-14 items-center justify-center rounded-full bg-primary-500 p-4"
         >
-          <PlusIcon className="w-[18px] text-white" />
-          <div className=" text-base leading-6 text-white">
-            Tambah listing baru
-          </div>
+          <PlusIcon className="h-6 w-6 text-white" />
         </button>
       </div>
+
       <SortBottomSheet
         isOpen={isFilterBottomSheetOpen}
         setIsOpen={setIsFilterBottomBarOpen}

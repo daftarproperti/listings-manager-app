@@ -36,16 +36,10 @@ export interface paths {
      * @description Returns list of property
      */
     get: operations["index"];
-    /** Create property */
-    post: operations["create"];
   };
   "/api/tele-app/properties/{id}": {
     /** Get property by id */
     get: operations["show"];
-    /** Update property */
-    post: operations["update"];
-    /** Delete property */
-    delete: operations["delete"];
   };
   "/api/tele-app/users/profile": {
     /**
@@ -67,50 +61,6 @@ export interface components {
       image?: string;
     };
     ListingRequest: {
-      /** @example Rumah dijual di daerah pasteur */
-      title?: string;
-      /** @example Jl. Pendidikan No. 1 */
-      address?: string;
-      /** @example Rumah bagus */
-      description?: string;
-      /** @example 100000 */
-      price?: number;
-      /** @example 1000 */
-      lotSize?: number;
-      /** @example 2000 */
-      buildingSize?: number;
-      /** @example 4 */
-      carCount?: number;
-      /** @example 3 */
-      bedroomCount?: number;
-      /** @example 2 */
-      bathroomCount?: number;
-      /** @example 2 */
-      floorCount?: number;
-      /** @example 2200 */
-      electricPower?: number;
-      /** @example Utara */
-      facing?: string;
-      /** @example SHM */
-      ownership?: string;
-      /** @example Bandung */
-      city?: string;
-      pictureUrls?: string[];
-      coordinate?: {
-        latitude?: number;
-        longitude?: number;
-      };
-      contacts?: {
-        name?: string;
-        profilePictureURL?: string;
-        phoneNumber?: string;
-        sourceURL?: string;
-        provider?: string;
-      };
-      /** @example false */
-      isPrivate?: boolean;
-    };
-    PropertyRequest: {
       /** @example Rumah dijual di daerah pasteur */
       title?: string;
       /** @example Jl. Pendidikan No. 1 */
@@ -483,8 +433,8 @@ export interface operations {
   index: {
     parameters: {
       query?: {
-        /** @description If set to true, it will only return user's collection */
-        collection?: boolean;
+        /** @description Search property by keyword */
+        q?: string;
         /** @description Minimum price */
         "price[min]"?: number;
         /** @description Maximum price */
@@ -493,8 +443,16 @@ export interface operations {
         type?: "house" | "apartment" | "land";
         /** @description Bedroom count */
         bedroomCount?: number;
+        /** @description Minimum Bedroom count */
+        "bedroomCount[min]"?: number;
+        /** @description Maximum Bedroom count */
+        "bedroomCount[max]"?: number;
         /** @description Bathroom count */
         bathroomCount?: number;
+        /** @description Minimum Bathroom count */
+        "bathroomCount[min]"?: number;
+        /** @description Maximum Bathroom count */
+        "bathroomCount[max]"?: number;
         /** @description Minimum lot size */
         "lotSize[min]"?: number;
         /** @description Maximum lot size */
@@ -507,6 +465,10 @@ export interface operations {
         ownership?: "shm" | "hgb" | "girik" | "lainnya";
         /** @description Car count */
         carCount?: number;
+        /** @description Minimum Car count */
+        "carCount[min]"?: number;
+        /** @description Maximum Car count */
+        "carCount[max]"?: number;
         /** @description Electric Power */
         electricPower?: number;
         /** @description Sort By */
@@ -522,22 +484,6 @@ export interface operations {
           "application/json": {
             properties?: components["schemas"]["Property"][];
           };
-        };
-      };
-    };
-  };
-  /** Create property */
-  create: {
-    requestBody: {
-      content: {
-        "multipart/form-data": components["schemas"]["PropertyRequest"];
-      };
-    };
-    responses: {
-      /** @description success */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Property"];
         };
       };
     };
@@ -563,57 +509,6 @@ export interface operations {
           "application/json": {
             /** @example Property not found */
             error?: string;
-          };
-        };
-      };
-    };
-  };
-  /** Update property */
-  update: {
-    parameters: {
-      path: {
-        /** @description Property Id */
-        id: string;
-      };
-    };
-    requestBody: {
-      content: {
-        "multipart/form-data": components["schemas"]["PropertyRequest"];
-      };
-    };
-    responses: {
-      /** @description success */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Property"];
-        };
-      };
-      /** @description Property not found */
-      404: {
-        content: {
-          "application/json": {
-            /** @example Property not found */
-            error?: string;
-          };
-        };
-      };
-    };
-  };
-  /** Delete property */
-  delete: {
-    parameters: {
-      path: {
-        /** @description Property Id */
-        id: string;
-      };
-    };
-    responses: {
-      /** @description success */
-      200: {
-        content: {
-          "application/json": {
-            /** @example Property deleted successfully */
-            message?: string;
           };
         };
       };

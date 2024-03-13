@@ -4,9 +4,9 @@ import { clsx } from 'clsx'
 import ImageWithAuth from 'components/ImageWithAuth'
 import { formatCurrencyToIDRText } from 'utils'
 
-const Card = ({ data }: { data: Listing }) => {
+const Card = ({ data, fromPage }: { data: Listing; fromPage: string }) => {
   return (
-    <div className="flex flex-col rounded-lg border">
+    <div className="flex flex-col rounded-lg border bg-white">
       <div className="relative flex justify-between gap-0">
         {!!data.pictureUrls?.length && data.isPrivate && (
           <span className="absolute m-2 w-fit justify-center rounded-xl border-2 border-solid border-sky-500 bg-indigo-900 px-1.5 py-0.5 text-xs leading-4 text-indigo-50 shadow-sm">
@@ -62,29 +62,27 @@ const Card = ({ data }: { data: Listing }) => {
         </div>
       </div>
       <div className="flex w-full justify-between gap-5 rounded-none bg-primary-100 px-3 py-2.5">
-        <div className="flex items-center justify-between gap-2">
-          <div className="aspect-square w-8 max-w-full shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate-300">
-            <img
-              loading="lazy"
-              src={data.user?.profilePictureURL}
-              className="h-full w-full object-contain object-center"
-            />
+        {fromPage === 'listings' && (
+          <a
+            href={'/listings/edit/' + data?.id}
+            className="w-full justify-center self-center whitespace-nowrap rounded-lg border border-solid border-primary-500 bg-white px-4 py-2 text-center text-sm leading-5 text-primary-500"
+          >
+            Edit
+          </a>
+        )}
+        {fromPage === 'properties' && (
+          <div className="w-full py-1 text-right">
+            <a
+              href={`tel:${data?.user?.phoneNumber}`}
+              onClick={(e) => {
+                e.stopPropagation()
+              }}
+              className="justify-center self-center whitespace-nowrap rounded-lg bg-primary-500 px-4 py-2.5 text-center text-sm leading-5 text-slate-50"
+            >
+              Hubungi
+            </a>
           </div>
-          <div className="flex grow basis-[0%] flex-col self-stretch">
-            <div className="text-sm font-semibold leading-5 text-slate-800">
-              {data.user?.name}
-            </div>
-            <div className="text-sm leading-5 text-slate-500">
-              {data.user?.phoneNumber}
-            </div>
-          </div>
-        </div>
-        <button
-          onClick={(e) => e.stopPropagation()}
-          className="justify-center self-center whitespace-nowrap rounded-lg bg-primary-500 px-4 py-2 text-center text-sm leading-5 text-slate-50"
-        >
-          Bagikan
-        </button>
+        )}
       </div>
     </div>
   )

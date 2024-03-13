@@ -52,7 +52,6 @@ export const useGetPropertyList = () =>
       if (!response.data || typeof response.data !== 'object') {
         throw new Error('Invalid response format')
       }
-
       return response.data
     },
   })

@@ -73,7 +73,7 @@ function EditListing({ id }: { id: string }) {
 
   return (
     <form
-      className="mx-auto max-w-lg"
+      className="mx-auto max-w-lg pt-16"
       onSubmit={handleSubmit((data) =>
         onSubmit(
           id,

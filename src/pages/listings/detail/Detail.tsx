@@ -43,7 +43,7 @@ function ListingDetail({
   }
 
   return (
-    <div className="space-y-4 break-words">
+    <div className="space-y-4 break-words pt-16">
       {!!data?.pictureUrls?.length && (
         <SwiperSlider pictures={data?.pictureUrls} />
       )}
@@ -53,11 +53,6 @@ function ListingDetail({
           data?.pictureUrls?.length === undefined && 'pt-4',
         )}
       >
-        {updateSuccess && (
-          <div className="mb-4 rounded-lg bg-primary-50 p-4 text-sm text-green-800">
-            Data berhasil diubah!
-          </div>
-        )}
         {data?.isPrivate && (
           <span className="relative w-fit justify-center rounded-xl border-2 border-solid border-sky-500 bg-indigo-900 px-1.5 py-0.5 text-xs leading-4 text-indigo-50 shadow-sm">
             PRIVATE
