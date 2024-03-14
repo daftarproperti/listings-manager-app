@@ -1,7 +1,7 @@
 image: node:18-bullseye
 pipelines:
   branches:
-    main:
+    dev:
       - step:
           name: Build
           caches:
