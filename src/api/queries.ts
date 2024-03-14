@@ -1,5 +1,6 @@
 import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
+import { toast } from 'react-toastify'
 
 import type {
   PropertyDetailRes,
@@ -14,6 +15,7 @@ import type {
   UpdateProfileParams,
   UpdateProfileRes,
   UserProfileResponse,
+  UploadImageRes,
 } from './types'
 
 // If x-init-data is in local storage (as a result of login widget), attach it
@@ -155,3 +157,33 @@ export const useGetListingDetail = ({ id }: { id: string }) =>
     retry: false,
     staleTime: 0,
   })
+
+// non hook function
+export const uploadImages = async (file: File) => {
+  const imageFormData = new FormData()
+  imageFormData.append('image', file)
+  try {
+    const res = await axios.post<UploadImageRes>('/upload/image', imageFormData)
+    return res?.data
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (
+        error.response?.data?.errors?.image.includes(
+          'The image field must be an image.',
+        )
+      ) {
+        toast(`Error uploading image: File harus berupa gambar`, {
+          type: 'error',
+        })
+      } else {
+        toast(
+          `Error uploading image: ${JSON.stringify(error.response?.data)}`,
+          {
+            type: 'error',
+          },
+        )
+      }
+    }
+    return null
+  }
+}

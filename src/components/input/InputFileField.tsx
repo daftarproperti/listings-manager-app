@@ -55,6 +55,7 @@ const InputFileField: React.FC<InputFileProps> = ({
           {...registerHook}
           onChange={handleImageChange}
           className="hidden"
+          accept="image/png, image/gif, image/jpeg"
         />
         <div className="my-2 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3">
           {existingImages.map((url, index) => (

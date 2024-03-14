@@ -31,3 +31,5 @@ export type DeleteListingRes =
 export type AddListingRequest = FormData
 export type AddListingResponse =
   operations['listings.create']['responses']['200']['content']['application/json']
+export type UploadImageRes =
+  operations['image.upload']['responses']['200']['content']['application/json']

@@ -42,7 +42,7 @@ const AddPage = () => {
   const navigate = useNavigate()
 
   const onSubmit = async (data: UpdateListingRequest) => {
-    const addNewListingPayload = transformListingObjectToFormData({
+    const addNewListingPayload = await transformListingObjectToFormData({
       data,
       formExistingImages,
       formNewImageFiles,

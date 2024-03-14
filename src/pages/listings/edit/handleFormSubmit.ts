@@ -18,7 +18,7 @@ export const onSubmit = async (
   formNewImageFiles: File[],
 ) => {
   setIsSubmitting(true)
-  const dataToSubmit = transformListingObjectToFormData({
+  const dataToSubmit = await transformListingObjectToFormData({
     data: formData,
     formExistingImages,
     formNewImageFiles,

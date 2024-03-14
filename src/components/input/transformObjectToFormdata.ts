@@ -1,6 +1,7 @@
+import { uploadImages } from 'api/queries'
 import { type UpdateListingRequest } from 'api/types'
 
-const transformListingObjectToFormData = ({
+const transformListingObjectToFormData = async ({
   data,
   formExistingImages,
   formNewImageFiles,
@@ -8,11 +9,11 @@ const transformListingObjectToFormData = ({
   data: UpdateListingRequest
   formExistingImages: string[]
   formNewImageFiles: File[]
-}) => {
+}): Promise<FormData> => {
   const formData = new FormData()
+
   Object.keys(data).forEach((key) => {
     const value = data[key as keyof typeof data]
-
     if (key !== 'pictureUrls' && !key.startsWith('contacts')) {
       if (key === 'price' && typeof value === 'string') {
         data[key] = parseFloat(value)
@@ -26,17 +27,14 @@ const transformListingObjectToFormData = ({
       ) {
         data[key] = parseInt(value, 10)
       }
-
       if (value !== null && value !== undefined) {
         formData.append(key, value.toString())
       }
-
       if (key === 'isPrivate') {
         const valueIsPrivate = data.isPrivate ? 1 : 0
         formData.append('isPrivate', valueIsPrivate.toString())
       }
     }
-
     if (key.startsWith('contacts')) {
       if (typeof value === 'object' && value !== null) {
         Object.keys(value).forEach((contactKey: string) => {
@@ -49,16 +47,29 @@ const transformListingObjectToFormData = ({
       }
     }
     if (key === 'pictureUrls') {
-      formExistingImages.forEach((url: string, index: number) => {
-        formData.append(`pictureUrls[${index}]`, url)
-      })
-
-      formNewImageFiles.forEach((file, index) => {
-        const newIndex = formExistingImages.length + index
-        formData.append(`pictureUrls[${newIndex}]`, file)
+      formExistingImages.forEach((url: string) => {
+        formData.append(`pictureUrls[]`, url)
       })
     }
   })
+
+  // Upload new images and wait for all uploads to complete
+  if (formNewImageFiles.length) {
+    const uploadedFileNames = await Promise.all(
+      formNewImageFiles.map(uploadImages),
+    )
+
+    uploadedFileNames.forEach((file) => {
+      if (file) {
+        formData.append(
+          'pictureUrls[]',
+          `${import.meta.env.VITE_BASE_URL_PHOTO}/${file.fileId}/${
+            file.fileName
+          }`,
+        )
+      }
+    })
+  }
   return formData
 }
 

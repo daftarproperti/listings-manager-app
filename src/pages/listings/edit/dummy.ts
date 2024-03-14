@@ -31,23 +31,23 @@ export const LISTING_OPTIONS = {
     options: [
       {
         label: '250 V',
-        value: '250v',
+        value: '250',
       },
       {
         label: '450 V',
-        value: '450v',
+        value: '450',
       },
       {
         label: '900 V',
-        value: '900v',
+        value: '900',
       },
       {
         label: '1300 V',
-        value: '1300v',
+        value: '1300',
       },
       {
         label: '2200 V',
-        value: '2200v',
+        value: '2200',
       },
       {
         label: '3500 V',
