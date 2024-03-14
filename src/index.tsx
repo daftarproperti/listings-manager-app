@@ -8,6 +8,8 @@ import './api/config'
 const container = document.getElementById('root') as HTMLDivElement
 const root = createRoot(container)
 
-serviceWorkerRegistration.register()
+if (import.meta.env.VITE_SERVICE_WORKER) {
+  serviceWorkerRegistration.register()
+}
 
 root.render(<App />)
