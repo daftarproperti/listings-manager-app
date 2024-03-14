@@ -36,7 +36,7 @@ axios.interceptors.request.use(
 export const checkAuth = async () => {
   try {
     // TODO: use auth specific endpoint that is lighter, like /auth
-    const response = await axios.get('/listings?source=tele_app_auth')
+    const response = await axios.get('/listings')
     return response.status === 200
   } catch (error) {
     return false

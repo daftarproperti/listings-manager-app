@@ -31,7 +31,7 @@ export function register(config?: Config) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(
       // Modified to vite .env
-      process.env.PUBLIC_URL ?? import.meta.env.VITE_BASE_URL,
+      process.env.PUBLIC_URL ?? import.meta.env.VITE_DP_HOME,
       window.location.href,
     )
     if (publicUrl.origin !== window.location.origin) {

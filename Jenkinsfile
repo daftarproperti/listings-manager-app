@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Each Jenkins build should be a unique project name for docker compose
         // to make sure each build runs the test in an isolated environment.
-        projectName = "tele-app_${BUILD_NUMBER}"
+        projectName = "dp-app_${BUILD_NUMBER}"
     }
 
     stages {

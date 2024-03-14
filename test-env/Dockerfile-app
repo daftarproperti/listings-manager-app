@@ -1,6 +1,6 @@
-# Container for tele-app CI.
+# Container for dp-app CI.
 
 FROM node:18.19.0-bullseye
 
-WORKDIR /usr/src/tele-app
+WORKDIR /usr/src/dp-app
 COPY ./ ./

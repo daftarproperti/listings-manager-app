@@ -8,7 +8,7 @@ const TelegramAuthPage = ({ message }: { message: string }) => {
       <h1 className="text-xl font-bold">{message}</h1>
       <h2 className="font-semibold">Please log in to continue</h2>
       <TelegramLoginButton
-        botName={import.meta.env.VITE_TELEGRAM_BOT_NAME ?? 'jelajah_mls_bot'}
+        botName={import.meta.env.VITE_TELEGRAM_BOT_NAME}
         dataOnauth={(user) => {
           const queryString = transformObjectToQueryString(user)
           localStorage.setItem('x-init-data', queryString)

@@ -28,7 +28,7 @@ function EditUser() {
   const navigate = useNavigate()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const picture = watch('picture')
-  const viteBaseURL = import.meta.env.VITE_BASE_URL.replace('/api/tele-app', '')
+  const dpHome = import.meta.env.VITE_DP_HOME
 
   const [newImageFile, setNewImageFile] = useState<File | null>(null)
   const handleNewFile = (file: File | null) => {
@@ -132,7 +132,7 @@ function EditUser() {
                   id="publicUrlInput"
                   onClick={handleInputClick}
                   type="text"
-                  value={`${viteBaseURL}/public/agents/${
+                  value={`${dpHome}/public/agents/${
                     userDetails?.publicId || ''
                   }`}
                   readOnly

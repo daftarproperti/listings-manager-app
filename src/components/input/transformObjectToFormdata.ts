@@ -63,7 +63,7 @@ const transformListingObjectToFormData = async ({
       if (file) {
         formData.append(
           'pictureUrls[]',
-          `${import.meta.env.VITE_BASE_URL_PHOTO}/${file.fileId}/${
+          `${import.meta.env.VITE_DP_HOME}/api/photo/${file.fileId}/${
             file.fileName
           }`,
         )

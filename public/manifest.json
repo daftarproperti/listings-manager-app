@@ -1,7 +1,7 @@
 {
-    "name": "Multiple Listing Service",
-    "short_name": "MLS",
-    "description": "Property Listing App",
+    "name": "Daftar Properti",
+    "short_name": "DP",
+    "description": "Daftar Properti Indonesia",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#ffffff",
@@ -13,5 +13,4 @@
         "type": "image/svg+xml"
       }
     ]
-  }
-  
+}
