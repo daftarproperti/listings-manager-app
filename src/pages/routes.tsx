@@ -6,11 +6,12 @@ import AuthenticationWrapper from './AuthWrapper'
 import AddPage from './listings/add'
 import ListingDetailPage from './listings/detail'
 import EditListingPage from './listings/edit'
-import FilterPage from './listings/filter'
+import ListingFilterPage from './listings/filter'
 import ListingListPage from './listings/list'
 import EditUserPage from './user'
 import SimpleForm from './listings/add/SimpleForm'
 import PropertyListPage from './properties/list'
+import PropertiesFilterPage from './properties/filter'
 
 const router = createBrowserRouter(
   [
@@ -62,8 +63,8 @@ const router = createBrowserRouter(
           path: '/listings/filter',
           element: (
             <>
-              <Header title="Filter" />
-              <FilterPage />
+              <Header title="Filter Listing" />
+              <ListingFilterPage />
             </>
           ),
         },
@@ -92,6 +93,15 @@ const router = createBrowserRouter(
               <Header title="Daftar Properti" isWithoutBackButton={true} />
               <PropertyListPage />
               <FooterIcons />
+            </>
+          ),
+        },
+        {
+          path: '/properties/filter',
+          element: (
+            <>
+              <Header title="Filter Properti" />
+              <PropertiesFilterPage />
             </>
           ),
         },

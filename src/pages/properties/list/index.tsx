@@ -5,27 +5,28 @@ import {
 } from '@heroicons/react/24/solid'
 import { useGetPropertyList } from 'api/queries'
 import { type Property } from 'api/types'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import ButtonChip from 'components/button/ButtonChip'
 import LinkChip from 'components/button/LinkChip'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import Card from 'components/Card'
+import SortBottomSheet from 'components/SortBottomSheet'
 
 const PropertyListPage = () => {
   const navigate = useNavigate()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams()
+  const [isFilterBottomSheetOpen, setIsFilterBottomBarOpen] = useState(false)
 
-  const { data, mutate, isPending, error, isError } = useGetPropertyList()
+  const { data, refetch, isPending, error, isError } = useGetPropertyList({
+    searchParams,
+  })
 
   const onClickCard = (item: Property) => navigate(`/properties/${item.id}`)
-  useEffect(
-    () =>
-      mutate({
-        searchParams,
-      }),
-    [searchParams],
-  )
+
+  useEffect(() => {
+    refetch()
+  }, [searchParams])
 
   return (
     <div className="relative w-full">
@@ -55,6 +56,7 @@ const PropertyListPage = () => {
                   <Bars3BottomLeftIcon className="w-5 overflow-hidden text-primary-500 group-hover:text-white" />
                 }
                 text="Urutkan"
+                onClick={() => setIsFilterBottomBarOpen(true)}
               />
             </div>
           </div>
@@ -83,11 +85,18 @@ const PropertyListPage = () => {
           ) : (
             <div className="mt-[50%] flex h-full -translate-y-1/2 flex-col items-center justify-center">
               <span className="mb-4">Data Tidak Tersedia</span>
-              <ButtonChip text="Reset" onClick={() => navigate('/')} />
+              <ButtonChip
+                text="Reset"
+                onClick={() => navigate('/properties')}
+              />
             </div>
           )}
         </div>
       </div>
+      <SortBottomSheet
+        isOpen={isFilterBottomSheetOpen}
+        setIsOpen={setIsFilterBottomBarOpen}
+      />
     </div>
   )
 }

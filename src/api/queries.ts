@@ -43,9 +43,14 @@ export const checkAuth = async () => {
   }
 }
 
-export const useGetPropertyList = () =>
-  useMutation<PropertyListRes, Error, { searchParams?: URLSearchParams }>({
-    mutationFn: async ({ searchParams }) => {
+export const useGetPropertyList = ({
+  searchParams,
+}: {
+  searchParams?: URLSearchParams
+}) =>
+  useQuery<PropertyListRes, Error>({
+    queryKey: ['useGetPropertyList', searchParams],
+    queryFn: async () => {
       const url = searchParams?.size
         ? `/properties?${searchParams}`
         : '/properties'
@@ -54,6 +59,7 @@ export const useGetPropertyList = () =>
       if (!response.data || typeof response.data !== 'object') {
         throw new Error('Invalid response format')
       }
+
       return response.data
     },
   })
