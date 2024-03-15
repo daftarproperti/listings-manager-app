@@ -1,27 +1,15 @@
-import { useGetListingDetail } from 'api/queries'
+import { useGetPropertyDetail } from 'api/queries'
 import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
 import { clsx } from 'clsx'
 import RenderDescription from 'pages/listings/detail/Description'
 import SwiperSlider from 'components/SwiperSlider'
 import { useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { formatCurrencyToIDRText } from 'utils'
 import DetailPropertyTable from 'components/DetailPropertyTable'
 
-import ShareButton from './ShareButton'
-
-function ListingDetail({
-  id,
-  setCanEdit,
-}: {
-  id: string
-  setCanEdit: (canEdit: boolean) => void
-}) {
-  const { data, isFetching, refetch } = useGetListingDetail({ id })
-  const navigate = useNavigate()
-  const navigateToEditForm = (id: string) => {
-    navigate(`/listings/edit/${id}`, { replace: true })
-  }
+function PropertyDetail({ id }: { id: string }) {
+  const { data, isFetching, refetch } = useGetPropertyDetail({ id })
   const location = useLocation()
   const updateSuccess = location.state?.updateSuccess
 
@@ -30,10 +18,6 @@ function ListingDetail({
       refetch()
     }
   }, [updateSuccess, refetch])
-
-  useEffect(() => {
-    setCanEdit(data?.userCanEdit ?? false)
-  }, [data?.userCanEdit, setCanEdit])
 
   if (isFetching) {
     return (
@@ -54,12 +38,7 @@ function ListingDetail({
           data?.pictureUrls?.length === undefined && 'pt-4',
         )}
       >
-        {data?.isPrivate && (
-          <span className="relative w-fit justify-center rounded-xl border-2 border-solid border-sky-500 bg-indigo-900 px-1.5 py-0.5 text-xs leading-4 text-indigo-50 shadow-sm">
-            PRIVATE
-          </span>
-        )}
-        <h1 className="pt-2 text-lg font-semibold leading-7 text-slate-500">
+        <h1 className=" pt-2 text-lg font-semibold leading-7 text-slate-500">
           {data?.title}
         </h1>
         <div className="text-2xl font-semibold leading-8 text-slate-800">
@@ -97,26 +76,30 @@ function ListingDetail({
       </div>
       <div className="px-4 text-sm leading-5 text-slate-800">
         <h2 className="text-sm font-semibold leading-7 text-slate-500">
-          Detail Listing
+          Detail Properti
         </h2>
         {data && <DetailPropertyTable dataTable={data} />}
       </div>
       <div className="px-4 text-sm leading-5 text-slate-800">
-        <h2 className="text-sm font-semibold leading-7 text-slate-500">
-          Deskripsi
-        </h2>
         {data && data.description && (
-          <RenderDescription description={data.description} />
+          <>
+            <h2 className="text-sm font-semibold leading-7 text-slate-500">
+              Deskripsi
+            </h2>
+            <RenderDescription description={data.description} />
+          </>
         )}
       </div>
-      <div className="flex items-stretch justify-between gap-5 bg-blue-100 px-3 py-2.5 pb-20">
+      <div className="flex items-stretch justify-between gap-5 bg-blue-100 px-3 py-2.5">
         <div className="flex items-center justify-between gap-2">
           <div className="aspect-square w-8 max-w-full shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate-300">
-            <img
-              loading="lazy"
-              srcSet={data?.user?.profilePictureURL}
-              className="my-auto aspect-square w-8 max-w-full shrink-0 items-center justify-center overflow-hidden object-contain object-center"
-            />
+            {data?.user?.profilePictureURL && (
+              <img
+                loading="lazy"
+                srcSet={data?.user?.profilePictureURL}
+                className="my-auto aspect-square w-8 max-w-full shrink-0 items-center justify-center overflow-hidden object-contain object-center"
+              />
+            )}
           </div>
           <span className="flex grow basis-[0%] flex-col items-stretch self-stretch">
             <div className="whitespace-nowrap text-sm font-semibold leading-5 text-slate-800">
@@ -139,22 +122,8 @@ function ListingDetail({
           </a>
         )}
       </div>
-      <div className="fixed bottom-0 flex w-full max-w-lg items-stretch gap-4 bg-sky-50 px-4 py-2">
-        {data?.userCanEdit && (
-          <button
-            onClick={() => navigateToEditForm(id)}
-            className="inline-block w-1/2 grow items-stretch justify-center whitespace-nowrap rounded-lg border border-solid border-[color:var(--Blue-Ribbon-500,#2A91FF)] bg-white px-11 py-2.5 text-center text-sm leading-5 text-blue-500"
-          >
-            Perbaharui
-          </button>
-        )}
-        <ShareButton
-          url="/detail/{id}"
-          title={data?.title || 'Default Title'}
-        />
-      </div>
     </div>
   )
 }
 
-export default ListingDetail
+export default PropertyDetail

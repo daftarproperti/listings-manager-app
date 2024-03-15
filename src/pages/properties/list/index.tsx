@@ -5,7 +5,6 @@ import {
   MagnifyingGlassIcon,
 } from '@heroicons/react/24/solid'
 import { useGetPropertyList } from 'api/queries'
-import { type Property } from 'api/types'
 import { Fragment, useEffect, useState } from 'react'
 import ButtonChip from 'components/button/ButtonChip'
 import LinkChip from 'components/button/LinkChip'
@@ -35,7 +34,6 @@ const PropertyListPage = () => {
     searchParams,
   })
 
-  const onClickCard = (item: Property) => navigate(`/properties/${item.id}`)
   const handleChangeSearchText = (event: React.ChangeEvent<HTMLInputElement>) =>
     setSearchText(event.target.value)
 
@@ -124,11 +122,7 @@ const PropertyListPage = () => {
                     <Fragment key={index}>
                       {page.properties?.length ? (
                         page.properties?.map((property, index) => (
-                          <div
-                            key={index}
-                            onClick={() => onClickCard(property)}
-                            className="cursor-pointer"
-                          >
+                          <div key={index}>
                             <Card data={property} fromPage="properties" />
                           </div>
                         ))

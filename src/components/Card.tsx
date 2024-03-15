@@ -11,7 +11,7 @@ const Card = ({ data, fromPage }: { data: Listing; fromPage: string }) => {
     navigate(`/listings/edit/${id}`)
   }
   const onClickCard = (id: string) => {
-    navigate(`/listings/${id}`)
+    navigate(`/${fromPage}/${id}`)
   }
 
   return (

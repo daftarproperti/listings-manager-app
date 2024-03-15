@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({
   const isHomePage = location.pathname === '/' || isWithoutBackButton
 
   return (
-    <header className="fixed z-10 flex h-16 w-full max-w-lg items-center justify-between border-b border-slate-300 bg-primary-50 px-4">
+    <header className="fixed top-0 z-10 flex h-16 w-full max-w-lg items-center justify-between border-b border-slate-300 bg-primary-50 px-4">
       <div className="flex h-full items-center space-x-3">
         {!isHomePage && (
           <ArrowLeftIcon

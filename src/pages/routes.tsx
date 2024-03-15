@@ -12,6 +12,7 @@ import EditUserPage from './user'
 import SimpleForm from './listings/add/SimpleForm'
 import PropertyListPage from './properties/list'
 import PropertiesFilterPage from './properties/filter'
+import PropertyDetailPage from './properties/detail'
 
 const router = createBrowserRouter(
   [
@@ -102,6 +103,15 @@ const router = createBrowserRouter(
             <>
               <Header title="Filter Properti" />
               <PropertiesFilterPage />
+            </>
+          ),
+        },
+        {
+          path: '/properties/:id',
+          element: (
+            <>
+              <Header title="Properti" />
+              <PropertyDetailPage />
             </>
           ),
         },
