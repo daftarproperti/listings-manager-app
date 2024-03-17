@@ -51,7 +51,7 @@ export const LISTING_OPTIONS = {
       },
       {
         label: '3500 V',
-        value: '3500v',
+        value: '3500',
       },
     ],
   },

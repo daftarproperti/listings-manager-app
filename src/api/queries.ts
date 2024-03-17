@@ -48,13 +48,18 @@ export const useGetPropertyList = ({
 }: {
   searchParams?: URLSearchParams
 }) =>
-  useQuery<PropertyListRes, Error>({
-    queryKey: ['useGetPropertyList', searchParams],
-    queryFn: async () => {
-      const url = searchParams?.size
-        ? `/properties?${searchParams}`
-        : '/properties'
-
+  useInfiniteQuery<PropertyListRes>({
+    queryKey: ['useGetPropertyListInfite', searchParams],
+    queryFn: async ({ pageParam }) => {
+      let url = '/properties'
+      if (searchParams?.size) {
+        url += `?${searchParams}`
+        if (pageParam) {
+          url += `&page=${pageParam}`
+        }
+      } else if (pageParam) {
+        url += `?page=${pageParam}`
+      }
       const response = await axios.get(url)
       if (!response.data || typeof response.data !== 'object') {
         throw new Error('Invalid response format')
@@ -62,6 +67,22 @@ export const useGetPropertyList = ({
 
       return response.data
     },
+    initialPageParam: searchParams?.get('page') ?? null,
+    getNextPageParam: (lastPage) => {
+      // Note: links and meta is not available in swagger schema yet
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const nextFetchLink: string = lastPage?.links?.next
+      if (!nextFetchLink) {
+        return null
+      } else {
+        return new URL(nextFetchLink).searchParams.get('page') ?? null
+      }
+    },
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    retry: false,
   })
 
 export const useGetPropertyDetail = ({ id }: { id: string }) =>

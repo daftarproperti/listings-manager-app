@@ -6,7 +6,6 @@ import {
   PlusIcon,
 } from '@heroicons/react/24/solid'
 import { useGetListingList } from 'api/queries'
-import { type Listing } from 'api/types'
 import NewListingSheet from 'components/NewListingSheet'
 import SortBottomSheet from 'components/SortBottomSheet'
 import ButtonChip from 'components/button/ButtonChip'
@@ -37,8 +36,6 @@ const ListingListPage = () => {
   } = useGetListingList({
     searchParams,
   })
-
-  const onClickCard = (item: Listing) => navigate(`/listings/${item.id}`)
 
   const handleChangeSearchText = (event: React.ChangeEvent<HTMLInputElement>) =>
     setSearchText(event.target.value)
@@ -146,11 +143,7 @@ const ListingListPage = () => {
                     <Fragment key={index}>
                       {page.listings?.length ? (
                         page.listings?.map((listing, index) => (
-                          <div
-                            key={index}
-                            onClick={() => onClickCard(listing)}
-                            className="cursor-pointer"
-                          >
+                          <div key={index}>
                             <Card data={listing} fromPage="listings" />
                           </div>
                         ))
@@ -178,6 +171,7 @@ const ListingListPage = () => {
       </div>
       <div className="fixed bottom-36 h-0 w-full max-w-lg text-right">
         <button
+          // if tambah listing cara cepat already to use, change this to open NewListingSheet
           // onClick={() => setIsNewListingSheetOpen(true)}
           onClick={() => navigate('/listings/add')}
           className="mr-4 inline-block h-14 w-14 items-center justify-center rounded-full bg-primary-500 p-4"

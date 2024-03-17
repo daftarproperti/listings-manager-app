@@ -3,11 +3,23 @@ import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
 import { clsx } from 'clsx'
 import ImageWithAuth from 'components/ImageWithAuth'
 import { formatCurrencyToIDRText } from 'utils'
+import { useNavigate } from 'react-router-dom'
 
 const Card = ({ data, fromPage }: { data: Listing; fromPage: string }) => {
+  const navigate = useNavigate()
+  const navigateToEditForm = (id: string) => {
+    navigate(`/listings/edit/${id}`)
+  }
+  const onClickCard = (id: string) => {
+    navigate(`/listings/${id}`)
+  }
+
   return (
     <div className="flex flex-col rounded-lg border bg-white">
-      <div className="relative flex justify-between gap-0">
+      <div
+        className="relative flex cursor-pointer justify-between gap-0"
+        onClick={() => onClickCard(data?.id ?? '')}
+      >
         {!!data.pictureUrls?.length && data.isPrivate && (
           <span className="absolute m-2 w-fit justify-center rounded-xl border-2 border-solid border-sky-500 bg-indigo-900 px-1.5 py-0.5 text-xs leading-4 text-indigo-50 shadow-sm">
             PRIVATE
@@ -63,12 +75,12 @@ const Card = ({ data, fromPage }: { data: Listing; fromPage: string }) => {
       </div>
       <div className="flex w-full justify-between gap-5 rounded-none bg-primary-100 px-3 py-2.5">
         {fromPage === 'listings' && (
-          <a
-            href={'/listings/edit/' + data?.id}
+          <button
+            onClick={() => navigateToEditForm(data?.id ?? '')}
             className="w-full justify-center self-center whitespace-nowrap rounded-lg border border-solid border-primary-500 bg-white px-4 py-2 text-center text-sm leading-5 text-primary-500"
           >
             Edit
-          </a>
+          </button>
         )}
         {fromPage === 'properties' && (
           <div className="w-full py-1 text-right">
