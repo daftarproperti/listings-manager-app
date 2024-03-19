@@ -1,4 +1,5 @@
 import { type UseMutateFunction } from '@tanstack/react-query'
+import { uploadImage } from 'api/queries'
 import {
   type UpdateProfileRequest,
   type UserProfileResponse,
@@ -16,7 +17,6 @@ export const onSubmit = async (
 ) => {
   setIsSubmitting(true)
   const dataToSubmit = new FormData()
-
   Object.entries(formData).forEach(([key, value]) => {
     if (key !== 'picture' && key !== 'isPublicProfile') {
       dataToSubmit.append(key, value != null ? String(value) : '')
@@ -28,17 +28,22 @@ export const onSubmit = async (
   })
 
   if (formNewImageFile !== null) {
-    dataToSubmit.append('picture', formNewImageFile)
+    const uploadedfFile = await uploadImage(formNewImageFile)
+    if (uploadedfFile?.fileId && uploadedfFile.fileName) {
+      dataToSubmit.append(
+        'picture',
+        `${uploadedfFile.fileId}_${uploadedfFile.fileName}`,
+      )
+    } else {
+      toast('Error uploading image: cannot get id and name', { type: 'error' })
+    }
   }
 
   mutate(
     { userData: dataToSubmit },
     {
       onSuccess: () => {
-        navigate('/', {
-          state: { updateSuccess: true },
-          replace: true,
-        })
+        navigate('/', { state: { updateSuccess: true }, replace: true })
         toast('Data Berhasil Diubah!', { type: 'success' })
       },
       onSettled: () => {

@@ -186,7 +186,7 @@ export const useGetListingDetail = ({ id }: { id: string }) =>
   })
 
 // non hook function
-export const uploadImages = async (file: File) => {
+export const uploadImage = async (file: File) => {
   const imageFormData = new FormData()
   imageFormData.append('image', file)
   try {

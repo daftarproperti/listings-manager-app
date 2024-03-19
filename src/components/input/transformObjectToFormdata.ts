@@ -1,4 +1,4 @@
-import { uploadImages } from 'api/queries'
+import { uploadImage } from 'api/queries'
 import { type UpdateListingRequest } from 'api/types'
 
 const transformListingObjectToFormData = async ({
@@ -56,7 +56,7 @@ const transformListingObjectToFormData = async ({
   // Upload new images and wait for all uploads to complete
   if (formNewImageFiles.length) {
     const uploadedFileNames = await Promise.all(
-      formNewImageFiles.map(uploadImages),
+      formNewImageFiles.map(uploadImage),
     )
 
     uploadedFileNames.forEach((file) => {
