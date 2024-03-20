@@ -13,6 +13,7 @@ import SimpleForm from './listings/add/SimpleForm'
 import PropertyListPage from './properties/list'
 import PropertiesFilterPage from './properties/filter'
 import PropertyDetailPage from './properties/detail'
+import NotFoundPage from './NotFoundPage'
 
 const router = createBrowserRouter(
   [
@@ -112,6 +113,15 @@ const router = createBrowserRouter(
             <>
               <Header title="Properti" />
               <PropertyDetailPage />
+            </>
+          ),
+        },
+        {
+          path: '*',
+          element: (
+            <>
+              <Header title="Halaman tidak Ditemukan" />
+              <NotFoundPage />
             </>
           ),
         },

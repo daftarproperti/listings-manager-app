@@ -88,7 +88,15 @@ export const useGetPropertyList = ({
 export const useGetPropertyDetail = ({ id }: { id: string }) =>
   useQuery<PropertyDetailRes>({
     queryKey: ['useGetPropertyDetail'],
-    queryFn: async () => (await axios.get(`/properties/${id}`)).data,
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`/properties/${id}`)
+        return response.data
+      } catch (error) {
+        console.error('Failed to fetch property detail:', error)
+        throw error
+      }
+    },
     retry: false,
     staleTime: 0,
   })
@@ -180,7 +188,15 @@ export const useGetListingList = ({
 export const useGetListingDetail = ({ id }: { id: string }) =>
   useQuery<ListingDetailRes>({
     queryKey: ['useGetListingDetail'],
-    queryFn: async () => (await axios.get(`/listings/${id}`)).data,
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`/listings/${id}`)
+        return response.data
+      } catch (error) {
+        console.error('Failed to fetch listing detail:', error)
+        throw error
+      }
+    },
     retry: false,
     staleTime: 0,
   })
