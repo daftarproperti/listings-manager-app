@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 
+import { validateImageFiles } from './validateImageFiles'
+
 export const useImageHandler = (
   propertyDetails: { pictureUrls: string[] },
   triggerAlert: (message: string) => void,
@@ -25,7 +27,7 @@ export const useImageHandler = (
     }
 
     if (files) {
-      const fileList = Array.from(files) as File[]
+      const fileList = Array.from(validateImageFiles(files)) as File[]
       const fileUrls = fileList.map((file) => URL.createObjectURL(file))
 
       setNewImageFiles((prevFiles) => [...prevFiles, ...fileList])

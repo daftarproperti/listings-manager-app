@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react'
 import { type UseFormRegisterReturn } from 'react-hook-form'
+import { validateImageFiles } from 'utils'
 
 type InputSingleFileProps = {
   registerHook: UseFormRegisterReturn<string>
@@ -26,7 +27,7 @@ const InputSingleFileField: React.FC<InputSingleFileProps> = ({
   const handleFileChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       if (e.target.files && e.target.files[0]) {
-        const file = e.target.files[0]
+        const file = validateImageFiles([e.target.files[0]])[0]
         const fileUrl = URL.createObjectURL(file)
         setPreviewUrl(fileUrl)
 
