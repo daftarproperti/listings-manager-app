@@ -180,20 +180,7 @@ export interface components {
         latitude?: number;
         longitude?: number;
       };
-      contacts?: {
-        name?: string;
-        profilePictureURL?: string;
-        phoneNumber?: string;
-        sourceURL?: string;
-        provider?: string;
-      };
-      user?: {
-        name?: string;
-        profilePictureURL?: string;
-        phoneNumber?: string;
-      };
-      userCanEdit?: boolean;
-      isPrivate?: boolean;
+      listings?: components["schemas"]["Listing"][];
     };
     TelegramUserProfile: {
       /** @example 123 */

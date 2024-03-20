@@ -103,30 +103,30 @@ function PropertyDetail({ id }: { id: string }) {
                 </>
               )}
             </div>
-            <div className="flex items-stretch justify-between gap-5 bg-blue-100 px-3 py-2.5">
+            <div className="fixed bottom-0 flex w-full max-w-lg items-stretch justify-between gap-5 border-t bg-blue-50 p-4">
               <div className="flex items-center justify-between gap-2">
                 <div className="aspect-square w-8 max-w-full shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate-300">
-                  {data?.user?.profilePictureURL && (
+                  {data?.listings?.[0]?.user?.profilePictureURL && (
                     <img
                       loading="lazy"
-                      srcSet={data?.user?.profilePictureURL}
+                      srcSet={data?.listings?.[0]?.user?.profilePictureURL}
                       className="my-auto aspect-square w-8 max-w-full shrink-0 items-center justify-center overflow-hidden object-contain object-center"
                     />
                   )}
                 </div>
                 <span className="flex grow basis-[0%] flex-col items-stretch self-stretch">
                   <div className="whitespace-nowrap text-sm font-semibold leading-5 text-slate-800">
-                    {data?.user?.name}
+                    {data?.listings?.[0]?.user?.name}
                   </div>
                   <div className="whitespace-nowrap text-sm leading-5 text-slate-500">
-                    {data?.user?.phoneNumber}
+                    {data?.listings?.[0]?.user?.phoneNumber}
                   </div>
                 </span>
               </div>
-              {data?.user?.phoneNumber && (
+              {data?.listings?.[0]?.user?.phoneNumber && (
                 <a
-                  href={`tel:${data.user.phoneNumber}`}
-                  className="items-stretch justify-center whitespace-nowrap rounded-lg bg-blue-500 px-4 py-2 text-center text-sm leading-5 text-slate-50"
+                  href={`tel:${data?.listings?.[0]?.user?.phoneNumber}`}
+                  className="items-stretch justify-center whitespace-nowrap rounded-lg bg-blue-500 px-5 py-3.5 text-center text-sm leading-5 text-slate-50"
                   onClick={(e) => {
                     e.stopPropagation()
                   }}
