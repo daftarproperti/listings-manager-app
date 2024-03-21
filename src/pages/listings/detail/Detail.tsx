@@ -8,8 +8,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { formatCurrencyToIDRText } from 'utils'
 import DetailPropertyTable from 'components/DetailPropertyTable'
 import ButtonChip from 'components/button/ButtonChip'
-
-import ShareButton from './ShareButton'
+import ShareButton from 'components/button/ShareButton'
 
 function ListingDetail({
   id,
@@ -25,6 +24,8 @@ function ListingDetail({
   }
   const location = useLocation()
   const updateSuccess = location.state?.updateSuccess
+  const dpHome = import.meta.env.VITE_DP_HOME
+  const listingPublicUrl = `${dpHome}/public/listings/${data?.id || ''}`
 
   useEffect(() => {
     if (updateSuccess) {
@@ -155,14 +156,16 @@ function ListingDetail({
               {data?.userCanEdit && (
                 <button
                   onClick={() => navigateToEditForm(id)}
-                  className="inline-block w-1/2 grow items-stretch justify-center whitespace-nowrap rounded-lg border border-solid border-[color:var(--Blue-Ribbon-500,#2A91FF)] bg-white px-11 py-2.5 text-center text-sm leading-5 text-blue-500"
+                  className="inline-block w-1/2 grow items-stretch justify-center whitespace-nowrap rounded-lg border border-solid border-[color:var(--Blue-Ribbon-500,#2A91FF)] bg-white px-3 py-2.5 text-center text-sm leading-5 text-blue-500"
                 >
                   Perbaharui
                 </button>
               )}
               <ShareButton
-                url="/detail/{id}"
+                url={listingPublicUrl}
                 title={data?.title || 'Default Title'}
+                buttonName="Bagikan"
+                className="inline-block w-1/2 grow items-stretch justify-center whitespace-nowrap rounded-lg bg-blue-500 px-3 py-2.5 text-center text-sm leading-5 text-white"
               />
             </div>
           </>
