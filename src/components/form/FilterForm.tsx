@@ -25,7 +25,7 @@ const ButtonFilterChip = ({
   </button>
 )
 
-const filterKeyStrings = {
+export const filterKeyStrings = {
   minPrice: 'price[min]',
   maxPrice: 'price[max]',
   listingType: 'type',
@@ -109,7 +109,7 @@ const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
             const isActive =
               searchParams.get(filterKeyStrings.minPrice) ===
                 option.minValue.toString() &&
-              searchParams.get(filterKeyStrings.maxPrice) ===
+              (searchParams.get(filterKeyStrings.maxPrice) ?? '') ===
                 option.maxValue.toString()
             return (
               <ButtonFilterChip

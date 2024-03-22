@@ -10,16 +10,18 @@ import NewListingSheet from 'components/NewListingSheet'
 import SortBottomSheet from 'components/SortBottomSheet'
 import ButtonChip from 'components/button/ButtonChip'
 import LinkChip from 'components/button/LinkChip'
+import Card from 'components/Card'
 import { Fragment, useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { XCircleIcon } from '@heroicons/react/24/outline'
-import Card from 'components/Card'
+import { countActiveFilters } from 'utils'
 
 const ListingListPage = () => {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const { ref: fetchMoreRef, inView: isFetchMoreInView } = useInView()
 
+  const [activeFilterCount, setActiveFilterCount] = useState(0)
   const [isFilterBottomSheetOpen, setIsFilterBottomBarOpen] = useState(false)
   const [isNewListingSheetOpen, setIsNewListingSheetOpen] = useState(false)
   const [searchText, setSearchText] = useState(searchParams?.get('q') ?? '')
@@ -47,6 +49,7 @@ const ListingListPage = () => {
 
   useEffect(() => {
     refetch()
+    setActiveFilterCount(countActiveFilters(searchParams))
   }, [searchParams])
 
   useEffect(() => {
@@ -66,21 +69,10 @@ const ListingListPage = () => {
     if (isFetchMoreInView) fetchNextPage()
   }, [isFetchMoreInView])
 
-  const countActiveFilters = () => {
-    let activeFilters = 0
-    for (const [, value] of searchParams.entries()) {
-      if (value) {
-        activeFilters++
-      }
-    }
-    return activeFilters
-  }
-  const activeFilterCount = countActiveFilters()
-
   return (
-    <div className="relative w-full">
-      <div className="pb-6 pt-20">
-        <div className="px-4 py-2 pt-0">
+    <div className="relative h-dvh">
+      <div className="flex h-dvh w-full flex-col pb-20 pt-16">
+        <div className="bg-white p-4">
           <div className="relative mb-4">
             <MagnifyingGlassIcon className="absolute left-2 top-[50%] h-4 w-4 -translate-y-[50%] text-slate-400" />
             <input
@@ -102,11 +94,12 @@ const ListingListPage = () => {
               text="Filter"
               additionalInfo={
                 activeFilterCount > 0 && (
-                  <span className="absolute left-5 top-4 inline-flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-xs leading-none text-red-100">
+                  <span className="absolute -end-1 -top-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-semibold text-red-100">
                     {activeFilterCount}
                   </span>
                 )
               }
+              className="relative"
             />
             <ButtonChip
               icon={
@@ -126,15 +119,15 @@ const ListingListPage = () => {
           </div>
         </div>
 
-        <div className="mt-2 bg-slate-100 p-4 pb-36">
+        <div className="grow bg-slate-100 p-4 pb-24">
           {isError ? (
-            <div className="mt-[50%] flex h-full -translate-y-1/2 flex-col items-center justify-center">
+            <div className="flex h-96 items-center justify-center">
               <span className="mb-4">Error: {error.message}</span>
             </div>
           ) : isFetching && !isFetchingNextPage ? (
-            <span className="mt-[50%] flex h-full -translate-y-1/2 items-center justify-center">
+            <div className="flex h-96 items-center justify-center">
               Loading...
-            </span>
+            </div>
           ) : (
             data?.pages?.length && (
               <>
@@ -148,19 +141,25 @@ const ListingListPage = () => {
                           </div>
                         ))
                       ) : (
-                        <div className="mt-[50%] flex h-full -translate-y-1/2 flex-col items-center justify-center">
-                          <span className="mb-4">Data Tidak Tersedia</span>
-                          <ButtonChip
-                            text="Reset"
-                            onClick={() => onClickReset(false)}
-                          />
+                        <div className="flex h-96 flex-col items-center justify-center gap-3">
+                          {`${searchParams}` === '' && (
+                            <div className="rounded-lg bg-primary-100 p-3 text-xs">
+                              Anda dapat dengan mudah menambahkan listing dengan
+                              cara menyalin dan menempelkan seluruh informasi
+                              listing Anda pada bot chat Telegram Anda.
+                            </div>
+                          )}
+                          Data Tidak Tersedia
                         </div>
                       )}
                     </Fragment>
                   ))}
                 </ul>
                 {hasNextPage && (
-                  <div ref={fetchMoreRef} className="mt-4 text-center">
+                  <div
+                    ref={fetchMoreRef}
+                    className="flex h-96 items-center justify-center"
+                  >
                     Loading...
                   </div>
                 )}

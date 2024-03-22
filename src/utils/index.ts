@@ -1,3 +1,4 @@
+export * from './countActiveFilters'
 export * from './formatCurrencyToIDRText'
 export * from './safeJSONParse'
 export * from './useImageHandler'
