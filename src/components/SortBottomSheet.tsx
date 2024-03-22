@@ -64,6 +64,7 @@ const SortBottomSheet = ({
       searchParams.set('order', v.order)
     }
     setSearchParams(searchParams)
+    setIsFilterBottomBarOpen(false)
   }
 
   return (
