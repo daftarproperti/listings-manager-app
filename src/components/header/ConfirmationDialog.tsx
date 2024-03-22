@@ -30,10 +30,12 @@ const ConfirmationDialog = ({
     >
       <>
         <div className="mx-6 mb-6 text-center">
-          <h2 className="text-2xl text-slate-900">Yakin akan hapus {title}?</h2>
+          <h2 className="text-2xl text-slate-900">
+            Yakin akan hapus <b>{title}</b>?
+          </h2>
           <p className="my-4 font-normal text-slate-500">
-            Saat ada yang bertanya soal properti ini, Anda akan lebih sulit
-            mencarinya.
+            Setelah terhapus, listing tidak bisa ditemukan di jaringan Daftar
+            Properti.
           </p>
           <div className="flex justify-evenly space-x-2">
             <button

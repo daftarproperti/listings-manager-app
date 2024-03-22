@@ -47,7 +47,7 @@ const router = createBrowserRouter(
           path: '/listings/add',
           element: (
             <>
-              <Header title="Tambah Listing Lengkap" />
+              <Header title="Tambah Listing" />
               <AddPage />
             </>
           ),

@@ -57,40 +57,42 @@ const InputFileField: React.FC<InputFileProps> = ({
           className="hidden"
           accept="image/png, image/gif, image/jpeg"
         />
-        <div className="my-2 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3">
-          {existingImages.map((url, index) => (
-            <div key={`existing-${index}`} className="relative">
-              <img
-                src={url}
-                alt={`Existing Image ${index}`}
-                className="rounded-lg object-cover"
-              />
-              <button
-                type="button"
-                onClick={() => removeImage(index, true)}
-                className="absolute right-0 top-0 rounded-full p-1 text-white"
-              >
-                <CancelIconSVG />
-              </button>
-            </div>
-          ))}
-          {selectedImages.map((image, index) => (
-            <div key={index} className="relative">
-              <img
-                src={image}
-                alt={`Preview ${index}`}
-                className="rounded-lg object-cover"
-              />
-              <button
-                type="button"
-                onClick={() => removeImage(index, false)}
-                className="absolute right-0 top-0 rounded-full p-1 text-white"
-              >
-                <CancelIconSVG />
-              </button>
-            </div>
-          ))}
-        </div>
+        {(existingImages.length > 0 || selectedImages.length > 0) && (
+          <div className="my-2 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3">
+            {existingImages.map((url, index) => (
+              <div key={`existing-${index}`} className="relative">
+                <img
+                  src={url}
+                  alt={`Existing Image ${index}`}
+                  className="rounded-lg object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeImage(index, true)}
+                  className="absolute right-0 top-0 rounded-full p-1 text-white"
+                >
+                  <CancelIconSVG />
+                </button>
+              </div>
+            ))}
+            {selectedImages.map((image, index) => (
+              <div key={index} className="relative">
+                <img
+                  src={image}
+                  alt={`Preview ${index}`}
+                  className="rounded-lg object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeImage(index, false)}
+                  className="absolute right-0 top-0 rounded-full p-1 text-white"
+                >
+                  <CancelIconSVG />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
         <label htmlFor="image-upload" className="cursor-pointer">
           <span className="mt-2 inline-block items-stretch justify-center whitespace-nowrap rounded-lg border border-solid border-[color:var(--Blue-Ribbon-500,#2A91FF)] bg-white px-4 py-2 text-center text-sm leading-5 text-blue-500">
             Upload foto
