@@ -26,7 +26,7 @@ const AuthenticationWrapper = ({ children }: { children: ReactNode }) => {
   ) : isAuth ? (
     children
   ) : (
-    <TelegramAuthPage message="Authentication Failure" />
+    <TelegramAuthPage message="Log in dengan Telegram" />
   )
 }
 

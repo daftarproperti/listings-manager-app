@@ -158,7 +158,7 @@ function ListingDetail({
                   onClick={() => navigateToEditForm(id)}
                   className="inline-block w-1/2 grow items-stretch justify-center whitespace-nowrap rounded-lg border border-solid border-[color:var(--Blue-Ribbon-500,#2A91FF)] bg-white px-3 py-2.5 text-center text-sm leading-5 text-blue-500"
                 >
-                  Perbaharui
+                  Edit
                 </button>
               )}
               <ShareButton

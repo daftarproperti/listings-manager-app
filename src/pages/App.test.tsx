@@ -26,7 +26,7 @@ describe('App', () => {
     await waitFor(() =>
       expect(screen.queryByText('Authenticating...')).not.toBeInTheDocument(),
     )
-    expect(screen.getByText('Authentication Failure')).toBeInTheDocument()
+    expect(screen.getByText('Log in dengan Telegram')).toBeInTheDocument()
   })
 
   test('authentication successful, bad response', async () => {
