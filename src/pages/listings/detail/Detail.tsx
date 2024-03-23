@@ -140,17 +140,6 @@ function ListingDetail({
                   </div>
                 </span>
               </div>
-              {data?.user?.phoneNumber && (
-                <a
-                  href={`tel:${data.user.phoneNumber}`}
-                  className="items-stretch justify-center whitespace-nowrap rounded-lg bg-blue-500 px-4 py-2 text-center text-sm leading-5 text-slate-50"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                  }}
-                >
-                  Hubungi
-                </a>
-              )}
             </div>
             <div className="fixed bottom-0 flex w-full max-w-lg items-stretch gap-4 bg-sky-50 px-4 py-2">
               {data?.userCanEdit && (

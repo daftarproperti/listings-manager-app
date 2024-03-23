@@ -5,7 +5,7 @@ import RenderDescription from 'pages/listings/detail/Description'
 import SwiperSlider from 'components/SwiperSlider'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { formatCurrencyToIDRText } from 'utils'
+import { formatCurrencyToIDRText, clipboardCopyIfMiniApp } from 'utils'
 import DetailPropertyTable from 'components/DetailPropertyTable'
 import ButtonChip from 'components/button/ButtonChip'
 
@@ -129,6 +129,8 @@ function PropertyDetail({ id }: { id: string }) {
                   className="items-stretch justify-center whitespace-nowrap rounded-lg bg-blue-500 px-5 py-3.5 text-center text-sm leading-5 text-slate-50"
                   onClick={(e) => {
                     e.stopPropagation()
+                    const phoneNumber = data?.listings?.[0]?.user?.phoneNumber
+                    clipboardCopyIfMiniApp(phoneNumber, e)
                   }}
                 >
                   Hubungi

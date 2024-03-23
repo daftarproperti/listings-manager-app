@@ -9,7 +9,7 @@ import { Fragment, useEffect, useState } from 'react'
 import ButtonChip from 'components/button/ButtonChip'
 import LinkChip from 'components/button/LinkChip'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import Card from 'components/Card'
+import PropertyCard from 'components/PropertyCard'
 import SortBottomSheet from 'components/SortBottomSheet'
 import { XCircleIcon } from '@heroicons/react/24/outline'
 
@@ -123,7 +123,7 @@ const PropertyListPage = () => {
                       {page.properties?.length ? (
                         page.properties?.map((property, index) => (
                           <div key={index}>
-                            <Card data={property} fromPage="properties" />
+                            <PropertyCard data={property} />
                           </div>
                         ))
                       ) : (
