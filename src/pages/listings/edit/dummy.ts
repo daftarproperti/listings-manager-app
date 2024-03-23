@@ -1,6 +1,8 @@
 export const LISTING_OPTIONS = {
   cities: {
     options: [
+      /*
+      TODO: Support more cities
       {
         label: 'Jakarta Barat, DKI Jakarta',
         value: 'Jakarta Barat',
@@ -21,9 +23,30 @@ export const LISTING_OPTIONS = {
         label: 'Jakarta Utara, DKI Jakarta',
         value: 'Jakarta Utara',
       },
+     */
       {
         label: 'Surabaya, Jawa Timur',
         value: 'Surabaya',
+      },
+    ],
+  },
+  facing: {
+    options: [
+      {
+        label: 'Utara',
+        value: 'north',
+      },
+      {
+        label: 'Timur',
+        value: 'east',
+      },
+      {
+        label: 'Selatan',
+        value: 'south',
+      },
+      {
+        label: 'Barat',
+        value: 'west',
       },
     ],
   },

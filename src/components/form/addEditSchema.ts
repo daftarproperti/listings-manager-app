@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const addEditFormSchema = z.object({
-  address: z.string().refine((value) => String(value).length > 0),
+  address: z.string().optional(),
   bathroomCount: z
     .string()
     .or(z.number())
@@ -14,10 +14,7 @@ export const addEditFormSchema = z.object({
     .string()
     .or(z.number())
     .refine((value) => String(value).length > 0),
-  carCount: z
-    .string()
-    .or(z.number())
-    .refine((value) => String(value).length > 0),
+  carCount: z.string().or(z.number()).optional().nullable(),
   city: z.string().refine((value) => String(value).length > 0),
   contacts: z
     .object({
@@ -37,16 +34,13 @@ export const addEditFormSchema = z.object({
     })
     .optional(),
   description: z.string().refine((value) => String(value).length > 0),
-  electricPower: z
-    .string()
-    .or(z.number())
-    .refine((value) => String(value).length > 0),
-  facing: z.string().refine((value) => String(value).length > 0),
+  electricPower: z.string().or(z.number()).optional().nullable(),
+  facing: z.string().optional().nullable(),
   floorCount: z
     .string()
     .or(z.number())
     .refine((value) => String(value).length > 0),
-  isPrivate: z.boolean(),
+  isPrivate: z.boolean().optional(),
   lotSize: z
     .string()
     .or(z.number())

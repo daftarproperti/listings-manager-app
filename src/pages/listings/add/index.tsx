@@ -5,7 +5,6 @@ import { type UpdateListingRequest } from 'api/types'
 import BottomStickyButton from 'components/button/BottomStickyButton'
 import { addEditFormSchema } from 'components/form/addEditSchema'
 import CurrencyInputField from 'components/input/CurrencyInputField'
-import InputCheckboxField from 'components/input/InputCheckboxField'
 import InputField from 'components/input/InputField'
 import InputFileField from 'components/input/InputFileField'
 import SelectField from 'components/input/SelectField'
@@ -78,7 +77,7 @@ const AddPage = () => {
           errorFieldName={errors.pictureUrls}
         />
         <InputField
-          label="Judul listing"
+          label="Judul Listing"
           registerHook={register('title', { required: true })}
           placeholderValue="Tulis Judul"
           errorFieldName={errors.title}
@@ -136,10 +135,13 @@ const AddPage = () => {
             errorMessage="Luas Bangunan harus diisi"
           />
         </div>
-        <InputField
+        <SelectField
           label="Bangunan Menghadap"
-          registerHook={register('facing')}
-          placeholderValue="Silahkan isi"
+          registerHook={register('facing', { required: false })}
+          selectOptions={LISTING_OPTIONS.facing.options}
+          defaultOption="Pilih Arah"
+          errorFieldName={errors.facing}
+          errorMessage="Hadap harus diisi"
         />
         <div className="flex w-full">
           <InputField
@@ -165,13 +167,15 @@ const AddPage = () => {
             halfWidth={true}
             leftPosition={true}
             label="Lantai"
-            registerHook={register('floorCount')}
+            registerHook={register('floorCount', { required: true })}
             placeholderValue="Silahkan isi"
+            errorFieldName={errors.floorCount}
+            errorMessage="Lantai harus diisi"
           />
           <InputField
             halfWidth={true}
             label="Garasi Mobil"
-            registerHook={register('carCount')}
+            registerHook={register('carCount', { required: false })}
             placeholderValue="Silahkan isi"
           />
         </div>
@@ -186,11 +190,8 @@ const AddPage = () => {
           registerHook={register('ownership')}
           selectOptions={LISTING_OPTIONS.ownership.options}
           defaultOption="Pilih Jenis Sertifikat"
-        />
-        <InputCheckboxField
-          label="Listing Private?"
-          registerHook={register('isPrivate')}
-          inputID="isPrivate"
+          errorFieldName={errors.ownership}
+          errorMessage="Sertifikat harus diisi"
         />
       </div>
       <BottomStickyButton type="submit" disabled={isPending}>

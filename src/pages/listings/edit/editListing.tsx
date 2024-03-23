@@ -6,7 +6,6 @@ import { useGetListingDetail, useUpdateListing } from 'api/queries'
 import { type Listing } from 'api/types'
 import { addEditFormSchema } from 'components/form/addEditSchema'
 import CurrencyInputField from 'components/input/CurrencyInputField'
-import InputCheckboxField from 'components/input/InputCheckboxField'
 import InputField from 'components/input/InputField'
 import InputFileField from 'components/input/InputFileField'
 import SelectField from 'components/input/SelectField'
@@ -98,15 +97,16 @@ function EditListing({ id }: { id: string }) {
           errorFieldName={errors.pictureUrls}
         />
         <InputField
-          label="Judul listing"
+          label="Judul Listing"
           registerHook={register('title', { required: true })}
           placeholderValue="Tulis Judul"
           errorFieldName={errors.title}
+          errorMessage="Judul listing harus diisi"
         />
         <InputField
           label="Alamat"
-          registerHook={register('address', { required: true })}
-          placeholderValue="Isi alamat lengkap"
+          registerHook={register('address', { required: false })}
+          placeholderValue="Isi alamat"
           errorFieldName={errors.address}
         />
         <SelectField
@@ -152,11 +152,13 @@ function EditListing({ id }: { id: string }) {
             errorFieldName={errors.buildingSize}
           />
         </div>
-        <InputField
+        <SelectField
           label="Bangunan Menghadap"
-          registerHook={register('facing')}
-          placeholderValue="Silahkan isi"
+          registerHook={register('facing', { required: false })}
+          selectOptions={LISTING_OPTIONS.facing.options}
+          defaultOption="Pilih Arah"
           errorFieldName={errors.facing}
+          errorMessage="Hadap harus diisi"
         />
         <div className="flex w-full">
           <InputField
@@ -186,7 +188,7 @@ function EditListing({ id }: { id: string }) {
           <InputField
             halfWidth={true}
             label="Garasi Mobil"
-            registerHook={register('carCount')}
+            registerHook={register('carCount', { required: false })}
             placeholderValue="Silahkan isi"
           />
         </div>
@@ -201,11 +203,6 @@ function EditListing({ id }: { id: string }) {
           registerHook={register('ownership')}
           selectOptions={LISTING_OPTIONS.ownership.options}
           defaultOption="Pilih Jenis Sertifikat"
-        />
-        <InputCheckboxField
-          label="Listing Private?"
-          registerHook={register('isPrivate')}
-          inputID="isPrivate"
         />
       </div>
       <div className="w-full items-stretch justify-center whitespace-nowrap border-b border-solid border-b-[color:var(--gray-200,#E5E7EB)] bg-blue-100 py-3 pl-4 pr-14 pt-4 text-lg leading-7 text-gray-800">

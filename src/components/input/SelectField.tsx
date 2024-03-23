@@ -43,7 +43,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
       </div>
       {errorFieldName && (
         <span className="self-stretch text-sm leading-5 text-red-500">
-          {errorMessage}
+          {errorMessage || errorFieldName?.message}
         </span>
       )}
     </div>
