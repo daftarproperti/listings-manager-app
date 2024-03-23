@@ -14,7 +14,7 @@ export const clipboardCopyIfMiniApp = (
         })
       })
       .catch(() => {
-        toast('Could not text', { type: 'error' })
+        toast('Could not copy text', { type: 'error' })
       })
   }
 }
