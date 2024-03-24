@@ -122,14 +122,6 @@ function ListingDetail({
                 <RenderDescription description={data.description} />
               )}
             </div>
-            <div className="px-4 text-sm leading-5 text-slate-800">
-              <h2 className="text-sm font-semibold leading-7 text-slate-500">
-                Teks Sumber
-              </h2>
-              {data && data.sourceText && (
-                <RenderDescription description={data.sourceText} />
-              )}
-            </div>
             <div className="flex items-stretch justify-between gap-5 bg-blue-100 px-3 py-2.5 pb-20">
               <div className="flex items-center justify-between gap-2">
                 <div className="aspect-square w-8 max-w-full shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate-300">

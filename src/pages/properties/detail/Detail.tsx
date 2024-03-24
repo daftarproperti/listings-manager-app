@@ -103,16 +103,6 @@ function PropertyDetail({ id }: { id: string }) {
                 </>
               )}
             </div>
-            <div className="px-4 text-sm leading-5 text-slate-800">
-              {data && data.sourceText && (
-                <>
-                  <h2 className="text-sm font-semibold leading-7 text-slate-500">
-                    Teks Sumber
-                  </h2>
-                  <RenderDescription description={data.sourceText} />
-                </>
-              )}
-            </div>
             <div className="fixed bottom-0 flex w-full max-w-lg items-stretch justify-between gap-5 border-t bg-blue-50 p-4">
               <div className="flex items-center justify-between gap-2">
                 <div className="aspect-square w-8 max-w-full shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate-300">
