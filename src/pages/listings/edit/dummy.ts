@@ -33,6 +33,10 @@ export const LISTING_OPTIONS = {
   facing: {
     options: [
       {
+        label: 'Tidak Diketahui',
+        value: 'unknown',
+      },
+      {
         label: 'Utara',
         value: 'north',
       },
@@ -47,6 +51,22 @@ export const LISTING_OPTIONS = {
       {
         label: 'Barat',
         value: 'west',
+      },
+      {
+        label: 'Timur Laut',
+        value: 'northeast',
+      },
+      {
+        label: 'Tenggara',
+        value: 'southeast',
+      },
+      {
+        label: 'Barat Daya',
+        value: 'southwest',
+      },
+      {
+        label: 'Barat Laut',
+        value: 'northwest',
       },
     ],
   },
@@ -98,7 +118,7 @@ export const LISTING_OPTIONS = {
       },
       {
         label: 'Lainnya',
-        value: 'lainnya',
+        value: 'unknown',
       },
     ],
   },
