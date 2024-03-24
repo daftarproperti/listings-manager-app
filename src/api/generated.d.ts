@@ -159,8 +159,7 @@ export interface components {
     };
     Listing: {
       id?: string;
-      /** @example id-123 */
-      publicId?: string;
+      sourceText?: string;
       title?: string;
       address?: string;
       description?: string;
@@ -197,6 +196,7 @@ export interface components {
     };
     Property: {
       id?: string;
+      sourceText?: string;
       title?: string;
       address?: string;
       description?: string;
