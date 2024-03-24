@@ -72,7 +72,7 @@ describe('App', () => {
       expect(screen.queryByText('Loading...')).not.toBeInTheDocument(),
     )
 
-    expect(screen.getByText('Anda belum mempunyai Listing')).toBeInTheDocument()
+    expect(screen.getByText('Data Tidak Tersedia')).toBeInTheDocument()
   })
 
   test('authentication successful, good response, some properties', async () => {

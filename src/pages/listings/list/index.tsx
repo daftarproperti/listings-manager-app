@@ -149,21 +149,11 @@ const ListingListPage = () => {
                         ))
                       ) : (
                         <div className="mt-[50%] flex h-full -translate-y-1/2 flex-col items-center justify-center">
-                          {countActiveFilters() > 0 ? (
-                            <>
-                              <span className="mb-4">
-                                Listing tidak ditemukan
-                              </span>
-                              <ButtonChip
-                                text="Reset Filter Pencarian"
-                                onClick={() => onClickReset(false)}
-                              />
-                            </>
-                          ) : (
-                            <span className="mb-4">
-                              Anda belum mempunyai Listing
-                            </span>
-                          )}
+                          <span className="mb-4">Data Tidak Tersedia</span>
+                          <ButtonChip
+                            text="Reset"
+                            onClick={() => onClickReset(false)}
+                          />
                         </div>
                       )}
                     </Fragment>
