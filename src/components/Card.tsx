@@ -1,22 +1,17 @@
-import { type Property, type Listing } from 'api/types'
+import { type Listing } from 'api/types'
 import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
 import ImageWithAuth from 'components/ImageWithAuth'
 import { formatCurrencyToIDRText } from 'utils'
 import { useNavigate } from 'react-router-dom'
+import { Button } from '@material-tailwind/react'
 
-const Card = ({
-  data,
-  fromPage,
-}: {
-  data: Listing & Property
-  fromPage: 'listings' | 'properties'
-}) => {
+const Card = ({ data }: { data: Listing }) => {
   const navigate = useNavigate()
   const navigateToEditForm = (id: string) => {
     navigate(`/listings/edit/${id}`)
   }
   const onClickCard = (id: string) => {
-    navigate(`/${fromPage}/${id}`)
+    navigate(`/listings/${id}`)
   }
 
   return (
@@ -73,28 +68,17 @@ const Card = ({
           </div>
         </div>
       </div>
-      <div className="flex w-full justify-end gap-5 rounded-b-lg bg-primary-100 px-3 py-2.5">
-        {fromPage === 'listings' && (
-          <button
-            onClick={() => navigateToEditForm(data?.id ?? '')}
-            className="w-full justify-center self-center whitespace-nowrap rounded-lg border border-solid border-primary-500 bg-white px-4 py-2 text-center text-sm leading-5 text-primary-500"
-          >
-            Edit
-          </button>
-        )}
-        {fromPage === 'properties' && (
-          <a
-            href={`tel:${
-              data.user?.phoneNumber ?? data.listings?.[0]?.user?.phoneNumber
-            }`}
-            onClick={(e) => {
-              e.stopPropagation()
-            }}
-            className="flex items-center justify-center gap-1 rounded-lg bg-primary-500 px-3.5 py-2 text-sm text-white transition-all hover:bg-primary-600"
-          >
-            Hubungi
-          </a>
-        )}
+      <div className="flex w-full justify-end gap-5 rounded-b-lg bg-blue-100 px-3 py-2.5">
+        <Button
+          size="sm"
+          fullWidth
+          color="blue"
+          variant="outlined"
+          onClick={() => navigateToEditForm(data?.id ?? '')}
+          className="bg-white text-center text-sm font-normal capitalize"
+        >
+          Edit
+        </Button>
       </div>
     </div>
   )

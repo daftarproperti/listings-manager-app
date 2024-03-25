@@ -1,28 +1,35 @@
 import { clsx } from 'clsx'
 import BottomStickyButton from 'components/button/BottomStickyButton'
-import { type ReactNode } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { NumericFormat } from 'react-number-format'
+import { Button } from '@material-tailwind/react'
 
 import { FILTER_OPTIONS } from './constant'
 
 const ButtonFilterChip = ({
+  key,
   children,
   isActive,
-  ...props
+  onClick,
 }: {
-  children: ReactNode
   isActive?: boolean
-} & React.ButtonHTMLAttributes<HTMLButtonElement>) => (
-  <button
-    {...props}
+} & React.DetailedHTMLProps<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  HTMLButtonElement
+>) => (
+  <Button
+    key={key}
+    size="sm"
+    color="blue"
+    variant={isActive ? 'filled' : 'outlined'}
     className={clsx(
-      `w-fit cursor-pointer justify-center whitespace-nowrap rounded-3xl border border-solid border-primary-500 px-3 py-2 text-sm leading-5 hover:bg-primary-500 hover:text-white`,
-      isActive ? 'bg-primary-500 text-white' : 'bg-white text-primary-500',
+      'rounded-full text-sm font-normal capitalize',
+      !isActive && 'bg-white',
     )}
+    onClick={onClick}
   >
     {children}
-  </button>
+  </Button>
 )
 
 export const filterKeyStrings = {

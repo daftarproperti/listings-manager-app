@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import ButtonChip from 'components/button/ButtonChip'
+import { Button } from '@material-tailwind/react'
 
 const NotFoundPage = () => {
   const navigate = useNavigate()
@@ -11,12 +11,14 @@ const NotFoundPage = () => {
         <p>Silahkan kembali ke halaman utama.</p>
       </div>
       <div className="flex items-center justify-center">
-        <ButtonChip
-          text="Kembali ke Halaman Utama"
-          isActive
+        <Button
+          size="sm"
+          color="blue"
+          className="text-sm font-normal capitalize"
           onClick={() => navigate('/')}
-          className="inline-block"
-        />
+        >
+          Kembali ke Halaman Utama
+        </Button>
       </div>
     </div>
   )

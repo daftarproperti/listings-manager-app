@@ -1,5 +1,6 @@
 import React from 'react'
 import BottomSheet from 'react-draggable-bottom-sheet'
+import { Button } from '@material-tailwind/react'
 
 const ConfirmationDialog = ({
   isOpen,
@@ -29,27 +30,34 @@ const ConfirmationDialog = ({
       }}
     >
       <>
-        <div className="mx-6 mb-6 text-center">
-          <h2 className="text-2xl text-slate-900">
-            Yakin akan hapus <b>{title}</b>?
-          </h2>
+        <div id="sheet-overlay" className="w-full cursor-pointer pt-3">
+          <div className="mx-auto h-1 w-12 rounded-full bg-slate-300" />
+        </div>
+        <div className="p-4 pb-8">
+          <h2 className="text-2xl text-slate-900">Yakin akan hapus {title}?</h2>
           <p className="my-4 font-normal text-slate-500">
             Setelah terhapus, listing tidak bisa ditemukan di jaringan Daftar
             Properti.
           </p>
-          <div className="flex justify-evenly space-x-2">
-            <button
-              className="inline-block w-1/2 grow items-stretch justify-center whitespace-nowrap rounded-lg border border-solid border-[color:var(--Blue-Ribbon-500,#2A91FF)] bg-white px-1 py-2.5 text-center text-sm leading-5 text-blue-500"
+          <div className="flex gap-x-2">
+            <Button
+              fullWidth
+              color="blue"
+              variant="outlined"
+              className="text-sm font-normal capitalize"
               onClick={handleCancel}
             >
               Tidak, batalkan
-            </button>
-            <button
-              className="inline-block w-1/2 grow items-stretch justify-center whitespace-nowrap rounded-lg border border-solid border-transparent bg-red-50 px-11 py-2.5 text-center text-sm leading-5 text-red-500"
+            </Button>
+            <Button
+              fullWidth
+              color="red"
+              variant="outlined"
+              className="border-red-100 bg-red-100 text-sm font-normal capitalize"
               onClick={handleConfirm}
             >
               Ya, hapus
-            </button>
+            </Button>
           </div>
         </div>
       </>

@@ -4,15 +4,14 @@ import {
   Bars3BottomLeftIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/react/24/solid'
+import { XCircleIcon } from '@heroicons/react/24/outline'
+import { Button } from '@material-tailwind/react'
 import { useGetPropertyList } from 'api/queries'
 import { Fragment, useEffect, useState } from 'react'
-import ButtonChip from 'components/button/ButtonChip'
-import LinkChip from 'components/button/LinkChip'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import PropertyCard from 'components/PropertyCard'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import SortBottomSheet from 'components/SortBottomSheet'
-import { XCircleIcon } from '@heroicons/react/24/outline'
 import { countActiveFilters } from 'utils'
+import PropertyCard from 'components/PropertyCard'
 
 const PropertyListPage = () => {
   const navigate = useNavigate()
@@ -83,35 +82,42 @@ const PropertyListPage = () => {
           </div>
           <div className="mb-0">
             <div className="flex flex-row gap-2">
-              <LinkChip
-                to={`/properties/filter?${searchParams}`}
-                icon={
-                  <AdjustmentsHorizontalIcon className="w-5 overflow-hidden text-primary-500 group-hover:text-white" />
-                }
-                text="Filter"
-                additionalInfo={
-                  activeFilterCount > 0 && (
+              <Link to={`/properties/filter?${searchParams}`}>
+                <Button
+                  size="sm"
+                  color="blue"
+                  variant="outlined"
+                  className="relative flex items-center gap-1.5 text-sm font-normal capitalize"
+                >
+                  <AdjustmentsHorizontalIcon className="w-5" />
+                  Filter
+                  {activeFilterCount > 0 && (
                     <span className="absolute -end-1 -top-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-semibold text-red-100">
                       {activeFilterCount}
                     </span>
-                  )
-                }
-                className="relative"
-              />
-              <ButtonChip
-                icon={
-                  <Bars3BottomLeftIcon className="w-5 overflow-hidden text-primary-500 group-hover:text-white" />
-                }
-                text="Urutkan"
+                  )}
+                </Button>
+              </Link>
+              <Button
+                size="sm"
+                color="blue"
+                variant="outlined"
+                className="flex items-center gap-1.5 text-sm font-normal capitalize"
                 onClick={() => setIsFilterBottomBarOpen(true)}
-              />
+              >
+                <Bars3BottomLeftIcon className="w-5" />
+                Urutkan
+              </Button>
               {searchParams?.size > 0 && (
-                <ButtonChip
-                  text="Reset"
-                  icon={<XCircleIcon className="w-5" />}
-                  isActive
+                <Button
+                  size="sm"
+                  color="blue"
+                  className="flex items-center gap-1.5 text-sm font-normal capitalize"
                   onClick={() => onClickReset(true)}
-                />
+                >
+                  <XCircleIcon className="w-5" />
+                  Reset
+                </Button>
               )}
             </div>
           </div>

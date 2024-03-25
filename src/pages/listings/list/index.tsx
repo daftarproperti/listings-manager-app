@@ -8,13 +8,12 @@ import {
 import { useGetListingList } from 'api/queries'
 import NewListingSheet from 'components/NewListingSheet'
 import SortBottomSheet from 'components/SortBottomSheet'
-import ButtonChip from 'components/button/ButtonChip'
-import LinkChip from 'components/button/LinkChip'
 import Card from 'components/Card'
 import { Fragment, useEffect, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { XCircleIcon } from '@heroicons/react/24/outline'
 import { countActiveFilters } from 'utils'
+import { Button, IconButton } from '@material-tailwind/react'
 
 const ListingListPage = () => {
   const navigate = useNavigate()
@@ -86,35 +85,42 @@ const ListingListPage = () => {
             />
           </div>
           <div className="flex flex-row gap-2">
-            <LinkChip
-              to={`/listings/filter?${searchParams}`}
-              icon={
-                <AdjustmentsHorizontalIcon className="w-5 overflow-hidden text-primary-500 group-hover:text-white" />
-              }
-              text="Filter"
-              additionalInfo={
-                activeFilterCount > 0 && (
+            <Link to={`/listings/filter?${searchParams}`}>
+              <Button
+                size="sm"
+                color="blue"
+                variant="outlined"
+                className="relative flex items-center gap-1.5 text-sm font-normal capitalize"
+              >
+                <AdjustmentsHorizontalIcon className="w-5" />
+                Filter
+                {activeFilterCount > 0 && (
                   <span className="absolute -end-1 -top-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-semibold text-red-100">
                     {activeFilterCount}
                   </span>
-                )
-              }
-              className="relative"
-            />
-            <ButtonChip
-              icon={
-                <Bars3BottomLeftIcon className="w-5 overflow-hidden text-primary-500 group-hover:text-white" />
-              }
-              text="Urutkan"
+                )}
+              </Button>
+            </Link>
+            <Button
+              size="sm"
+              color="blue"
+              variant="outlined"
+              className="flex items-center gap-1.5 text-sm font-normal capitalize"
               onClick={() => setIsFilterBottomBarOpen(true)}
-            />
+            >
+              <Bars3BottomLeftIcon className="w-5" />
+              Urutkan
+            </Button>
             {searchParams?.size > 0 && (
-              <ButtonChip
-                text="Reset"
-                icon={<XCircleIcon className="w-5" />}
-                isActive
+              <Button
+                size="sm"
+                color="blue"
+                className="flex items-center gap-1.5 text-sm font-normal capitalize"
                 onClick={() => onClickReset(true)}
-              />
+              >
+                <XCircleIcon className="w-5" />
+                Reset
+              </Button>
             )}
           </div>
         </div>
@@ -137,13 +143,13 @@ const ListingListPage = () => {
                       {page.listings?.length ? (
                         page.listings?.map((listing, index) => (
                           <div key={index}>
-                            <Card data={listing} fromPage="listings" />
+                            <Card data={listing} />
                           </div>
                         ))
                       ) : (
                         <div className="flex h-96 flex-col items-center justify-center gap-3">
                           {`${searchParams}` === '' && (
-                            <div className="rounded-lg bg-primary-100 p-3 text-xs">
+                            <div className="rounded-lg bg-blue-100 p-3 text-xs">
                               Anda dapat dengan mudah menambahkan listing dengan
                               cara menyalin dan menempelkan seluruh informasi
                               listing Anda pada bot chat Telegram Anda.
@@ -168,15 +174,17 @@ const ListingListPage = () => {
           )}
         </div>
       </div>
-      <div className="fixed bottom-36 h-0 w-full max-w-lg text-right">
-        <button
-          // if tambah listing cara cepat already to use, change this to open NewListingSheet
+      <div className="fixed bottom-36 h-0 w-full max-w-lg pr-4 text-right">
+        <IconButton
+          size="lg"
+          color="blue"
+          className="rounded-full"
+          // TODO if tambah listing cara cepat already to use, change this to open NewListingSheet
           // onClick={() => setIsNewListingSheetOpen(true)}
           onClick={() => navigate('/listings/add')}
-          className="mr-4 inline-block h-14 w-14 items-center justify-center rounded-full bg-primary-500 p-4"
         >
           <PlusIcon className="h-6 w-6 text-white" />
-        </button>
+        </IconButton>
       </div>
 
       <SortBottomSheet

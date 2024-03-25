@@ -4,7 +4,7 @@ export const clipboardCopyIfMiniApp = (
   text: string | undefined,
   e: React.MouseEvent,
 ) => {
-  if (window.Telegram?.WebApp?.initData && typeof text === 'string') {
+  if (typeof text === 'string') {
     e.preventDefault()
     navigator.clipboard
       .writeText(text)

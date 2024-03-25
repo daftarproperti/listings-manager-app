@@ -1,8 +1,9 @@
 import { CancelIconSVG } from 'assets/icons'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import type { FieldError, Merge, UseFormRegisterReturn } from 'react-hook-form'
 import { useImageHandler } from 'utils'
 import AlertDialog from 'components/AlertDialog'
+import { Button } from '@material-tailwind/react'
 
 type InputFileProps = {
   registerHook: UseFormRegisterReturn<string>
@@ -20,6 +21,8 @@ const InputFileField: React.FC<InputFileProps> = ({
   onExistingImagesChange,
   errorFieldName,
 }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
   const [alertMessage, setAlertMessage] = useState('')
   const [isAlertOpen, setIsAlertOpen] = useState(false)
 
@@ -45,7 +48,7 @@ const InputFileField: React.FC<InputFileProps> = ({
   }, [existingImages, onExistingImagesChange])
 
   return (
-    <div>
+    <div className="ml-1">
       <div className="text-lg font-semibold leading-7 text-gray-800">Foto</div>
       <div className="mb-4 flex flex-col">
         <input
@@ -53,6 +56,7 @@ const InputFileField: React.FC<InputFileProps> = ({
           type="file"
           multiple
           {...registerHook}
+          ref={fileInputRef}
           onChange={handleImageChange}
           className="hidden"
           accept="image/png, image/gif, image/jpeg"
@@ -93,11 +97,17 @@ const InputFileField: React.FC<InputFileProps> = ({
             ))}
           </div>
         )}
-        <label htmlFor="image-upload" className="cursor-pointer">
-          <span className="mt-2 inline-block items-stretch justify-center whitespace-nowrap rounded-lg border border-solid border-[color:var(--Blue-Ribbon-500,#2A91FF)] bg-white px-4 py-2 text-center text-sm leading-5 text-blue-500">
-            Upload foto
-          </span>
-        </label>
+        <div className="w-fit">
+          <Button
+            size="sm"
+            color="blue"
+            variant="outlined"
+            className="flex items-center gap-1.5 bg-white text-sm font-normal capitalize"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            Upload Foto
+          </Button>
+        </div>
       </div>
       {errorFieldName && (
         <span className="self-stretch text-sm leading-5 text-red-500">

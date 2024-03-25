@@ -5,9 +5,9 @@ import RenderDescription from 'pages/listings/detail/Description'
 import SwiperSlider from 'components/SwiperSlider'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { Button } from '@material-tailwind/react'
 import { formatCurrencyToIDRText } from 'utils'
 import DetailPropertyTable from 'components/DetailPropertyTable'
-import ButtonChip from 'components/button/ButtonChip'
 import ShareButton from 'components/button/ShareButton'
 
 function ListingDetail({
@@ -38,17 +38,19 @@ function ListingDetail({
   }, [data?.userCanEdit, setCanEdit])
 
   return (
-    <div className="flex min-h-screen flex-col space-y-4 break-words bg-slate-100 py-16">
+    <div className="flex min-h-screen flex-col break-words bg-slate-100 pt-16">
       {isError ? (
         <div className="mt-[50%] flex h-full -translate-y-1/2 flex-col items-center justify-center">
           <span className="mb-4">Data tidak ditemukan.</span>
           <div className="flex items-center justify-center">
-            <ButtonChip
-              text="Kembali ke Halaman Utama"
-              isActive
+            <Button
+              size="sm"
+              color="blue"
+              className="text-sm font-normal capitalize"
               onClick={() => navigate('/')}
-              className="inline-block"
-            />
+            >
+              Kembali ke Halaman Utama
+            </Button>
           </div>
         </div>
       ) : isFetching ? (
@@ -61,7 +63,7 @@ function ListingDetail({
             {!!data?.pictureUrls?.length && (
               <SwiperSlider pictures={data?.pictureUrls} />
             )}
-            <div className="grow">
+            <div className="grow py-2">
               <div
                 className={clsx(
                   'px-4',
@@ -73,7 +75,7 @@ function ListingDetail({
                     PRIVATE
                   </span>
                 )}
-                <h1 className="pt-2 text-lg font-semibold leading-7 text-slate-500">
+                <h1 className="text-lg font-semibold leading-7 text-slate-500">
                   {data?.title}
                 </h1>
                 <div className="text-2xl font-semibold leading-8 text-slate-800">
@@ -124,49 +126,59 @@ function ListingDetail({
                 </div>
               )}
             </div>
-            <div className="flex items-stretch justify-between gap-5 bg-blue-100 px-3 py-2.5">
-              <div className="flex items-center justify-between gap-2">
-                <div className="relative inline-flex aspect-square w-8 max-w-full shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate-300">
-                  {data?.user?.profilePictureURL ? (
+            <div className="sticky bottom-0 ">
+              <div className="flex items-stretch justify-between gap-5 bg-blue-100 px-3 py-2.5">
+                <div className="flex items-center justify-between gap-2">
+                  {data?.user?.profilePictureURL && (
                     <img
                       loading="lazy"
-                      srcSet={data?.user?.profilePictureURL}
-                      className="my-auto aspect-square w-8 max-w-full shrink-0 items-center justify-center overflow-hidden object-contain object-center"
+                      src={data?.user?.profilePictureURL}
+                      className="my-auto aspect-square w-8 max-w-full shrink-0 overflow-hidden rounded-full border border-white object-contain object-center shadow-sm"
+                      onError={({ currentTarget }) => {
+                        currentTarget.onerror = null
+                        currentTarget.src = '/logo.svg'
+                      }}
                     />
-                  ) : (
-                    <span className="font-medium text-gray-500">
-                      {data?.user?.name?.split('')?.[0]}
-                    </span>
                   )}
+                  <span className="flex grow basis-[0%] flex-col items-stretch justify-center self-stretch">
+                    <div className="whitespace-nowrap text-sm font-semibold leading-5 text-slate-800">
+                      {data?.user?.name}
+                    </div>
+                    <div className="whitespace-nowrap text-sm leading-5 text-slate-500">
+                      {data?.user?.phoneNumber}
+                    </div>
+                  </span>
                 </div>
-                <span className="flex grow basis-[0%] flex-col items-stretch justify-center self-stretch">
-                  <div className="whitespace-nowrap text-sm font-semibold leading-5 text-slate-800">
-                    {data?.user?.name}
-                  </div>
-                  <div className="whitespace-nowrap text-sm leading-5 text-slate-500">
-                    {data?.user?.phoneNumber}
-                  </div>
-                </span>
               </div>
-            </div>
-            {data?.userCanEdit && (
-              <div className="fixed bottom-0 flex w-full max-w-lg items-stretch gap-4 bg-sky-50 px-4 py-2">
-                {data?.userCanEdit && (
-                  <button
-                    onClick={() => navigateToEditForm(id)}
-                    className="inline-block w-1/2 grow items-stretch justify-center whitespace-nowrap rounded-lg border border-solid border-[color:var(--Blue-Ribbon-500,#2A91FF)] bg-white px-11 py-2.5 text-center text-sm leading-5 text-blue-500"
+              {data?.userCanEdit && (
+                <div className="flex w-full max-w-lg items-stretch gap-4 bg-sky-50 px-4 py-2">
+                  <div className="w-full">
+                    <Button
+                      fullWidth
+                      color="blue"
+                      variant="outlined"
+                      className="text-sm font-normal capitalize"
+                      onClick={() => navigateToEditForm(id)}
+                    >
+                      Edit
+                    </Button>
+                  </div>
+                  <ShareButton
+                    url={listingPublicUrl}
+                    title={data?.title || 'Default Title'}
+                    className="w-full"
                   >
-                    Perbaharui
-                  </button>
-                )}
-                <ShareButton
-                  url={listingPublicUrl}
-                  title={data?.title || 'Default Title'}
-                  buttonName="Bagikan"
-                  className="inline-block w-1/2 grow items-stretch justify-center whitespace-nowrap rounded-lg bg-blue-500 px-3 py-2.5 text-center text-sm leading-5 text-white"
-                />
-              </div>
-            )}
+                    <Button
+                      fullWidth
+                      color="blue"
+                      className="h-full text-sm font-normal capitalize"
+                    >
+                      Bagikan
+                    </Button>
+                  </ShareButton>
+                </div>
+              )}
+            </div>
           </>
         )
       )}

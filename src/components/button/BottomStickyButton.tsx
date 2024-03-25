@@ -1,19 +1,24 @@
-type BottomStickyButtonProps = {
-  children: React.ReactNode
-} & React.ButtonHTMLAttributes<HTMLButtonElement>
+import { Button } from '@material-tailwind/react'
 
-const BottomStickyButton: React.FC<BottomStickyButtonProps> = ({
+const BottomStickyButton = ({
+  type,
+  disabled,
   children,
-  ...rest
-}) => {
+}: React.DetailedHTMLProps<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  HTMLButtonElement
+>) => {
   return (
     <div className="fixed bottom-0 w-full max-w-lg bg-white px-4 py-2">
-      <button
-        {...rest}
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-500 px-20 py-3 text-white"
+      <Button
+        fullWidth
+        color="blue"
+        type={type}
+        disabled={disabled}
+        className="text-base font-normal capitalize"
       >
         {children}
-      </button>
+      </Button>
     </div>
   )
 }

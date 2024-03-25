@@ -61,7 +61,7 @@ const AddPage = () => {
 
   return (
     <form className="mx-auto max-w-lg pt-16" onSubmit={handleSubmit(onSubmit)}>
-      <div className="bg-fire-bush-100 p-4 text-xs">
+      <div className="bg-fireBush-100 p-4 text-xs">
         <b>Cara lebih cepat</b>: Salin dan tempelkan informasi listing Anda ke
         bot Daftar Properti.
       </div>

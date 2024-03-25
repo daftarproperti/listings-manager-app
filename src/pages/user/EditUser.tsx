@@ -12,6 +12,7 @@ import InputSingleFileField from 'components/input/InputSingleFileField'
 import BottomStickyButton from 'components/button/BottomStickyButton'
 import InputCheckboxField from 'components/input/InputCheckboxField'
 import { toast } from 'react-toastify'
+import { Button } from '@material-tailwind/react'
 
 import { onSubmit } from './handleUserForm'
 
@@ -127,7 +128,7 @@ function EditUser() {
               tooltipContent="Dapatkan halaman web profile yang dapat dikunjungi oleh publik."
             />
             {watch('isPublicProfile') ? (
-              <div className="mt-2 flex items-center space-x-2">
+              <div className="mt-2 flex items-center gap-2">
                 <input
                   id="publicUrlInput"
                   onClick={handleInputClick}
@@ -136,15 +137,16 @@ function EditUser() {
                     userDetails?.publicId || ''
                   }`}
                   readOnly
-                  className="mt-1 w-full items-start justify-center self-stretch whitespace-nowrap rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-gray-100 px-2 py-1 text-sm leading-7 text-gray-800"
+                  className="w-full items-start justify-center self-stretch whitespace-nowrap rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-gray-100 px-2 py-1 text-sm leading-7 text-gray-800"
                 />
-                <button
-                  type="button"
+                <Button
+                  size="sm"
+                  color="blue"
+                  className="h-full text-center"
                   onClick={handleCopyText}
-                  className="mt-1 rounded bg-blue-500 p-2 text-white hover:bg-blue-600"
                 >
                   <ClipboardIcon className="h-5 w-5" />
-                </button>
+                </Button>
               </div>
             ) : null}
           </div>

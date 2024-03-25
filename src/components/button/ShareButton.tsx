@@ -1,20 +1,16 @@
-import { type ReactNode } from 'react'
+import { type PropsWithChildren } from 'react'
 import { toast } from 'react-toastify'
 
-interface ShareButtonProps {
-  url: string
-  title?: string
-  icon?: ReactNode
-  buttonName?: string
-  className?: string
-}
 const ShareListingsButton = ({
   url,
   title,
-  icon,
-  buttonName,
+  children,
   className,
-}: ShareButtonProps) => {
+}: {
+  url: string
+  title?: string
+  className?: string
+} & PropsWithChildren) => {
   const handleShare = async () => {
     // Try navigator.share first, if available and has permission.
     if (navigator.share) {
@@ -51,15 +47,9 @@ const ShareListingsButton = ({
   }
 
   return (
-    <>
-      <button
-        className={`h-12 cursor-pointer p-3 text-sm text-blue-500 ${className}`}
-        onClick={handleShare}
-      >
-        {icon}
-        {buttonName}
-      </button>
-    </>
+    <div className={className} onClick={handleShare}>
+      {children}
+    </div>
   )
 }
 

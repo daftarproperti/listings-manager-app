@@ -1,3 +1,4 @@
+import { Button } from '@material-tailwind/react'
 import React, { useState, useCallback, useRef, useEffect } from 'react'
 import { type UseFormRegisterReturn } from 'react-hook-form'
 import { validateImageFiles } from 'utils'
@@ -62,11 +63,17 @@ const InputSingleFileField: React.FC<InputSingleFileProps> = ({
             />
           </div>
         )}
-        <label htmlFor="image-upload" className="cursor-pointer">
-          <span className="mt-2 inline-block items-stretch justify-center whitespace-nowrap rounded-lg border border-solid border-blue-500 bg-white px-4 py-2 text-center text-sm leading-5 text-blue-500">
-            Upload foto
-          </span>
-        </label>
+        <div className="w-fit">
+          <Button
+            size="sm"
+            color="blue"
+            variant="outlined"
+            className="flex items-center gap-1.5 bg-white text-sm font-normal capitalize"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            Upload Foto
+          </Button>
+        </div>
       </div>
     </div>
   )

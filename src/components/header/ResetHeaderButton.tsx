@@ -1,19 +1,23 @@
-import { useSearchParams } from 'react-router-dom'
+import { Button } from '@material-tailwind/react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 const ResetHeaderButton = () => {
+  const navigate = useNavigate()
   const [, setSearchParams] = useSearchParams()
 
   return (
-    <>
-      <button
-        className="h-12 w-12 cursor-pointer p-3 text-sm text-blue-500"
-        onClick={() => {
-          setSearchParams({}, { replace: true })
-        }}
-      >
-        Reset
-      </button>
-    </>
+    <Button
+      size="sm"
+      color="blue"
+      variant="text"
+      className="text-sm font-normal capitalize"
+      onClick={() => {
+        setSearchParams({}, { replace: true })
+        navigate(-1)
+      }}
+    >
+      Reset
+    </Button>
   )
 }
 
