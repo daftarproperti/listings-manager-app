@@ -126,7 +126,7 @@ function ListingDetail({
                 </div>
               )}
             </div>
-            <div className="sticky bottom-0 ">
+            <div className="sticky bottom-0 border-t">
               <div className="flex items-stretch justify-between gap-5 bg-blue-100 px-3 py-2.5">
                 <div className="flex items-center justify-between gap-2">
                   {data?.user?.profilePictureURL && (

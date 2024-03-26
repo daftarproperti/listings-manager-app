@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React from 'react'
 import type { UseFormRegisterReturn } from 'react-hook-form'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid'
-
-import PopUpModal from '../PopUpModal'
+import { Checkbox, Tooltip, Typography } from '@material-tailwind/react'
 
 type TextareaFieldProps = {
   label: string
@@ -19,67 +18,33 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
   showTooltip,
   tooltipContent,
 }) => {
-  const tooltipRef = useRef<HTMLSpanElement>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
-
-  const handleTap = () => {
-    setIsModalOpen(true)
-  }
-
-  useEffect(() => {
-    if (showTooltip && tooltipRef.current) {
-      const tooltipElement = tooltipRef.current
-
-      const handleMouseOver = (e: MouseEvent) => {
-        setCursorPosition({ x: e.clientX, y: e.clientY })
-        setIsModalOpen(true)
-      }
-
-      const handleMouseOut = () => {
-        setIsModalOpen(false)
-      }
-
-      tooltipElement.addEventListener('mouseover', handleMouseOver)
-      tooltipElement.addEventListener('mouseout', handleMouseOut)
-
-      return () => {
-        tooltipElement.removeEventListener('mouseover', handleMouseOver)
-        tooltipElement.removeEventListener('mouseout', handleMouseOut)
-      }
-    }
-  }, [showTooltip])
-
   return (
-    <div className="mt-3 w-full self-stretch">
-      <input
-        id={inputID}
-        type="checkbox"
-        {...registerHook}
-        className="relative top-0.5 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-      />
-      <label htmlFor={inputID} className="ml-2 text-gray-900">
+    <div className="mt-3 flex w-full items-center self-stretch">
+      <label
+        htmlFor={inputID}
+        className="flex items-center gap-1 text-gray-900"
+      >
+        <Checkbox id={inputID} {...registerHook} crossOrigin={undefined} />
         {label}
         {showTooltip && (
-          <span
-            ref={tooltipRef}
-            className="ml-2 cursor-pointer text-gray-400"
-            onClick={handleTap}
-            data-tip={tooltipContent}
-            data-event="click"
-            data-event-off="mouseout"
+          <Tooltip
+            className="border border-blue-gray-100 bg-white px-4 py-3 shadow shadow-black/10"
+            content={
+              <div className="w-60">
+                <Typography
+                  variant="small"
+                  color="blue-gray"
+                  className="font-normal opacity-80"
+                >
+                  {tooltipContent}
+                </Typography>
+              </div>
+            }
           >
-            <QuestionMarkCircleIcon className="mt-[-4px] inline h-5 w-5" />
-          </span>
+            <QuestionMarkCircleIcon className="h-5 w-5 text-slate-500" />
+          </Tooltip>
         )}
       </label>
-      {isModalOpen && (
-        <PopUpModal
-          mouseX={cursorPosition.x}
-          mouseY={cursorPosition.y}
-          tooltipContent={tooltipContent ?? ''}
-        />
-      )}
     </div>
   )
 }

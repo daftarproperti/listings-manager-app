@@ -5,12 +5,12 @@ import {
   MagnifyingGlassIcon,
 } from '@heroicons/react/24/solid'
 import { XCircleIcon } from '@heroicons/react/24/outline'
-import { Button } from '@material-tailwind/react'
+import { Badge, Button } from '@material-tailwind/react'
 import { useGetPropertyList } from 'api/queries'
 import { Fragment, useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import SortBottomSheet from 'components/SortBottomSheet'
-import { countActiveFilters } from 'utils'
+import { countActiveFilters, isSorted } from 'utils'
 import PropertyCard from 'components/PropertyCard'
 
 const PropertyListPage = () => {
@@ -19,6 +19,7 @@ const PropertyListPage = () => {
   const { ref: fetchMoreRef, inView: isFetchMoreInView } = useInView()
   const [isFilterBottomSheetOpen, setIsFilterBottomBarOpen] = useState(false)
 
+  const [isSortedList, setIsSortedList] = useState(false)
   const [activeFilterCount, setActiveFilterCount] = useState(0)
   const [searchText, setSearchText] = useState(searchParams?.get('q') ?? '')
 
@@ -45,6 +46,7 @@ const PropertyListPage = () => {
 
   useEffect(() => {
     refetch()
+    setIsSortedList(isSorted(searchParams))
     setActiveFilterCount(countActiveFilters(searchParams))
   }, [searchParams])
 
@@ -82,32 +84,39 @@ const PropertyListPage = () => {
           </div>
           <div className="mb-0">
             <div className="flex flex-row gap-2">
-              <Link to={`/properties/filter?${searchParams}`}>
+              <Badge
+                content={activeFilterCount}
+                invisible={activeFilterCount === 0}
+                className="min-h-5 min-w-5"
+              >
+                <Link to={`/properties/filter?${searchParams}`}>
+                  <Button
+                    size="sm"
+                    color="blue"
+                    variant="outlined"
+                    className="relative flex items-center gap-1.5 text-sm font-normal capitalize"
+                  >
+                    <AdjustmentsHorizontalIcon className="w-5" />
+                    Filter
+                  </Button>
+                </Link>
+              </Badge>
+              <Badge
+                content="1"
+                invisible={!isSortedList}
+                className="min-h-5 min-w-5"
+              >
                 <Button
                   size="sm"
                   color="blue"
                   variant="outlined"
-                  className="relative flex items-center gap-1.5 text-sm font-normal capitalize"
+                  className="flex items-center gap-1.5 text-sm font-normal capitalize"
+                  onClick={() => setIsFilterBottomBarOpen(true)}
                 >
-                  <AdjustmentsHorizontalIcon className="w-5" />
-                  Filter
-                  {activeFilterCount > 0 && (
-                    <span className="absolute -end-1 -top-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-semibold text-red-100">
-                      {activeFilterCount}
-                    </span>
-                  )}
+                  <Bars3BottomLeftIcon className="w-5" />
+                  Urutkan
                 </Button>
-              </Link>
-              <Button
-                size="sm"
-                color="blue"
-                variant="outlined"
-                className="flex items-center gap-1.5 text-sm font-normal capitalize"
-                onClick={() => setIsFilterBottomBarOpen(true)}
-              >
-                <Bars3BottomLeftIcon className="w-5" />
-                Urutkan
-              </Button>
+              </Badge>
               {searchParams?.size > 0 && (
                 <Button
                   size="sm"

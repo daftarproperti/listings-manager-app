@@ -1,5 +1,12 @@
 import { MoreIconSVG, TrashIconSVG } from 'assets/icons'
 import React, { useState } from 'react'
+import {
+  IconButton,
+  Menu,
+  MenuHandler,
+  MenuItem,
+  MenuList,
+} from '@material-tailwind/react'
 
 import ConfirmationDialog from './ConfirmationDialog'
 import useHandleDelete from './useHandleDelete'
@@ -24,27 +31,26 @@ const DotsHeaderButton: React.FC<DotsButtonProps> = ({ propertyId }) => {
 
   return (
     <>
-      <>
-        <button
-          className="h-5 w-5 cursor-pointer"
-          onClick={() => {
-            setShowDropdown(!showDropdown)
-          }}
-        >
-          <MoreIconSVG />
-        </button>
-        {showDropdown && (
-          <div className="absolute right-4 top-0 z-10 mt-14 w-36 rounded-md bg-white py-1 shadow-lg">
-            <button
-              className="inline-flex w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
-              onClick={initiateDelete}
-            >
-              <TrashIconSVG />
-              <span className="ml-2 text-lg">Hapus</span>
-            </button>
-          </div>
-        )}
-      </>
+      <Menu
+        placement="bottom-end"
+        open={showDropdown}
+        handler={setShowDropdown}
+      >
+        <MenuHandler>
+          <IconButton variant="text" className="rounded-full">
+            <MoreIconSVG />
+          </IconButton>
+        </MenuHandler>
+        <MenuList className="px-0 py-1">
+          <MenuItem
+            className="flex items-center gap-2 rounded-none text-lg"
+            onClick={initiateDelete}
+          >
+            <TrashIconSVG className="w-6" />
+            Hapus
+          </MenuItem>
+        </MenuList>
+      </Menu>
       <ConfirmationDialog
         isOpen={isDialogOpen}
         setIsOpen={handleDeleteCancellation}

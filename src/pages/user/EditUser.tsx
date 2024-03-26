@@ -119,9 +119,9 @@ function EditUser() {
             existingImageUrl={picture}
             onImageUpload={handleNewFile}
           />
-          <div className="mb-10">
+          <div className="mb-5">
             <InputCheckboxField
-              label="Profile Publik"
+              label="Profil Publik"
               registerHook={register('isPublicProfile')}
               inputID="isPrivate"
               showTooltip

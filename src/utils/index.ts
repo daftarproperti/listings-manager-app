@@ -1,5 +1,6 @@
 export * from './countActiveFilters'
 export * from './formatCurrencyToIDRText'
+export * from './isSorted'
 export * from './safeJSONParse'
 export * from './useImageHandler'
 export * from './useSingleImageHandler'
