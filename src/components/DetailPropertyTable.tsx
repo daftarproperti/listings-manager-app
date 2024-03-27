@@ -1,6 +1,16 @@
 import { type Property } from 'api/types'
+import { LISTING_OPTIONS } from 'pages/listings/edit/dummy'
 
 const DetailPropertyTable = ({ dataTable }: { dataTable: Property }) => {
+  const getLabelForValue = (
+    property: keyof typeof LISTING_OPTIONS,
+    value: string | number,
+  ) => {
+    const options = LISTING_OPTIONS[property].options
+    const option = options.find((option) => option.value === value)
+    return option ? option.label : value
+  }
+
   return (
     <table>
       <tbody>
@@ -19,13 +29,15 @@ const DetailPropertyTable = ({ dataTable }: { dataTable: Property }) => {
         {dataTable?.facing && (
           <tr>
             <td className="w-1/3 min-w-24 align-top">Hadap</td>
-            <td>: {dataTable?.facing}</td>
+            <td>: {getLabelForValue('facing', dataTable.facing)}</td>
           </tr>
         )}
         {dataTable?.electricPower && (
           <tr>
             <td className="w-1/3 min-w-24 align-top">Listrik</td>
-            <td>: {dataTable?.electricPower} V</td>
+            <td>
+              : {getLabelForValue('electric_power', dataTable.electricPower)} V
+            </td>
           </tr>
         )}
         {dataTable?.floorCount && (
@@ -43,12 +55,7 @@ const DetailPropertyTable = ({ dataTable }: { dataTable: Property }) => {
         {dataTable?.ownership && (
           <tr>
             <td className="w-1/3 min-w-24 align-top">Sertifikat</td>
-            <td>
-              :{' '}
-              {dataTable.ownership === 'shm' || dataTable.ownership === 'hgb'
-                ? dataTable.ownership.toUpperCase()
-                : dataTable.ownership}
-            </td>
+            <td>: {getLabelForValue('ownership', dataTable.ownership)}</td>
           </tr>
         )}
       </tbody>
