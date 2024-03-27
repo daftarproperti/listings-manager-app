@@ -81,14 +81,12 @@ const AddPage = () => {
           registerHook={register('title', { required: true })}
           placeholderValue="Tulis Judul"
           errorFieldName={errors.title}
-          errorMessage="Judul listing harus diisi"
         />
         <InputField
           label="Alamat"
           registerHook={register('address', { required: true })}
           placeholderValue="Isi alamat lengkap"
           errorFieldName={errors.address}
-          errorMessage="Alamat harus diisi"
         />
         <SelectField
           label="Kota"
@@ -96,14 +94,12 @@ const AddPage = () => {
           selectOptions={LISTING_OPTIONS.cities.options}
           defaultOption="Pilih Kota"
           errorFieldName={errors.city}
-          errorMessage="Kota harus diisi"
         />
         <TextareaField
           label="Deskripsi"
           registerHook={register('description', { required: true })}
           placeholderValue="Tulis keterangan untuk listing ini"
           errorFieldName={errors.description}
-          errorMessage="Deskripsi harus diisi"
         />
         <CurrencyInputField
           name="price"
@@ -114,7 +110,6 @@ const AddPage = () => {
           })}
           placeholderValue="Isi Harga"
           errorFieldName={errors.price}
-          errorMessage="Harga Jual harus diisi"
         />
         <div className="flex w-full">
           <InputField
@@ -124,7 +119,6 @@ const AddPage = () => {
             registerHook={register('lotSize', { required: true })}
             placeholderValue="Luas Tanah"
             errorFieldName={errors.lotSize}
-            errorMessage="Luas Tanah harus diisi"
           />
           <InputField
             halfWidth={true}
@@ -132,7 +126,6 @@ const AddPage = () => {
             registerHook={register('buildingSize', { required: true })}
             placeholderValue="Luas Bangunan"
             errorFieldName={errors.buildingSize}
-            errorMessage="Luas Bangunan harus diisi"
           />
         </div>
         <SelectField
@@ -141,7 +134,6 @@ const AddPage = () => {
           selectOptions={LISTING_OPTIONS.facing.options}
           defaultOption="Pilih Arah"
           errorFieldName={errors.facing}
-          errorMessage="Hadap harus diisi"
         />
         <div className="flex w-full">
           <InputField
@@ -151,7 +143,6 @@ const AddPage = () => {
             registerHook={register('bedroomCount', { required: true })}
             placeholderValue="Silahkan isi"
             errorFieldName={errors.bedroomCount}
-            errorMessage="Kamar Tidur harus diisi"
           />
           <InputField
             halfWidth={true}
@@ -159,7 +150,6 @@ const AddPage = () => {
             registerHook={register('bathroomCount', { required: true })}
             placeholderValue="Silahkan isi"
             errorFieldName={errors.bathroomCount}
-            errorMessage="Kamar Mandi harus diisi"
           />
         </div>
         <div className="flex w-full">
@@ -170,13 +160,13 @@ const AddPage = () => {
             registerHook={register('floorCount', { required: true })}
             placeholderValue="Silahkan isi"
             errorFieldName={errors.floorCount}
-            errorMessage="Lantai harus diisi"
           />
           <InputField
             halfWidth={true}
             label="Garasi Mobil"
             registerHook={register('carCount', { required: false })}
             placeholderValue="Silahkan isi"
+            errorFieldName={errors.carCount}
           />
         </div>
         <SelectField
@@ -184,6 +174,7 @@ const AddPage = () => {
           registerHook={register('electricPower')}
           selectOptions={LISTING_OPTIONS.electric_power.options}
           defaultOption="Pilih Daya Listrik"
+          errorFieldName={errors.electricPower}
         />
         <SelectField
           label="Jenis Sertifikat"
@@ -191,7 +182,6 @@ const AddPage = () => {
           selectOptions={LISTING_OPTIONS.ownership.options}
           defaultOption="Pilih Jenis Sertifikat"
           errorFieldName={errors.ownership}
-          errorMessage="Sertifikat harus diisi"
         />
       </div>
       <BottomStickyButton type="submit" disabled={isPending}>

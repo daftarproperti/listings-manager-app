@@ -9,8 +9,6 @@ import {
 import { NumericFormat } from 'react-number-format'
 
 type CurrencyInputFieldProps = {
-  halfWidth?: boolean
-  leftPosition?: boolean
   label: string
   registerHook: UseFormRegisterReturn<string>
   placeholderValue: string
@@ -21,8 +19,6 @@ type CurrencyInputFieldProps = {
 }
 
 const CurrencyInputField: React.FC<CurrencyInputFieldProps> = ({
-  halfWidth,
-  leftPosition,
   label,
   registerHook,
   placeholderValue,
@@ -36,10 +32,7 @@ const CurrencyInputField: React.FC<CurrencyInputFieldProps> = ({
       control={control}
       name={name}
       render={({ field: { ref, ...rest } }) => (
-        <div
-          className={`mt-3 self-stretch 
-        ${halfWidth ? 'w-1/2' : 'w-full'} ${leftPosition ? 'mr-1' : 'ml-1'}`}
-        >
+        <div className="mt-3 w-full self-stretch">
           <span className="text-lg font-semibold leading-7 text-gray-800">
             {label}
           </span>
@@ -60,7 +53,7 @@ const CurrencyInputField: React.FC<CurrencyInputFieldProps> = ({
           />
           {errorFieldName && (
             <span className="self-stretch text-sm leading-5 text-red-500">
-              {errorMessage}
+              {errorMessage || errorFieldName?.message}
             </span>
           )}
         </div>

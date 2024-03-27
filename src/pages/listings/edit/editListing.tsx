@@ -101,7 +101,6 @@ function EditListing({ id }: { id: string }) {
           registerHook={register('title', { required: true })}
           placeholderValue="Tulis Judul"
           errorFieldName={errors.title}
-          errorMessage="Judul listing harus diisi"
         />
         <InputField
           label="Alamat"
@@ -115,14 +114,12 @@ function EditListing({ id }: { id: string }) {
           selectOptions={LISTING_OPTIONS.cities.options}
           defaultOption="Pilih Kota"
           errorFieldName={errors.city}
-          errorMessage="Kota harus diisi"
         />
         <TextareaField
           label="Deskripsi"
           registerHook={register('description', { required: true })}
           placeholderValue="Tulis keterangan untuk listing ini"
           errorFieldName={errors.description}
-          errorMessage="Deskripsi harus diisi"
         />
         <CurrencyInputField
           name="price"
@@ -133,7 +130,6 @@ function EditListing({ id }: { id: string }) {
           })}
           placeholderValue="Isi Harga"
           errorFieldName={errors.price}
-          errorMessage="Harga Jual harus diisi"
         />
         <div className="flex w-full">
           <InputField
@@ -158,7 +154,6 @@ function EditListing({ id }: { id: string }) {
           selectOptions={LISTING_OPTIONS.facing.options}
           defaultOption="Pilih Arah"
           errorFieldName={errors.facing}
-          errorMessage="Hadap harus diisi"
         />
         <div className="flex w-full">
           <InputField
@@ -184,12 +179,14 @@ function EditListing({ id }: { id: string }) {
             label="Lantai"
             registerHook={register('floorCount')}
             placeholderValue="Silahkan isi"
+            errorFieldName={errors.floorCount}
           />
           <InputField
             halfWidth={true}
             label="Garasi Mobil"
             registerHook={register('carCount', { required: false })}
             placeholderValue="Silahkan isi"
+            errorFieldName={errors.carCount}
           />
         </div>
         <SelectField
@@ -197,12 +194,14 @@ function EditListing({ id }: { id: string }) {
           registerHook={register('electricPower')}
           selectOptions={LISTING_OPTIONS.electric_power.options}
           defaultOption="Pilih Daya Listrik"
+          errorFieldName={errors.electricPower}
         />
         <SelectField
           label="Jenis Sertifikat"
           registerHook={register('ownership')}
           selectOptions={LISTING_OPTIONS.ownership.options}
           defaultOption="Pilih Jenis Sertifikat"
+          errorFieldName={errors.ownership}
         />
       </div>
       <div className="w-full items-stretch justify-center whitespace-nowrap border-b border-solid border-b-[color:var(--gray-200,#E5E7EB)] bg-blue-100 py-3 pl-4 pr-14 pt-4 text-lg leading-7 text-gray-800">
