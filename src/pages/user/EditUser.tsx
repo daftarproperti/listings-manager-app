@@ -69,6 +69,8 @@ function EditUser() {
     }
   }
 
+  const phoneNumberPattern = /^(\+[1-9]\d{1,14}|0\d{5,14})$/
+
   return (
     <div>
       <form
@@ -97,8 +99,15 @@ function EditUser() {
           />
           <InputField
             label="Nomor HP"
-            registerHook={register('phoneNumber')}
-            placeholderValue="Isi dengan awalan 0"
+            registerHook={register('phoneNumber', {
+              required: 'Nomor HP harus diisi',
+              pattern: {
+                value: phoneNumberPattern,
+                message: 'Format Nomor HP Anda salah',
+              },
+            })}
+            placeholderValue="Isi dengan awalan 0 atau +"
+            errorFieldName={errors.phoneNumber}
           />
           <SelectField
             label="Daerah Operasi"
