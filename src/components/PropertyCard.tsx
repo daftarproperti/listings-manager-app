@@ -1,7 +1,7 @@
 import { type Property } from 'api/types'
 import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
 import ImageWithAuth from 'components/ImageWithAuth'
-import { formatCurrencyToIDRText, clipboardCopyIfMiniApp } from 'utils'
+import { formatCurrencyToIDRText, clipboardCopyIfMiniApp, appPath } from 'utils'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@material-tailwind/react'
 
@@ -70,7 +70,7 @@ const PropertyCard = ({ data }: { data: Property }) => {
                 className="my-auto aspect-square w-8 max-w-full shrink-0 overflow-hidden rounded-full border border-white object-contain object-center shadow-sm"
                 onError={({ currentTarget }) => {
                   currentTarget.onerror = null
-                  currentTarget.src = '/logo.svg'
+                  currentTarget.src = appPath('/logo.svg')
                 }}
               />
             )}

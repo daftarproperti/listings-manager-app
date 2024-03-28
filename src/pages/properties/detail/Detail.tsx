@@ -5,7 +5,7 @@ import RenderDescription from 'pages/listings/detail/Description'
 import SwiperSlider from 'components/SwiperSlider'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { clipboardCopyIfMiniApp, formatCurrencyToIDRText } from 'utils'
+import { clipboardCopyIfMiniApp, formatCurrencyToIDRText, appPath } from 'utils'
 import DetailPropertyTable from 'components/DetailPropertyTable'
 import { Button } from '@material-tailwind/react'
 
@@ -115,7 +115,7 @@ function PropertyDetail({ id }: { id: string }) {
                       className="my-auto aspect-square w-8 max-w-full shrink-0 overflow-hidden rounded-full border border-white object-contain object-center shadow-sm"
                       onError={({ currentTarget }) => {
                         currentTarget.onerror = null
-                        currentTarget.src = '/logo.svg'
+                        currentTarget.src = appPath('/logo.svg')
                       }}
                     />
                   )}

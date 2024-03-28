@@ -6,7 +6,7 @@ import SwiperSlider from 'components/SwiperSlider'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Chip } from '@material-tailwind/react'
-import { formatCurrencyToIDRText } from 'utils'
+import { formatCurrencyToIDRText, appPath } from 'utils'
 import DetailPropertyTable from 'components/DetailPropertyTable'
 import ShareButton from 'components/button/ShareButton'
 
@@ -137,7 +137,7 @@ function ListingDetail({
                       className="my-auto aspect-square w-8 max-w-full shrink-0 overflow-hidden rounded-full border border-white object-contain object-center shadow-sm"
                       onError={({ currentTarget }) => {
                         currentTarget.onerror = null
-                        currentTarget.src = '/logo.svg'
+                        currentTarget.src = appPath('/logo.svg')
                       }}
                     />
                   )}
