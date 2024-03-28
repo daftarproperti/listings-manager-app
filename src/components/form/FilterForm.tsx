@@ -3,11 +3,11 @@ import BottomStickyButton from 'components/button/BottomStickyButton'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { NumericFormat } from 'react-number-format'
 import { Button } from '@material-tailwind/react'
+import { useValidateMinMaxValue } from 'utils'
 
 import { FILTER_OPTIONS } from './constant'
 
 const ButtonFilterChip = ({
-  key,
   children,
   isActive,
   onClick,
@@ -18,7 +18,6 @@ const ButtonFilterChip = ({
   HTMLButtonElement
 >) => (
   <Button
-    key={key}
     size="sm"
     color="blue"
     variant={isActive ? 'filled' : 'outlined'}
@@ -50,6 +49,7 @@ export const filterKeyStrings = {
 const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
+  const { validationMessage } = useValidateMinMaxValue(searchParams)
 
   const controlSearchParams = (key: string, value?: string) => {
     searchParams.delete(key)
@@ -85,32 +85,39 @@ const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
         <div className="w-full text-lg font-semibold leading-7 text-slate-500">
           Harga
         </div>
-        <div className="mt-1 flex w-full justify-between">
-          <NumericFormat
-            placeholder="Rp Minimum"
-            thousandSeparator="."
-            decimalSeparator=","
-            prefix="Rp "
-            decimalScale={2}
-            value={searchParams.get(filterKeyStrings.minPrice) ?? ''}
-            onValueChange={(event) =>
-              controlSearchParams(filterKeyStrings.minPrice, event.value)
-            }
-            className="mr-2 w-1/2 justify-between gap-1 rounded-lg border border-solid border-slate-400 bg-white px-3 py-2.5"
-          />
-          <NumericFormat
-            thousandSeparator="."
-            decimalSeparator=","
-            prefix="Rp "
-            decimalScale={2}
-            placeholder="Rp Maximum"
-            value={searchParams.get(filterKeyStrings.maxPrice) ?? ''}
-            onValueChange={(event) =>
-              controlSearchParams(filterKeyStrings.maxPrice, event.value)
-            }
-            className="ml-2 w-1/2 justify-between gap-1 rounded-lg border border-solid border-slate-400 bg-white px-3 py-2.5"
-          />
+        <div className="mt-1 flex w-full justify-between gap-2">
+          <div className="relative flex grow gap-1 rounded-lg border border-solid border-slate-400 bg-white">
+            <NumericFormat
+              placeholder="Rp Minimum"
+              thousandSeparator="."
+              decimalSeparator=","
+              prefix="Rp "
+              decimalScale={2}
+              value={searchParams.get(filterKeyStrings.minPrice) ?? ''}
+              onValueChange={(event) =>
+                controlSearchParams(filterKeyStrings.minPrice, event.value)
+              }
+              className="h-full w-full rounded-lg border-none p-3 py-3.5 ring-0"
+            />
+          </div>
+          <div className="relative flex grow gap-1 rounded-lg border border-solid border-slate-400 bg-white">
+            <NumericFormat
+              thousandSeparator="."
+              decimalSeparator=","
+              prefix="Rp "
+              decimalScale={2}
+              placeholder="Rp Maximum"
+              value={searchParams.get(filterKeyStrings.maxPrice) ?? ''}
+              onValueChange={(event) =>
+                controlSearchParams(filterKeyStrings.maxPrice, event.value)
+              }
+              className="h-full w-full rounded-lg border-none p-3 py-3.5 ring-0"
+            />
+          </div>
         </div>
+        <span className="self-stretch text-sm text-red-500">
+          {validationMessage('price')}
+        </span>
         <div className="mt-2 inline-grid grid-cols-3 gap-2">
           {FILTER_OPTIONS.priceRange.options.map((option, index) => {
             const isActive =
@@ -275,6 +282,9 @@ const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
             </span>
           </div>
         </div>
+        <span className="self-stretch text-sm text-red-500">
+          {validationMessage('lotSize')}
+        </span>
         <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-500">
           Luas bangunan
         </div>
@@ -314,6 +324,9 @@ const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
             </span>
           </div>
         </div>
+        <span className="self-stretch text-sm text-red-500">
+          {validationMessage('buildingSize')}
+        </span>
         <div className="mt-6 w-full text-lg font-semibold leading-7 text-black">
           Sertifikat
         </div>
