@@ -220,7 +220,9 @@ export const uploadImage = async (file: File) => {
         })
       } else {
         toast(
-          `Error uploading image: ${JSON.stringify(error.response?.data)}`,
+          `Error uploading image: ${JSON.stringify(
+            error.response?.data?.message,
+          )}`,
           {
             type: 'error',
           },
