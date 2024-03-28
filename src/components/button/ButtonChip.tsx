@@ -15,7 +15,7 @@ const ButtonChip = ({
     <button
       {...props}
       className={clsx(
-        'group flex items-center justify-center gap-1 rounded-lg border border-solid border-primary-500 bg-white px-3.5 py-2 text-white transition-all',
+        'border-primary-500 group flex items-center justify-center gap-1 rounded-lg border border-solid bg-white px-3.5 py-2 text-white transition-all',
         isActive && '!bg-primary-500',
         props.disabled ? 'border-none !bg-slate-300' : 'hover:bg-primary-500',
         props.className,
@@ -25,7 +25,7 @@ const ButtonChip = ({
       {text && (
         <div
           className={clsx(
-            'grow self-stretch text-sm leading-5 text-primary-500',
+            'text-primary-500 grow self-stretch text-sm leading-5',
             isActive && '!text-white',
             props.disabled ? 'text-slate-100' : 'group-hover:text-white',
           )}

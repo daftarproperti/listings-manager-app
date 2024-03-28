@@ -18,7 +18,7 @@ const LinkChip = ({
     <Link
       {...props}
       className={clsx(
-        'group flex items-center justify-center gap-1 rounded-lg border border-solid border-primary-500 bg-white px-3.5 py-2 text-white transition-all hover:bg-primary-500',
+        'border-primary-500 hover:bg-primary-500 group flex items-center justify-center gap-1 rounded-lg border border-solid bg-white px-3.5 py-2 text-white transition-all',
         props.className,
         disabled && 'pointer-events-none border-none !bg-slate-300',
       )}
@@ -26,7 +26,7 @@ const LinkChip = ({
       {icon}
       <div
         className={clsx(
-          'grow self-stretch  text-sm leading-5 text-primary-500 group-hover:text-white',
+          'text-primary-500 grow  self-stretch text-sm leading-5 group-hover:text-white',
           disabled && '!text-slate-100',
         )}
       >
