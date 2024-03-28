@@ -1,5 +1,4 @@
 import axios from 'axios'
-
 import WebApp from '@twa-dev/sdk'
 
 axios.defaults.baseURL = import.meta.env.VITE_DP_HOME + '/api/tele-app'

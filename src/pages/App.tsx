@@ -4,20 +4,24 @@ import { RouterProvider } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { ThemeProvider } from '@material-tailwind/react'
+import { BackButton } from '@twa-dev/sdk/react'
 
 import routes from './routes'
 
 const queryClient = new QueryClient()
 
 const App = () => (
-  <main className="mx-auto h-auto min-h-screen max-w-lg bg-white font-inter text-gray-950">
-    <ThemeProvider>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={routes} />
-        <ToastContainer position="top-center" />
-      </QueryClientProvider>
-    </ThemeProvider>
-  </main>
+  <>
+    <BackButton />
+    <main className="mx-auto h-auto min-h-screen max-w-lg bg-white font-inter text-gray-950">
+      <ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={routes} />
+          <ToastContainer position="top-center" />
+        </QueryClientProvider>
+      </ThemeProvider>
+    </main>
+  </>
 )
 
 export default App
