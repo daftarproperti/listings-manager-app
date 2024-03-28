@@ -10,3 +10,7 @@
     margin: 0;
   }
 }
+
+.Toastify__close-button {
+  margin: 8px !important;
+}
