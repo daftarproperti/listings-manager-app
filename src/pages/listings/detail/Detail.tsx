@@ -5,7 +5,7 @@ import RenderDescription from 'pages/listings/detail/Description'
 import SwiperSlider from 'components/SwiperSlider'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Button } from '@material-tailwind/react'
+import { Button, Chip } from '@material-tailwind/react'
 import { formatCurrencyToIDRText } from 'utils'
 import DetailPropertyTable from 'components/DetailPropertyTable'
 import ShareButton from 'components/button/ShareButton'
@@ -71,9 +71,10 @@ function ListingDetail({
                 )}
               >
                 {data?.isPrivate && (
-                  <span className="relative w-fit justify-center rounded-xl border-2 border-solid border-sky-500 bg-indigo-900 px-1.5 py-0.5 text-xs leading-4 text-indigo-50 shadow-sm">
-                    PRIVATE
-                  </span>
+                  <Chip
+                    value="PRIVATE"
+                    className="mb-1.5 w-fit rounded-full border-2 border-sky-500 bg-indigo-900 px-1.5 py-0.5 shadow"
+                  />
                 )}
                 <h1 className="text-lg font-semibold leading-7 text-slate-500">
                   {data?.title}
