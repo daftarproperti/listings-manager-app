@@ -1,17 +1,21 @@
 import { type operations } from 'api/generated'
 
-export type ListingType = NonNullable<
-  NonNullable<operations['index']['parameters']['query']>['type']
+export type PropertyType = NonNullable<
+  NonNullable<operations['index']['parameters']['query']>['propertyType']
 >
 
 export type ListingOwnership = NonNullable<
   NonNullable<operations['index']['parameters']['query']>['ownership']
 >
 
-export const LISTING_TYPE_ENUM: { [key in ListingType]: string } = {
+export const PROPERTY_TYPE_ENUM: { [key in PropertyType]: string } = {
+  unknown: 'Lainnya',
   house: 'Rumah',
-  apartment: 'Apartement',
+  apartment: 'Apartemen',
+  warehouse: 'Gudang',
+  shophouse: 'Ruko',
   land: 'Tanah',
+  villa: 'Villa',
 }
 
 export const LISTING_OWNERSHIP_ENUM: { [key in ListingOwnership]: string } = {
@@ -61,9 +65,9 @@ export const FILTER_OPTIONS = {
       },
     ],
   },
-  listingType: {
-    options: Object.keys(LISTING_TYPE_ENUM).map((value) => ({
-      label: LISTING_TYPE_ENUM[value as ListingType],
+  propertyType: {
+    options: Object.keys(PROPERTY_TYPE_ENUM).map((value) => ({
+      label: PROPERTY_TYPE_ENUM[value as PropertyType],
       value,
     })),
   },

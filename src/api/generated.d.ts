@@ -72,8 +72,8 @@ export interface components {
       /** @description Collection */
       collection?: boolean | null;
       price?: components["schemas"]["FilterMinMax"];
-      /** @description Type */
-      type?: string | null;
+      /** @description Property Type */
+      propertyType?: string | null;
       bedroomCount?: components["schemas"]["FilterMinMax"];
       bathroomCount?: components["schemas"]["FilterMinMax"];
       lotSize?: components["schemas"]["FilterMinMax"];
@@ -157,10 +157,21 @@ export interface components {
       /** @example true */
       isPublicProfile?: boolean;
     };
+    /**
+     * @description Property ownership/certificate
+     * @example shm
+     * @enum {string}
+     */
+    PropertyOwnership: "unknown" | "shm" | "hgb" | "strata" | "girik";
+    /**
+     * @description Property type
+     * @example house
+     * @enum {string}
+     */
+    PropertyType: "unknown" | "house" | "apartment" | "warehouse" | "shophouse" | "land" | "villa";
     Listing: {
       id?: string;
-      /** @example id-123 */
-      publicId?: string;
+      sourceText?: string;
       title?: string;
       address?: string;
       description?: string;
@@ -173,7 +184,7 @@ export interface components {
       floorCount?: number;
       electricPower?: number;
       facing?: string;
-      ownership?: string;
+      ownership?: components["schemas"]["PropertyOwnership"];
       city?: string;
       pictureUrls?: string[];
       coordinate?: {
@@ -197,6 +208,7 @@ export interface components {
     };
     Property: {
       id?: string;
+      sourceText?: string;
       title?: string;
       address?: string;
       description?: string;
@@ -268,7 +280,7 @@ export interface operations {
         /** @description Maximum price */
         "price[max]"?: number;
         /** @description Property type */
-        type?: "house" | "apartment" | "land";
+        propertyType?: components["schemas"]["PropertyType"];
         /** @description Bedroom count */
         bedroomCount?: number;
         /** @description Minimum Bedroom count */
@@ -290,7 +302,7 @@ export interface operations {
         /** @description Maximum building size */
         "buildingSize[max]"?: number;
         /** @description Ownership */
-        ownership?: "shm" | "hgb" | "girik" | "lainnya";
+        ownership?: components["schemas"]["PropertyOwnership"];
         /** @description Car count */
         carCount?: number;
         /** @description Minimum Car count */
@@ -463,7 +475,7 @@ export interface operations {
         /** @description Maximum price */
         "price[max]"?: number;
         /** @description Property type */
-        type?: "house" | "apartment" | "land";
+        propertyType?: components["schemas"]["PropertyType"];
         /** @description Bedroom count */
         bedroomCount?: number;
         /** @description Minimum Bedroom count */

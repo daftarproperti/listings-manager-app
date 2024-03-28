@@ -26,7 +26,7 @@ function EditListing({ id }: { id: string }) {
   } = useForm<Listing>({
     defaultValues: {
       isPrivate: false,
-      ownership: '',
+      ownership: 'unknown',
     },
     resolver: zodResolver(addEditFormSchema),
   })
