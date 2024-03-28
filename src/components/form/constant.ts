@@ -1,3 +1,26 @@
+import { type operations } from 'api/generated'
+
+export type ListingType = NonNullable<
+  NonNullable<operations['index']['parameters']['query']>['type']
+>
+
+export type ListingOwnership = NonNullable<
+  NonNullable<operations['index']['parameters']['query']>['ownership']
+>
+
+export const LISTING_TYPE_ENUM: { [key in ListingType]: string } = {
+  house: 'Rumah',
+  apartment: 'Apartement',
+  land: 'Tanah',
+}
+
+export const LISTING_OWNERSHIP_ENUM: { [key in ListingOwnership]: string } = {
+  shm: 'SHM',
+  hgb: 'HGB',
+  girik: 'Girik',
+  lainnya: 'Lainnya',
+}
+
 export const FILTER_OPTIONS = {
   priceRange: {
     options: [
@@ -39,24 +62,10 @@ export const FILTER_OPTIONS = {
     ],
   },
   listingType: {
-    options: [
-      {
-        label: 'Rumah',
-        value: 'house',
-      },
-      {
-        label: 'Apartement',
-        value: 'apartment',
-      },
-      {
-        label: 'Tanah',
-        value: 'land',
-      },
-      // {
-      //   label: 'Ruko',
-      //   value: 'shophouse',
-      // },
-    ],
+    options: Object.keys(LISTING_TYPE_ENUM).map((value) => ({
+      label: LISTING_TYPE_ENUM[value as ListingType],
+      value,
+    })),
   },
   bedroomCount: {
     options: [
@@ -107,28 +116,10 @@ export const FILTER_OPTIONS = {
     ],
   },
   certificate: {
-    options: [
-      {
-        label: 'SHM',
-        value: 'shm',
-      },
-      {
-        label: 'HGB',
-        value: 'hgb',
-      },
-      {
-        label: 'Strata',
-        value: 'strata',
-      },
-      {
-        label: 'Girik',
-        value: 'girik',
-      },
-      {
-        label: 'Lainnya',
-        value: 'lainnya',
-      },
-    ],
+    options: Object.keys(LISTING_OWNERSHIP_ENUM).map((value) => ({
+      label: LISTING_OWNERSHIP_ENUM[value as ListingOwnership],
+      value,
+    })),
   },
   carCount: {
     options: [
