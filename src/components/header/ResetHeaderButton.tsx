@@ -1,9 +1,14 @@
 import { Button } from '@material-tailwind/react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+
+const redirectPathMap: { [key: string]: string } = {
+  '/listings/filter': '/',
+  '/properties/filter': '/properties',
+}
 
 const ResetHeaderButton = () => {
   const navigate = useNavigate()
-  const [, setSearchParams] = useSearchParams()
+  const { pathname } = useLocation()
 
   return (
     <Button
@@ -12,8 +17,7 @@ const ResetHeaderButton = () => {
       variant="text"
       className="text-sm font-normal capitalize"
       onClick={() => {
-        setSearchParams({}, { replace: true })
-        navigate(-1)
+        navigate(redirectPathMap[pathname])
       }}
     >
       Reset
