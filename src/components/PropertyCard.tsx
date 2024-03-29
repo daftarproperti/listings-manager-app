@@ -11,6 +11,20 @@ const PropertyCard = ({ data }: { data: Property }) => {
     navigate(`/properties/${id}`)
   }
 
+  const contact = data?.listings?.[0]?.user?.name
+    ? {
+        name: data?.listings?.[0]?.user?.name,
+        phoneNumber: data?.listings?.[0]?.user?.phoneNumber,
+        profilePictureURL: data?.listings?.[0]?.user?.profilePictureURL,
+      }
+    : data?.listings?.[0]?.contact?.name
+      ? {
+          name: data?.listings?.[0]?.contact?.name,
+          phoneNumber: data?.listings?.[0]?.contact?.phoneNumber,
+          profilePictureURL: null,
+        }
+      : null
+
   return (
     <div className="flex flex-col rounded-lg border bg-white">
       <div
@@ -60,13 +74,13 @@ const PropertyCard = ({ data }: { data: Property }) => {
           </div>
         </div>
       </div>
-      {data?.listings?.[0]?.user?.name && (
+      {contact?.name && (
         <div className="flex w-full justify-between gap-5 rounded-b-lg bg-blue-100 px-3 py-2.5">
           <div className="flex items-center justify-between gap-2">
-            {data?.listings?.[0]?.user?.profilePictureURL && (
+            {contact?.profilePictureURL && (
               <img
                 loading="lazy"
-                src={data?.listings?.[0]?.user?.profilePictureURL}
+                src={contact?.profilePictureURL}
                 className="my-auto aspect-square w-8 max-w-full shrink-0 overflow-hidden rounded-full border border-white object-contain object-center shadow-sm"
                 onError={({ currentTarget }) => {
                   currentTarget.onerror = null
@@ -76,22 +90,22 @@ const PropertyCard = ({ data }: { data: Property }) => {
             )}
             <span className="flex grow basis-[0%] flex-col items-stretch justify-center self-stretch">
               <div className="whitespace-nowrap text-sm font-semibold leading-5 text-slate-800">
-                {data?.listings?.[0]?.user?.name}
+                {contact?.name}
               </div>
               <div className="whitespace-nowrap text-sm leading-5 text-slate-500">
-                {data?.listings?.[0]?.user?.phoneNumber}
+                {contact?.phoneNumber}
               </div>
             </span>
           </div>
-          {data?.listings?.[0]?.user?.phoneNumber && (
-            <a href={`tel:${data.listings?.[0]?.user?.phoneNumber}`}>
+          {contact?.phoneNumber && (
+            <a href={`tel:${contact?.phoneNumber}`}>
               <Button
                 size="sm"
                 color="blue"
                 className="text-sm font-normal capitalize"
                 onClick={(e) => {
                   e.stopPropagation()
-                  const phoneNumber = data?.listings?.[0]?.user?.phoneNumber
+                  const phoneNumber = contact?.phoneNumber
                   clipboardCopyIfMiniApp(phoneNumber, e)
                 }}
               >

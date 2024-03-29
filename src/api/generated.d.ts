@@ -128,13 +128,6 @@ export interface components {
         latitude?: number;
         longitude?: number;
       };
-      contacts?: {
-        name?: string;
-        profilePictureURL?: string;
-        phoneNumber?: string;
-        sourceURL?: string;
-        provider?: string;
-      };
       /** @example false */
       isPrivate?: boolean;
     };
@@ -158,6 +151,12 @@ export interface components {
       isPublicProfile?: boolean;
     };
     /**
+     * @description Listing type
+     * @example house
+     * @enum {string}
+     */
+    ListingType: "unknown" | "sale" | "rent";
+    /**
      * @description Property ownership/certificate
      * @example shm
      * @enum {string}
@@ -173,6 +172,8 @@ export interface components {
       id?: string;
       sourceText?: string;
       title?: string;
+      propertyType?: components["schemas"]["PropertyType"];
+      listingType?: components["schemas"]["ListingType"];
       address?: string;
       description?: string;
       price?: number;
@@ -191,12 +192,10 @@ export interface components {
         latitude?: number;
         longitude?: number;
       };
-      contacts?: {
+      contact?: {
         name?: string;
-        profilePictureURL?: string;
         phoneNumber?: string;
-        sourceURL?: string;
-        provider?: string;
+        company?: string;
       };
       user?: {
         name?: string;
@@ -210,6 +209,8 @@ export interface components {
       id?: string;
       sourceText?: string;
       title?: string;
+      propertyType?: components["schemas"]["PropertyType"];
+      listingType?: components["schemas"]["ListingType"];
       address?: string;
       description?: string;
       price?: number;
