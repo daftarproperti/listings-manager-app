@@ -1,6 +1,7 @@
 import Header from 'components/header/Header'
 import FooterIcons from 'components/footer/FooterIcons'
 import { createBrowserRouter, Outlet } from 'react-router-dom'
+import ScrollRestoration from 'components/ScrollRestoration'
 
 import AuthenticationWrapper from './AuthWrapper'
 import AddPage from './listings/add'
@@ -21,6 +22,7 @@ const router = createBrowserRouter(
       path: '/',
       element: (
         <AuthenticationWrapper>
+          <ScrollRestoration />
           <Outlet />
         </AuthenticationWrapper>
       ),
