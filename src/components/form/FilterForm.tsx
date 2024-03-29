@@ -352,7 +352,7 @@ const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
           })}
         </div>
         <div className="mt-6 w-full text-lg font-semibold leading-7 text-black">
-          Kapasitas garasi mobil
+          Kapasitas Mobil
         </div>
         <div className="mt-2 flex gap-2">
           {FILTER_OPTIONS.carCount.options.map((option, index) => {

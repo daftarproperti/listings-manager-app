@@ -48,7 +48,7 @@ const DetailPropertyTable = ({ dataTable }: { dataTable: Property }) => {
         )}
         {dataTable?.carCount && (
           <tr>
-            <td className="w-1/3 min-w-24 align-top">Garasi Mobil</td>
+            <td className="w-1/3 min-w-24 align-top">Kapasitas Mobil</td>
             <td>: {dataTable?.carCount}</td>
           </tr>
         )}

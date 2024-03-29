@@ -92,7 +92,7 @@ export const addEditFormSchema = z.object({
   bathroomCount: getMandatoryField('Kamar Mandi').number,
   bedroomCount: getMandatoryField('Kamar Tidur').number,
   buildingSize: getMandatoryField('Luas Bangunan').numberMoreThanZero,
-  carCount: getOptionalField('Garasi Mobil').number,
+  carCount: getOptionalField('Kapasitas Mobil').number,
   city: getMandatoryField('Kota').string,
   description: getMandatoryField('Deskripsi').string,
   electricPower: getOptionalField('Daya Listrik').number,

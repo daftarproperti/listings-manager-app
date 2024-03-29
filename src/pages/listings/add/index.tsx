@@ -163,7 +163,7 @@ const AddPage = () => {
           />
           <InputField
             halfWidth={true}
-            label="Garasi Mobil"
+            label="Kapasitas Mobil"
             registerHook={register('carCount', { required: false })}
             placeholderValue="Silahkan isi"
             errorFieldName={errors.carCount}
