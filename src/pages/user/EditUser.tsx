@@ -13,6 +13,7 @@ import BottomStickyButton from 'components/button/BottomStickyButton'
 import InputCheckboxField from 'components/input/InputCheckboxField'
 import { toast } from 'react-toastify'
 import { Button } from '@material-tailwind/react'
+import { dpPath } from 'utils'
 
 import { onSubmit } from './handleUserForm'
 
@@ -29,7 +30,6 @@ function EditUser() {
   const navigate = useNavigate()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const picture = watch('picture')
-  const dpHome = import.meta.env.VITE_DP_HOME
 
   const [newImageFile, setNewImageFile] = useState<File | null>(null)
   const handleNewFile = (file: File | null) => {
@@ -142,9 +142,9 @@ function EditUser() {
                   id="publicUrlInput"
                   onClick={handleInputClick}
                   type="text"
-                  value={`${dpHome}/public/agents/${
-                    userDetails?.publicId || ''
-                  }`}
+                  value={dpPath(
+                    `/public/agents/${userDetails?.publicId || ''}`,
+                  )}
                   readOnly
                   className="w-full items-start justify-center self-stretch whitespace-nowrap rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-gray-100 px-2 py-1 text-sm leading-7 text-gray-800"
                 />

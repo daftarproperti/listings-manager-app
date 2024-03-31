@@ -6,7 +6,7 @@ import SwiperSlider from 'components/SwiperSlider'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Chip } from '@material-tailwind/react'
-import { formatCurrencyToIDRText, appPath } from 'utils'
+import { formatCurrencyToIDRText, appPath, dpPath } from 'utils'
 import DetailPropertyTable from 'components/DetailPropertyTable'
 import ShareButton from 'components/button/ShareButton'
 
@@ -24,8 +24,7 @@ function ListingDetail({
   }
   const location = useLocation()
   const updateSuccess = location.state?.updateSuccess
-  const dpHome = import.meta.env.VITE_DP_HOME
-  const listingPublicUrl = `${dpHome}/public/listings/${data?.id || ''}`
+  const listingPublicUrl = dpPath(`/public/listings/${data?.id || ''}`)
 
   useEffect(() => {
     if (updateSuccess) {
