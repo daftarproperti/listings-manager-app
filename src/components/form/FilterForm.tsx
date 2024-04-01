@@ -22,7 +22,7 @@ const ButtonFilterChip = ({
     color="blue"
     variant={isActive ? 'filled' : 'outlined'}
     className={clsx(
-      'rounded-full text-sm font-normal capitalize',
+      'w-fit rounded-full text-sm font-normal capitalize',
       !isActive && 'bg-white',
     )}
     onClick={onClick}
@@ -155,7 +155,7 @@ const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
         <div className="mt-6 w-full text-lg font-semibold leading-7 text-black">
           Tipe Properti
         </div>
-        <div className="mt-2 inline-grid grid-cols-4 gap-2">
+        <div className="mt-2 flex flex-wrap gap-2">
           {FILTER_OPTIONS.propertyType.options.map((option, index) => {
             const isActive =
               searchParams.get(filterKeyStrings.propertyType) === option.value
@@ -386,7 +386,7 @@ const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
         <div className="mt-6 w-full text-lg font-semibold leading-7 text-black">
           Listrik
         </div>
-        <div className="mt-2 inline-grid grid-cols-4 gap-2">
+        <div className="mt-2 flex flex-wrap gap-2">
           {FILTER_OPTIONS.electricity.options.map((option, index) => {
             const isActive =
               searchParams.get(filterKeyStrings.electricPower) === option.value

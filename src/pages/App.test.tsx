@@ -72,7 +72,11 @@ describe('App', () => {
       expect(screen.queryByText('Loading...')).not.toBeInTheDocument(),
     )
 
-    expect(screen.getByText('Data Tidak Tersedia')).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        /data tidak tersedia|anda dapat dengan mudah menambahkan listing/i,
+      ),
+    ).toBeInTheDocument()
   })
 
   test('authentication successful, good response, some properties', async () => {

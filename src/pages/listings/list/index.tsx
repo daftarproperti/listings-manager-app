@@ -11,7 +11,7 @@ import SortBottomSheet from 'components/SortBottomSheet'
 import Card from 'components/Card'
 import { Fragment, useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { XCircleIcon } from '@heroicons/react/24/outline'
+import { InformationCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { countActiveFilters, isSorted } from 'utils'
 import { Badge, Button, IconButton } from '@material-tailwind/react'
 
@@ -71,8 +71,8 @@ const ListingListPage = () => {
   }, [isFetchMoreInView])
 
   return (
-    <div className="relative h-dvh">
-      <div className="flex h-dvh w-full flex-col pb-20 pt-16">
+    <>
+      <div className="flex min-h-dvh w-full flex-col pb-20 pt-16">
         <div className="bg-white p-4">
           <div className="relative mb-4">
             <MagnifyingGlassIcon className="absolute left-2 top-[50%] h-4 w-4 -translate-y-[50%] text-slate-400" />
@@ -134,47 +134,49 @@ const ListingListPage = () => {
           </div>
         </div>
 
-        <div className="grow bg-slate-100 p-4 pb-24">
+        <div className="flex grow flex-col bg-slate-100 p-4">
           {isError ? (
-            <div className="flex h-96 items-center justify-center">
-              <span className="mb-4">Error: {error.message}</span>
-            </div>
+            <div className="my-auto text-center">Error: {error.message}</div>
           ) : isFetching && !isFetchingNextPage ? (
-            <div className="flex h-96 items-center justify-center">
-              Loading...
-            </div>
+            <div className="my-auto text-center">Loading...</div>
           ) : (
             data?.pages?.length && (
               <>
-                <ul role="list" className="space-y-4">
+                <ul role="list" className="flex grow flex-col space-y-4">
                   {data.pages.map((page, index) => (
                     <Fragment key={index}>
                       {page.listings?.length ? (
                         page.listings?.map((listing, index) => (
-                          <div key={index}>
+                          <Fragment key={index}>
                             <Card data={listing} />
-                          </div>
+                          </Fragment>
                         ))
                       ) : (
-                        <div className="flex h-96 flex-col items-center justify-center gap-3">
-                          {`${searchParams}` === '' && (
-                            <div className="rounded-lg bg-blue-100 p-3 text-xs">
-                              Anda dapat dengan mudah menambahkan listing dengan
-                              cara menyalin dan menempelkan seluruh informasi
-                              listing Anda pada bot chat Telegram Anda.
+                        <div className="my-auto space-y-3">
+                          {`${searchParams}` === '' ? (
+                            <div className="flex space-x-2 rounded-lg bg-blue-100 p-3">
+                              <div className="shrink-0">
+                                <InformationCircleIcon className="h-5 w-5 text-slate-800" />
+                              </div>
+                              <div className="text-sm">
+                                Anda dapat dengan mudah menambahkan listing
+                                dengan cara menyalin dan menempelkan seluruh
+                                informasi listing Anda pada bot chat Telegram
+                                Anda.
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="text-center">
+                              Data Tidak Tersedia
                             </div>
                           )}
-                          Data Tidak Tersedia
                         </div>
                       )}
                     </Fragment>
                   ))}
                 </ul>
                 {hasNextPage && (
-                  <div
-                    ref={fetchMoreRef}
-                    className="flex h-96 items-center justify-center"
-                  >
+                  <div ref={fetchMoreRef} className="text-center">
                     Loading...
                   </div>
                 )}
@@ -204,7 +206,7 @@ const ListingListPage = () => {
         isOpen={isNewListingSheetOpen}
         setIsOpen={setIsNewListingSheetOpen}
       />
-    </div>
+    </>
   )
 }
 

@@ -68,8 +68,8 @@ const PropertyListPage = () => {
   }, [isFetchMoreInView])
 
   return (
-    <div className="relative h-dvh">
-      <div className="flex h-dvh w-full flex-col pb-20 pt-16">
+    <>
+      <div className="flex min-h-dvh w-full flex-col pb-20 pt-16">
         <div className="bg-white p-4">
           <div className="relative mb-4">
             <MagnifyingGlassIcon className="absolute left-2 top-[50%] h-4 w-4 -translate-y-[50%] text-slate-400" />
@@ -131,29 +131,25 @@ const PropertyListPage = () => {
             </div>
           </div>
         </div>
-        <div className="grow bg-slate-100 p-4 pb-24">
+        <div className="flex grow flex-col bg-slate-100 p-4">
           {isError ? (
-            <div className="flex h-96 items-center justify-center">
-              Error: {error.message}
-            </div>
+            <div className="my-auto text-center">Error: {error.message}</div>
           ) : isFetching && !isFetchingNextPage ? (
-            <div className="flex h-96 items-center justify-center">
-              Loading...
-            </div>
+            <div className="my-auto text-center">Loading...</div>
           ) : (
             data?.pages?.length && (
               <>
-                <ul role="list" className="space-y-4">
+                <ul role="list" className="flex grow flex-col space-y-4">
                   {data.pages.map((page, index) => (
                     <Fragment key={index}>
                       {page.properties?.length ? (
                         page.properties?.map((property, index) => (
-                          <div key={index}>
+                          <Fragment key={index}>
                             <PropertyCard data={property} />
-                          </div>
+                          </Fragment>
                         ))
                       ) : (
-                        <div className="flex h-96 items-center justify-center">
+                        <div className="my-auto text-center">
                           Data Tidak Tersedia
                         </div>
                       )}
@@ -161,10 +157,7 @@ const PropertyListPage = () => {
                   ))}
                 </ul>
                 {hasNextPage && (
-                  <div
-                    ref={fetchMoreRef}
-                    className="flex h-96 items-center justify-center"
-                  >
+                  <div ref={fetchMoreRef} className="pt-4 text-center">
                     Loading...
                   </div>
                 )}
@@ -177,7 +170,7 @@ const PropertyListPage = () => {
         isOpen={isFilterBottomSheetOpen}
         setIsOpen={setIsFilterBottomBarOpen}
       />
-    </div>
+    </>
   )
 }
 
