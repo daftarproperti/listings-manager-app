@@ -1,28 +1,25 @@
-import { type operations } from 'api/generated'
+import { type components } from 'api/generated'
 
-export type PropertyType = NonNullable<
-  NonNullable<operations['index']['parameters']['query']>['propertyType']
->
+export type PropertyType = components['schemas']['PropertyType']
 
-export type ListingOwnership = NonNullable<
-  NonNullable<operations['index']['parameters']['query']>['ownership']
->
+export type PropertyOwnership = components['schemas']['PropertyOwnership']
 
 export const PROPERTY_TYPE_ENUM: { [key in PropertyType]: string } = {
-  unknown: 'Lainnya',
   house: 'Rumah',
   apartment: 'Apartemen',
   warehouse: 'Gudang',
   shophouse: 'Ruko',
   land: 'Tanah',
   villa: 'Villa',
+  unknown: 'Lainnya',
 }
 
-export const LISTING_OWNERSHIP_ENUM: { [key in ListingOwnership]: string } = {
+export const PROPERTY_OWNERSHIP_ENUM: { [key in PropertyOwnership]: string } = {
   shm: 'SHM',
   hgb: 'HGB',
   girik: 'Girik',
-  lainnya: 'Lainnya',
+  strata: 'Strata',
+  unknown: 'Lainnya',
 }
 
 export const FILTER_OPTIONS = {
@@ -120,8 +117,8 @@ export const FILTER_OPTIONS = {
     ],
   },
   certificate: {
-    options: Object.keys(LISTING_OWNERSHIP_ENUM).map((value) => ({
-      label: LISTING_OWNERSHIP_ENUM[value as ListingOwnership],
+    options: Object.keys(PROPERTY_OWNERSHIP_ENUM).map((value) => ({
+      label: PROPERTY_OWNERSHIP_ENUM[value as PropertyOwnership],
       value,
     })),
   },

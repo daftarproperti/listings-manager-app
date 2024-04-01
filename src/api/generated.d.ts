@@ -168,6 +168,12 @@ export interface components {
      * @enum {string}
      */
     PropertyType: "unknown" | "house" | "apartment" | "warehouse" | "shophouse" | "land" | "villa";
+    /**
+     * @description Sort Listing By
+     * @example price
+     * @enum {string}
+     */
+    ListingSort: "price" | "bedroomCount" | "bathroomCount" | "lotSize" | "buildingSize";
     Listing: {
       id?: string;
       sourceText?: string;
@@ -313,7 +319,7 @@ export interface operations {
         /** @description Electric Power */
         electricPower?: number;
         /** @description Sort By */
-        sort?: "price" | "bedroomCount" | "lotSize";
+        sort?: components["schemas"]["ListingSort"];
         /** @description Order By */
         order?: "asc" | "desc";
       };
@@ -498,7 +504,7 @@ export interface operations {
         /** @description Maximum building size */
         "buildingSize[max]"?: number;
         /** @description Ownership */
-        ownership?: "shm" | "hgb" | "girik" | "lainnya";
+        ownership?: components["schemas"]["PropertyOwnership"];
         /** @description Car count */
         carCount?: number;
         /** @description Minimum Car count */
@@ -508,7 +514,7 @@ export interface operations {
         /** @description Electric Power */
         electricPower?: number;
         /** @description Sort By */
-        sort?: "price" | "bedroomCount" | "lotSize";
+        sort?: components["schemas"]["ListingSort"];
         /** @description Order By */
         order?: "asc" | "desc";
       };

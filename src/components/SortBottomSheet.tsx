@@ -5,9 +5,20 @@ import {
   Radio,
   Typography,
 } from '@material-tailwind/react'
+import { type components } from 'api/generated'
 import { type Dispatch, type SetStateAction } from 'react'
 import BottomSheet from 'react-draggable-bottom-sheet'
 import { useSearchParams } from 'react-router-dom'
+
+type ListingSort = components['schemas']['ListingSort']
+
+export const LISTING_SORT_ENUM: { [key in ListingSort]: string } = {
+  price: 'Harga Termahal',
+  bedroomCount: 'Kamar Tidur',
+  bathroomCount: 'Kamar Mandi',
+  lotSize: 'Luas Tanah',
+  buildingSize: 'Luas Bangunan',
+}
 
 const SORT_OPTIONS = [
   {
@@ -15,16 +26,11 @@ const SORT_OPTIONS = [
     value: 'price',
     order: 'asc',
   },
-  {
-    label: 'Harga termahal',
-    value: 'price',
+  ...Object.keys(LISTING_SORT_ENUM).map((value) => ({
+    label: LISTING_SORT_ENUM[value as ListingSort],
+    value,
     order: 'desc',
-  },
-  {
-    label: 'Jumlah kamar tidur terbanyak',
-    value: 'bedroomCount',
-    order: 'desc',
-  },
+  })),
 ]
 
 const SortBottomSheet = ({
@@ -64,7 +70,7 @@ const SortBottomSheet = ({
         <div id="sheet-overlay" className="w-full cursor-pointer pt-3">
           <div className="mx-auto h-1 w-12 rounded-full bg-slate-300" />
         </div>
-        <div data-no-drag className="mb-6 text-gray-800">
+        <div data-no-drag className="mb-3 text-gray-800">
           <div className="p-4 text-2xl font-semibold leading-8">
             Urutkan berdasarkan
           </div>
@@ -87,12 +93,13 @@ const SortBottomSheet = ({
                   </Typography>
                   <ListItemSuffix className="mr-3">
                     <Radio
+                      readOnly
                       ripple={false}
                       color="blue-gray"
                       crossOrigin={undefined}
                       className="hover:before:opacity-0"
                       containerProps={{ className: 'p-0' }}
-                      defaultChecked={
+                      checked={
                         searchParams.get('sort') === option.value &&
                         searchParams.get('order') === option.order
                       }
