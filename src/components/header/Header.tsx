@@ -14,12 +14,14 @@ type HeaderProps = {
   title?: string
   canEdit?: boolean
   isWithoutBackButton?: boolean
+  isWithShareButton?: boolean
 }
 
 const Header: React.FC<HeaderProps> = ({
   title = 'Judul Halaman',
   canEdit = false,
   isWithoutBackButton = false,
+  isWithShareButton = false,
 }) => {
   const { id } = useParams<{ id: string }>()
   const location = useLocation()
@@ -51,7 +53,7 @@ const Header: React.FC<HeaderProps> = ({
         <DotsHeaderButton propertyId={id} />
       ) : isFilterPage ? (
         <ResetHeaderButton />
-      ) : isHomePage ? (
+      ) : isWithShareButton ? (
         <ShareButton title={title} url={userPublicUrl}>
           <IconButton variant="text" color="blue-gray" className="rounded-full">
             <ShareIconSVG />
