@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import 'tailwindcss/tailwind.css'
 import './api/config'
+import './reactGA4/config'
 
 const container = document.getElementById('root') as HTMLDivElement
 const root = createRoot(container)

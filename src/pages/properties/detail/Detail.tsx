@@ -1,13 +1,14 @@
-import { useGetPropertyDetail } from 'api/queries'
-import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
-import { clsx } from 'clsx'
-import RenderDescription from 'pages/listings/detail/Description'
-import SwiperSlider from 'components/SwiperSlider'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { clipboardCopyIfMiniApp, formatCurrencyToIDRText, appPath } from 'utils'
-import DetailPropertyTable from 'components/DetailPropertyTable'
 import { Button } from '@material-tailwind/react'
+import { clsx } from 'clsx'
+import ReactGA from 'react-ga4'
+import SwiperSlider from 'components/SwiperSlider'
+import { useGetPropertyDetail } from 'api/queries'
+import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
+import { clipboardCopyIfMiniApp, formatCurrencyToIDRText, appPath } from 'utils'
+import RenderDescription from 'pages/listings/detail/Description'
+import DetailPropertyTable from 'components/DetailPropertyTable'
 
 function PropertyDetail({ id }: { id: string }) {
   const { data, isFetching, isError, refetch } = useGetPropertyDetail({ id })
@@ -20,6 +21,16 @@ function PropertyDetail({ id }: { id: string }) {
       refetch()
     }
   }, [updateSuccess, refetch])
+
+  useEffect(() => {
+    if (data?.listings) {
+      data.listings.forEach((listing) => {
+        ReactGA.event('listing_view', {
+          listing_id: listing.id,
+        })
+      })
+    }
+  }, [data])
 
   const contact = data?.listings?.[0]?.user?.name
     ? {
