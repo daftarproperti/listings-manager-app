@@ -1,9 +1,10 @@
 import { CancelIconSVG } from 'assets/icons'
 import React, { useEffect, useRef, useState } from 'react'
 import type { FieldError, Merge, UseFormRegisterReturn } from 'react-hook-form'
-import { useImageHandler } from 'utils'
+import { getMobileOperatingSystem, useImageHandler } from 'utils'
 import AlertDialog from 'components/AlertDialog'
 import { Button } from '@material-tailwind/react'
+import WebApp from '@twa-dev/sdk'
 
 type InputFileProps = {
   registerHook: UseFormRegisterReturn<string>
@@ -54,7 +55,9 @@ const InputFileField: React.FC<InputFileProps> = ({
         <input
           id="image-upload"
           type="file"
-          multiple
+          multiple={
+            getMobileOperatingSystem() === 'Android' ? !WebApp.initData : true
+          }
           {...registerHook}
           ref={fileInputRef}
           onChange={handleImageChange}
