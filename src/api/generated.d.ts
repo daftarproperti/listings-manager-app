@@ -190,6 +190,7 @@ export interface components {
       bathroomCount?: number;
       floorCount?: number;
       electricPower?: number;
+      viewCount?: number;
       facing?: string;
       ownership?: components["schemas"]["PropertyOwnership"];
       city?: string;

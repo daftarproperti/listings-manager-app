@@ -4,6 +4,7 @@ import ImageWithAuth from 'components/ImageWithAuth'
 import { formatCurrencyToIDRText } from 'utils'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@material-tailwind/react'
+import { EyeIcon } from '@heroicons/react/24/solid'
 
 const Card = ({ data }: { data: Listing }) => {
   const navigate = useNavigate()
@@ -68,6 +69,16 @@ const Card = ({ data }: { data: Listing }) => {
           </div>
         </div>
       </div>
+      {import.meta.env.VITE_PHASE1 === 'true' && (
+        <div className="flex bg-slate-200 px-4 py-3">
+          <div className="flex gap-1">
+            <EyeIcon className="w-5 text-slate-500" />
+            <div className="shrink-0 text-slate-800">
+              Dilihat: {data.viewCount}
+            </div>
+          </div>
+        </div>
+      )}
       <div className="flex w-full justify-end gap-5 rounded-b-lg bg-blue-100 px-3 py-2.5">
         <Button
           size="sm"
