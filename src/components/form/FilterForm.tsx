@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { NumericFormat } from 'react-number-format'
 import { Button } from '@material-tailwind/react'
 import { useValidateMinMaxValue } from 'utils'
+import { ArrowDownIconSVG } from 'assets/icons'
 
 import { FILTER_OPTIONS } from './constant'
 
@@ -44,6 +45,7 @@ export const filterKeyStrings = {
   ownership: 'ownership',
   carCount: 'carCount',
   electricPower: 'electricPower',
+  city: 'city',
 }
 
 const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
@@ -175,6 +177,29 @@ const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
               </ButtonFilterChip>
             )
           })}
+        </div>
+        <div className="mt-6 w-full text-lg font-semibold leading-7 text-black">
+          Kota
+        </div>
+        <div className="relative mt-2 flex flex-wrap gap-2">
+          <select
+            name="city"
+            value={searchParams.get(filterKeyStrings.city) || ''}
+            onChange={(event) =>
+              controlSearchParams(filterKeyStrings.city, event.target.value)
+            }
+            className="h-full w-full appearance-none rounded-lg border border-solid border-slate-400 p-3 py-3.5 ring-0"
+          >
+            <option>Pilih Kota</option>
+            {FILTER_OPTIONS.city.options.map((option, index) => (
+              <option value={option.value} key={index}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <div className="pointer-events-none absolute right-3 top-3.5 group-hover:pointer-events-auto">
+            <ArrowDownIconSVG />
+          </div>
         </div>
         <div className="mt-6 w-full text-lg font-semibold leading-7 text-black">
           Kamar tidur

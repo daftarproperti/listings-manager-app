@@ -174,4 +174,120 @@ export const FILTER_OPTIONS = {
       },
     ],
   },
+  city: {
+    options: [
+      {
+        label: 'Bandar Lampung',
+        value: 'Bandar Lampung',
+      },
+      {
+        label: 'Bandung',
+        value: 'Bandung',
+      },
+      {
+        label: 'Banjarmasin',
+        value: 'Banjarmasin',
+      },
+      {
+        label: 'Batam',
+        value: 'Batam',
+      },
+      {
+        label: 'Bekasi',
+        value: 'Bekasi',
+      },
+      {
+        label: 'Denpasar',
+        value: 'Denpasar',
+      },
+      {
+        label: 'Depok',
+        value: 'Depok',
+      },
+      {
+        label: 'Jakarta Barat',
+        value: 'Jakarta Barat',
+      },
+      {
+        label: 'Jakarta Pusat',
+        value: 'Jakarta Pusat',
+      },
+      {
+        label: 'Jakarta Selatan',
+        value: 'Jakarta Selatan',
+      },
+      {
+        label: 'Jakarta Timur',
+        value: 'Jakarta Timur',
+      },
+      {
+        label: 'Jakarta Utara',
+        value: 'Jakarta Utara',
+      },
+      {
+        label: 'Makasar',
+        value: 'Makasar',
+      },
+      {
+        label: 'Malang',
+        value: 'Malang',
+      },
+      {
+        label: 'Manado',
+        value: 'Manado',
+      },
+      {
+        label: 'Medan',
+        value: 'Medan',
+      },
+      {
+        label: 'Padang',
+        value: 'Padang',
+      },
+      {
+        label: 'Palembang',
+        value: 'Palembang',
+      },
+      {
+        label: 'Pekanbaru',
+        value: 'Pekanbaru',
+      },
+      {
+        label: 'Pontianak',
+        value: 'Pontianak',
+      },
+      {
+        label: 'Samarinda',
+        value: 'Samarinda',
+      },
+      {
+        label: 'Semarang',
+        value: 'Semarang',
+      },
+      {
+        label: 'Serang',
+        value: 'Serang',
+      },
+      {
+        label: 'Surabaya',
+        value: 'Surabaya',
+      },
+      {
+        label: 'Surakarta',
+        value: 'Surakarta',
+      },
+      {
+        label: 'Tangerang',
+        value: 'Tangerang',
+      },
+      {
+        label: 'Tasikmalaya',
+        value: 'Tasikmalaya',
+      },
+      {
+        label: 'Yogyakarta',
+        value: 'Yogyakarta',
+      },
+    ],
+  },
 }
