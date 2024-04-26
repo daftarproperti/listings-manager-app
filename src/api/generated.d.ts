@@ -151,6 +151,12 @@ export interface components {
       isPublicProfile?: boolean;
     };
     /**
+     * @description Sort Listing By
+     * @example price
+     * @enum {string}
+     */
+    ListingSort: "price" | "bedroomCount" | "bathroomCount" | "lotSize" | "buildingSize";
+    /**
      * @description Listing type
      * @example house
      * @enum {string}
@@ -168,12 +174,6 @@ export interface components {
      * @enum {string}
      */
     PropertyType: "unknown" | "house" | "apartment" | "warehouse" | "shophouse" | "land" | "villa";
-    /**
-     * @description Sort Listing By
-     * @example price
-     * @enum {string}
-     */
-    ListingSort: "price" | "bedroomCount" | "bathroomCount" | "lotSize" | "buildingSize";
     Listing: {
       id?: string;
       sourceText?: string;
@@ -211,6 +211,8 @@ export interface components {
       };
       userCanEdit?: boolean;
       isPrivate?: boolean;
+      /** Format: date-time */
+      updatedAt?: string;
     };
     Property: {
       id?: string;
@@ -236,7 +238,17 @@ export interface components {
         latitude?: number;
         longitude?: number;
       };
+      /** Format: date-time */
+      updatedAt?: string;
       listings?: components["schemas"]["Listing"][];
+    };
+    TelegramAllowlistGroup: {
+      id?: string;
+      chatId?: number;
+      groupName?: string;
+      sampleMessage?: string;
+      allowed?: boolean;
+      createdAt?: string;
     };
     TelegramUserProfile: {
       /** @example 123 */

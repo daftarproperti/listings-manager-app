@@ -88,6 +88,9 @@ function PropertyDetail({ id }: { id: string }) {
                 <div className="mt-1.5 line-clamp-3 text-xs leading-4 text-slate-500">
                   {data?.address}
                 </div>
+                <div className="mt-1.5 line-clamp-3 text-[10px] leading-4 text-slate-400">
+                  Diperbarui pada: {data?.updatedAt}
+                </div>
               </div>
               <div className="mt-4 flex flex-wrap content-start items-stretch gap-4 border-y border-solid border-y-[color:var(--slate-200,#E2E8F0)] py-2 pl-4 pr-14">
                 <span className="flex items-center justify-between gap-1">
