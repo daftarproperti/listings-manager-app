@@ -27,11 +27,14 @@ const Header: React.FC<HeaderProps> = ({
   const location = useLocation()
   const navigate = useNavigate()
 
+  const searchParams = new URLSearchParams(location.search)
+
   const isFilterPage = location.pathname.includes('/filter')
   const isHomePage = location.pathname === '/' || isWithoutBackButton
 
   const { data: userDetails } = useGetUserProfile()
   const userPublicUrl = dpPath(`/public/agents/${userDetails?.publicId || ''}`)
+  const shareUrl = `${userPublicUrl}?${searchParams.toString()}`
 
   return (
     <header className="fixed top-0 z-10 flex h-16 w-full max-w-lg items-center justify-between border-b border-slate-300 bg-blue-50 px-4">
@@ -54,7 +57,7 @@ const Header: React.FC<HeaderProps> = ({
       ) : isFilterPage ? (
         <ResetHeaderButton />
       ) : isWithShareButton ? (
-        <ShareButton title={title} url={userPublicUrl}>
+        <ShareButton title={title} url={shareUrl}>
           <IconButton variant="text" color="blue-gray" className="rounded-full">
             <ShareIconSVG />
           </IconButton>
