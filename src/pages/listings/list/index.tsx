@@ -150,7 +150,7 @@ const ListingListPage = () => {
                 </Button>
               )}
             </div>
-            {import.meta.env.VITE_PHASE1 === 'true' &&
+            {import.meta.env.VITE_PHASE1 === 'true' && (
               <div>
                 <Badge invisible={true} className="min-h-5 min-w-5">
                   <Button
@@ -161,11 +161,13 @@ const ListingListPage = () => {
                     onClick={() => setIsSavedSearchSheetOpen(true)}
                   >
                     <PlusIcon className="w-5" />
-                    {selectedSearchTitle ? selectedSearchTitle : 'Calon Pembeli'}
+                    {selectedSearchTitle
+                      ? selectedSearchTitle
+                      : 'Calon Pembeli'}
                   </Button>
                 </Badge>
               </div>
-            }
+            )}
           </div>
         </div>
 
