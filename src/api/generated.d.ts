@@ -41,6 +41,23 @@ export interface paths {
     /** Get property by id */
     get: operations["show"];
   };
+  "/api/tele-app/saved-searches": {
+    /**
+     * Get saved search items
+     * @description Returns saved search items
+     */
+    get: operations["saved_searches.index"];
+    /** Create saved search */
+    post: operations["saved_searches.create"];
+  };
+  "/api/tele-app/saved-searches/{id}": {
+    /** Get saved search by id */
+    get: operations["saved_searches.show"];
+    /** Update saved searches */
+    post: operations["saved_searches.update"];
+    /** Delete saved searches */
+    delete: operations["saved_searches.delete"];
+  };
   "/api/tele-app/users/profile": {
     /**
      * Get profile
@@ -72,15 +89,17 @@ export interface components {
       /** @description Collection */
       collection?: boolean | null;
       price?: components["schemas"]["FilterMinMax"];
-      /** @description Property Type */
-      propertyType?: string | null;
+      propertyType?: components["schemas"]["PropertyType"];
+      listingType?: components["schemas"]["ListingType"];
       bedroomCount?: components["schemas"]["FilterMinMax"];
       bathroomCount?: components["schemas"]["FilterMinMax"];
       lotSize?: components["schemas"]["FilterMinMax"];
       buildingSize?: components["schemas"]["FilterMinMax"];
-      /** @description Ownership */
-      ownership?: string | null;
+      facing?: components["schemas"]["FacingDirection"];
+      ownership?: components["schemas"]["PropertyOwnership"];
       carCount?: components["schemas"]["FilterMinMax"];
+      /** @description Floor Count */
+      floorCount?: number | null;
       /** @description Electric Power */
       electricPower?: number | null;
       /** @description Sort */
@@ -131,6 +150,11 @@ export interface components {
       /** @example false */
       isPrivate?: boolean;
     };
+    SavedSearchRequest: {
+      /** @example Pak Eko */
+      title?: string;
+      filterSet?: components["schemas"]["FilterSet"];
+    };
     TelegramUserProfileRequest: {
       /** @example Jono Doe */
       name?: string;
@@ -150,6 +174,12 @@ export interface components {
       /** @example true */
       isPublicProfile?: boolean;
     };
+    /**
+     * @description Facing Direction
+     * @example east
+     * @enum {string}
+     */
+    FacingDirection: "unknown" | "north" | "east" | "south" | "west" | "northeast" | "southeast" | "southwest" | "northwest";
     /**
      * @description Sort Listing By
      * @example price
@@ -241,6 +271,12 @@ export interface components {
       /** Format: date-time */
       updatedAt?: string;
       listings?: components["schemas"]["Listing"][];
+    };
+    SavedSearch: {
+      id?: string;
+      userId?: number;
+      title?: string;
+      filterSet?: components["schemas"]["FilterSet"];
     };
     TelegramAllowlistGroup: {
       id?: string;
@@ -563,6 +599,130 @@ export interface operations {
         content: {
           "application/json": {
             /** @example Property not found */
+            error?: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * Get saved search items
+   * @description Returns saved search items
+   */
+  "saved_searches.index": {
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": {
+            saved_searches?: components["schemas"]["SavedSearch"][];
+          };
+        };
+      };
+    };
+  };
+  /** Create saved search */
+  "saved_searches.create": {
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["SavedSearchRequest"];
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": {
+            /** @example Saved search created successfully */
+            message?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Get saved search by id */
+  "saved_searches.show": {
+    parameters: {
+      path: {
+        /** @description Saved Search Id */
+        id: string;
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SavedSearch"];
+        };
+      };
+      /** @description Saved search not found */
+      404: {
+        content: {
+          "application/json": {
+            /** @example Saved search not found */
+            error?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Update saved searches */
+  "saved_searches.update": {
+    parameters: {
+      path: {
+        /** @description Saved Searches Id */
+        id: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["SavedSearchRequest"];
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": {
+            /** @example Saved search updated successfully */
+            message?: string;
+          };
+        };
+      };
+      /** @description Saved search not found */
+      404: {
+        content: {
+          "application/json": {
+            /** @example Saved search not found */
+            error?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Delete saved searches */
+  "saved_searches.delete": {
+    parameters: {
+      path: {
+        /** @description Saved Searches Id */
+        id: string;
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": {
+            /** @example Saved search deleted successfully */
+            message?: string;
+          };
+        };
+      };
+      /** @description Saved search not found */
+      404: {
+        content: {
+          "application/json": {
+            /** @example Saved search not found */
             error?: string;
           };
         };

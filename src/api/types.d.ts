@@ -33,3 +33,9 @@ export type AddListingResponse =
   operations['listings.create']['responses']['200']['content']['application/json']
 export type UploadImageRes =
   operations['image.upload']['responses']['200']['content']['application/json']
+
+export type SavedSearch = components['schemas']['SavedSearch']
+export type SavedSearchListRes =
+  operations['saved_searches.index']['responses']['200']['content']['application/json']
+
+export type FilterMinMax = components['schemas']['FilterMinMax']

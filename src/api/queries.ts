@@ -16,6 +16,7 @@ import type {
   UpdateProfileRes,
   UserProfileResponse,
   UploadImageRes,
+  SavedSearchListRes,
 } from './types'
 
 // If x-init-data is in local storage (as a result of login widget), attach it
@@ -197,6 +198,14 @@ export const useGetListingDetail = ({ id }: { id: string }) =>
         throw error
       }
     },
+    retry: false,
+    staleTime: 0,
+  })
+
+export const useListSavedSearch = () =>
+  useQuery<SavedSearchListRes>({
+    queryKey: ['listSavedSearch'],
+    queryFn: async () => (await axios.get('/saved-searches')).data,
     retry: false,
     staleTime: 0,
   })
