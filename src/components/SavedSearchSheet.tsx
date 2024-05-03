@@ -82,7 +82,7 @@ const SavedSearchSheet = ({
           <div className="p-4 text-2xl font-semibold leading-8">
             Calon Pembeli
           </div>
-          {savedSearches?.saved_searches?.length && (
+          {(savedSearches?.saved_searches?.length ?? 0) > 0 && (
             <List>
               {savedSearches?.saved_searches?.map((search, index) => (
                 <ListItem

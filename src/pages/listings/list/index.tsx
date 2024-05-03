@@ -150,20 +150,22 @@ const ListingListPage = () => {
                 </Button>
               )}
             </div>
-            <div>
-              <Badge invisible={true} className="min-h-5 min-w-5">
-                <Button
-                  size="sm"
-                  color="blue"
-                  variant="outlined"
-                  className="relative flex items-center gap-1.5 text-sm font-normal capitalize"
-                  onClick={() => setIsSavedSearchSheetOpen(true)}
-                >
-                  <PlusIcon className="w-5" />
-                  {selectedSearchTitle ? selectedSearchTitle : 'Calon Pembeli'}
-                </Button>
-              </Badge>
-            </div>
+            {import.meta.env.VITE_PHASE1 === 'true' &&
+              <div>
+                <Badge invisible={true} className="min-h-5 min-w-5">
+                  <Button
+                    size="sm"
+                    color="blue"
+                    variant="outlined"
+                    className="relative flex items-center gap-1.5 text-sm font-normal capitalize"
+                    onClick={() => setIsSavedSearchSheetOpen(true)}
+                  >
+                    <PlusIcon className="w-5" />
+                    {selectedSearchTitle ? selectedSearchTitle : 'Calon Pembeli'}
+                  </Button>
+                </Badge>
+              </div>
+            }
           </div>
         </div>
 
