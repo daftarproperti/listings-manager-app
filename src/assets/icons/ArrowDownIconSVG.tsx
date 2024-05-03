@@ -9,8 +9,8 @@ export const ArrowDownIconSVG = ({ className }: { className?: string }) => {
       className={className}
     >
       <path
-        d="M7.41 8.59L12 13.17L16.59 8.59L18 10L12 16L6 10L7.41 8.59Z"
-        fill="#9CA3AF"
+        d="M7.41 8.58997L12 13.17L16.59 8.58997L18 9.99997L12 16L6 9.99997L7.41 8.58997Z"
+        fill="currentColor"
       />
     </svg>
   )

@@ -1,16 +1,16 @@
 export const LotIconSVG = ({ className }: { className?: string }) => {
   return (
     <svg
-      width="14"
-      height="13"
-      viewBox="0 0 14 13"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className ?? 'h-[18px] w-[18px] text-slate-400'}
     >
       <path
-        d="M10.75 3.25L7 0.25L3.25 5.5L0.25 3.25V13H13.75V3.25H10.75ZM12.25 10.7125L7 6.625L4 10.75L1.75 8.95V6.25L3.58 7.6225L7.3 2.41L10.225 4.75H12.25V10.7125Z"
-        fill="#94A3B8"
-        className={className}
+        d="M17 7L12 3L7 10L3 7V20H21V7H17ZM19 16.95L12 11.5L8 17L5 14.6V11L7.44 12.83L12.4 5.88L16.3 9H19V16.95Z"
+        fill="currentColor"
       />
     </svg>
   )
