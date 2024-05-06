@@ -88,6 +88,8 @@ const getMandatoryField = (fieldName: string) => ({
 
 export const addEditFormSchema = z.object({
   title: getMandatoryField('Judul Listing').string,
+  listingType: getOptionalField().string,
+  propertyType: getOptionalField().string,
   address: getOptionalField().string,
   bathroomCount: getMandatoryField('Kamar Mandi').number,
   bedroomCount: getMandatoryField('Kamar Tidur').number,

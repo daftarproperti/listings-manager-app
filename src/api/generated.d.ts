@@ -73,42 +73,6 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
-    /** @description Filter Min Max DTO */
-    FilterMinMax: {
-      /** @description Minimum value */
-      min?: number | null;
-      /** @description Maximum value */
-      max?: number | null;
-    };
-    /** @description Filter Set DTO */
-    FilterSet: {
-      /** @description User ID */
-      userId?: number | null;
-      /** @description Query */
-      q?: string | null;
-      /** @description Collection */
-      collection?: boolean | null;
-      price?: components["schemas"]["FilterMinMax"];
-      propertyType?: components["schemas"]["PropertyType"];
-      listingType?: components["schemas"]["ListingType"];
-      bedroomCount?: components["schemas"]["FilterMinMax"];
-      bathroomCount?: components["schemas"]["FilterMinMax"];
-      lotSize?: components["schemas"]["FilterMinMax"];
-      buildingSize?: components["schemas"]["FilterMinMax"];
-      facing?: components["schemas"]["FacingDirection"];
-      ownership?: components["schemas"]["PropertyOwnership"];
-      carCount?: components["schemas"]["FilterMinMax"];
-      /** @description Floor Count */
-      floorCount?: number | null;
-      /** @description Electric Power */
-      electricPower?: number | null;
-      /** @description Sort */
-      sort?: string | null;
-      /** @description Order */
-      order?: string | null;
-      /** @description City */
-      city?: string | null;
-    };
     ImageUploadRequest: {
       /** Format: binary */
       image?: string;
@@ -142,6 +106,8 @@ export interface components {
       ownership?: string;
       /** @example Bandung */
       city?: string;
+      listingType?: components["schemas"]["ListingType"];
+      propertyType?: components["schemas"]["PropertyType"];
       pictureUrls?: string[];
       coordinate?: {
         latitude?: number;
@@ -180,6 +146,42 @@ export interface components {
      * @enum {string}
      */
     FacingDirection: "unknown" | "north" | "east" | "south" | "west" | "northeast" | "southeast" | "southwest" | "northwest";
+    /** @description Filter Min Max */
+    FilterMinMax: {
+      /** @description Minimum value */
+      min?: number | null;
+      /** @description Maximum value */
+      max?: number | null;
+    };
+    /** @description Filter Set */
+    FilterSet: {
+      /** @description User ID */
+      userId?: number | null;
+      /** @description Query */
+      q?: string | null;
+      /** @description Collection */
+      collection?: boolean | null;
+      price?: components["schemas"]["FilterMinMax"];
+      propertyType?: components["schemas"]["PropertyType"];
+      listingType?: components["schemas"]["ListingType"];
+      bedroomCount?: components["schemas"]["FilterMinMax"];
+      bathroomCount?: components["schemas"]["FilterMinMax"];
+      lotSize?: components["schemas"]["FilterMinMax"];
+      buildingSize?: components["schemas"]["FilterMinMax"];
+      facing?: components["schemas"]["FacingDirection"];
+      ownership?: components["schemas"]["PropertyOwnership"];
+      carCount?: components["schemas"]["FilterMinMax"];
+      /** @description Floor Count */
+      floorCount?: number | null;
+      /** @description Electric Power */
+      electricPower?: number | null;
+      /** @description Sort */
+      sort?: string | null;
+      /** @description Order */
+      order?: string | null;
+      /** @description City */
+      city?: string | null;
+    };
     /**
      * @description Sort Listing By
      * @example price

@@ -1,3 +1,20 @@
+import { type PropertyType, type ListingType } from 'api/types'
+
+export const PROPERTY_TYPE_ENUM: { [key in PropertyType]: string } = {
+  house: 'Rumah',
+  apartment: 'Apartemen',
+  warehouse: 'Gudang',
+  shophouse: 'Ruko',
+  land: 'Tanah',
+  villa: 'Villa',
+  unknown: 'Lainnya',
+}
+export const LISTING_TYPE_ENUM: { [key in ListingType]: string } = {
+  sale: 'Dijual',
+  rent: 'Disewakan',
+  unknown: 'Lainnya',
+}
+
 export const LISTING_OPTIONS = {
   cities: {
     options: [
@@ -121,5 +138,17 @@ export const LISTING_OPTIONS = {
         value: 'unknown',
       },
     ],
+  },
+  listingType: {
+    options: Object.keys(LISTING_TYPE_ENUM).map((value) => ({
+      label: LISTING_TYPE_ENUM[value as ListingType],
+      value,
+    })),
+  },
+  propertyType: {
+    options: Object.keys(PROPERTY_TYPE_ENUM).map((value) => ({
+      label: PROPERTY_TYPE_ENUM[value as PropertyType],
+      value,
+    })),
   },
 }

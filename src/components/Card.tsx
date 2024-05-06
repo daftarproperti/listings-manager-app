@@ -1,7 +1,7 @@
 import { type Listing } from 'api/types'
 import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
 import ImageWithAuth from 'components/ImageWithAuth'
-import { formatCurrencyToIDRText } from 'utils'
+import { formatCurrencyToIDRText, getLabelForValue } from 'utils'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@material-tailwind/react'
 import { EyeIcon } from '@heroicons/react/24/solid'
@@ -67,6 +67,26 @@ const Card = ({ data }: { data: Listing }) => {
               </div>
             </div>
           </div>
+          {(data.listingType || data.propertyType) && (
+            <>
+              <div className="flex flex-wrap content-start gap-x-4 gap-y-1 border-t border-solid border-t-slate-200 px-3 py-2 text-[10px] text-slate-400">
+                <div className="flex items-center justify-between gap-1">
+                  Tipe Listing:{' '}
+                  {getLabelForValue(
+                    'listingType',
+                    data.listingType || 'defaultType',
+                  )}
+                </div>
+                <div className="flex items-center justify-between gap-1">
+                  Tipe Properti:{' '}
+                  {getLabelForValue(
+                    'propertyType',
+                    data.propertyType || 'defaultType',
+                  )}
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
       {import.meta.env.VITE_PHASE1 === 'true' && (

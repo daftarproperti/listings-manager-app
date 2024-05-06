@@ -102,6 +102,18 @@ function EditListing({ id }: { id: string }) {
           placeholderValue="Tulis Judul"
           errorFieldName={errors.title}
         />
+        <SelectField
+          label="Tipe Listing"
+          registerHook={register('listingType', { required: false })}
+          selectOptions={LISTING_OPTIONS.listingType.options}
+          defaultOption="Pilih Tipe Listing"
+        />
+        <SelectField
+          label="Tipe Properti"
+          registerHook={register('propertyType', { required: false })}
+          selectOptions={LISTING_OPTIONS.propertyType.options}
+          defaultOption="Pilih Tipe Properti"
+        />
         <InputField
           label="Alamat"
           registerHook={register('address', { required: false })}

@@ -51,3 +51,5 @@ export type DeleteSavedSearchRes =
 
 export type FilterMinMax = components['schemas']['FilterMinMax']
 export type FilterSet = components['schemas']['FilterSet']
+export type PropertyType = components['schemas']['PropertyType']
+export type ListingType = components['schemas']['ListingType']

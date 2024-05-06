@@ -6,7 +6,12 @@ import SwiperSlider from 'components/SwiperSlider'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Chip } from '@material-tailwind/react'
-import { formatCurrencyToIDRText, appPath, dpPath } from 'utils'
+import {
+  formatCurrencyToIDRText,
+  appPath,
+  dpPath,
+  getLabelForValue,
+} from 'utils'
 import DetailPropertyTable from 'components/DetailPropertyTable'
 import ShareButton from 'components/button/ShareButton'
 
@@ -114,6 +119,26 @@ function ListingDetail({
                   </div>
                 </span>
               </div>
+              {(data.listingType || data.propertyType) && (
+                <>
+                  <div className="flex flex-wrap content-start gap-x-4 gap-y-1 border-b border-solid border-t-slate-200 px-3 py-2 text-[10px] text-slate-400">
+                    <div className="flex items-center justify-between gap-1">
+                      Tipe Listing:{' '}
+                      {getLabelForValue(
+                        'listingType',
+                        data.listingType || 'defaultType',
+                      )}
+                    </div>
+                    <div className="flex items-center justify-between gap-1">
+                      Tipe Properti:{' '}
+                      {getLabelForValue(
+                        'propertyType',
+                        data.propertyType || 'defaultType',
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
               <div className="px-4 py-1 text-sm leading-5 text-slate-800">
                 <h2 className="text-sm font-semibold leading-7 text-slate-500">
                   Detail Listing
