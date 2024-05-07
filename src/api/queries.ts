@@ -21,6 +21,7 @@ import type {
   AddSavedSearchRes,
   UpdateSavedSearchRes,
   UpdateSavedSearchParams,
+  DeleteSavedSearchRes,
 } from './types'
 
 // If x-init-data is in local storage (as a result of login widget), attach it
@@ -243,6 +244,19 @@ export const useUpdateSavedSearch = () =>
         return response.data
       } catch (error) {
         console.error('Failed to update saved search:', error)
+        throw error
+      }
+    },
+  })
+
+export const useDeleteSavedSearch = () =>
+  useMutation<DeleteSavedSearchRes, Error, { id: string }>({
+    mutationFn: async ({ id }) => {
+      try {
+        const response = await axios.delete(`/saved-searches/${id}`)
+        return response.data
+      } catch (error) {
+        console.error('Failed to delete saved search:', error)
         throw error
       }
     },

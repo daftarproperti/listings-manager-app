@@ -46,6 +46,8 @@ export type UpdateSavedSearchParams = {
   id: operations['saved_searches.update']['parameters']['path']['id']
   requestBody: components['schemas']['SavedSearchRequest']
 }
+export type DeleteSavedSearchRes =
+  operations['saved_searches.delete']['responses']['200']['content']['application/json']
 
 export type FilterMinMax = components['schemas']['FilterMinMax']
 export type FilterSet = components['schemas']['FilterSet']

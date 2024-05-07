@@ -6,8 +6,10 @@ import {
   CardFooter,
   IconButton,
 } from '@material-tailwind/react'
+import { toast } from 'react-toastify'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useGetSavedSearchList } from 'api/queries'
+import { useDeleteSavedSearch, useGetSavedSearchList } from 'api/queries'
 import { type SavedSearch } from 'api/types'
 import {
   BathIconSVG,
@@ -34,6 +36,8 @@ import {
   type ListingType,
 } from 'components/form/constant'
 
+import ConfirmationDialog from './ConfirmationDialog'
+
 export const FILTER_ICON: {
   [key: string]: JSX.Element
 } = {
@@ -49,7 +53,15 @@ export const FILTER_ICON: {
 
 const SavedSearchListPage = () => {
   const navigate = useNavigate()
-  const { data, error, isError, isFetching } = useGetSavedSearchList()
+  const { mutate } = useDeleteSavedSearch()
+  const { data, error, isError, isFetching, refetch } = useGetSavedSearchList()
+  const [isOpen, setIsOpen] = useState(false)
+  const [selectedId, setSelectedId] = useState<string>()
+
+  const title = useMemo(
+    () => data?.saved_searches?.find((s) => s.id === selectedId)?.title,
+    [selectedId],
+  )
 
   const handleClickSearch = (search: SavedSearch) => {
     const newSearchParams = savedSearchToSearchParams(search)
@@ -59,6 +71,25 @@ const SavedSearchListPage = () => {
   const handleToEditPage = (search: SavedSearch) => {
     const newSearchParams = savedSearchToSearchParams(search)
     navigate(`/saved-searches/edit?${newSearchParams}`)
+  }
+
+  const handleDelete = (id?: string) => {
+    if (id) {
+      mutate(
+        { id },
+        {
+          onSuccess: () => {
+            refetch()
+            toast('Permintaan berhasil dihapus', { type: 'success' })
+          },
+          onError: (error) => {
+            toast(`Mohon maaf, telah terjadi kesalahan (${error?.message})`, {
+              type: 'error',
+            })
+          },
+        },
+      )
+    }
   }
 
   return (
@@ -82,7 +113,14 @@ const SavedSearchListPage = () => {
                     >
                       <EditIconSVG className="text-blue-400" />
                     </IconButton>
-                    <IconButton variant="text" className="rounded-full">
+                    <IconButton
+                      variant="text"
+                      className="rounded-full"
+                      onClick={() => {
+                        setIsOpen(true)
+                        setSelectedId(item.id)
+                      }}
+                    >
                       <TrashIconSVG className="text-red-400" />
                     </IconButton>
                   </div>
@@ -247,6 +285,13 @@ const SavedSearchListPage = () => {
           <PlusIcon className="h-6 w-6 text-white" />
         </IconButton>
       </div>
+      <ConfirmationDialog
+        title={title}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        onConfirm={() => handleDelete(selectedId)}
+        onCancel={() => setSelectedId(undefined)}
+      />
     </div>
   )
 }
