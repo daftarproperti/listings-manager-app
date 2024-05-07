@@ -37,6 +37,15 @@ export type UploadImageRes =
 export type SavedSearch = components['schemas']['SavedSearch']
 export type SavedSearchListRes =
   operations['saved_searches.index']['responses']['200']['content']['application/json']
+export type AddSavedSearchRes =
+  operations['saved_searches.create']['responses']['200']['content']['application/json']
+export type AddSavedSearchReq = components['schemas']['SavedSearchRequest']
+export type UpdateSavedSearchRes =
+  operations['saved_searches.update']['responses']['200']['content']['application/json']
+export type UpdateSavedSearchParams = {
+  id: operations['saved_searches.update']['parameters']['path']['id']
+  requestBody: components['schemas']['SavedSearchRequest']
+}
 
 export type FilterMinMax = components['schemas']['FilterMinMax']
 export type FilterSet = components['schemas']['FilterSet']

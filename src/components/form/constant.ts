@@ -94,23 +94,23 @@ export const FILTER_OPTIONS = {
     options: [
       {
         label: '1+',
-        value: '1+',
+        value: '1',
       },
       {
         label: '2+',
-        value: '2+',
+        value: '2',
       },
       {
         label: '3+',
-        value: '3+',
+        value: '3',
       },
       {
         label: '4+',
-        value: '4+',
+        value: '4',
       },
       {
         label: '5+',
-        value: '5+',
+        value: '5',
       },
     ],
   },
@@ -118,23 +118,23 @@ export const FILTER_OPTIONS = {
     options: [
       {
         label: '1+',
-        value: '1+',
+        value: '1',
       },
       {
         label: '2+',
-        value: '2+',
+        value: '2',
       },
       {
         label: '3+',
-        value: '3+',
+        value: '3',
       },
       {
         label: '4+',
-        value: '4+',
+        value: '4',
       },
       {
         label: '5+',
-        value: '5+',
+        value: '5',
       },
     ],
   },
@@ -148,23 +148,23 @@ export const FILTER_OPTIONS = {
     options: [
       {
         label: '1+',
-        value: '1+',
+        value: '1',
       },
       {
         label: '2+',
-        value: '2+',
+        value: '2',
       },
       {
         label: '3+',
-        value: '3+',
+        value: '3',
       },
       {
         label: '4+',
-        value: '4+',
+        value: '4',
       },
       {
         label: '5+',
-        value: '5+',
+        value: '5',
       },
     ],
   },
@@ -172,27 +172,31 @@ export const FILTER_OPTIONS = {
     options: [
       {
         label: '250 V',
-        value: '250v',
+        value: '250',
       },
       {
         label: '450 V',
-        value: '450v',
+        value: '450',
       },
       {
         label: '900 V',
-        value: '900v',
+        value: '900',
       },
       {
         label: '1300 V',
-        value: '1300v',
+        value: '1300',
+      },
+      {
+        label: '1500 V',
+        value: '1500',
       },
       {
         label: '2200 V',
-        value: '2200v',
+        value: '2200',
       },
       {
         label: '3500 V',
-        value: '3500v',
+        value: '3500',
       },
     ],
   },

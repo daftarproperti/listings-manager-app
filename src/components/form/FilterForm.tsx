@@ -1,12 +1,14 @@
 import { clsx } from 'clsx'
-import BottomStickyButton from 'components/button/BottomStickyButton'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { NumericFormat } from 'react-number-format'
 import { Button } from '@material-tailwind/react'
-import { useValidateMinMaxValue } from 'utils'
+import { toast } from 'react-toastify'
+import { searchparamsToSavedSearch, useValidateMinMaxValue } from 'utils'
+import { useAddSavedSearch, useUpdateSavedSearch } from 'api/queries'
 import { ArrowDownIconSVG } from 'assets/icons'
 
 import { FILTER_OPTIONS } from './constant'
+import BottomStickyButton from '../button/BottomStickyButton'
 
 const ButtonFilterChip = ({
   children,
@@ -36,55 +38,106 @@ export const filterKeyStrings = {
   minPrice: 'price[min]',
   maxPrice: 'price[max]',
   propertyType: 'propertyType',
-  bedroomCount: 'bedroomCount',
-  bathroomCount: 'bathroomCount',
+  bedroomCount: 'bedroomCount[min]',
+  bathroomCount: 'bathroomCount[min]',
   minLotSize: 'lotSize[min]',
   maxLotSize: 'lotSize[max]',
   minBuildingSize: 'buildingSize[min]',
   maxBuildingSize: 'buildingSize[max]',
   ownership: 'ownership',
-  carCount: 'carCount',
+  carCount: 'carCount[min]',
   electricPower: 'electricPower',
   city: 'city',
 }
 
-const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
+type FilterFormProps = {
+  type: 'listing' | 'property' | 'savedSearch'
+}
+
+const FilterForm = ({ type }: FilterFormProps) => {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const { validationMessage } = useValidateMinMaxValue(searchParams)
 
+  const { mutate: addSearch, isPending: loadingAdd } = useAddSavedSearch()
+  const { mutate: updateSearch, isPending: loadingUpdate } =
+    useUpdateSavedSearch()
+
   const controlSearchParams = (key: string, value?: string) => {
     searchParams.delete(key)
-    searchParams.delete(`${key}[min]`)
-
     if (value) {
-      if (
-        key === 'bedroomCount' ||
-        key === 'bathroomCount' ||
-        key === 'carCount'
-      ) {
-        const minCountValue = value.replace('+', '')
-        searchParams.set(`${key}[min]`, minCountValue)
-      } else {
-        searchParams.set(key, value)
-      }
+      searchParams.set(key, value)
     }
-
     setSearchParams(searchParams, { replace: true })
   }
 
-  const onSubmit = () => {
-    if (type === 'listing') {
-      navigate(`/?${searchParams}`)
-    } else {
-      navigate(`/properties?${searchParams}`)
+  const handleSuccess = () => {
+    toast('Permintaan berhasil disimpan!', { type: 'success' })
+    navigate(-1)
+  }
+
+  const handleError = (error: Error) => {
+    toast(`Mohon maaf, telah terjadi kesalahan (${error?.message})`, {
+      type: 'error',
+    })
+  }
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    const search = searchparamsToSavedSearch(searchParams)
+    const searchId = searchParams.get('searchId')
+    switch (type) {
+      case 'savedSearch':
+        if (searchId) {
+          updateSearch(
+            { id: searchId, requestBody: search },
+            {
+              onSuccess: handleSuccess,
+              onError: handleError,
+            },
+          )
+          break
+        }
+        addSearch(search, {
+          onSuccess: handleSuccess,
+          onError: handleError,
+        })
+        break
+      case 'property':
+        navigate(`/properties?${searchParams}`)
+        break
+      default:
+        navigate(`/?${searchParams}`)
+        break
     }
   }
 
   return (
     <form onSubmit={onSubmit} className="relative w-full bg-slate-100">
       <div className="p-4 pb-24 pt-20">
-        <div className="w-full text-lg font-semibold leading-7 text-slate-500">
+        {type === 'savedSearch' && (
+          <>
+            <div className="w-full text-lg font-semibold leading-7 text-slate-800">
+              Judul
+            </div>
+            <div className="mb-6 mt-1 flex w-full">
+              <div className="relative flex grow gap-1 rounded-lg border border-solid border-slate-400 bg-white">
+                <input
+                  required
+                  type="text"
+                  placeholder="cth: Nama calon pembeli"
+                  className="h-full w-full rounded-lg border-none p-3 py-3.5 ring-0"
+                  value={searchParams.get('title') ?? ''}
+                  onChange={(event) =>
+                    controlSearchParams('title', event.target.value)
+                  }
+                />
+              </div>
+            </div>
+          </>
+        )}
+        <div className="w-full text-lg font-semibold leading-7 text-slate-800">
           Harga
         </div>
         <div className="mt-1 flex w-full justify-between gap-2">
@@ -154,7 +207,7 @@ const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
             )
           })}
         </div>
-        <div className="mt-6 w-full text-lg font-semibold leading-7 text-black">
+        <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-800">
           Tipe Properti
         </div>
         <div className="mt-2 flex flex-wrap gap-2">
@@ -178,7 +231,7 @@ const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
             )
           })}
         </div>
-        <div className="mt-6 w-full text-lg font-semibold leading-7 text-black">
+        <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-800">
           Kota
         </div>
         <div className="relative mt-2 flex flex-wrap gap-2">
@@ -201,16 +254,13 @@ const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
             <ArrowDownIconSVG />
           </div>
         </div>
-        <div className="mt-6 w-full text-lg font-semibold leading-7 text-black">
+        <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-800">
           Kamar tidur
         </div>
         <div className="mt-2 flex gap-2">
           {FILTER_OPTIONS.bedroomCount.options.map((option, index) => {
-            const minValue = searchParams.get(
-              `${filterKeyStrings.bedroomCount}[min]`,
-            )
-            const optionMinValue = option.value.replace('+', '')
-            const isActive = minValue === optionMinValue
+            const isActive =
+              searchParams.get(filterKeyStrings.bedroomCount) === option.value
 
             return (
               <ButtonFilterChip
@@ -218,15 +268,10 @@ const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
                 type="button"
                 isActive={isActive}
                 onClick={() => {
-                  if (isActive) {
-                    searchParams.delete(`${filterKeyStrings.bedroomCount}[min]`)
-                  } else {
-                    searchParams.set(
-                      `${filterKeyStrings.bedroomCount}[min]`,
-                      optionMinValue,
-                    )
-                  }
-                  setSearchParams(searchParams, { replace: true })
+                  controlSearchParams(
+                    filterKeyStrings.bedroomCount,
+                    isActive ? undefined : option.value,
+                  )
                 }}
               >
                 {option.label}
@@ -234,33 +279,23 @@ const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
             )
           })}
         </div>
-        <div className="mt-6 w-full text-lg font-semibold leading-7 text-black">
+        <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-800">
           Kamar mandi
         </div>
         <div className="mt-2 flex gap-2">
           {FILTER_OPTIONS.bathroomCount.options.map((option, index) => {
-            const minValue = searchParams.get(
-              `${filterKeyStrings.bathroomCount}[min]`,
-            )
-            const optionMinValue = option.value.replace('+', '')
-            const isActive = minValue === optionMinValue
+            const isActive =
+              searchParams.get(filterKeyStrings.bathroomCount) === option.value
             return (
               <ButtonFilterChip
                 key={index}
                 type="button"
                 isActive={isActive}
                 onClick={() => {
-                  if (isActive) {
-                    searchParams.delete(
-                      `${filterKeyStrings.bathroomCount}[min]`,
-                    )
-                  } else {
-                    searchParams.set(
-                      `${filterKeyStrings.bathroomCount}[min]`,
-                      optionMinValue,
-                    )
-                  }
-                  setSearchParams(searchParams, { replace: true })
+                  controlSearchParams(
+                    filterKeyStrings.bathroomCount,
+                    isActive ? undefined : option.value,
+                  )
                 }}
               >
                 {option.label}
@@ -268,7 +303,7 @@ const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
             )
           })}
         </div>
-        <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-500">
+        <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-800">
           Luas Tanah
         </div>
         <div className="mt-1 flex gap-2">
@@ -310,7 +345,7 @@ const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
         <span className="self-stretch text-sm text-red-500">
           {validationMessage('lotSize')}
         </span>
-        <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-500">
+        <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-800">
           Luas bangunan
         </div>
         <div className="mt-1 flex gap-2">
@@ -352,7 +387,7 @@ const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
         <span className="self-stretch text-sm text-red-500">
           {validationMessage('buildingSize')}
         </span>
-        <div className="mt-6 w-full text-lg font-semibold leading-7 text-black">
+        <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-800">
           Sertifikat
         </div>
         <div className="mt-2 flex gap-2">
@@ -376,31 +411,23 @@ const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
             )
           })}
         </div>
-        <div className="mt-6 w-full text-lg font-semibold leading-7 text-black">
+        <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-800">
           Kapasitas Mobil
         </div>
         <div className="mt-2 flex gap-2">
           {FILTER_OPTIONS.carCount.options.map((option, index) => {
-            const minValue = searchParams.get(
-              `${filterKeyStrings.carCount}[min]`,
-            )
-            const optionMinValue = option.value.replace('+', '')
-            const isActive = minValue === optionMinValue
+            const isActive =
+              searchParams.get(filterKeyStrings.carCount) === option.value
             return (
               <ButtonFilterChip
                 key={index}
                 type="button"
                 isActive={isActive}
                 onClick={() => {
-                  if (isActive) {
-                    searchParams.delete(`${filterKeyStrings.carCount}[min]`)
-                  } else {
-                    searchParams.set(
-                      `${filterKeyStrings.carCount}[min]`,
-                      optionMinValue,
-                    )
-                  }
-                  setSearchParams(searchParams, { replace: true })
+                  controlSearchParams(
+                    filterKeyStrings.carCount,
+                    isActive ? undefined : option.value,
+                  )
                 }}
               >
                 {option.label}
@@ -408,7 +435,7 @@ const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
             )
           })}
         </div>
-        <div className="mt-6 w-full text-lg font-semibold leading-7 text-black">
+        <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-800">
           Listrik
         </div>
         <div className="mt-2 flex flex-wrap gap-2">
@@ -433,7 +460,9 @@ const FilterForm = ({ type }: { type: 'listing' | 'property' }) => {
           })}
         </div>
       </div>
-      <BottomStickyButton type="submit">Lihat Hasil Filter</BottomStickyButton>
+      <BottomStickyButton type="submit" disabled={loadingAdd || loadingUpdate}>
+        {type === 'savedSearch' ? 'Simpan' : 'Lihat Hasil Filter'}
+      </BottomStickyButton>
     </form>
   )
 }

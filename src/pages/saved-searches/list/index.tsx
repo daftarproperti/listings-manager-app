@@ -56,6 +56,11 @@ const SavedSearchListPage = () => {
     navigate(`/?${newSearchParams}`)
   }
 
+  const handleToEditPage = (search: SavedSearch) => {
+    const newSearchParams = savedSearchToSearchParams(search)
+    navigate(`/saved-searches/edit?${newSearchParams}`)
+  }
+
   return (
     <div className="flex min-h-screen bg-slate-100 pt-16">
       <div className="flex grow flex-col space-y-4 p-4">
@@ -70,7 +75,11 @@ const SavedSearchListPage = () => {
                 <div className="flex justify-between">
                   <div className="text-slate-800">Permintaan: {item.title}</div>
                   <div className="flex items-center gap-1">
-                    <IconButton variant="text" className="rounded-full">
+                    <IconButton
+                      variant="text"
+                      className="rounded-full"
+                      onClick={() => handleToEditPage(item)}
+                    >
                       <EditIconSVG className="text-blue-400" />
                     </IconButton>
                     <IconButton variant="text" className="rounded-full">

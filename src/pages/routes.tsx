@@ -15,6 +15,7 @@ import PropertyListPage from './properties/list'
 import PropertiesFilterPage from './properties/filter'
 import PropertyDetailPage from './properties/detail'
 import SavedSearchListPage from './saved-searches/list'
+import SavedSearchFormPage from './saved-searches/form'
 import NotFoundPage from './NotFoundPage'
 
 const router = createBrowserRouter(
@@ -125,6 +126,24 @@ const router = createBrowserRouter(
             <>
               <Header title="Permintaan" />
               <SavedSearchListPage />
+            </>
+          ),
+        },
+        {
+          path: '/saved-searches/add',
+          element: (
+            <>
+              <Header title="Tambah Permintaan" />
+              <SavedSearchFormPage />
+            </>
+          ),
+        },
+        {
+          path: '/saved-searches/edit',
+          element: (
+            <>
+              <Header title="Edit Permintaan" />
+              <SavedSearchFormPage />
             </>
           ),
         },

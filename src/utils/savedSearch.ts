@@ -1,4 +1,4 @@
-import type { SavedSearch } from 'api/types'
+import type { FilterMinMax, FilterSet, SavedSearch } from 'api/types'
 
 export const savedSearchToSearchParams = (search: SavedSearch) => {
   const searchParams = new URLSearchParams()
@@ -36,4 +36,54 @@ export const savedSearchToSearchParams = (search: SavedSearch) => {
   return searchParams
 }
 
-export const searchparamsToSavedSearch = () => {}
+export const searchparamsToSavedSearch = (searchParams: URLSearchParams) => {
+  const defaultValue: {
+    [key: string]: string | number | FilterMinMax | null
+  } = {
+    propertyType: null,
+    listingType: null,
+    price: null,
+    lotSize: null,
+    buildingSize: null,
+    bedroomCount: null,
+    bathroomCount: null,
+    carCount: null,
+    facing: null,
+    ownership: null,
+    floorCount: null,
+    electricPower: null,
+    city: null,
+  }
+
+  const filterSetKeys = Object.keys(defaultValue)
+  const regexMinMax = /\[min\]|\[max\]/g
+
+  for (const [key, value] of searchParams.entries()) {
+    const filterKey = key.replace(regexMinMax, '')
+
+    if (filterSetKeys.includes(filterKey)) {
+      if (key.includes('min') || key.includes('max')) {
+        const minMaxKey = key.includes('min') ? 'min' : 'max'
+        const currentValue = (defaultValue[filterKey] as FilterMinMax) ?? {
+          min: null,
+          max: null,
+        }
+        currentValue[minMaxKey] = value ? parseInt(value) : null
+        defaultValue[filterKey] = currentValue
+      } else if (key.includes('electricPower') || key.includes('floorCount')) {
+        defaultValue[filterKey] = value ? parseInt(value) : null
+      } else {
+        defaultValue[filterKey] = value ?? null
+      }
+    }
+  }
+
+  const search: SavedSearch = {
+    ...(searchParams.has('title')
+      ? { title: searchParams.get('title') as string }
+      : {}),
+    filterSet: defaultValue as FilterSet,
+  }
+
+  return search
+}

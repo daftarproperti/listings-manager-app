@@ -17,6 +17,10 @@ import type {
   UserProfileResponse,
   UploadImageRes,
   SavedSearchListRes,
+  AddSavedSearchReq,
+  AddSavedSearchRes,
+  UpdateSavedSearchRes,
+  UpdateSavedSearchParams,
 } from './types'
 
 // If x-init-data is in local storage (as a result of login widget), attach it
@@ -216,6 +220,32 @@ export const useGetSavedSearchList = () =>
     },
     retry: false,
     staleTime: 0,
+  })
+
+export const useAddSavedSearch = () =>
+  useMutation<AddSavedSearchRes, Error, AddSavedSearchReq>({
+    mutationFn: async (formData) => {
+      try {
+        const response = await axios.post('/saved-searches', formData)
+        return response.data
+      } catch (error) {
+        console.error('Failed to create saved search:', error)
+        throw error
+      }
+    },
+  })
+
+export const useUpdateSavedSearch = () =>
+  useMutation<UpdateSavedSearchRes, Error, UpdateSavedSearchParams>({
+    mutationFn: async ({ id, requestBody }) => {
+      try {
+        const response = await axios.post(`/saved-searches/${id}`, requestBody)
+        return response.data
+      } catch (error) {
+        console.error('Failed to update saved search:', error)
+        throw error
+      }
+    },
   })
 
 // non hook function
