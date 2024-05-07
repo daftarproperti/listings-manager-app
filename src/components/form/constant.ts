@@ -1,8 +1,18 @@
 import { type components } from 'api/generated'
 
+export type ListingType = components['schemas']['ListingType']
+
 export type PropertyType = components['schemas']['PropertyType']
 
 export type PropertyOwnership = components['schemas']['PropertyOwnership']
+
+export type FacingDirection = components['schemas']['FacingDirection']
+
+export const LISTING_TYPE_ENUM: { [key in ListingType]: string } = {
+  sale: 'Dijual',
+  rent: 'Disewakan',
+  unknown: 'Lainnya',
+}
 
 export const PROPERTY_TYPE_ENUM: { [key in PropertyType]: string } = {
   house: 'Rumah',
@@ -20,6 +30,18 @@ export const PROPERTY_OWNERSHIP_ENUM: { [key in PropertyOwnership]: string } = {
   girik: 'Girik',
   strata: 'Strata',
   unknown: 'Lainnya',
+}
+
+export const FACING_DIRECTION_ENUM: { [key in FacingDirection]: string } = {
+  east: 'Timur',
+  north: 'Utara',
+  northeast: 'Timur Laut',
+  northwest: 'Barat Laut',
+  south: 'Selatan',
+  southeast: 'Tenggara',
+  southwest: 'Barat Daya',
+  west: 'Barat',
+  unknown: 'Tidak Diketahui',
 }
 
 export const FILTER_OPTIONS = {

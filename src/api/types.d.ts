@@ -39,3 +39,4 @@ export type SavedSearchListRes =
   operations['saved_searches.index']['responses']['200']['content']['application/json']
 
 export type FilterMinMax = components['schemas']['FilterMinMax']
+export type FilterSet = components['schemas']['FilterSet']

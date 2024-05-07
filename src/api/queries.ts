@@ -202,10 +202,18 @@ export const useGetListingDetail = ({ id }: { id: string }) =>
     staleTime: 0,
   })
 
-export const useListSavedSearch = () =>
+export const useGetSavedSearchList = () =>
   useQuery<SavedSearchListRes>({
-    queryKey: ['listSavedSearch'],
-    queryFn: async () => (await axios.get('/saved-searches')).data,
+    queryKey: ['useGetSavedSearchList'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`/saved-searches`)
+        return response.data
+      } catch (error) {
+        console.error('Failed to fetch saved search:', error)
+        throw error
+      }
+    },
     retry: false,
     staleTime: 0,
   })

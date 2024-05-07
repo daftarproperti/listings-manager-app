@@ -221,6 +221,7 @@ export interface components {
       floorCount?: number;
       electricPower?: number;
       viewCount?: number;
+      matchFilterCount?: number;
       facing?: string;
       ownership?: components["schemas"]["PropertyOwnership"];
       city?: string;

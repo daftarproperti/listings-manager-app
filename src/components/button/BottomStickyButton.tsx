@@ -4,6 +4,7 @@ const BottomStickyButton = ({
   type,
   disabled,
   children,
+  onClick,
 }: React.DetailedHTMLProps<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
@@ -15,6 +16,7 @@ const BottomStickyButton = ({
         color="blue"
         type={type}
         disabled={disabled}
+        onClick={onClick}
         className="text-base font-normal capitalize"
       >
         {children}

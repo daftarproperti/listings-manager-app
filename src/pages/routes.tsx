@@ -14,6 +14,7 @@ import SimpleForm from './listings/add/SimpleForm'
 import PropertyListPage from './properties/list'
 import PropertiesFilterPage from './properties/filter'
 import PropertyDetailPage from './properties/detail'
+import SavedSearchListPage from './saved-searches/list'
 import NotFoundPage from './NotFoundPage'
 
 const router = createBrowserRouter(
@@ -115,6 +116,15 @@ const router = createBrowserRouter(
             <>
               <Header title="Properti" />
               <PropertyDetailPage />
+            </>
+          ),
+        },
+        {
+          path: '/saved-searches',
+          element: (
+            <>
+              <Header title="Permintaan" />
+              <SavedSearchListPage />
             </>
           ),
         },

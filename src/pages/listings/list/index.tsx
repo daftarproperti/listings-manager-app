@@ -5,7 +5,7 @@ import {
   MagnifyingGlassIcon,
   PlusIcon,
 } from '@heroicons/react/24/solid'
-import { useGetListingList, useListSavedSearch } from 'api/queries'
+import { useGetListingList, useGetSavedSearchList } from 'api/queries'
 import { type SavedSearchListRes } from 'api/types'
 import NewListingSheet from 'components/NewListingSheet'
 import SortBottomSheet from 'components/SortBottomSheet'
@@ -16,6 +16,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { InformationCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { countActiveFilters, isSorted, isSavedSearchApplied } from 'utils'
 import { Badge, Button, IconButton } from '@material-tailwind/react'
+import { ArrowDownIconSVG } from 'assets/icons'
 
 const ListingListPage = () => {
   const navigate = useNavigate()
@@ -44,15 +45,10 @@ const ListingListPage = () => {
     searchParams,
   })
 
-  const { data: savedSearchData } = useListSavedSearch()
+  const { data: savedSearchData } = useGetSavedSearchList()
 
   const handleChangeSearchText = (event: React.ChangeEvent<HTMLInputElement>) =>
     setSearchText(event.target.value)
-
-  const handleSelectSearch = (title: string, searchParams: URLSearchParams) => {
-    setSelectedSearchTitle(title)
-    setSearchParams(searchParams)
-  }
 
   const onClickReset = (isReplace: boolean) => {
     setSearchText('')
@@ -160,10 +156,10 @@ const ListingListPage = () => {
                     className="relative flex items-center gap-1.5 text-sm font-normal capitalize"
                     onClick={() => setIsSavedSearchSheetOpen(true)}
                   >
-                    <PlusIcon className="w-5" />
                     {selectedSearchTitle
                       ? selectedSearchTitle
                       : 'Calon Pembeli'}
+                    <ArrowDownIconSVG className="h-5 w-5" />
                   </Button>
                 </Badge>
               </div>
@@ -226,7 +222,7 @@ const ListingListPage = () => {
         <IconButton
           size="lg"
           color="blue"
-          className="rounded-full"
+          className="rounded-full drop-shadow-lg"
           // TODO if tambah listing cara cepat already to use, change this to open NewListingSheet
           // onClick={() => setIsNewListingSheetOpen(true)}
           onClick={() => navigate('/listings/add')}
@@ -243,7 +239,6 @@ const ListingListPage = () => {
         isOpen={isSavedSearchSheetOpen}
         setIsOpen={setIsSavedSearchSheetOpen}
         savedSearches={savedSearches}
-        onSelectSearch={handleSelectSearch}
       />
       <NewListingSheet
         isOpen={isNewListingSheetOpen}
