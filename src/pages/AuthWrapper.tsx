@@ -21,6 +21,15 @@ const AuthenticationWrapper = ({ children }: { children: ReactNode }) => {
     initAuth()
   }, [])
 
+  if (import.meta.env.VITE_ENV === 'production') {
+    return (
+      <main className="flex min-h-screen w-full flex-col items-center justify-center">
+        <h1 className="text-xl font-bold m-5">Segera Hadir | Juni 2024</h1>
+        <h2 className="text-l font-bold">Properti Terdaftar: 3000+ di 100+ kota</h2>
+      </main>
+    )
+  }
+
   return isAuth === undefined ? (
     <LoadingPage message="Authenticating..." />
   ) : isAuth ? (
