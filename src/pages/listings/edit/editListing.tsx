@@ -4,18 +4,22 @@ import { useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useGetListingDetail, useUpdateListing } from 'api/queries'
 import { type Listing } from 'api/types'
-import { addEditFormSchema } from 'components/form/addEditSchema'
+import { getDynamicFormSchema } from 'components/form/addEditSchema'
 import CurrencyInputField from 'components/input/CurrencyInputField'
 import InputField from 'components/input/InputField'
 import InputFileField from 'components/input/InputFileField'
 import SelectField from 'components/input/SelectField'
 import TextareaField from 'components/input/TextareaField'
+import InputCheckboxField from 'components/input/InputCheckboxField'
 import BottomStickyButton from 'components/button/BottomStickyButton'
 
 import { LISTING_OPTIONS } from './dummy'
 import { onSubmit } from './handleFormSubmit'
 
 function EditListing({ id }: { id: string }) {
+  const [schema, setSchema] = useState(() =>
+    getDynamicFormSchema(false, false, 'house'),
+  )
   const {
     register,
     formState: { errors },
@@ -26,15 +30,36 @@ function EditListing({ id }: { id: string }) {
   } = useForm<Listing>({
     defaultValues: {
       isPrivate: false,
+      listingForSale: false,
+      listingForRent: false,
       ownership: 'unknown',
     },
-    resolver: zodResolver(addEditFormSchema),
+    resolver: zodResolver(schema),
   })
   const {
     data: listingDetails,
     isLoading,
     isError,
   } = useGetListingDetail({ id: id })
+
+  const listingForSale = watch('listingForSale', false)
+  const listingForRent = watch('listingForRent', false)
+  const propertyType = watch('propertyType')
+
+  useEffect(() => {
+    if (
+      typeof listingForSale === 'boolean' &&
+      typeof listingForRent === 'boolean' &&
+      propertyType
+    ) {
+      const updatedSchema = getDynamicFormSchema(
+        listingForSale,
+        listingForRent,
+        propertyType,
+      )
+      setSchema(updatedSchema)
+    }
+  }, [listingForSale, listingForRent, propertyType])
 
   const [formExistingImages, setFormExistingImages] = useState<string[]>([])
   const [formNewImageFiles, setFormNewImageFiles] = useState<File[]>([])
@@ -102,12 +127,23 @@ function EditListing({ id }: { id: string }) {
           placeholderValue="Tulis Judul"
           errorFieldName={errors.title}
         />
-        <SelectField
-          label="Tipe Listing"
-          registerHook={register('listingType', { required: false })}
-          selectOptions={LISTING_OPTIONS.listingType.options}
-          defaultOption="Pilih Tipe Listing"
-        />
+        <div className="mt-3">
+          <span className="text-lg font-semibold leading-7 text-gray-800">
+            Tipe Listing
+          </span>
+          <div className="flex items-center space-x-8">
+            <InputCheckboxField
+              label="Dijual"
+              registerHook={register('listingForSale')}
+              inputID="listingForSale"
+            />
+            <InputCheckboxField
+              label="Disewa"
+              registerHook={register('listingForRent')}
+              inputID="listingForRent"
+            />
+          </div>
+        </div>
         <SelectField
           label="Tipe Properti"
           registerHook={register('propertyType', { required: false })}
@@ -133,88 +169,118 @@ function EditListing({ id }: { id: string }) {
           placeholderValue="Tulis keterangan untuk listing ini"
           errorFieldName={errors.description}
         />
-        <CurrencyInputField
-          name="price"
-          control={control}
-          label="Harga jual"
-          registerHook={register('price', {
-            required: true,
-          })}
-          placeholderValue="Isi Harga"
-          errorFieldName={errors.price}
-        />
+        {listingForSale && (
+          <CurrencyInputField
+            name="price"
+            control={control}
+            label="Harga Jual"
+            registerHook={register('price', {
+              required: true,
+            })}
+            placeholderValue="Isi Harga"
+            errorFieldName={errors.price}
+          />
+        )}
+        {listingForRent && (
+          <CurrencyInputField
+            name="rentPrice"
+            control={control}
+            label="Harga Sewa per tahun"
+            registerHook={register('rentPrice', {
+              required: true,
+            })}
+            placeholderValue="Isi Harga"
+            errorFieldName={errors.rentPrice}
+          />
+        )}
         <div className="flex w-full">
-          <InputField
-            halfWidth={true}
-            leftPosition={true}
-            label="Luas Tanah"
-            registerHook={register('lotSize', { required: true })}
-            placeholderValue="Luas Tanah"
-            errorFieldName={errors.lotSize}
-          />
-          <InputField
-            halfWidth={true}
-            label="Luas Bangunan"
-            registerHook={register('buildingSize', { required: true })}
-            placeholderValue="Luas Bangunan"
-            errorFieldName={errors.buildingSize}
-          />
+          {propertyType !== 'apartment' && (
+            <InputField
+              halfWidth={true}
+              leftPosition={true}
+              label="Luas Tanah"
+              registerHook={register('lotSize', { required: true })}
+              placeholderValue="Luas Tanah"
+              errorFieldName={errors.lotSize}
+            />
+          )}
+          {propertyType !== 'land' && (
+            <InputField
+              halfWidth={true}
+              label="Luas Bangunan"
+              registerHook={register('buildingSize', { required: true })}
+              placeholderValue="Luas Bangunan"
+              errorFieldName={errors.buildingSize}
+            />
+          )}
         </div>
-        <SelectField
-          label="Bangunan Menghadap"
-          registerHook={register('facing', { required: false })}
-          selectOptions={LISTING_OPTIONS.facing.options}
-          defaultOption="Pilih Arah"
-          errorFieldName={errors.facing}
-        />
-        <div className="flex w-full">
-          <InputField
-            halfWidth={true}
-            leftPosition={true}
-            label="Kamar Tidur"
-            registerHook={register('bedroomCount', { required: true })}
-            placeholderValue="Silahkan isi"
-            errorFieldName={errors.bedroomCount}
+        {propertyType !== 'land' && (
+          <SelectField
+            label="Bangunan Menghadap"
+            registerHook={register('facing', { required: false })}
+            selectOptions={LISTING_OPTIONS.facing.options}
+            defaultOption="Pilih Arah"
+            errorFieldName={errors.facing}
           />
-          <InputField
-            halfWidth={true}
-            label="Kamar Mandi"
-            registerHook={register('bathroomCount', { required: true })}
-            placeholderValue="Silahkan isi"
-            errorFieldName={errors.bathroomCount}
+        )}
+        {propertyType !== 'land' && propertyType !== 'warehouse' && (
+          <div className="flex w-full">
+            <InputField
+              halfWidth={true}
+              leftPosition={true}
+              label="Kamar Tidur"
+              registerHook={register('bedroomCount', { required: true })}
+              placeholderValue="Silahkan isi"
+              errorFieldName={errors.bedroomCount}
+            />
+            <InputField
+              halfWidth={true}
+              label="Kamar Mandi"
+              registerHook={register('bathroomCount', { required: true })}
+              placeholderValue="Silahkan isi"
+              errorFieldName={errors.bathroomCount}
+            />
+          </div>
+        )}
+        {propertyType !== 'land' &&
+          propertyType !== 'warehouse' &&
+          propertyType !== 'apartment' && (
+            <div className="flex w-full">
+              <InputField
+                halfWidth={true}
+                leftPosition={true}
+                label="Lantai"
+                registerHook={register('floorCount', { required: true })}
+                placeholderValue="Silahkan isi"
+                errorFieldName={errors.floorCount}
+              />
+              <InputField
+                halfWidth={true}
+                label="Kapasitas Mobil"
+                registerHook={register('carCount', { required: false })}
+                placeholderValue="Silahkan isi"
+                errorFieldName={errors.carCount}
+              />
+            </div>
+          )}
+        {propertyType !== 'land' && (
+          <SelectField
+            label="Daya Listrik"
+            registerHook={register('electricPower')}
+            selectOptions={LISTING_OPTIONS.electric_power.options}
+            defaultOption="Pilih Daya Listrik"
+            errorFieldName={errors.electricPower}
           />
-        </div>
-        <div className="flex w-full">
-          <InputField
-            halfWidth={true}
-            leftPosition={true}
-            label="Lantai"
-            registerHook={register('floorCount')}
-            placeholderValue="Silahkan isi"
-            errorFieldName={errors.floorCount}
+        )}
+        {listingForSale && (
+          <SelectField
+            label="Jenis Sertifikat"
+            registerHook={register('ownership')}
+            selectOptions={LISTING_OPTIONS.ownership.options}
+            defaultOption="Pilih Jenis Sertifikat"
+            errorFieldName={errors.ownership}
           />
-          <InputField
-            halfWidth={true}
-            label="Kapasitas Mobil"
-            registerHook={register('carCount', { required: false })}
-            placeholderValue="Silahkan isi"
-            errorFieldName={errors.carCount}
-          />
-        </div>
-        <SelectField
-          label="Daya Listrik"
-          registerHook={register('electricPower')}
-          selectOptions={LISTING_OPTIONS.electric_power.options}
-          defaultOption="Pilih Daya Listrik"
-          errorFieldName={errors.electricPower}
-        />
-        <SelectField
-          label="Jenis Sertifikat"
-          registerHook={register('ownership')}
-          selectOptions={LISTING_OPTIONS.ownership.options}
-          defaultOption="Pilih Jenis Sertifikat"
-          errorFieldName={errors.ownership}
-        />
+        )}
       </div>
       <div className="w-full items-stretch justify-center whitespace-nowrap border-b border-solid border-b-[color:var(--gray-200,#E5E7EB)] bg-blue-100 py-3 pl-4 pr-14 pt-4 text-lg leading-7 text-gray-800">
         Keterangan Agen

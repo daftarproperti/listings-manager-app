@@ -86,10 +86,11 @@ const getMandatoryField = (fieldName: string) => ({
     }),
 })
 
-export const addEditFormSchema = z.object({
+export const baseFormSchema = z.object({
   title: getMandatoryField('Judul Listing').string,
-  listingType: getOptionalField().string,
   propertyType: getOptionalField().string,
+  listingForSale: z.boolean(),
+  listingForRent: z.boolean(),
   address: getOptionalField().string,
   bathroomCount: getMandatoryField('Kamar Mandi').number,
   bedroomCount: getMandatoryField('Kamar Tidur').number,
@@ -103,6 +104,50 @@ export const addEditFormSchema = z.object({
   lotSize: getMandatoryField('Luas Tanah').numberMoreThanZero,
   ownership: getMandatoryField('Sertifikat').string,
   pictureUrls: getOptionalField().picture,
-  price: getMandatoryField('Harga Jual').price,
   isPrivate: z.boolean(),
 })
+
+export function getDynamicFormSchema(
+  forSale: boolean,
+  forRent: boolean,
+  propertyType: string,
+) {
+  let schema = baseFormSchema
+
+  if (forSale) {
+    schema = schema.extend({
+      price: getMandatoryField('Harga Jual').price,
+    })
+  }
+  if (forRent) {
+    schema = schema.extend({
+      rentPrice: getMandatoryField('Harga Sewa').price,
+    })
+  }
+
+  switch (propertyType) {
+    case 'apartment':
+      return schema.omit({
+        lotSize: true,
+        floorCount: true,
+      })
+    case 'land':
+      return schema.omit({
+        buildingSize: true,
+        floorCount: true,
+        bathroomCount: true,
+        bedroomCount: true,
+        electricPower: true,
+        facing: true,
+      })
+    case 'warehouse':
+      return schema.omit({
+        bedroomCount: true,
+        bathroomCount: true,
+      })
+    default:
+      return schema
+  }
+}
+
+export type DynamicFormSchema = ReturnType<typeof getDynamicFormSchema>

@@ -23,7 +23,9 @@ const InputField: React.FC<InputFieldProps> = ({
   return (
     <div
       className={`mt-3 self-stretch 
-        ${halfWidth ? 'w-1/2' : 'w-full'} ${leftPosition ? 'mr-1' : 'ml-1'}`}
+        ${halfWidth ? 'w-1/2' : 'w-full'} ${
+          leftPosition ? 'mr-1' : halfWidth ? 'ml-1' : 'ml-0'
+        }`}
     >
       <span className="text-lg font-semibold leading-7 text-gray-800">
         {label}

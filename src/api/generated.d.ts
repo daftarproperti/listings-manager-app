@@ -5,6 +5,14 @@
 
 
 export interface paths {
+  "/api/auth/send-otp": {
+    /** Send OTP */
+    post: operations["auth.send_otp"];
+  };
+  "/api/auth/verify-otp": {
+    /** Verify OTP */
+    post: operations["auth.verify_otp"];
+  };
   "/api/tele-app/listings": {
     /**
      * Get listing items
@@ -86,6 +94,8 @@ export interface components {
       description?: string;
       /** @example 100000 */
       price?: number;
+      /** @example 40000 */
+      rentPrice?: number;
       /** @example 1000 */
       lotSize?: number;
       /** @example 2000 */
@@ -108,6 +118,10 @@ export interface components {
       city?: string;
       listingType?: components["schemas"]["ListingType"];
       propertyType?: components["schemas"]["PropertyType"];
+      /** @example false */
+      listingForRent?: boolean;
+      /** @example false */
+      listingForSale?: boolean;
       pictureUrls?: string[];
       coordinate?: {
         latitude?: number;
@@ -140,6 +154,12 @@ export interface components {
       /** @example true */
       isPublicProfile?: boolean;
     };
+    /**
+     * @description Verification status
+     * @example approved
+     * @enum {string}
+     */
+    VerifyStatus: "on_review" | "approved" | "rejected";
     /**
      * @description Facing Direction
      * @example east
@@ -212,9 +232,12 @@ export interface components {
       title?: string;
       propertyType?: components["schemas"]["PropertyType"];
       listingType?: components["schemas"]["ListingType"];
+      listingForSale?: boolean;
+      listingForRent?: boolean;
       address?: string;
       description?: string;
       price?: number;
+      rentPrice?: number;
       lotSize?: number;
       buildingSize?: number;
       carCount?: number;
@@ -224,8 +247,9 @@ export interface components {
       electricPower?: number;
       viewCount?: number;
       matchFilterCount?: number;
-      facing?: string;
+      facing?: components["schemas"]["FacingDirection"];
       ownership?: components["schemas"]["PropertyOwnership"];
+      verifyStatus?: components["schemas"]["VerifyStatus"];
       city?: string;
       pictureUrls?: string[];
       coordinate?: {
@@ -263,8 +287,9 @@ export interface components {
       bathroomCount?: number;
       floorCount?: number;
       electricPower?: number;
-      facing?: string;
-      ownership?: string;
+      facing?: components["schemas"]["FacingDirection"];
+      ownership?: components["schemas"]["PropertyOwnership"];
+      verifyStatus?: components["schemas"]["VerifyStatus"];
       city?: string;
       pictureUrls?: string[];
       coordinate?: {
@@ -323,6 +348,63 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  /** Send OTP */
+  "auth.send_otp": {
+    parameters: {
+      path: {
+        /** @description Phone Number */
+        phoneNumber: string;
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": {
+            /** @description JWT Token used for authentication */
+            token?: string;
+            /**
+             * Format: int64
+             * @description Timestamp of when the OTP was created
+             */
+            timestamp?: number;
+          };
+        };
+      };
+    };
+  };
+  /** Verify OTP */
+  "auth.verify_otp": {
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @description Token to verify */
+          token: string;
+          /**
+           * Format: int64
+           * @description Timestamp of when the OTP was created
+           */
+          timestamp: number;
+          /** @description User's OTP Code */
+          otpCode: string;
+        };
+      };
+    };
+    responses: {
+      /** @description Success response */
+      200: {
+        content: {
+          "application/json": {
+            /**
+             * @description Verify status
+             * @example true
+             */
+            success?: boolean;
+          };
+        };
+      };
+    };
+  };
   /**
    * Get listing items
    * @description Returns listing items

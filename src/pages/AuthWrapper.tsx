@@ -23,10 +23,14 @@ const AuthenticationWrapper = ({ children }: { children: ReactNode }) => {
 
   if (import.meta.env.VITE_ENV === 'production') {
     return (
-      <main className="flex min-h-screen w-full flex-col items-center justify-center">
-        <h1 className="text-xl font-bold m-5">Segera Hadir | Juni 2024</h1>
-        <h2 className="text-l font-bold">Properti Terdaftar: 3000+ di 100+ kota</h2>
-      </main>
+      <>
+        <main className="flex min-h-screen w-full flex-col items-center justify-center">
+          <h1 className="m-5 text-xl font-bold">Segera Hadir | Juni 2024</h1>
+          <h2 className="text-lg font-bold">
+            Properti Terdaftar: 3000+ di 100+ kota
+          </h2>
+        </main>
+      </>
     )
   }
 

@@ -12,6 +12,8 @@ const transformListingObjectToFormData = async ({
 }): Promise<FormData> => {
   const formData = new FormData()
 
+  const binaryKeys = ['isPrivate', 'listingForSale', 'listingForRent']
+
   Object.keys(data).forEach((key) => {
     const value = data[key as keyof typeof data]
     if (key !== 'pictureUrls' && !key.startsWith('contacts')) {
@@ -30,9 +32,11 @@ const transformListingObjectToFormData = async ({
       if (value !== null && value !== undefined) {
         formData.append(key, value.toString())
       }
-      if (key === 'isPrivate') {
-        const valueIsPrivate = data.isPrivate ? 1 : 0
-        formData.append('isPrivate', valueIsPrivate.toString())
+      if (binaryKeys.includes(key)) {
+        const binaryValue = value ? 1 : 0
+        formData.append(key, binaryValue.toString())
+      } else if (value !== null && value !== undefined) {
+        formData.append(key, value.toString())
       }
     }
     if (key.startsWith('contacts')) {

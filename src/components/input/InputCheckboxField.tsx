@@ -3,7 +3,7 @@ import type { UseFormRegisterReturn } from 'react-hook-form'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid'
 import { Checkbox, Tooltip, Typography } from '@material-tailwind/react'
 
-type TextareaFieldProps = {
+type InputCheckboxFieldProps = {
   label: string
   registerHook: UseFormRegisterReturn<string>
   inputID: string
@@ -11,7 +11,7 @@ type TextareaFieldProps = {
   tooltipContent?: string
 }
 
-const TextareaField: React.FC<TextareaFieldProps> = ({
+const InputCheckboxField: React.FC<InputCheckboxFieldProps> = ({
   label,
   registerHook,
   inputID,
@@ -19,13 +19,22 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
   tooltipContent,
 }) => {
   return (
-    <div className="mt-3 flex w-full items-center self-stretch">
+    <div className="mt-3 flex w-auto items-center">
       <label
         htmlFor={inputID}
         className="flex items-center gap-1 text-gray-900"
       >
-        <Checkbox id={inputID} {...registerHook} crossOrigin={undefined} />
-        {label}
+        <Checkbox
+          id={inputID}
+          {...registerHook}
+          crossOrigin={undefined}
+          containerProps={{
+            className: 'm-0 p-0 rounded-none',
+            style: { marginLeft: '0' },
+          }}
+          className="mr-0 p-0 hover:before:opacity-0"
+        />
+        <span className="ml-1">{label}</span>
         {showTooltip && (
           <Tooltip
             className="border border-blue-gray-100 bg-white px-4 py-3 shadow shadow-black/10"
@@ -49,4 +58,4 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
   )
 }
 
-export default TextareaField
+export default InputCheckboxField
