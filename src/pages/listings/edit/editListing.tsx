@@ -6,7 +6,7 @@ import { Button } from '@material-tailwind/react'
 import { useGetListingDetail, useUpdateListing } from 'api/queries'
 import { type Listing } from 'api/types'
 import { getDynamicFormSchema } from 'components/form/addEditSchema'
-import CurrencyInputField from 'components/input/CurrencyInputField'
+import IntuitiveCurrencyInputField from 'components/input/IntuitiveCurrencyInputField'
 import InputField from 'components/input/InputField'
 import InputFileField from 'components/input/InputFileField'
 import SelectField from 'components/input/SelectField'
@@ -188,25 +188,19 @@ function EditListing({ id }: { id: string }) {
           errorFieldName={errors.description}
         />
         {listingForSale && (
-          <CurrencyInputField
+          <IntuitiveCurrencyInputField
             name="price"
             control={control}
             label="Harga Jual"
-            registerHook={register('price', {
-              required: true,
-            })}
             placeholderValue="Isi Harga"
             errorFieldName={errors.price}
           />
         )}
         {listingForRent && (
-          <CurrencyInputField
+          <IntuitiveCurrencyInputField
             name="rentPrice"
             control={control}
             label="Harga Sewa per tahun"
-            registerHook={register('rentPrice', {
-              required: true,
-            })}
             placeholderValue="Isi Harga"
             errorFieldName={errors.rentPrice}
           />
