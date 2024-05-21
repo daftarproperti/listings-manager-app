@@ -138,6 +138,9 @@ const AddPage = () => {
           registerHook={register('address', { required: true })}
           placeholderValue="Isi alamat lengkap"
           errorFieldName={errors.address}
+          additionalLabel="Pelajari lebih lanjut di "
+          linkHref="http://www.daftarproperti.org/address-required"
+          linkText="sini"
         />
         <SelectField
           label="Kota"

@@ -9,6 +9,9 @@ type InputFieldProps = {
   placeholderValue: string
   errorFieldName?: FieldError
   errorMessage?: string
+  additionalLabel?: string
+  linkHref?: string
+  linkText?: string
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -19,6 +22,9 @@ const InputField: React.FC<InputFieldProps> = ({
   placeholderValue,
   errorFieldName,
   errorMessage,
+  additionalLabel,
+  linkHref,
+  linkText,
 }) => {
   return (
     <div
@@ -27,9 +33,22 @@ const InputField: React.FC<InputFieldProps> = ({
           leftPosition ? 'mr-1' : halfWidth ? 'ml-1' : 'ml-0'
         }`}
     >
-      <span className="text-lg font-semibold leading-7 text-gray-800">
-        {label}
-      </span>
+      <div className="flex justify-between">
+        <div className="text-lg font-semibold leading-7 text-gray-800">
+          {label}
+        </div>
+        {additionalLabel && (
+          <div className="ml-2 cursor-pointer text-sm leading-7 text-gray-500">
+            {additionalLabel}
+            <a
+              href={linkHref}
+              className="text-blue-500 underline hover:no-underline"
+            >
+              {linkText}
+            </a>
+          </div>
+        )}
+      </div>
       <input
         {...registerHook}
         placeholder={placeholderValue}

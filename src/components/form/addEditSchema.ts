@@ -91,7 +91,7 @@ export const baseFormSchema = z.object({
   propertyType: getOptionalField().string,
   listingForSale: z.boolean(),
   listingForRent: z.boolean(),
-  address: getOptionalField().string,
+  address: getMandatoryField('Alamat').string,
   bathroomCount: getMandatoryField('Kamar Mandi').number,
   bedroomCount: getMandatoryField('Kamar Tidur').number,
   buildingSize: getMandatoryField('Luas Bangunan').numberMoreThanZero,
