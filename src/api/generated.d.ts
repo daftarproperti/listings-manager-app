@@ -155,6 +155,12 @@ export interface components {
       isPublicProfile?: boolean;
     };
     /**
+     * @description Account type
+     * @example professional
+     * @enum {string}
+     */
+    AccountType: "individual" | "professional";
+    /**
      * @description Verification status
      * @example approved
      * @enum {string}
@@ -277,9 +283,12 @@ export interface components {
       title?: string;
       propertyType?: components["schemas"]["PropertyType"];
       listingType?: components["schemas"]["ListingType"];
+      listingForSale?: boolean;
+      listingForRent?: boolean;
       address?: string;
       description?: string;
       price?: number;
+      rentPrice?: number;
       lotSize?: number;
       buildingSize?: number;
       carCount?: number;
@@ -334,6 +343,33 @@ export interface components {
       /** @example true */
       isPublicProfile?: boolean;
     };
+    UserProfile: {
+      /** @example John Doe */
+      name?: string;
+      /** @example I am a programmer */
+      description?: string;
+      /** @example New York */
+      city?: string;
+      /** @example https://example.com/image.jpg */
+      picture?: string;
+      /** @example Google */
+      company?: string;
+      /** @example Jakarta */
+      cityOfOperation?: string;
+      /** @example true */
+      isPublicProfile?: boolean;
+    };
+    User: {
+      id?: string;
+      firstName?: string;
+      lastName?: string;
+      username?: string;
+      phoneNumber?: string;
+      accountType?: components["schemas"]["AccountType"];
+      email?: string;
+      password?: string;
+      profile?: components["schemas"]["UserProfile"];
+    };
   };
   responses: never;
   parameters: never;
@@ -378,6 +414,8 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": {
+          /** @description User phone number */
+          phoneNumber: string;
           /** @description Token to verify */
           token: string;
           /**
@@ -400,6 +438,12 @@ export interface operations {
              * @example true
              */
             success?: boolean;
+            /**
+             * @description Access token
+             * @example Akoasdk131o3ipIaskdlz
+             */
+            accessToken?: string;
+            user?: components["schemas"]["User"];
           };
         };
       };

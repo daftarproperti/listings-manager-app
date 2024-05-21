@@ -38,7 +38,7 @@ const InputField: React.FC<InputFieldProps> = ({
           {label}
         </div>
         {additionalLabel && (
-          <div className="ml-2 cursor-pointer text-sm leading-7 text-gray-500">
+          <div className="ml-2 text-sm leading-7 text-gray-500">
             {additionalLabel}
             <a
               href={linkHref}

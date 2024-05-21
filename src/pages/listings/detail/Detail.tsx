@@ -124,10 +124,13 @@ function ListingDetail({
                   <div className="flex flex-wrap content-start gap-x-4 gap-y-1 border-b border-solid border-t-slate-200 px-3 py-2 text-[10px] text-slate-400">
                     <div className="flex items-center justify-between gap-1">
                       Tipe Listing:{' '}
-                      {getLabelForValue(
-                        'listingType',
-                        data.listingType || 'defaultType',
-                      )}
+                      {data.listingForSale && data.listingForRent
+                        ? 'Dijual/Disewa'
+                        : data.listingForSale
+                          ? 'Dijual'
+                          : data.listingForRent
+                            ? 'Disewa'
+                            : null}
                     </div>
                     <div className="flex items-center justify-between gap-1">
                       Tipe Properti:{' '}
