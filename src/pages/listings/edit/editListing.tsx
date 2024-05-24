@@ -205,6 +205,11 @@ function EditListing({ id }: { id: string }) {
               registerHook={register('lotSize', { required: true })}
               placeholderValue="Luas Tanah"
               errorFieldName={errors.lotSize}
+              rightContent={
+                <>
+                  m<sup>2</sup>
+                </>
+              }
             />
           )}
           {propertyType !== 'land' && (
@@ -214,6 +219,11 @@ function EditListing({ id }: { id: string }) {
               registerHook={register('buildingSize', { required: true })}
               placeholderValue="Luas Bangunan"
               errorFieldName={errors.buildingSize}
+              rightContent={
+                <>
+                  m<sup>2</sup>
+                </>
+              }
             />
           )}
         </div>

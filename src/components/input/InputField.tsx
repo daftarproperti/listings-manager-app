@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { type ReactNode } from 'react'
 import { type FieldError, type UseFormRegisterReturn } from 'react-hook-form'
 
 type InputFieldProps = {
@@ -12,6 +12,7 @@ type InputFieldProps = {
   additionalLabel?: string
   linkHref?: string
   linkText?: string
+  rightContent?: ReactNode
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -25,6 +26,7 @@ const InputField: React.FC<InputFieldProps> = ({
   additionalLabel,
   linkHref,
   linkText,
+  rightContent,
 }) => {
   return (
     <div
@@ -49,12 +51,19 @@ const InputField: React.FC<InputFieldProps> = ({
           </div>
         )}
       </div>
-      <input
-        {...registerHook}
-        placeholder={placeholderValue}
-        className="mt-1 w-full items-start justify-center self-stretch whitespace-nowrap rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-white px-3 py-2.5 text-lg leading-7 text-gray-800"
-        type="text"
-      />
+      <div className="relative mt-1 w-full self-stretch rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-white">
+        <input
+          {...registerHook}
+          placeholder={placeholderValue}
+          className="h-full w-full items-start justify-center whitespace-nowrap rounded-lg px-3 py-2.5 text-lg leading-7 text-gray-800"
+          type="text"
+        />
+        {rightContent && (
+          <div className="absolute right-0 top-0 flex h-full min-w-11 items-center justify-center rounded-r-lg bg-slate-200 text-lg text-slate-700">
+            <span>{rightContent}</span>
+          </div>
+        )}
+      </div>
       {errorFieldName && (
         <span className="self-stretch text-sm leading-5 text-red-500">
           {errorMessage || errorFieldName?.message}
