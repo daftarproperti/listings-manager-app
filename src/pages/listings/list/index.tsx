@@ -85,8 +85,8 @@ const ListingListPage = () => {
 
   return (
     <>
-      <div className="flex min-h-dvh w-full flex-col pb-20 pt-16">
-        <div className="bg-white p-4">
+      <div className="flex min-h-dvh w-full flex-col bg-slate-100 pb-20 pt-16 lg:p-0">
+        <div className="bg-white p-4 lg:hidden">
           <div className="relative mb-4">
             <MagnifyingGlassIcon className="absolute left-2 top-[50%] h-4 w-4 -translate-y-[50%] text-slate-400" />
             <input
@@ -166,8 +166,21 @@ const ListingListPage = () => {
             )}
           </div>
         </div>
+        <div className="sticky top-0 z-10 hidden items-center justify-between bg-slate-100 p-4 pt-8 lg:flex">
+          <div className="text-lg">Listing Saya</div>
+          <Button
+            size="sm"
+            color="blue"
+            variant="outlined"
+            className="flex items-center gap-2 bg-white text-sm font-normal capitalize"
+            onClick={() => navigate('/listings/add')}
+          >
+            <PlusIcon className="w-5" />
+            Properti Baru
+          </Button>
+        </div>
 
-        <div className="flex grow flex-col bg-slate-100 p-4">
+        <div className="flex grow flex-col p-4 lg:pt-0">
           {isError ? (
             <div className="my-auto text-center">Error: {error.message}</div>
           ) : isFetching && !isFetchingNextPage ? (
@@ -218,7 +231,12 @@ const ListingListPage = () => {
           )}
         </div>
       </div>
-      <div className="fixed bottom-36 h-0 w-full max-w-lg pr-4 text-right">
+
+      {data?.pages[0].listings?.length && !isFetching ? (
+        <hr className="mb-8 mt-4 hidden border-2 lg:block" />
+      ) : null}
+
+      <div className="fixed bottom-36 right-4 h-0 w-full max-w-lg text-right lg:hidden">
         <IconButton
           size="lg"
           color="blue"
