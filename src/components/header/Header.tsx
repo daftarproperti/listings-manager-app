@@ -37,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({
   const shareUrl = `${userPublicUrl}?${searchParams.toString()}`
 
   return (
-    <header className="fixed top-0 z-10 flex h-16 w-full max-w-lg items-center justify-between border-b border-slate-300 bg-blue-50 px-4">
+    <header className="fixed top-0 z-10 flex h-16 w-full items-center justify-between border-b border-slate-300 bg-blue-50 px-4 lg:hidden">
       <div className="flex h-full items-center space-x-2">
         {!isHomePage && (
           <IconButton

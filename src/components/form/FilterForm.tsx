@@ -114,11 +114,14 @@ const FilterForm = ({ type }: FilterFormProps) => {
   }
 
   return (
-    <form onSubmit={onSubmit} className="relative w-full bg-slate-100">
-      <div className="p-4 pb-24 pt-20">
+    <form
+      onSubmit={onSubmit}
+      className="relative w-full bg-slate-100 lg:bg-blue-100"
+    >
+      <div className="p-4 pb-24 pt-20 lg:p-0">
         {type === 'savedSearch' && (
           <>
-            <div className="w-full text-lg font-semibold leading-7 text-slate-800">
+            <div className="w-full text-lg font-semibold leading-7 lg:text-sm lg:font-bold lg:uppercase lg:text-slate-500">
               Judul
             </div>
             <div className="mb-6 mt-1 flex w-full">
@@ -127,7 +130,7 @@ const FilterForm = ({ type }: FilterFormProps) => {
                   required
                   type="text"
                   placeholder="cth: Nama calon pembeli"
-                  className="h-full w-full rounded-lg border-none p-3 py-3.5 ring-0"
+                  className="h-full w-full rounded-lg border-none p-3 py-2.5 ring-0"
                   value={searchParams.get('title') ?? ''}
                   onChange={(event) =>
                     controlSearchParams('title', event.target.value)
@@ -137,7 +140,7 @@ const FilterForm = ({ type }: FilterFormProps) => {
             </div>
           </>
         )}
-        <div className="w-full text-lg font-semibold leading-7 text-slate-800">
+        <div className="w-full text-lg font-semibold leading-7 lg:text-sm lg:font-bold lg:uppercase lg:text-slate-500">
           Harga
         </div>
         <div className="mt-1 flex w-full justify-between gap-2">
@@ -152,7 +155,7 @@ const FilterForm = ({ type }: FilterFormProps) => {
               onValueChange={(event) =>
                 controlSearchParams(filterKeyStrings.minPrice, event.value)
               }
-              className="h-full w-full rounded-lg border-none p-3 py-3.5 ring-0"
+              className="h-full w-full rounded-lg border-none p-3 py-2.5 ring-0"
             />
           </div>
           <div className="relative flex grow gap-1 rounded-lg border border-solid border-slate-400 bg-white">
@@ -166,7 +169,7 @@ const FilterForm = ({ type }: FilterFormProps) => {
               onValueChange={(event) =>
                 controlSearchParams(filterKeyStrings.maxPrice, event.value)
               }
-              className="h-full w-full rounded-lg border-none p-3 py-3.5 ring-0"
+              className="h-full w-full rounded-lg border-none p-3 py-2.5 ring-0"
             />
           </div>
         </div>
@@ -207,7 +210,7 @@ const FilterForm = ({ type }: FilterFormProps) => {
             )
           })}
         </div>
-        <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-800">
+        <div className="mt-6 w-full text-lg font-semibold leading-7 lg:text-sm lg:font-bold lg:uppercase lg:text-slate-500">
           Tipe Properti
         </div>
         <div className="mt-2 flex flex-wrap gap-2">
@@ -231,7 +234,7 @@ const FilterForm = ({ type }: FilterFormProps) => {
             )
           })}
         </div>
-        <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-800">
+        <div className="mt-6 w-full text-lg font-semibold leading-7 lg:text-sm lg:font-bold lg:uppercase lg:text-slate-500">
           Kota
         </div>
         <div className="relative mt-2 flex flex-wrap gap-2">
@@ -241,7 +244,7 @@ const FilterForm = ({ type }: FilterFormProps) => {
             onChange={(event) =>
               controlSearchParams(filterKeyStrings.city, event.target.value)
             }
-            className="h-full w-full appearance-none rounded-lg border border-solid border-slate-400 p-3 py-3.5 ring-0"
+            className="h-full w-full appearance-none rounded-lg border border-solid border-slate-400 p-3 py-2.5 ring-0"
           >
             <option>Pilih Kota</option>
             {FILTER_OPTIONS.city.options.map((option, index) => (
@@ -250,14 +253,14 @@ const FilterForm = ({ type }: FilterFormProps) => {
               </option>
             ))}
           </select>
-          <div className="pointer-events-none absolute right-3 top-3.5 group-hover:pointer-events-auto">
+          <div className="pointer-events-none absolute right-3 top-2.5 group-hover:pointer-events-auto">
             <ArrowDownIconSVG />
           </div>
         </div>
-        <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-800">
+        <div className="mt-6 w-full text-lg font-semibold leading-7 lg:text-sm lg:font-bold lg:uppercase lg:text-slate-500">
           Kamar tidur
         </div>
-        <div className="mt-2 flex gap-2">
+        <div className="mt-2 flex flex-wrap gap-2">
           {FILTER_OPTIONS.bedroomCount.options.map((option, index) => {
             const isActive =
               searchParams.get(filterKeyStrings.bedroomCount) === option.value
@@ -279,10 +282,10 @@ const FilterForm = ({ type }: FilterFormProps) => {
             )
           })}
         </div>
-        <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-800">
+        <div className="mt-6 w-full text-lg font-semibold leading-7 lg:text-sm lg:font-bold lg:uppercase lg:text-slate-500">
           Kamar mandi
         </div>
-        <div className="mt-2 flex gap-2">
+        <div className="mt-2 flex flex-wrap gap-2">
           {FILTER_OPTIONS.bathroomCount.options.map((option, index) => {
             const isActive =
               searchParams.get(filterKeyStrings.bathroomCount) === option.value
@@ -303,7 +306,7 @@ const FilterForm = ({ type }: FilterFormProps) => {
             )
           })}
         </div>
-        <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-800">
+        <div className="mt-6 w-full text-lg font-semibold leading-7 lg:text-sm lg:font-bold lg:uppercase lg:text-slate-500">
           Luas Tanah
         </div>
         <div className="mt-1 flex gap-2">
@@ -311,7 +314,7 @@ const FilterForm = ({ type }: FilterFormProps) => {
             <input
               placeholder="Minimum"
               type="number"
-              className="h-full w-full rounded-lg border-none p-3 py-3.5 ring-0"
+              className="h-full w-full rounded-lg border-none p-3 py-2.5 ring-0"
               value={searchParams.get(filterKeyStrings.minLotSize) ?? ''}
               onChange={(event) =>
                 controlSearchParams(
@@ -335,7 +338,7 @@ const FilterForm = ({ type }: FilterFormProps) => {
                   event.target.value,
                 )
               }
-              className="h-full w-full rounded-lg border-none p-3 py-3.5 ring-0"
+              className="h-full w-full rounded-lg border-none p-3 py-2.5 ring-0"
             />
             <span className="absolute right-2 top-[50%] -translate-y-[50%] text-gray-400">
               m2
@@ -345,7 +348,7 @@ const FilterForm = ({ type }: FilterFormProps) => {
         <span className="self-stretch text-sm text-red-500">
           {validationMessage('lotSize')}
         </span>
-        <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-800">
+        <div className="mt-6 w-full text-lg font-semibold leading-7 lg:text-sm lg:font-bold lg:uppercase lg:text-slate-500">
           Luas bangunan
         </div>
         <div className="mt-1 flex gap-2">
@@ -360,7 +363,7 @@ const FilterForm = ({ type }: FilterFormProps) => {
                   event.target.value,
                 )
               }
-              className="h-full w-full rounded-lg border-none p-3 py-3.5 ring-0"
+              className="h-full w-full rounded-lg border-none p-3 py-2.5 ring-0"
             />
             <span className="absolute right-2 top-[50%] -translate-y-[50%] text-gray-400">
               m2
@@ -377,7 +380,7 @@ const FilterForm = ({ type }: FilterFormProps) => {
                   event.target.value,
                 )
               }
-              className="h-full w-full rounded-lg border-none p-3 py-3.5 ring-0"
+              className="h-full w-full rounded-lg border-none p-3 py-2.5 ring-0"
             />
             <span className="absolute right-2 top-[50%] -translate-y-[50%] text-gray-400">
               m2
@@ -387,10 +390,10 @@ const FilterForm = ({ type }: FilterFormProps) => {
         <span className="self-stretch text-sm text-red-500">
           {validationMessage('buildingSize')}
         </span>
-        <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-800">
+        <div className="mt-6 w-full text-lg font-semibold leading-7 lg:text-sm lg:font-bold lg:uppercase lg:text-slate-500">
           Sertifikat
         </div>
-        <div className="mt-2 flex gap-2">
+        <div className="mt-2 flex flex-wrap gap-2">
           {FILTER_OPTIONS.certificate.options.map((option, index) => {
             const isActive =
               searchParams.get(filterKeyStrings.ownership) === option.value
@@ -411,10 +414,10 @@ const FilterForm = ({ type }: FilterFormProps) => {
             )
           })}
         </div>
-        <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-800">
+        <div className="mt-6 w-full text-lg font-semibold leading-7 lg:text-sm lg:font-bold lg:uppercase lg:text-slate-500">
           Kapasitas Mobil
         </div>
-        <div className="mt-2 flex gap-2">
+        <div className="mt-2 flex flex-wrap gap-2">
           {FILTER_OPTIONS.carCount.options.map((option, index) => {
             const isActive =
               searchParams.get(filterKeyStrings.carCount) === option.value
@@ -435,7 +438,7 @@ const FilterForm = ({ type }: FilterFormProps) => {
             )
           })}
         </div>
-        <div className="mt-6 w-full text-lg font-semibold leading-7 text-slate-800">
+        <div className="mt-6 w-full text-lg font-semibold leading-7 lg:text-sm lg:font-bold lg:uppercase lg:text-slate-500">
           Listrik
         </div>
         <div className="mt-2 flex flex-wrap gap-2">
@@ -460,9 +463,14 @@ const FilterForm = ({ type }: FilterFormProps) => {
           })}
         </div>
       </div>
-      <BottomStickyButton type="submit" disabled={loadingAdd || loadingUpdate}>
-        {type === 'savedSearch' ? 'Simpan' : 'Lihat Hasil Filter'}
-      </BottomStickyButton>
+      <div className="lg:hidden">
+        <BottomStickyButton
+          type="submit"
+          disabled={loadingAdd || loadingUpdate}
+        >
+          {type === 'savedSearch' ? 'Simpan' : 'Lihat Hasil Filter'}
+        </BottomStickyButton>
+      </div>
     </form>
   )
 }

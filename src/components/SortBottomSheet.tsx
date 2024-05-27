@@ -20,7 +20,7 @@ export const LISTING_SORT_ENUM: { [key in ListingSort]: string } = {
   buildingSize: 'Luas Bangunan',
 }
 
-const SORT_OPTIONS = [
+export const SORT_OPTIONS = [
   {
     label: 'Harga Termurah',
     value: 'price',

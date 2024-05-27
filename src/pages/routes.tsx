@@ -2,6 +2,7 @@ import Header from 'components/header/Header'
 import FooterIcons from 'components/footer/FooterIcons'
 import { createBrowserRouter, Outlet } from 'react-router-dom'
 import ScrollRestoration from 'components/ScrollRestoration'
+import MainLayout from 'components/layout/MainLayout'
 
 import AuthenticationWrapper from './AuthWrapper'
 import AddPage from './listings/add'
@@ -32,37 +33,37 @@ const router = createBrowserRouter(
         {
           path: '/',
           element: (
-            <>
+            <MainLayout>
               <Header title="Listing Saya" isWithShareButton={true} />
               <ListingListPage />
               <FooterIcons />
-            </>
+            </MainLayout>
           ),
         },
         {
           path: '/listings/:id',
           element: (
-            <>
+            <MainLayout>
               <ListingDetailPage />
-            </>
+            </MainLayout>
           ),
         },
         {
           path: '/listings/add',
           element: (
-            <>
+            <MainLayout>
               <Header title="Tambah Listing" />
               <AddPage />
-            </>
+            </MainLayout>
           ),
         },
         {
           path: '/listings/add/simpleform',
           element: (
-            <>
+            <MainLayout>
               <Header title="Tambah Listing Cara Cepat" />
               <SimpleForm />
-            </>
+            </MainLayout>
           ),
         },
         {
@@ -77,29 +78,29 @@ const router = createBrowserRouter(
         {
           path: '/listings/edit/:id',
           element: (
-            <>
+            <MainLayout>
               <Header title="Data Listing" />
               <EditListingPage />
-            </>
+            </MainLayout>
           ),
         },
         {
           path: '/user',
           element: (
-            <>
+            <MainLayout>
               <Header title="Data Pribadi" />
               <EditUserPage />
-            </>
+            </MainLayout>
           ),
         },
         {
           path: '/properties',
           element: (
-            <>
+            <MainLayout>
               <Header title="Daftar Properti" isWithoutBackButton={true} />
               <PropertyListPage />
               <FooterIcons />
-            </>
+            </MainLayout>
           ),
         },
         {
@@ -114,37 +115,37 @@ const router = createBrowserRouter(
         {
           path: '/properties/:id',
           element: (
-            <>
+            <MainLayout>
               <Header title="Properti" />
               <PropertyDetailPage />
-            </>
+            </MainLayout>
           ),
         },
         {
           path: '/saved-searches',
           element: (
-            <>
+            <MainLayout>
               <Header title="Permintaan" />
               <SavedSearchListPage />
-            </>
+            </MainLayout>
           ),
         },
         {
           path: '/saved-searches/add',
           element: (
-            <>
+            <MainLayout>
               <Header title="Tambah Permintaan" />
               <SavedSearchFormPage />
-            </>
+            </MainLayout>
           ),
         },
         {
           path: '/saved-searches/edit',
           element: (
-            <>
+            <MainLayout>
               <Header title="Edit Permintaan" />
               <SavedSearchFormPage />
-            </>
+            </MainLayout>
           ),
         },
         {

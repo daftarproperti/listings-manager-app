@@ -18,7 +18,7 @@ const FooterIcons: React.FC<FooterIconsProps> = () => {
     isActive ? 'text-blue-500' : 'text-slate-500'
 
   return (
-    <footer className="fixed bottom-0 h-20 w-full max-w-lg border-t border-slate-300 bg-white py-1">
+    <footer className="fixed bottom-0 h-20 w-full border-t border-slate-300 bg-white py-1 lg:hidden">
       <div className="flex w-full justify-between">
         <Link
           to="/"

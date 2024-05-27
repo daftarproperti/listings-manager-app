@@ -13,7 +13,7 @@ const queryClient = new QueryClient()
 const App = () => (
   <>
     <BackButton />
-    <main className="mx-auto h-auto min-h-screen max-w-lg bg-white font-inter text-gray-950">
+    <main className="mx-auto h-auto min-h-screen w-full bg-white font-inter text-slate-800">
       <ThemeProvider>
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={routes} />
