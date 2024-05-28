@@ -293,3 +293,51 @@ export const uploadImage = async (file: File) => {
     return null
   }
 }
+
+export const sendOTP = async (
+  phoneNumber: string,
+): Promise<{ token: string; timestamp: number }> => {
+  try {
+    const response = await axios.post(
+      '/send-otp',
+      { phoneNumber },
+      { baseURL: `${import.meta.env.VITE_DP_HOME}/api/auth` },
+    )
+    return response.data
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 429) {
+      throw new Error(
+        'Too many attempts, please wait 1 minute before trying again.',
+      )
+    }
+    throw new Error('Failed to send verification code. Please try again.')
+  }
+}
+
+export const verifyOTP = async (
+  phoneNumber: string,
+  token: string,
+  timestamp: number,
+  otpCode: string,
+): Promise<{ accessToken: string }> => {
+  try {
+    const response = await axios.post(
+      '/verify-otp',
+      {
+        phoneNumber,
+        token,
+        timestamp,
+        otpCode,
+      },
+      { baseURL: `${import.meta.env.VITE_DP_HOME}/api/auth` },
+    )
+    return response.data
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 429) {
+      throw new Error(
+        'Too many attempts, please wait 1 minute before trying again.',
+      )
+    }
+    throw new Error('Failed to verify the otpCode. Please try again.')
+  }
+}

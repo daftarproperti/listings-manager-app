@@ -5,6 +5,8 @@ import ScrollRestoration from 'components/ScrollRestoration'
 import MainLayout from 'components/layout/MainLayout'
 
 import AuthenticationWrapper from './AuthWrapper'
+import LoginPage from './auth/login'
+import VerifyPage from './auth/verify'
 import AddPage from './listings/add'
 import ListingDetailPage from './listings/detail'
 import EditListingPage from './listings/edit'
@@ -21,6 +23,22 @@ import NotFoundPage from './NotFoundPage'
 
 const router = createBrowserRouter(
   [
+    {
+      path: '/login',
+      element: (
+        <>
+          <LoginPage />
+        </>
+      ),
+    },
+    {
+      path: '/verify',
+      element: (
+        <>
+          <VerifyPage />
+        </>
+      ),
+    },
     {
       path: '/',
       element: (

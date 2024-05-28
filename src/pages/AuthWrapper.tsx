@@ -1,5 +1,6 @@
 import { checkAuth } from 'api/queries'
 import { type ReactNode, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import LoadingPage from './Loading'
 import TelegramAuthPage from './telegram-auth'
@@ -9,6 +10,7 @@ const AuthenticationWrapper = ({ children }: { children: ReactNode }) => {
   const [isAuth, setIsAuth] = useState<boolean | undefined>(
     xInitData ? true : undefined,
   )
+  const navigate = useNavigate()
 
   // Initialize authentication state just once
   useEffect(() => {
@@ -20,6 +22,12 @@ const AuthenticationWrapper = ({ children }: { children: ReactNode }) => {
     }
     initAuth()
   }, [])
+
+  useEffect(() => {
+    if (isAuth === false) {
+      navigate('/login')
+    }
+  }, [isAuth, navigate])
 
   if (import.meta.env.VITE_ENV === 'production') {
     return (

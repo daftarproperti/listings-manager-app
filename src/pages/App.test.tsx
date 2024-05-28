@@ -2,10 +2,19 @@ import { vi } from 'vitest'
 import axios from 'axios'
 import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
+import * as reactRouterDom from 'react-router-dom'
 
 import App from './App'
 
 vi.mock('axios')
+vi.mock('react-router-dom', async () => {
+  const actual =
+    await vi.importActual<typeof reactRouterDom>('react-router-dom')
+  return {
+    ...actual,
+    useNavigate: vi.fn(),
+  }
+})
 
 // async utility to insert intentional response delay
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
@@ -16,17 +25,17 @@ describe('App', () => {
     vi.resetAllMocks()
   })
 
-  test('authentication failure', async () => {
+  test('Render login page at the start of the app', async () => {
+    const mockedNavigate = vi.fn()
+    vi.mocked(reactRouterDom.useNavigate).mockReturnValue(mockedNavigate)
+
     vi.mocked(axios.get).mockImplementation(() => {
       return Promise.reject(new Error('Page not found'))
     })
 
     render(<App />)
-    expect(screen.getByText('Authenticating...')).toBeInTheDocument()
-    await waitFor(() =>
-      expect(screen.queryByText('Authenticating...')).not.toBeInTheDocument(),
-    )
-    expect(screen.getByText('Log in dengan Telegram')).toBeInTheDocument()
+
+    await waitFor(() => expect(mockedNavigate).toHaveBeenCalledWith('/login'))
   })
 
   test('authentication successful, bad response', async () => {
