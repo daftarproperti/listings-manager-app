@@ -84,6 +84,45 @@ export const FILTER_OPTIONS = {
       },
     ],
   },
+  rentPriceRange: {
+    options: [
+      {
+        label: '< 20jt',
+        minValue: 0,
+        minStringValue: 'Rp 0',
+        maxValue: 20000000,
+        maxStringValue: 'Rp 20.000.000',
+      },
+      {
+        label: '< 40jt',
+        minValue: 0,
+        minStringValue: 'Rp 0',
+        maxValue: 40000000,
+        maxStringValue: 'Rp 40.000.000',
+      },
+      {
+        label: '< 60jt',
+        minValue: 0,
+        minStringValue: 'Rp 0',
+        maxValue: 60000000,
+        maxStringValue: 'Rp 60.000.000',
+      },
+      {
+        label: '< 80jt',
+        minValue: 0,
+        minStringValue: 'Rp 0',
+        maxValue: 80000000,
+        maxStringValue: 'Rp 80.000.000',
+      },
+      {
+        label: '> 100jt',
+        minValue: 100000000,
+        minStringValue: 'Rp 100.000.000',
+        maxValue: '',
+        maxStringValue: '',
+      },
+    ],
+  },
   propertyType: {
     options: Object.keys(PROPERTY_TYPE_ENUM).map((value) => ({
       label: PROPERTY_TYPE_ENUM[value as PropertyType],

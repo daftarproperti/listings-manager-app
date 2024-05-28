@@ -37,7 +37,11 @@ const ButtonFilterChip = ({
 export const filterKeyStrings = {
   minPrice: 'price[min]',
   maxPrice: 'price[max]',
+  minRentPrice: 'rentPrice[min]',
+  maxRentPrice: 'rentPrice[max]',
   propertyType: 'propertyType',
+  listingForSale: 'listingForSale',
+  listingForRent: 'listingForRent',
   bedroomCount: 'bedroomCount[min]',
   bathroomCount: 'bathroomCount[min]',
   minLotSize: 'lotSize[min]',
@@ -63,11 +67,36 @@ const FilterForm = ({ type }: FilterFormProps) => {
   const { mutate: updateSearch, isPending: loadingUpdate } =
     useUpdateSavedSearch()
 
-  const controlSearchParams = (key: string, value?: string) => {
+  const listingForRent =
+    searchParams.get(filterKeyStrings.listingForRent) === 'true'
+  const listingForSale =
+    searchParams.get(filterKeyStrings.listingForSale) === 'true'
+
+  const controlSearchParams = (
+    key: string,
+    value?: string,
+    exclusiveKey?: string,
+  ) => {
+    if (exclusiveKey) {
+      searchParams.delete(exclusiveKey)
+
+      if (exclusiveKey === 'listingForSale') {
+        searchParams.delete(filterKeyStrings.minPrice)
+        searchParams.delete(filterKeyStrings.maxPrice)
+      } else if (exclusiveKey === 'listingForRent') {
+        searchParams.delete(filterKeyStrings.minRentPrice)
+        searchParams.delete(filterKeyStrings.maxRentPrice)
+      }
+    }
+
     searchParams.delete(key)
-    if (value) {
+
+    if (value === undefined || value === null || value === '') {
+      searchParams.delete(key)
+    } else {
       searchParams.set(key, value)
     }
+
     setSearchParams(searchParams, { replace: true })
   }
 
@@ -140,76 +169,200 @@ const FilterForm = ({ type }: FilterFormProps) => {
             </div>
           </>
         )}
-        <div className="w-full text-lg font-semibold leading-7 lg:text-sm lg:font-bold lg:uppercase lg:text-slate-500">
-          Harga
+        <div className="w-full text-lg font-semibold leading-7 text-slate-800">
+          Tampilkan
         </div>
-        <div className="mt-1 flex w-full justify-between gap-2">
-          <div className="relative flex grow gap-1 rounded-lg border border-solid border-slate-400 bg-white">
-            <NumericFormat
-              placeholder="Rp Minimum"
-              thousandSeparator="."
-              decimalSeparator=","
-              prefix="Rp "
-              decimalScale={2}
-              value={searchParams.get(filterKeyStrings.minPrice) ?? ''}
-              onValueChange={(event) =>
-                controlSearchParams(filterKeyStrings.minPrice, event.value)
-              }
-              className="h-full w-full rounded-lg border-none p-3 py-2.5 ring-0"
-            />
-          </div>
-          <div className="relative flex grow gap-1 rounded-lg border border-solid border-slate-400 bg-white">
-            <NumericFormat
-              thousandSeparator="."
-              decimalSeparator=","
-              prefix="Rp "
-              decimalScale={2}
-              placeholder="Rp Maximum"
-              value={searchParams.get(filterKeyStrings.maxPrice) ?? ''}
-              onValueChange={(event) =>
-                controlSearchParams(filterKeyStrings.maxPrice, event.value)
-              }
-              className="h-full w-full rounded-lg border-none p-3 py-2.5 ring-0"
-            />
-          </div>
+        <div className="mb-5 mt-1 flex w-full gap-2">
+          <ButtonFilterChip
+            key="forSale"
+            isActive={
+              searchParams.get(filterKeyStrings.listingForSale) === 'true'
+            }
+            onClick={() =>
+              controlSearchParams(
+                filterKeyStrings.listingForSale,
+                searchParams.get(filterKeyStrings.listingForSale) === 'true'
+                  ? 'false'
+                  : 'true',
+                filterKeyStrings.listingForRent,
+              )
+            }
+          >
+            Dijual
+          </ButtonFilterChip>
+          <ButtonFilterChip
+            key="forRent"
+            isActive={
+              searchParams.get(filterKeyStrings.listingForRent) === 'true'
+            }
+            onClick={() =>
+              controlSearchParams(
+                filterKeyStrings.listingForRent,
+                searchParams.get(filterKeyStrings.listingForRent) === 'true'
+                  ? 'false'
+                  : 'true',
+                filterKeyStrings.listingForSale,
+              )
+            }
+          >
+            Disewakan
+          </ButtonFilterChip>
         </div>
-        <span className="self-stretch text-sm text-red-500">
-          {validationMessage('price')}
-        </span>
-        <div className="mt-2 inline-grid grid-cols-3 gap-2">
-          {FILTER_OPTIONS.priceRange.options.map((option, index) => {
-            const isActive =
-              searchParams.get(filterKeyStrings.minPrice) ===
-                option.minValue.toString() &&
-              (searchParams.get(filterKeyStrings.maxPrice) ?? '') ===
-                option.maxValue.toString()
-            return (
-              <ButtonFilterChip
-                key={index}
-                type="button"
-                isActive={isActive}
-                onClick={() => {
-                  if (isActive) {
-                    searchParams.delete(filterKeyStrings.minPrice)
-                    searchParams.delete(filterKeyStrings.maxPrice)
-                  } else {
-                    searchParams.set(
-                      filterKeyStrings.minPrice,
-                      option.minValue.toString(),
-                    )
-                    searchParams.set(
-                      filterKeyStrings.maxPrice,
-                      option.maxValue.toString(),
+        {(!listingForRent || listingForSale) && (
+          <>
+            <div className="w-full text-lg font-semibold leading-7 lg:text-sm lg:font-bold lg:uppercase lg:text-slate-500">
+              Harga Jual
+            </div>
+            <div className="mt-1 flex w-full justify-between gap-2">
+              <div className="relative flex grow gap-1 rounded-lg border border-solid border-slate-400 bg-white">
+                <NumericFormat
+                  placeholder="Rp Minimum"
+                  thousandSeparator="."
+                  decimalSeparator=","
+                  prefix="Rp "
+                  decimalScale={2}
+                  value={searchParams.get(filterKeyStrings.minPrice) ?? ''}
+                  onValueChange={(event) =>
+                    controlSearchParams(filterKeyStrings.minPrice, event.value)
+                  }
+                  className="h-full w-full rounded-lg border-none p-3 py-2.5 ring-0"
+                />
+              </div>
+              <div className="relative flex grow gap-1 rounded-lg border border-solid border-slate-400 bg-white">
+                <NumericFormat
+                  thousandSeparator="."
+                  decimalSeparator=","
+                  prefix="Rp "
+                  decimalScale={2}
+                  placeholder="Rp Maximum"
+                  value={searchParams.get(filterKeyStrings.maxPrice) ?? ''}
+                  onValueChange={(event) =>
+                    controlSearchParams(filterKeyStrings.maxPrice, event.value)
+                  }
+                  className="h-full w-full rounded-lg border-none p-3 py-2.5 ring-0"
+                />
+              </div>
+            </div>
+            <span className="self-stretch text-sm text-red-500">
+              {validationMessage('price')}
+            </span>
+            <div className="mt-2 inline-grid grid-cols-3 gap-2">
+              {FILTER_OPTIONS.priceRange.options.map((option, index) => {
+                const isActive =
+                  searchParams.get(filterKeyStrings.minPrice) ===
+                    option.minValue.toString() &&
+                  (searchParams.get(filterKeyStrings.maxPrice) ?? '') ===
+                    option.maxValue.toString()
+                return (
+                  <ButtonFilterChip
+                    key={index}
+                    type="button"
+                    isActive={isActive}
+                    onClick={() => {
+                      if (isActive) {
+                        searchParams.delete(filterKeyStrings.minPrice)
+                        searchParams.delete(filterKeyStrings.maxPrice)
+                      } else {
+                        searchParams.set(
+                          filterKeyStrings.minPrice,
+                          option.minValue.toString(),
+                        )
+                        searchParams.set(
+                          filterKeyStrings.maxPrice,
+                          option.maxValue.toString(),
+                        )
+                      }
+                      setSearchParams(searchParams, { replace: true })
+                    }}
+                  >
+                    {option.label}
+                  </ButtonFilterChip>
+                )
+              })}
+            </div>
+          </>
+        )}
+        {listingForRent && (
+          <>
+            <div className="w-full text-lg font-semibold leading-7 lg:text-sm lg:font-bold lg:uppercase lg:text-slate-500">
+              Harga Sewa per tahun
+            </div>
+            <div className="mt-1 flex w-full justify-between gap-2">
+              <div className="relative flex grow gap-1 rounded-lg border border-solid border-slate-400 bg-white">
+                <NumericFormat
+                  placeholder="Rp Minimum"
+                  thousandSeparator="."
+                  decimalSeparator=","
+                  prefix="Rp "
+                  decimalScale={2}
+                  value={searchParams.get(filterKeyStrings.minRentPrice) ?? ''}
+                  onValueChange={(event) =>
+                    controlSearchParams(
+                      filterKeyStrings.minRentPrice,
+                      event.value,
                     )
                   }
-                  setSearchParams(searchParams, { replace: true })
-                }}
-              >
-                {option.label}
-              </ButtonFilterChip>
-            )
-          })}
-        </div>
+                  className="h-full w-full rounded-lg border-none p-3 py-2.5 ring-0"
+                />
+              </div>
+              <div className="relative flex grow gap-1 rounded-lg border border-solid border-slate-400 bg-white">
+                <NumericFormat
+                  thousandSeparator="."
+                  decimalSeparator=","
+                  prefix="Rp "
+                  decimalScale={2}
+                  placeholder="Rp Maximum"
+                  value={searchParams.get(filterKeyStrings.maxRentPrice) ?? ''}
+                  onValueChange={(event) =>
+                    controlSearchParams(
+                      filterKeyStrings.maxRentPrice,
+                      event.value,
+                    )
+                  }
+                  className="h-full w-full rounded-lg border-none p-3 py-2.5 ring-0"
+                />
+              </div>
+            </div>
+            <span className="self-stretch text-sm text-red-500">
+              {validationMessage('price')}
+            </span>
+            <div className="mt-2 inline-grid grid-cols-3 gap-2">
+              {FILTER_OPTIONS.rentPriceRange.options.map((option, index) => {
+                const isActive =
+                  searchParams.get(filterKeyStrings.minRentPrice) ===
+                    option.minValue.toString() &&
+                  (searchParams.get(filterKeyStrings.maxRentPrice) ?? '') ===
+                    option.maxValue.toString()
+                return (
+                  <ButtonFilterChip
+                    key={index}
+                    type="button"
+                    isActive={isActive}
+                    onClick={() => {
+                      if (isActive) {
+                        searchParams.delete(filterKeyStrings.minRentPrice)
+                        searchParams.delete(filterKeyStrings.maxRentPrice)
+                      } else {
+                        searchParams.set(
+                          filterKeyStrings.minRentPrice,
+                          option.minValue.toString(),
+                        )
+                        searchParams.set(
+                          filterKeyStrings.maxRentPrice,
+                          option.maxValue.toString(),
+                        )
+                      }
+                      setSearchParams(searchParams, { replace: true })
+                    }}
+                  >
+                    {option.label}
+                  </ButtonFilterChip>
+                )
+              })}
+            </div>
+          </>
+        )}
+
         <div className="mt-6 w-full text-lg font-semibold leading-7 lg:text-sm lg:font-bold lg:uppercase lg:text-slate-500">
           Tipe Properti
         </div>

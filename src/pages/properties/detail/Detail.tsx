@@ -88,7 +88,15 @@ function PropertyDetail({ id }: { id: string }) {
                   {data?.title}
                 </h1>
                 <div className="text-2xl font-semibold leading-8 text-slate-800">
-                  {formatCurrencyToIDRText(data?.price)}
+                  {data.listingForSale && !data.listingForRent
+                    ? formatCurrencyToIDRText(data.price)
+                    : data.listingForRent && !data.listingForSale
+                      ? formatCurrencyToIDRText(data.rentPrice) + ' per tahun'
+                      : `${formatCurrencyToIDRText(
+                          data.price,
+                        )} / ${formatCurrencyToIDRText(
+                          data.rentPrice,
+                        )} per tahun`}
                 </div>
                 <div className="mt-1.5 line-clamp-3 text-xs leading-4 text-slate-500">
                   {data?.address}

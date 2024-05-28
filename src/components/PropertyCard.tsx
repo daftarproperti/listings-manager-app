@@ -7,13 +7,38 @@ import {
   appPath,
   getLabelForValue,
 } from 'utils'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '@material-tailwind/react'
 
 const PropertyCard = ({ data }: { data: Property }) => {
   const navigate = useNavigate()
+  const location = useLocation()
+
   const onClickCard = (id: string) => {
     navigate(`/properties/${id}`)
+  }
+
+  const searchParams = new URLSearchParams(location.search)
+  const listingForSaleParam = searchParams.get('listingForSale') === 'true'
+  const listingForRentParam = searchParams.get('listingForRent') === 'true'
+
+  const getPriceDisplay = (data: Property) => {
+    if (listingForSaleParam) return formatCurrencyToIDRText(data.price)
+    if (listingForRentParam)
+      return `${formatCurrencyToIDRText(data.rentPrice)} per tahun`
+    if (!listingForSaleParam && !listingForRentParam) {
+      if (data.listingForSale && data.listingForRent) {
+        return `${formatCurrencyToIDRText(
+          data.price,
+        )} / ${formatCurrencyToIDRText(data.rentPrice)} per tahun`
+      } else if (data.listingForSale) {
+        return formatCurrencyToIDRText(data.price)
+      } else if (data.listingForRent) {
+        return `${formatCurrencyToIDRText(data.rentPrice)} per tahun`
+      } else {
+        return formatCurrencyToIDRText(data.price)
+      }
+    }
   }
 
   const contact = data?.listings?.[0]?.user?.name
@@ -44,7 +69,7 @@ const PropertyCard = ({ data }: { data: Property }) => {
             <div className="text-xs leading-4 text-slate-500">{data.title}</div>
             <div className="mt-2 flex flex-col">
               <div className="text-2xl font-semibold leading-8 text-slate-800">
-                {formatCurrencyToIDRText(data.price)}
+                {getPriceDisplay(data)}
               </div>
               <div className="mt-1.5 line-clamp-3 text-xs leading-4 text-slate-500">
                 {data.address}

@@ -66,6 +66,15 @@ export interface paths {
     /** Delete saved searches */
     delete: operations["saved_searches.delete"];
   };
+  "/api/tele-app/telegram-users/profile": {
+    /**
+     * Get profile
+     * @description Returns user profile
+     */
+    get: operations["telegramProfile"];
+    /** Update profile */
+    post: operations["updateTelegramProfile"];
+  };
   "/api/tele-app/users/profile": {
     /**
      * Get profile
@@ -148,7 +157,16 @@ export interface components {
       company?: string;
       /**
        * Format: binary
-       * @example \x00\x00\x00\x04\x00\x00\x00\x04
+       * @example {
+       *   "0": 0,
+       *   "1": 0,
+       *   "2": 0,
+       *   "3": 4,
+       *   "4": 0,
+       *   "5": 0,
+       *   "6": 0,
+       *   "7": 4
+       * }
        */
       picture?: string;
       /** @example true */
@@ -188,8 +206,11 @@ export interface components {
       /** @description Collection */
       collection?: boolean | null;
       price?: components["schemas"]["FilterMinMax"];
+      rentPrice?: components["schemas"]["FilterMinMax"];
       propertyType?: components["schemas"]["PropertyType"];
       listingType?: components["schemas"]["ListingType"];
+      listingForSale?: boolean | null;
+      listingForRent?: boolean | null;
       bedroomCount?: components["schemas"]["FilterMinMax"];
       bathroomCount?: components["schemas"]["FilterMinMax"];
       lotSize?: components["schemas"]["FilterMinMax"];
@@ -270,6 +291,9 @@ export interface components {
       user?: {
         name?: string;
         profilePictureURL?: string;
+        city?: string;
+        company?: string;
+        description?: string;
         phoneNumber?: string;
       };
       userCanEdit?: boolean;
@@ -337,38 +361,24 @@ export interface components {
       /** @example I am a programmer */
       description?: string;
       /** @example https://example.com/image.jpg */
-      pricture?: string;
-      /** @example Google */
-      company?: string;
-      /** @example true */
-      isPublicProfile?: boolean;
-    };
-    UserProfile: {
-      /** @example John Doe */
-      name?: string;
-      /** @example I am a programmer */
-      description?: string;
-      /** @example New York */
-      city?: string;
-      /** @example https://example.com/image.jpg */
       picture?: string;
       /** @example Google */
       company?: string;
-      /** @example Jakarta */
-      cityOfOperation?: string;
       /** @example true */
       isPublicProfile?: boolean;
     };
     User: {
       id?: string;
-      firstName?: string;
-      lastName?: string;
       username?: string;
       phoneNumber?: string;
       accountType?: components["schemas"]["AccountType"];
       email?: string;
-      password?: string;
-      profile?: components["schemas"]["UserProfile"];
+      name?: string;
+      city?: string;
+      description?: string;
+      picture?: string;
+      company?: string;
+      isPublicProfile?: boolean;
     };
   };
   responses: never;
@@ -464,8 +474,16 @@ export interface operations {
         "price[min]"?: number;
         /** @description Maximum price */
         "price[max]"?: number;
+        /** @description Minimum rent price */
+        "rentPrice[min]"?: number;
+        /** @description Maximum rent price */
+        "rentPrice[max]"?: number;
         /** @description Property type */
         propertyType?: components["schemas"]["PropertyType"];
+        /** @description Listing for sale */
+        listingForSale?: boolean;
+        /** @description Listing for rent */
+        listingForRent?: boolean;
         /** @description Bedroom count */
         bedroomCount?: number;
         /** @description Minimum Bedroom count */
@@ -659,8 +677,16 @@ export interface operations {
         "price[min]"?: number;
         /** @description Maximum price */
         "price[max]"?: number;
+        /** @description Minimum rent price */
+        "rentPrice[min]"?: number;
+        /** @description Maximum rent price */
+        "rentPrice[max]"?: number;
         /** @description Property type */
         propertyType?: components["schemas"]["PropertyType"];
+        /** @description Listing for sale */
+        listingForSale?: boolean;
+        /** @description Listing for rent */
+        listingForRent?: boolean;
         /** @description Bedroom count */
         bedroomCount?: number;
         /** @description Minimum Bedroom count */
@@ -854,6 +880,36 @@ export interface operations {
             /** @example Saved search not found */
             error?: string;
           };
+        };
+      };
+    };
+  };
+  /**
+   * Get profile
+   * @description Returns user profile
+   */
+  telegramProfile: {
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TelegramUserProfile"];
+        };
+      };
+    };
+  };
+  /** Update profile */
+  updateTelegramProfile: {
+    requestBody: {
+      content: {
+        "multipart/form-data": components["schemas"]["TelegramUserProfileRequest"];
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TelegramUserProfile"];
         };
       };
     };

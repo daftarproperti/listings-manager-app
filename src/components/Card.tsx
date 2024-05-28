@@ -2,17 +2,42 @@ import { type Listing } from 'api/types'
 import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
 import ImageWithAuth from 'components/ImageWithAuth'
 import { formatCurrencyToIDRText, getLabelForValue } from 'utils'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '@material-tailwind/react'
 import { EyeIcon } from '@heroicons/react/24/solid'
 
 const Card = ({ data }: { data: Listing }) => {
   const navigate = useNavigate()
+  const location = useLocation()
+
   const navigateToEditForm = (id: string) => {
     navigate(`/listings/edit/${id}`)
   }
   const onClickCard = (id: string) => {
     navigate(`/listings/${id}`)
+  }
+
+  const searchParams = new URLSearchParams(location.search)
+  const listingForSaleParam = searchParams.get('listingForSale') === 'true'
+  const listingForRentParam = searchParams.get('listingForRent') === 'true'
+
+  const getPriceDisplay = (data: Listing) => {
+    if (listingForSaleParam) return formatCurrencyToIDRText(data.price)
+    if (listingForRentParam)
+      return `${formatCurrencyToIDRText(data.rentPrice)} per tahun`
+    if (!listingForSaleParam && !listingForRentParam) {
+      if (data.listingForSale && data.listingForRent) {
+        return `${formatCurrencyToIDRText(
+          data.price,
+        )} / ${formatCurrencyToIDRText(data.rentPrice)} per tahun`
+      } else if (data.listingForSale) {
+        return formatCurrencyToIDRText(data.price)
+      } else if (data.listingForRent) {
+        return `${formatCurrencyToIDRText(data.rentPrice)} per tahun`
+      } else {
+        return formatCurrencyToIDRText(data.price)
+      }
+    }
   }
 
   return (
@@ -34,7 +59,7 @@ const Card = ({ data }: { data: Listing }) => {
             <div className="text-xs leading-4 text-slate-500">{data.title}</div>
             <div className="mt-2 flex flex-col">
               <div className="text-2xl font-semibold leading-8 text-slate-800">
-                {formatCurrencyToIDRText(data.price)}
+                {getPriceDisplay(data)}
               </div>
               <div className="mt-1.5 line-clamp-3 text-xs leading-4 text-slate-500">
                 {data.address}
