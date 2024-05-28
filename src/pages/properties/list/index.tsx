@@ -6,22 +6,27 @@ import {
 } from '@heroicons/react/24/solid'
 import { XCircleIcon } from '@heroicons/react/24/outline'
 import { Badge, Button } from '@material-tailwind/react'
-import { useGetPropertyList } from 'api/queries'
 import { Fragment, useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import SortBottomSheet from 'components/SortBottomSheet'
-import { countActiveFilters, isSorted } from 'utils'
+import { useGetPropertyList } from 'api/queries'
+import { countActiveFilters, isSavedSearchApplied, isSorted } from 'utils'
+import { AccountIconSVG } from 'assets/icons'
 import PropertyCard from 'components/PropertyCard'
+import SortBottomSheet from 'components/SortBottomSheet'
+import SavedSearchSheet from 'components/SavedSearchSheet'
 
 const PropertyListPage = () => {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const { ref: fetchMoreRef, inView: isFetchMoreInView } = useInView()
   const [isFilterBottomSheetOpen, setIsFilterBottomBarOpen] = useState(false)
+  const [isSavedSearchSheetOpen, setIsSavedSearchSheetOpen] = useState(false)
 
   const [isSortedList, setIsSortedList] = useState(false)
   const [activeFilterCount, setActiveFilterCount] = useState(0)
   const [searchText, setSearchText] = useState(searchParams?.get('q') ?? '')
+
+  const savedSearchTitle = isSavedSearchApplied(searchParams)
 
   const {
     data,
@@ -69,8 +74,8 @@ const PropertyListPage = () => {
 
   return (
     <>
-      <div className="flex min-h-dvh w-full flex-col pb-20 pt-16">
-        <div className="bg-white p-4">
+      <div className="flex min-h-dvh w-full flex-col pb-20 pt-16 lg:p-0">
+        <div className="bg-white p-4 lg:hidden">
           <div className="relative mb-4">
             <MagnifyingGlassIcon className="absolute left-2 top-[50%] h-4 w-4 -translate-y-[50%] text-slate-400" />
             <input
@@ -82,8 +87,8 @@ const PropertyListPage = () => {
               onChange={handleChangeSearchText}
             />
           </div>
-          <div className="mb-0">
-            <div className="flex flex-row gap-2">
+          <div className="mb-2 flex flex-wrap justify-between gap-2">
+            <div className="flex grow gap-2">
               <Badge
                 content={activeFilterCount}
                 invisible={activeFilterCount === 0}
@@ -94,7 +99,7 @@ const PropertyListPage = () => {
                     size="sm"
                     color="blue"
                     variant="outlined"
-                    className="relative flex items-center gap-1.5 text-sm font-normal capitalize"
+                    className="flex items-center gap-1.5 text-sm font-normal capitalize"
                   >
                     <AdjustmentsHorizontalIcon className="w-5" />
                     Filter
@@ -117,21 +122,37 @@ const PropertyListPage = () => {
                   Urutkan
                 </Button>
               </Badge>
-              {searchParams?.size > 0 && (
-                <Button
-                  size="sm"
-                  color="blue"
-                  className="flex items-center gap-1.5 text-sm font-normal capitalize"
-                  onClick={() => onClickReset(true)}
-                >
-                  <XCircleIcon className="w-5" />
-                  Reset
-                </Button>
-              )}
             </div>
+            {searchParams?.size > 0 && (
+              <Button
+                size="sm"
+                color="blue"
+                className="flex items-center gap-1.5 text-sm font-normal capitalize"
+                onClick={() => onClickReset(true)}
+              >
+                <XCircleIcon className="w-5" />
+                Reset
+              </Button>
+            )}
+            {import.meta.env.VITE_PHASE1 === 'true' && (
+              <Button
+                size="sm"
+                color="blue"
+                variant="outlined"
+                className="flex grow items-center justify-center gap-1.5 text-sm font-normal capitalize md:grow-0"
+                onClick={() => setIsSavedSearchSheetOpen(true)}
+              >
+                <AccountIconSVG className="h-5 w-5" />
+                {savedSearchTitle}
+              </Button>
+            )}
           </div>
         </div>
-        <div className="flex grow flex-col bg-slate-100 p-4">
+        <div className="sticky top-0 z-10 hidden items-center justify-between bg-slate-100 p-4 pt-8 lg:flex">
+          <div className="text-lg">Daftar Properti</div>
+        </div>
+
+        <div className="flex grow flex-col bg-slate-100 p-4 lg:pt-0">
           {isError ? (
             <div className="my-auto text-center">Error: {error.message}</div>
           ) : isFetching && !isFetchingNextPage ? (
@@ -166,9 +187,18 @@ const PropertyListPage = () => {
           )}
         </div>
       </div>
+
+      {data?.pages[0].properties?.length && !isFetching ? (
+        <hr className="mb-8 mt-4 hidden border-2 lg:block" />
+      ) : null}
+
       <SortBottomSheet
         isOpen={isFilterBottomSheetOpen}
         setIsOpen={setIsFilterBottomBarOpen}
+      />
+      <SavedSearchSheet
+        isOpen={isSavedSearchSheetOpen}
+        setIsOpen={setIsSavedSearchSheetOpen}
       />
     </>
   )

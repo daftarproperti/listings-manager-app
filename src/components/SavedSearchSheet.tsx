@@ -8,7 +8,8 @@ import {
 import { type Dispatch, type SetStateAction } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { savedSearchToSearchParams } from 'utils'
-import { type SavedSearchListRes, type SavedSearch } from 'api/types'
+import { useGetSavedSearchList } from 'api/queries'
+import type { SavedSearch } from 'api/types'
 import BottomSheet from 'react-draggable-bottom-sheet'
 
 import BottomStickyButton from './button/BottomStickyButton'
@@ -16,14 +17,14 @@ import BottomStickyButton from './button/BottomStickyButton'
 const SavedSearchSheet = ({
   isOpen,
   setIsOpen,
-  savedSearches,
 }: {
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
-  savedSearches: SavedSearchListRes
 }) => {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
+
+  const { data } = useGetSavedSearchList()
 
   const handleClickSearch = (search: SavedSearch) => {
     if (searchParams.get('searchId') === search.id) {
@@ -42,21 +43,17 @@ const SavedSearchSheet = ({
       isOpen={isOpen}
       close={() => setIsOpen(false)}
       classNames={{
-        draggable:
-          '!w-full !max-w-lg !mx-auto rounded-t-xl border border-slate-400',
+        draggable: '!w-full rounded-t-xl border border-slate-400',
       }}
     >
       <>
-        <div id="sheet-overlay" className="w-full cursor-pointer pt-3">
-          <div className="mx-auto h-1 w-12 rounded-full bg-slate-300" />
-        </div>
         <div data-no-drag className="mb-20 text-gray-800">
-          <div className="p-4 text-2xl font-semibold leading-8">
+          <div className="px-4 py-3 text-2xl font-semibold leading-8">
             Calon Pembeli
           </div>
-          {(savedSearches?.saved_searches?.length ?? 0) > 0 && (
+          {data?.saved_searches?.length ? (
             <List>
-              {savedSearches?.saved_searches?.map((search, index) => (
+              {data?.saved_searches?.map((search, index) => (
                 <ListItem
                   key={index}
                   className="p-0"
@@ -92,6 +89,10 @@ const SavedSearchSheet = ({
                 </ListItem>
               ))}
             </List>
+          ) : (
+            <div className="w-full text-center text-slate-500">
+              Belum ada permintaan
+            </div>
           )}
           <div className="flex justify-center">
             <BottomStickyButton onClick={() => navigate('/saved-searches')}>

@@ -5,18 +5,15 @@ import {
   MagnifyingGlassIcon,
   PlusIcon,
 } from '@heroicons/react/24/solid'
-import { useGetListingList, useGetSavedSearchList } from 'api/queries'
-import { type SavedSearchListRes } from 'api/types'
+import { useGetListingList } from 'api/queries'
 import NewListingSheet from 'components/NewListingSheet'
 import SortBottomSheet from 'components/SortBottomSheet'
-import SavedSearchSheet from 'components/SavedSearchSheet'
 import Card from 'components/Card'
 import { Fragment, useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { InformationCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
-import { countActiveFilters, isSorted, isSavedSearchApplied } from 'utils'
+import { countActiveFilters, isSorted } from 'utils'
 import { Badge, Button, IconButton } from '@material-tailwind/react'
-import { ArrowDownIconSVG } from 'assets/icons'
 
 const ListingListPage = () => {
   const navigate = useNavigate()
@@ -26,11 +23,8 @@ const ListingListPage = () => {
   const [isSortedList, setIsSortedList] = useState(false)
   const [activeFilterCount, setActiveFilterCount] = useState(0)
   const [isFilterBottomSheetOpen, setIsFilterBottomBarOpen] = useState(false)
-  const [isSavedSearchSheetOpen, setIsSavedSearchSheetOpen] = useState(false)
   const [isNewListingSheetOpen, setIsNewListingSheetOpen] = useState(false)
   const [searchText, setSearchText] = useState(searchParams?.get('q') ?? '')
-  const [savedSearches, setSavedSearches] = useState<SavedSearchListRes>({})
-  const [selectedSearchTitle, setSelectedSearchTitle] = useState('')
 
   const {
     data,
@@ -45,8 +39,6 @@ const ListingListPage = () => {
     searchParams,
   })
 
-  const { data: savedSearchData } = useGetSavedSearchList()
-
   const handleChangeSearchText = (event: React.ChangeEvent<HTMLInputElement>) =>
     setSearchText(event.target.value)
 
@@ -58,7 +50,6 @@ const ListingListPage = () => {
   useEffect(() => {
     refetch()
     setIsSortedList(isSorted(searchParams))
-    setSelectedSearchTitle(isSavedSearchApplied(searchParams))
     setActiveFilterCount(countActiveFilters(searchParams))
   }, [searchParams])
 
@@ -79,10 +70,6 @@ const ListingListPage = () => {
     if (isFetchMoreInView) fetchNextPage()
   }, [isFetchMoreInView])
 
-  useEffect(() => {
-    if (savedSearchData) setSavedSearches(savedSearchData)
-  }, [savedSearchData])
-
   return (
     <>
       <div className="flex min-h-dvh w-full flex-col bg-slate-100 pb-20 pt-16 lg:p-0">
@@ -99,70 +86,50 @@ const ListingListPage = () => {
               onChange={handleChangeSearchText}
             />
           </div>
-          <div className="flex flex-row justify-between gap-2">
-            <div className="flex flex-row gap-2">
-              <Badge
-                content={activeFilterCount}
-                invisible={activeFilterCount === 0}
-                className="min-h-5 min-w-5"
-              >
-                <Link to={`/listings/filter?${searchParams}`}>
-                  <Button
-                    size="sm"
-                    color="blue"
-                    variant="outlined"
-                    className="relative flex items-center gap-1.5 text-sm font-normal capitalize"
-                  >
-                    <AdjustmentsHorizontalIcon className="w-5" />
-                    Filter
-                  </Button>
-                </Link>
-              </Badge>
-              <Badge
-                content="1"
-                invisible={!isSortedList}
-                className="min-h-5 min-w-5"
-              >
+          <div className="flex flex-row gap-2">
+            <Badge
+              content={activeFilterCount}
+              invisible={activeFilterCount === 0}
+              className="min-h-5 min-w-5"
+            >
+              <Link to={`/listings/filter?${searchParams}`}>
                 <Button
                   size="sm"
                   color="blue"
                   variant="outlined"
                   className="relative flex items-center gap-1.5 text-sm font-normal capitalize"
-                  onClick={() => setIsFilterBottomBarOpen(true)}
                 >
-                  <Bars3BottomLeftIcon className="w-5" />
-                  Urutkan
+                  <AdjustmentsHorizontalIcon className="w-5" />
+                  Filter
                 </Button>
-              </Badge>
-              {searchParams?.size > 0 && (
-                <Button
-                  size="sm"
-                  color="blue"
-                  className="flex items-center gap-1.5 text-sm font-normal capitalize"
-                  onClick={() => onClickReset(true)}
-                >
-                  <XCircleIcon className="w-5" />
-                  Reset
-                </Button>
-              )}
-            </div>
-            {import.meta.env.VITE_PHASE1 === 'true' && (
-              <div>
-                <Badge invisible={true} className="min-h-5 min-w-5">
-                  <Button
-                    size="sm"
-                    color="blue"
-                    variant="outlined"
-                    className="relative flex items-center gap-1.5 text-sm font-normal capitalize"
-                    onClick={() => setIsSavedSearchSheetOpen(true)}
-                  >
-                    {selectedSearchTitle
-                      ? selectedSearchTitle
-                      : 'Calon Pembeli'}
-                    <ArrowDownIconSVG className="h-5 w-5" />
-                  </Button>
-                </Badge>
-              </div>
+              </Link>
+            </Badge>
+            <Badge
+              content="1"
+              invisible={!isSortedList}
+              className="min-h-5 min-w-5"
+            >
+              <Button
+                size="sm"
+                color="blue"
+                variant="outlined"
+                className="relative flex items-center gap-1.5 text-sm font-normal capitalize"
+                onClick={() => setIsFilterBottomBarOpen(true)}
+              >
+                <Bars3BottomLeftIcon className="w-5" />
+                Urutkan
+              </Button>
+            </Badge>
+            {searchParams?.size > 0 && (
+              <Button
+                size="sm"
+                color="blue"
+                className="flex items-center gap-1.5 text-sm font-normal capitalize"
+                onClick={() => onClickReset(true)}
+              >
+                <XCircleIcon className="w-5" />
+                Reset
+              </Button>
             )}
           </div>
         </div>
@@ -252,11 +219,6 @@ const ListingListPage = () => {
       <SortBottomSheet
         isOpen={isFilterBottomSheetOpen}
         setIsOpen={setIsFilterBottomBarOpen}
-      />
-      <SavedSearchSheet
-        isOpen={isSavedSearchSheetOpen}
-        setIsOpen={setIsSavedSearchSheetOpen}
-        savedSearches={savedSearches}
       />
       <NewListingSheet
         isOpen={isNewListingSheetOpen}
