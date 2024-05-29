@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { Button } from '@material-tailwind/react'
 import { useAddListing } from 'api/queries'
 import { type UpdateListingRequest } from 'api/types'
 import BottomStickyButton from 'components/button/BottomStickyButton'
@@ -12,14 +16,15 @@ import TextareaField from 'components/input/TextareaField'
 import InputCheckboxField from 'components/input/InputCheckboxField'
 import transformListingObjectToFormData from 'components/input/transformObjectToFormdata'
 import { LISTING_OPTIONS } from 'pages/listings/edit/dummy'
-import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
 
 const AddPage = () => {
+  const navigate = useNavigate()
+  const [formExistingImages, setFormExistingImages] = useState<string[]>([])
+  const [formNewImageFiles, setFormNewImageFiles] = useState<File[]>([])
   const [schema, setSchema] = useState(() =>
     getDynamicFormSchema(false, false, 'house'),
   )
+
   const {
     register,
     formState: { errors },
@@ -35,6 +40,8 @@ const AddPage = () => {
     },
     resolver: zodResolver(schema),
   })
+
+  const { mutate, isPending } = useAddListing()
 
   const listingForSale = watch('listingForSale', false)
   const listingForRent = watch('listingForRent', false)
@@ -55,16 +62,12 @@ const AddPage = () => {
     }
   }, [listingForSale, listingForRent, propertyType])
 
-  const [formExistingImages, setFormExistingImages] = useState<string[]>([])
-  const [formNewImageFiles, setFormNewImageFiles] = useState<File[]>([])
   const handleExistingImagesChange = (existingImages: string[]) => {
     setFormExistingImages(existingImages)
   }
   const handleNewFiles = (newFiles: File[]) => {
     setFormNewImageFiles(newFiles)
   }
-  const { mutate, isPending } = useAddListing()
-  const navigate = useNavigate()
 
   const onSubmit = async (data: UpdateListingRequest) => {
     const addNewListingPayload = await transformListingObjectToFormData({
@@ -86,18 +89,30 @@ const AddPage = () => {
   }
 
   return (
-    <form className="mx-auto max-w-lg pt-16" onSubmit={handleSubmit(onSubmit)}>
-      <div className="bg-fireBush-100 p-4 text-xs">
-        <b>Cara lebih cepat</b>: Salin dan tempelkan informasi listing Anda ke
-        bot Daftar Properti.
-      </div>
-      <div className="items-start justify-center whitespace-nowrap border-b border-solid border-b-[color:var(--slate-200,#E2E8F0)] bg-slate-50 py-3 pl-4 pr-16 text-sm font-semibold leading-5 text-slate-500">
+    <form
+      className="w-full bg-slate-50 pb-20 pt-16 lg:pb-4 lg:pt-0"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <div className="items-start justify-center whitespace-nowrap border-b border-solid border-slate-200 bg-slate-50 py-3 pl-4 pr-16 text-sm font-semibold leading-5 text-slate-500 lg:hidden">
         Lengkapi data dibawah ini
       </div>
-      <div className="bg-slate-50 p-4 pb-24">
+      <div className="sticky top-0 z-10 hidden items-center justify-between border-b bg-white p-4 pt-8 lg:flex">
+        <div className="text-xl font-semibold">Tambah Properti</div>
+        <Button
+          size="sm"
+          color="blue"
+          type="submit"
+          className="flex items-center gap-2 text-sm font-normal capitalize"
+          disabled={isPending}
+        >
+          Simpan
+        </Button>
+      </div>
+      <div className="p-4 lg:w-4/5">
         <InputFileField
+          label="Foto Properti"
+          additionalLabel="Maksimal 10 foto, format .jpg, .png, @10mb"
           registerHook={register('pictureUrls')}
-          dataListing={undefined}
           onNewFiles={handleNewFiles}
           onExistingImagesChange={handleExistingImagesChange}
           errorFieldName={errors.pictureUrls}
@@ -278,9 +293,11 @@ const AddPage = () => {
           />
         )}
       </div>
-      <BottomStickyButton type="submit" disabled={isPending}>
-        Simpan
-      </BottomStickyButton>
+      <div className="lg:hidden">
+        <BottomStickyButton type="submit" disabled={isPending}>
+          Simpan
+        </BottomStickyButton>
+      </div>
     </form>
   )
 }

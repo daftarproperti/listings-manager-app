@@ -5,17 +5,21 @@ import { getMobileOperatingSystem, useImageHandler } from 'utils'
 import AlertDialog from 'components/AlertDialog'
 import { Button } from '@material-tailwind/react'
 import WebApp from '@twa-dev/sdk'
+import { CameraIcon } from '@heroicons/react/24/solid'
 
 type InputFileProps = {
+  label: string
+  additionalLabel?: string
   registerHook: UseFormRegisterReturn<string>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  dataListing: any
+  dataListing?: { pictureUrls?: string[] }
   onNewFiles: (newFiles: File[]) => void
   onExistingImagesChange: (existingImages: string[]) => void
   errorFieldName?: Merge<FieldError, (FieldError | undefined)[]>
 }
 
 const InputFileField: React.FC<InputFileProps> = ({
+  label,
+  additionalLabel,
   registerHook,
   dataListing,
   onNewFiles,
@@ -49,10 +53,13 @@ const InputFileField: React.FC<InputFileProps> = ({
   }, [existingImages, onExistingImagesChange])
 
   return (
-    <div className="ml-1">
+    <div className="w-auto">
       <div className="mb-1 text-lg font-semibold leading-7 text-gray-800">
-        Foto
+        {label}
       </div>
+      {additionalLabel && (
+        <div className="mb-4 text-sm text-gray-500">{additionalLabel}</div>
+      )}
       <div className="mb-4 flex flex-col">
         <input
           id="image-upload"
@@ -66,14 +73,14 @@ const InputFileField: React.FC<InputFileProps> = ({
           className="hidden"
           accept="image/png, image/gif, image/jpeg"
         />
-        {(existingImages.length > 0 || selectedImages.length > 0) && (
-          <div className="my-2 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3">
+        {existingImages.length > 0 || selectedImages.length > 0 ? (
+          <div className="grid grid-cols-2 items-center gap-4 md:grid-cols-3">
             {existingImages.map((url, index) => (
               <div key={`existing-${index}`} className="relative">
                 <img
                   src={url}
                   alt={`Existing Image ${index}`}
-                  className="rounded-lg object-cover"
+                  className="h-full rounded-lg object-cover"
                 />
                 <button
                   type="button"
@@ -89,7 +96,7 @@ const InputFileField: React.FC<InputFileProps> = ({
                 <img
                   src={image}
                   alt={`Preview ${index}`}
-                  className="rounded-lg object-cover"
+                  className="h-full rounded-lg object-cover"
                 />
                 <button
                   type="button"
@@ -100,19 +107,28 @@ const InputFileField: React.FC<InputFileProps> = ({
                 </button>
               </div>
             ))}
+            <div className="w-fit">
+              <Button
+                size="sm"
+                color="blue"
+                variant="outlined"
+                className="flex items-center gap-1.5 bg-white text-sm font-normal capitalize"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                Tambah Upload Foto
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3">
+            <div
+              onClick={() => fileInputRef.current?.click()}
+              className="flex h-32 w-full cursor-pointer items-center justify-center border-2 border-dashed border-slate-500 bg-slate-200"
+            >
+              <CameraIcon className="h-5 w-5" />
+            </div>
           </div>
         )}
-        <div className="w-fit">
-          <Button
-            size="sm"
-            color="blue"
-            variant="outlined"
-            className="flex items-center gap-1.5 bg-white text-sm font-normal capitalize"
-            onClick={() => fileInputRef.current?.click()}
-          >
-            Upload Foto
-          </Button>
-        </div>
       </div>
       {errorFieldName && (
         <span className="self-stretch text-sm leading-5 text-red-500">

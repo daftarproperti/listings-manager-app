@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { validateImageFiles } from './validateImageFiles'
 
 export const useImageHandler = (
-  propertyDetails: { pictureUrls: string[] },
+  propertyDetails: { pictureUrls?: string[] } | undefined,
   triggerAlert: (message: string) => void,
 ) => {
   const [selectedImages, setSelectedImages] = useState<string[]>([])

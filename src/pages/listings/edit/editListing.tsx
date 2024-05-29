@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Button } from '@material-tailwind/react'
 import { useGetListingDetail, useUpdateListing } from 'api/queries'
 import { type Listing } from 'api/types'
 import { getDynamicFormSchema } from 'components/form/addEditSchema'
@@ -17,9 +18,14 @@ import { LISTING_OPTIONS } from './dummy'
 import { onSubmit } from './handleFormSubmit'
 
 function EditListing({ id }: { id: string }) {
+  const navigate = useNavigate()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formExistingImages, setFormExistingImages] = useState<string[]>([])
+  const [formNewImageFiles, setFormNewImageFiles] = useState<File[]>([])
   const [schema, setSchema] = useState(() =>
     getDynamicFormSchema(false, false, 'house'),
   )
+
   const {
     register,
     formState: { errors },
@@ -36,11 +42,14 @@ function EditListing({ id }: { id: string }) {
     },
     resolver: zodResolver(schema),
   })
+
   const {
     data: listingDetails,
     isLoading,
     isError,
   } = useGetListingDetail({ id: id })
+
+  const { mutate } = useUpdateListing()
 
   const listingForSale = watch('listingForSale', false)
   const listingForRent = watch('listingForRent', false)
@@ -61,19 +70,11 @@ function EditListing({ id }: { id: string }) {
     }
   }, [listingForSale, listingForRent, propertyType])
 
-  const [formExistingImages, setFormExistingImages] = useState<string[]>([])
-  const [formNewImageFiles, setFormNewImageFiles] = useState<File[]>([])
   const handleExistingImagesChange = (existingImages: string[]) => {
     setFormExistingImages(existingImages)
   }
   const handleNewFiles = (newFiles: File[]) => {
     setFormNewImageFiles(newFiles)
-  }
-  const { mutate } = useUpdateListing()
-  const navigate = useNavigate()
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const navigateToUserForm = () => {
-    navigate(`/user`)
   }
 
   useEffect(() => {
@@ -84,20 +85,20 @@ function EditListing({ id }: { id: string }) {
 
   if (isLoading)
     return (
-      <div className="h-12 w-full justify-center p-6 text-center">
+      <div className="flex min-h-screen w-full items-center justify-center">
         Loading...
       </div>
     )
   if (isError)
     return (
-      <div className="h-12 w-full justify-center p-6 text-center">
+      <div className="flex min-h-screen w-full items-center justify-center">
         Error loading listing details.
       </div>
     )
 
   return (
     <form
-      className="mx-auto max-w-lg pt-16"
+      className="w-full bg-slate-50 pb-20 pt-16 lg:pb-4 lg:pt-0"
       onSubmit={handleSubmit((data) =>
         onSubmit(
           id,
@@ -110,13 +111,27 @@ function EditListing({ id }: { id: string }) {
         ),
       )}
     >
-      <div className="items-start justify-center whitespace-nowrap border-b border-solid border-b-[color:var(--slate-200,#E2E8F0)] bg-slate-50 py-3 pl-4 pr-16 text-sm font-semibold leading-5 text-slate-500">
+      <div className="items-start justify-center whitespace-nowrap border-b border-solid border-slate-200 bg-slate-50 py-3 pl-4 pr-16 text-sm font-semibold leading-5 text-slate-500 lg:hidden">
         Lengkapi data dibawah ini
       </div>
-      <div className="bg-slate-50 p-4">
+      <div className="sticky top-0 z-10 hidden items-center justify-between border-b bg-white p-4 pt-8 lg:flex">
+        <div className="text-xl font-semibold">Edit Properti</div>
+        <Button
+          size="sm"
+          color="blue"
+          type="submit"
+          className="flex items-center gap-2 text-sm font-normal capitalize"
+          disabled={isSubmitting}
+        >
+          Simpan
+        </Button>
+      </div>
+      <div className="p-4 lg:w-4/5">
         <InputFileField
+          label="Foto Properti"
+          additionalLabel="Maksimal 10 foto, format .jpg, .png, @10mb"
           registerHook={register('pictureUrls')}
-          dataListing={listingDetails}
+          dataListing={{ pictureUrls: listingDetails?.pictureUrls }}
           onNewFiles={handleNewFiles}
           onExistingImagesChange={handleExistingImagesChange}
           errorFieldName={errors.pictureUrls}
@@ -295,10 +310,10 @@ function EditListing({ id }: { id: string }) {
           />
         )}
       </div>
-      <div className="w-full items-stretch justify-center whitespace-nowrap border-b border-solid border-b-[color:var(--gray-200,#E5E7EB)] bg-blue-100 py-3 pl-4 pr-14 pt-4 text-lg leading-7 text-gray-800">
+      <div className="w-full bg-blue-100 px-4 py-3 text-lg lg:w-4/5">
         Keterangan Agen
       </div>
-      <div className="bg-slate-50 p-4 pb-24">
+      <div className="bg-slate-50 p-4">
         <table>
           <tbody>
             <tr>
@@ -312,18 +327,15 @@ function EditListing({ id }: { id: string }) {
           </tbody>
         </table>
         <br />
-        <p>
-          <a
-            className="cursor-pointer text-blue-500"
-            onClick={() => navigateToUserForm()}
-          >
-            Ubah Data Pribadi
-          </a>
-        </p>
+        <Link to="/user" className="cursor-pointer text-blue-500">
+          Ubah Data Pribadi
+        </Link>
       </div>
-      <BottomStickyButton type="submit" disabled={isSubmitting}>
-        Simpan
-      </BottomStickyButton>
+      <div className="lg:hidden">
+        <BottomStickyButton type="submit" disabled={isSubmitting}>
+          Simpan
+        </BottomStickyButton>
+      </div>
     </form>
   )
 }
