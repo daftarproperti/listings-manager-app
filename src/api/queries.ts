@@ -28,9 +28,9 @@ import type {
 // on every request.
 axios.interceptors.request.use(
   (config) => {
-    const xInitData = localStorage.getItem('x-init-data')
-    if (xInitData) {
-      config.headers['X-INIT-DATA'] = xInitData
+    const accessToken = sessionStorage.getItem('accessToken')
+    if (accessToken) {
+      config.headers['Authorization'] = `Bearer ${accessToken}`
     }
     return config
   },
@@ -38,16 +38,6 @@ axios.interceptors.request.use(
     return Promise.reject(error)
   },
 )
-
-export const checkAuth = async () => {
-  try {
-    // TODO: use auth specific endpoint that is lighter, like /auth
-    const response = await axios.get('/listings')
-    return response.status === 200
-  } catch (error) {
-    return false
-  }
-}
 
 export const useGetPropertyList = ({
   searchParams,
