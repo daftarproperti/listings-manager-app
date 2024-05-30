@@ -331,3 +331,14 @@ export const verifyOTP = async (
     throw new Error('Failed to verify the otpCode. Please try again.')
   }
 }
+
+export const logout = async () => {
+  try {
+    const response = await axios.post('/logout', {
+      baseURL: `${import.meta.env.VITE_DP_HOME}/api/auth`,
+    })
+    return response.data
+  } catch (error) {
+    throw new Error('Failed to logout. Please try again.')
+  }
+}

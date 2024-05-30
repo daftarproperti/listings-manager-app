@@ -33,7 +33,7 @@ import {
 } from '@heroicons/react/24/solid'
 import FilterForm from 'components/form/FilterForm'
 import { SORT_OPTIONS } from 'components/SortBottomSheet'
-import { useGetSavedSearchList } from 'api/queries'
+import { useGetSavedSearchList, logout } from 'api/queries'
 import type { SavedSearch } from 'api/types'
 import {
   countActiveFilters,
@@ -92,6 +92,12 @@ const MainLayout = ({ children }: PropsWithChildren) => {
     setSearchText(query)
   }, [query])
 
+  const handleLogout = () => {
+    sessionStorage.clear()
+    logout()
+    navigate('/login')
+  }
+
   return (
     <div className="grid max-h-screen grid-cols-7">
       <div className="col-span-2 hidden lg:block">
@@ -118,6 +124,16 @@ const MainLayout = ({ children }: PropsWithChildren) => {
                 </Link>
               ))}
             </List>
+          </div>
+          <div className="mt-4">
+            <Button
+              color="red"
+              size="sm"
+              className="w-full"
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
           </div>
           <div className="px-2 text-xs leading-5 text-slate-400">
             Made with love in Indonesia © 2024
