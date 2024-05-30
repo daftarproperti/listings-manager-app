@@ -112,8 +112,10 @@ const MainLayout = ({ children }: PropsWithChildren) => {
                 <Link key={item.name} to={item.link}>
                   <ListItem
                     selected={isActive(item.link)}
-                    className={`hover:bg-blue-100 hover:text-blue-600 focus:bg-blue-100 focus:text-blue-600 active:bg-blue-100 active:text-blue-600 ${
-                      isActive(item.link) ? 'bg-blue-100 text-blue-600' : ''
+                    className={`hover:bg-blue-100 hover:text-blue-600 active:bg-blue-100 active:text-blue-600 ${
+                      isActive(item.link)
+                        ? 'bg-blue-100 text-blue-600 focus:bg-blue-100 focus:text-blue-600'
+                        : 'focus:bg-inherit focus:text-inherit'
                     }`}
                   >
                     <ListItemPrefix>

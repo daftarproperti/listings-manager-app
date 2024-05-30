@@ -62,16 +62,12 @@ const SortBottomSheet = ({
       isOpen={isFilterBottomSheetOpen}
       close={() => setIsFilterBottomBarOpen(false)}
       classNames={{
-        draggable:
-          '!w-full !max-w-lg !mx-auto rounded-t-xl border border-slate-400',
+        draggable: '!w-full rounded-t-xl border border-slate-400',
       }}
     >
       <>
-        <div id="sheet-overlay" className="w-full cursor-pointer pt-3">
-          <div className="mx-auto h-1 w-12 rounded-full bg-slate-300" />
-        </div>
         <div data-no-drag className="mb-3 text-gray-800">
-          <div className="p-4 text-2xl font-semibold leading-8">
+          <div className="px-4 py-3 text-2xl font-semibold leading-8">
             Urutkan berdasarkan
           </div>
           <List>
