@@ -63,6 +63,8 @@ const FilterForm = ({ type }: FilterFormProps) => {
   const [searchParams, setSearchParams] = useSearchParams()
   const { validationMessage } = useValidateMinMaxValue(searchParams)
 
+  const searchId = searchParams.get('searchId')
+
   const { mutate: addSearch, isPending: loadingAdd } = useAddSavedSearch()
   const { mutate: updateSearch, isPending: loadingUpdate } =
     useUpdateSavedSearch()
@@ -115,7 +117,6 @@ const FilterForm = ({ type }: FilterFormProps) => {
     e.preventDefault()
 
     const search = searchparamsToSavedSearch(searchParams)
-    const searchId = searchParams.get('searchId')
     switch (type) {
       case 'savedSearch':
         if (searchId) {
@@ -143,11 +144,28 @@ const FilterForm = ({ type }: FilterFormProps) => {
   }
 
   return (
-    <form
-      onSubmit={onSubmit}
-      className="relative w-full bg-slate-100 lg:bg-blue-100"
-    >
-      <div className="p-4 pb-24 pt-20 lg:p-0">
+    <form onSubmit={onSubmit} className="w-full bg-inherit">
+      {type === 'savedSearch' && (
+        <div className="sticky top-0 z-10 hidden items-center justify-between border-b bg-white p-4 pt-8 lg:flex">
+          <div className="text-xl font-semibold">
+            {searchId ? 'Edit' : 'Tambah'} Permintaan
+          </div>
+          <Button
+            size="sm"
+            color="blue"
+            type="submit"
+            className="flex items-center gap-2 text-sm font-normal capitalize"
+            disabled={loadingAdd || loadingUpdate}
+          >
+            Simpan
+          </Button>
+        </div>
+      )}
+      <div
+        className={`p-4 pb-24 pt-20 ${
+          type === 'savedSearch' ? 'lg:w-4/5 lg:p-4' : 'lg:p-0'
+        }`}
+      >
         {type === 'savedSearch' && (
           <>
             <div className="w-full text-lg font-semibold leading-7 lg:text-sm lg:font-bold lg:uppercase lg:text-slate-500">

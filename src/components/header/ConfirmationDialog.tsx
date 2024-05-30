@@ -3,16 +3,22 @@ import BottomSheet from 'react-draggable-bottom-sheet'
 import { Button } from '@material-tailwind/react'
 
 const ConfirmationDialog = ({
+  title,
+  subtitle,
   isOpen,
   setIsOpen,
   onConfirm,
+  onCancel,
 }: {
+  title?: string | null
+  subtitle?: string | null
   isOpen: boolean
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
   onConfirm: () => void
+  onCancel?: () => void
 }) => {
-  const title = document.querySelector('h1')?.textContent
   const handleCancel = () => {
+    if (onCancel) onCancel()
     setIsOpen(false)
   }
   const handleConfirm = () => {
@@ -30,11 +36,8 @@ const ConfirmationDialog = ({
       }}
     >
       <div className="space-y-4 px-4 pb-4 lg:px-6 lg:py-4">
-        <h2 className="text-2xl">Yakin akan hapus {title}?</h2>
-        <p className="font-normal text-slate-500">
-          Setelah terhapus, listing tidak bisa ditemukan di jaringan Daftar
-          Properti.
-        </p>
+        <h2 className="text-xl">Yakin akan hapus {title}?</h2>
+        <p className="font-normal text-slate-500">{subtitle}</p>
         <div className="flex gap-x-2">
           <Button
             fullWidth
