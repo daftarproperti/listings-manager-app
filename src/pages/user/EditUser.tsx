@@ -74,17 +74,35 @@ function EditUser() {
   return (
     <div>
       <form
-        className="mx-auto max-w-lg"
+        className="w-full bg-slate-100 pb-20 pt-16 lg:pb-4 lg:pt-0"
         onSubmit={handleSubmit((formData) => {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { picture, ...otherData } = formData
           onSubmit(otherData, mutate, navigate, setIsSubmitting, newImageFile)
         })}
       >
-        <div className="items-start justify-center whitespace-nowrap border-b border-solid border-b-[color:var(--slate-200,#E2E8F0)] bg-slate-50 py-3 pl-4 pr-16 text-sm font-semibold leading-5 text-slate-500">
+        <div className="items-start justify-center whitespace-nowrap border-b border-solid border-slate-200 bg-slate-50 py-3 pl-4 pr-16 text-sm font-semibold leading-5 text-slate-500 lg:hidden">
           Lengkapi data dibawah ini
         </div>
-        <div className="mb-10 bg-slate-50 p-4">
+        <div className="sticky top-0 z-10 hidden items-center justify-between border-b bg-white p-4 pt-8 lg:flex">
+          <div className="text-xl font-semibold">Informasi Profil Saya</div>
+          <Button
+            size="sm"
+            color="blue"
+            type="submit"
+            className="flex items-center gap-2 text-sm font-normal capitalize"
+            disabled={isSubmitting || isLoading}
+          >
+            Simpan Perubahan
+          </Button>
+        </div>
+        <div className="p-4 lg:w-4/5">
+          <InputSingleFileField
+            label="Foto profil"
+            registerHook={register('picture')}
+            existingImageUrl={picture}
+            onImageUpload={handleNewFile}
+          />
           <InputField
             label="Nama"
             registerHook={register('name', { required: true })}
@@ -123,11 +141,6 @@ function EditUser() {
             placeholderValue="Tulis deskripsi tentang Anda di sini"
             errorFieldName={errors.description}
           />
-          <InputSingleFileField
-            registerHook={register('picture')}
-            existingImageUrl={picture}
-            onImageUpload={handleNewFile}
-          />
           <div className="mb-5">
             <InputCheckboxField
               label="Profil Publik"
@@ -160,9 +173,14 @@ function EditUser() {
             ) : null}
           </div>
         </div>
-        <BottomStickyButton type="submit" disabled={isSubmitting || isLoading}>
-          Simpan
-        </BottomStickyButton>
+        <div className="lg:hidden">
+          <BottomStickyButton
+            type="submit"
+            disabled={isSubmitting || isLoading}
+          >
+            Simpan
+          </BottomStickyButton>
+        </div>
       </form>
     </div>
   )
