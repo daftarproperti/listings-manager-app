@@ -26,41 +26,36 @@ const ConfirmationDialog = ({
       close={handleCancel}
       classNames={{
         draggable:
-          '!w-full !max-w-lg !mx-auto rounded-t-xl border border-slate-400',
+          '!w-full lg:!max-w-lg lg:!mx-auto rounded-t-xl border border-slate-400',
       }}
     >
-      <>
-        <div id="sheet-overlay" className="w-full cursor-pointer pt-3">
-          <div className="mx-auto h-1 w-12 rounded-full bg-slate-300" />
+      <div className="space-y-4 px-4 pb-4 lg:px-6 lg:py-4">
+        <h2 className="text-2xl">Yakin akan hapus {title}?</h2>
+        <p className="font-normal text-slate-500">
+          Setelah terhapus, listing tidak bisa ditemukan di jaringan Daftar
+          Properti.
+        </p>
+        <div className="flex gap-x-2">
+          <Button
+            fullWidth
+            color="blue"
+            variant="outlined"
+            className="text-sm font-normal capitalize"
+            onClick={handleCancel}
+          >
+            Tidak, batalkan
+          </Button>
+          <Button
+            fullWidth
+            color="red"
+            variant="outlined"
+            className="border-red-100 bg-red-100 text-sm font-normal capitalize"
+            onClick={handleConfirm}
+          >
+            Ya, hapus
+          </Button>
         </div>
-        <div className="p-4 pb-8">
-          <h2 className="text-2xl text-slate-900">Yakin akan hapus {title}?</h2>
-          <p className="my-4 font-normal text-slate-500">
-            Setelah terhapus, listing tidak bisa ditemukan di jaringan Daftar
-            Properti.
-          </p>
-          <div className="flex gap-x-2">
-            <Button
-              fullWidth
-              color="blue"
-              variant="outlined"
-              className="text-sm font-normal capitalize"
-              onClick={handleCancel}
-            >
-              Tidak, batalkan
-            </Button>
-            <Button
-              fullWidth
-              color="red"
-              variant="outlined"
-              className="border-red-100 bg-red-100 text-sm font-normal capitalize"
-              onClick={handleConfirm}
-            >
-              Ya, hapus
-            </Button>
-          </div>
-        </div>
-      </>
+      </div>
     </BottomSheet>
   )
 }

@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@material-tailwind/react'
-import { clsx } from 'clsx'
 import ReactGA from 'react-ga4'
 import SwiperSlider from 'components/SwiperSlider'
 import { useGetPropertyDetail } from 'api/queries'
@@ -11,8 +10,8 @@ import {
   formatCurrencyToIDRText,
   appPath,
   getLabelForValue,
+  replaceWithBr,
 } from 'utils'
-import RenderDescription from 'pages/listings/detail/Description'
 import DetailPropertyTable from 'components/DetailPropertyTable'
 
 function PropertyDetail({ id }: { id: string }) {
@@ -52,9 +51,12 @@ function PropertyDetail({ id }: { id: string }) {
       : null
 
   return (
-    <div className="flex min-h-screen flex-col break-words bg-slate-100 pt-16">
+    <div className="flex min-h-screen flex-col break-words bg-slate-100 pt-16 lg:pt-0">
+      <div className="sticky top-0 z-10 hidden items-center justify-between border-b bg-white p-4 pt-8 lg:flex">
+        <div className="text-xl font-semibold">Rincian Properti</div>
+      </div>
       {isError ? (
-        <div className="mt-[50%] flex h-full -translate-y-1/2 flex-col items-center justify-center">
+        <div className="flex grow flex-col items-center justify-center">
           <span className="mb-4">Data tidak ditemukan.</span>
           <div className="flex items-center justify-center">
             <Button
@@ -68,22 +70,15 @@ function PropertyDetail({ id }: { id: string }) {
           </div>
         </div>
       ) : isFetching ? (
-        <div className="m-auto mt-[50%] flex h-full items-center justify-center">
-          Loading...
-        </div>
+        <div className="flex grow items-center justify-center">Loading...</div>
       ) : (
         data && (
           <>
             {!!data?.pictureUrls?.length && (
               <SwiperSlider pictures={data?.pictureUrls} />
             )}
-            <div className="grow py-2">
-              <div
-                className={clsx(
-                  'px-4',
-                  data?.pictureUrls?.length === undefined && 'pt-4',
-                )}
-              >
+            <div className="grow py-4 lg:pt-2">
+              <div className="px-4">
                 <h1 className="text-lg font-semibold leading-7 text-slate-500">
                   {data?.title}
                 </h1>
@@ -154,23 +149,28 @@ function PropertyDetail({ id }: { id: string }) {
                   </div>
                 </>
               )}
-              <div className="px-4 py-1 text-sm leading-5 text-slate-800">
+              <div className="px-4 py-1 text-sm">
                 <h2 className="text-sm font-semibold leading-7 text-slate-500">
                   Detail Properti
                 </h2>
                 {data && <DetailPropertyTable dataTable={data} />}
               </div>
               {data && data.description && (
-                <div className="px-4 py-1 text-sm leading-5 text-slate-800">
+                <div className="px-4 py-1">
                   <h2 className="text-sm font-semibold leading-7 text-slate-500">
                     Deskripsi
                   </h2>
-                  <RenderDescription description={data.description} />
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: replaceWithBr(data.description),
+                    }}
+                    className="whitespace-pre-wrap text-sm"
+                  />
                 </div>
               )}
             </div>
             {contact?.name && (
-              <div className="sticky bottom-0 flex w-full max-w-lg items-stretch justify-between gap-5 border-t bg-blue-50 px-4 py-3">
+              <div className="sticky bottom-0 flex w-full items-stretch justify-between gap-5 border-t bg-blue-50 px-4 py-3">
                 <div className="flex items-center justify-between gap-2">
                   {contact?.profilePictureURL && (
                     <img

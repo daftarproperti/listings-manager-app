@@ -1,19 +1,19 @@
-import { useGetListingDetail } from 'api/queries'
-import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
-import { clsx } from 'clsx'
-import RenderDescription from 'pages/listings/detail/Description'
 import SwiperSlider from 'components/SwiperSlider'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Button, Chip } from '@material-tailwind/react'
+import { Button, type ButtonProps, Chip } from '@material-tailwind/react'
+import { useGetListingDetail } from 'api/queries'
+import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
 import {
   formatCurrencyToIDRText,
   appPath,
   dpPath,
   getLabelForValue,
+  replaceWithBr,
 } from 'utils'
 import DetailPropertyTable from 'components/DetailPropertyTable'
 import ShareButton from 'components/button/ShareButton'
+import DotsHeaderButton from 'components/header/DotsHeaderButton'
 
 function ListingDetail({
   id,
@@ -41,10 +41,48 @@ function ListingDetail({
     setCanEdit(data?.userCanEdit ?? false)
   }, [data?.userCanEdit, setCanEdit])
 
+  const actionButton = ({ size }: Omit<ButtonProps, 'children'>) => (
+    <>
+      <div className="w-full">
+        <Button
+          fullWidth
+          size={size}
+          color="blue"
+          variant="outlined"
+          className="text-sm font-normal capitalize"
+          onClick={() => navigateToEditForm(id)}
+        >
+          Edit
+        </Button>
+      </div>
+      <ShareButton
+        url={listingPublicUrl}
+        title={data?.title || 'Default Title'}
+        className="w-full"
+      >
+        <Button
+          fullWidth
+          size={size}
+          color="blue"
+          className="h-full text-sm font-normal capitalize"
+        >
+          Bagikan
+        </Button>
+      </ShareButton>
+      <div className="hidden w-fit lg:block">
+        <DotsHeaderButton propertyId={id} />
+      </div>
+    </>
+  )
+
   return (
-    <div className="flex min-h-screen flex-col break-words bg-slate-100 pt-16">
+    <div className="flex min-h-screen flex-col break-words bg-slate-100 pt-16 lg:pt-0">
+      <div className="sticky top-0 z-10 hidden items-center justify-between border-b bg-white p-4 pt-8 lg:flex">
+        <div className="text-xl font-semibold">Rincian Listing</div>
+        <div className="flex gap-3">{actionButton({ size: 'sm' })}</div>
+      </div>
       {isError ? (
-        <div className="mt-[50%] flex h-full -translate-y-1/2 flex-col items-center justify-center">
+        <div className="flex grow flex-col items-center justify-center">
           <span className="mb-4">Data tidak ditemukan.</span>
           <div className="flex items-center justify-center">
             <Button
@@ -58,22 +96,15 @@ function ListingDetail({
           </div>
         </div>
       ) : isFetching ? (
-        <div className="m-auto mt-[50%] flex h-full items-center justify-center">
-          Loading...
-        </div>
+        <div className="flex grow items-center justify-center">Loading...</div>
       ) : (
         data && (
           <>
             {!!data?.pictureUrls?.length && (
               <SwiperSlider pictures={data?.pictureUrls} />
             )}
-            <div className="grow py-2">
-              <div
-                className={clsx(
-                  'px-4',
-                  data?.pictureUrls?.length === undefined && 'pt-4',
-                )}
-              >
+            <div className="grow py-4 lg:pt-2">
+              <div className="px-4">
                 {data?.isPrivate && (
                   <Chip
                     value="PRIVATE"
@@ -150,71 +181,55 @@ function ListingDetail({
                   </div>
                 </>
               )}
-              <div className="px-4 py-1 text-sm leading-5 text-slate-800">
+              <div className="px-4 py-1 text-sm">
                 <h2 className="text-sm font-semibold leading-7 text-slate-500">
                   Detail Listing
                 </h2>
                 {data && <DetailPropertyTable dataTable={data} />}
               </div>
               {data && data.description && (
-                <div className="px-4 py-1 text-sm leading-5 text-slate-800">
+                <div className="px-4 py-1">
                   <h2 className="text-sm font-semibold leading-7 text-slate-500">
                     Deskripsi
                   </h2>
-                  <RenderDescription description={data.description} />
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: replaceWithBr(data.description),
+                    }}
+                    className="whitespace-pre-wrap text-sm"
+                  />
                 </div>
               )}
             </div>
-            <div className="sticky bottom-0 border-t">
-              <div className="flex items-stretch justify-between gap-5 bg-blue-100 px-3 py-2.5">
-                <div className="flex items-center justify-between gap-2">
-                  {data?.user?.profilePictureURL && (
-                    <img
-                      loading="lazy"
-                      src={data?.user?.profilePictureURL}
-                      className="my-auto aspect-square w-8 max-w-full shrink-0 overflow-hidden rounded-full border border-white object-contain object-center shadow-sm"
-                      onError={({ currentTarget }) => {
-                        currentTarget.onerror = null
-                        currentTarget.src = appPath('/logo.svg')
-                      }}
-                    />
-                  )}
-                  <span className="flex grow basis-[0%] flex-col items-stretch justify-center self-stretch">
-                    <div className="whitespace-nowrap text-sm font-semibold leading-5 text-slate-800">
-                      {data?.user?.name}
-                    </div>
-                    <div className="whitespace-nowrap text-sm leading-5 text-slate-500">
-                      {data?.user?.phoneNumber}
-                    </div>
-                  </span>
-                </div>
-              </div>
-              {data?.userCanEdit && (
-                <div className="flex w-full max-w-lg items-stretch gap-4 bg-sky-50 px-4 py-2">
-                  <div className="w-full">
-                    <Button
-                      fullWidth
-                      color="blue"
-                      variant="outlined"
-                      className="text-sm font-normal capitalize"
-                      onClick={() => navigateToEditForm(id)}
-                    >
-                      Edit
-                    </Button>
+            <div className="sticky bottom-0 border-t lg:border-0">
+              {data?.user?.name && (
+                <div className="flex items-stretch justify-between gap-5 bg-blue-100 px-4 py-3">
+                  <div className="flex items-center justify-between gap-2">
+                    {data?.user?.profilePictureURL && (
+                      <img
+                        loading="lazy"
+                        src={data?.user?.profilePictureURL}
+                        className="my-auto aspect-square w-8 max-w-full shrink-0 overflow-hidden rounded-full border border-white object-contain object-center shadow-sm"
+                        onError={({ currentTarget }) => {
+                          currentTarget.onerror = null
+                          currentTarget.src = appPath('/logo.svg')
+                        }}
+                      />
+                    )}
+                    <span className="flex grow basis-[0%] flex-col items-stretch justify-center self-stretch">
+                      <div className="whitespace-nowrap text-sm font-semibold leading-5 text-slate-800">
+                        {data?.user?.name}
+                      </div>
+                      <div className="whitespace-nowrap text-sm leading-5 text-slate-500">
+                        {data?.user?.phoneNumber}
+                      </div>
+                    </span>
                   </div>
-                  <ShareButton
-                    url={listingPublicUrl}
-                    title={data?.title || 'Default Title'}
-                    className="w-full"
-                  >
-                    <Button
-                      fullWidth
-                      color="blue"
-                      className="h-full text-sm font-normal capitalize"
-                    >
-                      Bagikan
-                    </Button>
-                  </ShareButton>
+                </div>
+              )}
+              {data?.userCanEdit && (
+                <div className="flex w-full max-w-lg items-stretch gap-4 bg-sky-50 px-4 py-2 lg:hidden">
+                  {actionButton({ size: 'md' })}
                 </div>
               )}
             </div>
