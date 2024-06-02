@@ -32,7 +32,7 @@ function Login() {
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    if (/^\d*$/.test(value)) {
+    if (/^\+?\d*$/.test(value)) {
       setPhone(value)
     }
   }
