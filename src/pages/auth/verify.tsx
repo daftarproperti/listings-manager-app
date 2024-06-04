@@ -37,7 +37,7 @@ function Verify() {
         timestamp,
         verificationCode,
       )
-      sessionStorage.setItem('accessToken', accessToken)
+      localStorage.setItem('accessToken', accessToken)
       navigate('/', { state: { accessToken } })
     } catch (error) {
       if (error instanceof Error) {

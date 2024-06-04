@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import LoadingPage from './Loading'
 
 const AuthenticationWrapper = ({ children }: { children: ReactNode }) => {
-  const accessToken = sessionStorage.getItem('accessToken')
+  const accessToken = localStorage.getItem('accessToken')
   const [isAuth, setIsAuth] = useState<boolean | undefined>(
     accessToken ? true : undefined,
   )

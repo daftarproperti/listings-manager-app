@@ -93,7 +93,7 @@ const MainLayout = ({ children }: PropsWithChildren) => {
   }, [query])
 
   const handleLogout = () => {
-    sessionStorage.clear()
+    localStorage.clear()
     logout()
     navigate('/login')
   }
