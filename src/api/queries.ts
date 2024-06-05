@@ -28,7 +28,7 @@ import type {
 // on every request.
 axios.interceptors.request.use(
   (config) => {
-    const accessToken = sessionStorage.getItem('accessToken')
+    const accessToken = localStorage.getItem('accessToken')
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`
     }

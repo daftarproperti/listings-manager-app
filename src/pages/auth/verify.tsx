@@ -87,7 +87,7 @@ function Verify() {
           Verifikasi nomor kamu
         </h1>
         <p className="mb-4 text-center text-gray-600">
-          Kode verifikasi dikirim via Whatsapp atau SMS ke nomor aktif kamu di
+          Kode verifikasi dikirim via WhatsApp atau SMS ke nomor aktif kamu di
           <br />
           <strong>{phone}</strong>
         </p>
