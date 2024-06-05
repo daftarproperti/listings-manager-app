@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button } from '@material-tailwind/react'
+import { Button, Tooltip, Typography } from '@material-tailwind/react'
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid'
 import { sendOTP } from 'api/queries'
 
 import { LogoSVG } from '../../assets/icons/LogoSVG'
@@ -43,17 +44,34 @@ function Login() {
         <div className="mb-4 flex justify-center">
           <LogoSVG />
         </div>
-        <h1 className="mb-2 text-center text-xl font-semibold">
-          Masuk / daftar akun dulu
-        </h1>
+        <h1 className="mb-2 text-center text-xl font-semibold">Masuk/Daftar</h1>
         <form className="space-y-4" onSubmit={handleLogin}>
           <div>
-            <label
-              htmlFor="phone"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Masukkan dengan nomor HP
-            </label>
+            <div className="flex justify-center">
+              <label
+                htmlFor="phone"
+                className="text-center text-sm font-medium text-gray-700"
+              >
+                Masukkan nomor WhatsApp
+              </label>
+              <Tooltip
+                className="border border-blue-gray-100 bg-white px-4 py-3 shadow shadow-black/10"
+                content={
+                  <div className="w-60">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal opacity-80"
+                    >
+                      Pengguna wajib menyediakan nomer HP yang dapat
+                      diverifikasi melalui WhatsApp.
+                    </Typography>
+                  </div>
+                }
+              >
+                <QuestionMarkCircleIcon className="ml-1 h-5 w-5 text-slate-500" />
+              </Tooltip>
+            </div>
             <input
               type="text"
               id="phone"
@@ -75,11 +93,19 @@ function Login() {
         {error && <p className="mt-4 text-center text-red-500">{error}</p>}
         <p className="mt-4 text-center text-sm text-gray-500">
           Dengan masuk atau mendaftar, saya menyetujui{' '}
-          <a href="#" className="text-blue-600 hover:underline">
+          <a
+            target="_blank"
+            href="/syarat-ketentuan"
+            className="text-blue-600 hover:underline"
+          >
             Syarat dan Ketentuan
           </a>{' '}
           serta{' '}
-          <a href="#" className="text-blue-600 hover:underline">
+          <a
+            target="_blank"
+            href="/privasi"
+            className="text-blue-600 hover:underline"
+          >
             Kebijakan Privasi
           </a>
         </p>
