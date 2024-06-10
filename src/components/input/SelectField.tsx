@@ -29,7 +29,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
       </span>
       <select
         {...registerHook}
-        className="mt-1 w-full appearance-none items-start justify-center self-stretch whitespace-nowrap rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-white px-3 py-2.5 text-lg leading-7 text-gray-800"
+        className="mt-1 w-full appearance-none items-start justify-center self-stretch whitespace-nowrap rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-white px-3 py-2 text-lg leading-7 text-gray-800"
       >
         <option value="">{defaultOption}</option>
         {selectOptions.map((option, index) => (

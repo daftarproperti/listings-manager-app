@@ -1,7 +1,7 @@
-import { type Property } from 'api/types'
+import { type Listing } from 'api/types'
 import { getLabelForValue } from 'utils'
 
-const DetailPropertyTable = ({ dataTable }: { dataTable: Property }) => {
+const DetailListingTable = ({ dataTable }: { dataTable: Listing }) => {
   return (
     <table>
       <tbody>
@@ -54,4 +54,4 @@ const DetailPropertyTable = ({ dataTable }: { dataTable: Property }) => {
   )
 }
 
-export default DetailPropertyTable
+export default DetailListingTable

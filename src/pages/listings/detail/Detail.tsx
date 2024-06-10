@@ -11,7 +11,7 @@ import {
   getLabelForValue,
   replaceWithBr,
 } from 'utils'
-import DetailPropertyTable from 'components/DetailPropertyTable'
+import DetailListingTable from 'components/DetailListingTable'
 import ShareButton from 'components/button/ShareButton'
 import DotsHeaderButton from 'components/header/DotsHeaderButton'
 
@@ -185,7 +185,7 @@ function ListingDetail({
                 <h2 className="text-sm font-semibold leading-7 text-slate-500">
                   Detail Listing
                 </h2>
-                {data && <DetailPropertyTable dataTable={data} />}
+                {data && <DetailListingTable dataTable={data} />}
               </div>
               {data && data.description && (
                 <div className="px-4 py-1">
