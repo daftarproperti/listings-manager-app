@@ -7,6 +7,7 @@ import MainLayout from 'components/layout/MainLayout'
 import AuthenticationWrapper from './AuthWrapper'
 import LoginPage from './auth/login'
 import VerifyPage from './auth/verify'
+import ImpersonatePage from './auth/impersonate'
 import AddPage from './listings/add'
 import ListingDetailPage from './listings/detail'
 import EditListingPage from './listings/edit'
@@ -164,6 +165,14 @@ const router = createBrowserRouter(
               <Header title="Edit Permintaan" />
               <SavedSearchFormPage />
             </MainLayout>
+          ),
+        },
+        {
+          path: '/impersonate',
+          element: (
+            <>
+              <ImpersonatePage />
+            </>
           ),
         },
         {

@@ -394,3 +394,18 @@ export function getDebouncedCities(inputValue: string): Promise<CityOption[]> {
     debouncedFetchCities(inputValue, resolve, reject)
   })
 }
+
+export const impersonate = async (
+  phoneNumber: string,
+): Promise<{ accessToken: string }> => {
+  try {
+    const response = await axios.post(
+      '/impersonate',
+      { phoneNumber },
+      { baseURL: `${import.meta.env.VITE_DP_HOME}/api/auth` },
+    )
+    return response.data
+  } catch (error) {
+    throw new Error('Failed to impersonate. Please try again.')
+  }
+}
