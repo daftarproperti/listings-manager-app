@@ -1,17 +1,23 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, type SetStateAction } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { Button } from '@material-tailwind/react'
-import { useAddListing } from 'api/queries'
-import { type UpdateListingRequest } from 'api/types'
+import {
+  useAddListing,
+  getDebouncedCities,
+  fetchDefaultCities,
+  useGetUserProfile,
+} from 'api/queries'
+import { type UpdateListingRequest, type CityOption } from 'api/types'
 import BottomStickyButton from 'components/button/BottomStickyButton'
 import { getDynamicFormSchema } from 'components/form/addEditSchema'
 import IntuitiveCurrencyInputField from 'components/input/IntuitiveCurrencyInputField'
 import InputField from 'components/input/InputField'
 import InputFileField from 'components/input/InputFileField'
 import SelectField from 'components/input/SelectField'
+import CustomSelectField from 'components/input/CustomSelectField'
 import TextareaField from 'components/input/TextareaField'
 import InputCheckboxField from 'components/input/InputCheckboxField'
 import transformListingObjectToFormData from 'components/input/transformObjectToFormdata'
@@ -31,12 +37,14 @@ const AddPage = () => {
     handleSubmit,
     control,
     watch,
+    setValue,
   } = useForm<UpdateListingRequest>({
     defaultValues: {
       isPrivate: false,
-      listingForSale: false,
+      listingForSale: true,
       listingForRent: false,
       ownership: 'unknown',
+      city: '',
     },
     resolver: zodResolver(schema),
   })
@@ -46,6 +54,10 @@ const AddPage = () => {
   const listingForSale = watch('listingForSale', false)
   const listingForRent = watch('listingForRent', false)
   const propertyType = watch('propertyType')
+
+  const [defaultCityOptions, setDefaultCityOptions] = useState<CityOption[]>([])
+  const { data: userProfile, isFetched } = useGetUserProfile()
+  const [selectedCity, setSelectedCity] = useState<CityOption | null>(null)
 
   useEffect(() => {
     if (
@@ -61,6 +73,44 @@ const AddPage = () => {
       setSchema(updatedSchema)
     }
   }, [listingForSale, listingForRent, propertyType])
+
+  useEffect(() => {
+    if (isFetched) {
+      if (userProfile && userProfile.cityName && userProfile.cityId != null) {
+        const defaultCity = {
+          label: userProfile.cityName,
+          value: userProfile.cityId,
+        }
+        setSelectedCity(defaultCity as CityOption)
+
+        if (selectedCity) {
+          setValue('cityId', selectedCity.value, { shouldValidate: true })
+        }
+      } else {
+        setSelectedCity(null)
+      }
+    }
+  }, [userProfile, isFetched])
+
+  useEffect(() => {
+    fetchDefaultCities().then((cities) => {
+      const cityOptions = cities.map((city) => ({
+        label: city.name || 'Unknown city',
+        value: city.id || 0,
+      }))
+      setDefaultCityOptions(cityOptions)
+    })
+  }, [])
+
+  useEffect(() => {
+    if (selectedCity) {
+      setValue('cityId', selectedCity.value, { shouldValidate: true })
+    }
+  }, [selectedCity, setValue])
+
+  const handleCityChange = (cityOption: SetStateAction<CityOption | null>) => {
+    setSelectedCity(cityOption)
+  }
 
   const handleExistingImagesChange = (existingImages: string[]) => {
     setFormExistingImages(existingImages)
@@ -140,10 +190,15 @@ const AddPage = () => {
               inputID="listingForRent"
             />
           </div>
+          <div>
+            {errors.listingType && (
+              <p className="text-red-500">{errors.listingType.message}</p>
+            )}
+          </div>
         </div>
         <SelectField
           label="Tipe Properti"
-          registerHook={register('propertyType', { required: false })}
+          registerHook={register('propertyType', { required: true })}
           selectOptions={LISTING_OPTIONS.propertyType.options}
           defaultOption="Pilih Tipe Properti"
           errorFieldName={errors.propertyType}
@@ -157,12 +212,15 @@ const AddPage = () => {
           linkHref="http://www.daftarproperti.org/address-required"
           linkText="sini"
         />
-        <SelectField
+        <CustomSelectField
+          control={control}
+          name="cityId"
+          placeholder="Pilih Kota"
           label="Kota"
-          registerHook={register('city', { required: true })}
-          selectOptions={LISTING_OPTIONS.cities.options}
-          defaultOption="Pilih Kota"
-          errorFieldName={errors.city}
+          loadOptions={getDebouncedCities}
+          defaultOptions={defaultCityOptions}
+          defaultValue={selectedCity ?? undefined}
+          onCityChange={handleCityChange}
         />
         <TextareaField
           label="Deskripsi"

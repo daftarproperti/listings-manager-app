@@ -1,10 +1,15 @@
-import { useEffect, useState } from 'react'
+import { type SetStateAction, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@material-tailwind/react'
-import { useGetListingDetail, useUpdateListing } from 'api/queries'
-import { type Listing } from 'api/types'
+import {
+  useGetListingDetail,
+  useUpdateListing,
+  getDebouncedCities,
+  fetchDefaultCities,
+} from 'api/queries'
+import { type CityOption, type Listing } from 'api/types'
 import { getDynamicFormSchema } from 'components/form/addEditSchema'
 import IntuitiveCurrencyInputField from 'components/input/IntuitiveCurrencyInputField'
 import InputField from 'components/input/InputField'
@@ -12,6 +17,7 @@ import InputFileField from 'components/input/InputFileField'
 import SelectField from 'components/input/SelectField'
 import TextareaField from 'components/input/TextareaField'
 import InputCheckboxField from 'components/input/InputCheckboxField'
+import CustomSelectField from 'components/input/CustomSelectField'
 import BottomStickyButton from 'components/button/BottomStickyButton'
 
 import { LISTING_OPTIONS } from './dummy'
@@ -33,6 +39,7 @@ function EditListing({ id }: { id: string }) {
     watch,
     handleSubmit,
     control,
+    setValue,
   } = useForm<Listing>({
     defaultValues: {
       isPrivate: false,
@@ -55,6 +62,12 @@ function EditListing({ id }: { id: string }) {
   const listingForRent = watch('listingForRent', false)
   const propertyType = watch('propertyType')
 
+  const [defaultCityOptions, setDefaultCityOptions] = useState<CityOption[]>([])
+  const [selectedCity, setSelectedCity] = useState<{
+    label: string
+    value: number
+  } | null>(null)
+
   useEffect(() => {
     if (
       typeof listingForSale === 'boolean' &&
@@ -70,18 +83,58 @@ function EditListing({ id }: { id: string }) {
     }
   }, [listingForSale, listingForRent, propertyType])
 
+  const cityId = watch('cityId')
+  const cityName = watch('cityName')
+  const [shouldReset, setShouldReset] = useState(true)
+
+  useEffect(() => {
+    if (listingDetails && shouldReset) {
+      reset(listingDetails)
+    }
+  }, [listingDetails, reset])
+
+  useEffect(() => {
+    if (listingDetails && !selectedCity) {
+      const defaultCity = {
+        label: listingDetails.cityName,
+        value: listingDetails.cityId,
+      }
+      setSelectedCity(defaultCity as CityOption)
+      setValue('cityId', defaultCity.value)
+    }
+  }, [listingDetails, selectedCity])
+
+  useEffect(() => {
+    fetchDefaultCities().then((cities) => {
+      const cityOptions = cities.map((city) => ({
+        label: city.name || 'Unknown city',
+        value: city.id || 0,
+      }))
+      setDefaultCityOptions(cityOptions)
+
+      if (cityId && cityName && typeof cityName === 'string' && shouldReset) {
+        const initialCity = cityOptions.find(
+          (option) => option.value === cityId,
+        ) || {
+          label: cityName,
+          value: cityId,
+        }
+        setSelectedCity(initialCity as CityOption)
+      }
+    })
+  }, [cityId, cityName, setValue])
+
+  const handleCityChange = (cityOption: SetStateAction<CityOption | null>) => {
+    setSelectedCity(cityOption)
+    setShouldReset(false)
+  }
+
   const handleExistingImagesChange = (existingImages: string[]) => {
     setFormExistingImages(existingImages)
   }
   const handleNewFiles = (newFiles: File[]) => {
     setFormNewImageFiles(newFiles)
   }
-
-  useEffect(() => {
-    if (listingDetails) {
-      reset(listingDetails)
-    }
-  }, [listingDetails, reset])
 
   if (isLoading)
     return (
@@ -174,12 +227,15 @@ function EditListing({ id }: { id: string }) {
           linkHref="http://www.daftarproperti.org/address-required"
           linkText="sini"
         />
-        <SelectField
+        <CustomSelectField
+          control={control}
+          name="cityId"
+          placeholder="Pilih Kota"
           label="Kota"
-          registerHook={register('city', { required: true })}
-          selectOptions={LISTING_OPTIONS.cities.options}
-          defaultOption="Pilih Kota"
-          errorFieldName={errors.city}
+          loadOptions={getDebouncedCities}
+          defaultOptions={defaultCityOptions}
+          defaultValue={selectedCity ?? undefined}
+          onCityChange={handleCityChange}
         />
         <TextareaField
           label="Deskripsi"
@@ -187,7 +243,7 @@ function EditListing({ id }: { id: string }) {
           placeholderValue="Tulis keterangan untuk listing ini"
           errorFieldName={errors.description}
         />
-        {listingForSale && (
+        {(listingForSale || (!listingForSale && !listingForRent)) && (
           <IntuitiveCurrencyInputField
             name="price"
             control={control}

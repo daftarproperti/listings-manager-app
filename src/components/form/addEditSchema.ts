@@ -86,9 +86,17 @@ const getMandatoryField = (fieldName: string) => ({
     }),
 })
 
+const priceSchema = z
+  .union([getMandatoryField('Harga Jual').price, z.literal(false)])
+  .transform((price) => (price === false ? undefined : price))
+
+const rentPriceSchema = z
+  .union([getMandatoryField('Harga Sewa').price, z.literal(false)])
+  .transform((rentPrice) => (rentPrice === false ? undefined : rentPrice))
+
 export const baseFormSchema = z.object({
   title: getMandatoryField('Judul Listing').string,
-  propertyType: getOptionalField().string,
+  propertyType: getMandatoryField('Tipe Properti').string,
   listingForSale: z.boolean(),
   listingForRent: z.boolean(),
   address: getMandatoryField('Alamat').string,
@@ -96,7 +104,7 @@ export const baseFormSchema = z.object({
   bedroomCount: getMandatoryField('Kamar Tidur').number,
   buildingSize: getMandatoryField('Luas Bangunan').numberMoreThanZero,
   carCount: getOptionalField('Kapasitas Mobil').number,
-  city: getMandatoryField('Kota').string,
+  cityId: getOptionalField('Kota').number,
   description: getMandatoryField('Deskripsi').string,
   electricPower: getOptionalField('Daya Listrik').number,
   facing: getOptionalField().string,
@@ -105,24 +113,38 @@ export const baseFormSchema = z.object({
   ownership: getMandatoryField('Sertifikat').string,
   pictureUrls: getOptionalField().picture,
   isPrivate: z.boolean(),
+  price: priceSchema,
 })
-
-export function getDynamicFormSchema(
-  forSale: boolean,
-  forRent: boolean,
+export const getDynamicFormSchema = (
+  listingForSale: boolean,
+  listingForRent: boolean,
   propertyType: string,
-) {
+) => {
   let schema = baseFormSchema
 
-  if (forSale) {
+  if (listingForSale && listingForRent) {
     schema = schema.extend({
-      price: getMandatoryField('Harga Jual').price,
+      price: priceSchema,
+      rentPrice: rentPriceSchema,
     })
-  }
-  if (forRent) {
-    schema = schema.extend({
-      rentPrice: getMandatoryField('Harga Sewa').price,
-    })
+  } else if (listingForSale && !listingForRent) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    schema = schema
+      .extend({
+        price: priceSchema,
+      })
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      .omit({ rentPrice: true })
+  } else if (!listingForSale && listingForRent) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    schema = schema
+      .extend({
+        rentPrice: rentPriceSchema,
+      })
+      .omit({ price: true })
   }
 
   switch (propertyType) {
@@ -144,6 +166,7 @@ export function getDynamicFormSchema(
       return schema.omit({
         bedroomCount: true,
         bathroomCount: true,
+        floorCount: true,
       })
     default:
       return schema

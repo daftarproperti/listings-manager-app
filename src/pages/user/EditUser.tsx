@@ -1,12 +1,16 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, type SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
-import { LISTING_OPTIONS } from 'pages/listings/edit/dummy'
-import { type UpdateProfileRequest } from 'api/types'
-import { useGetUserProfile, useUpdateUserProfile } from 'api/queries'
+import { type UpdateProfileRequest, type CityOption } from 'api/types'
+import {
+  useGetUserProfile,
+  useUpdateUserProfile,
+  getDebouncedCities,
+  fetchDefaultCities,
+} from 'api/queries'
 import { useNavigate } from 'react-router-dom'
 import { ClipboardIcon } from '@heroicons/react/24/solid'
 import InputField from 'components/input/InputField'
-import SelectField from 'components/input/SelectField'
+import CustomSelectField from 'components/input/CustomSelectField'
 import TextareaField from 'components/input/TextareaField'
 import InputSingleFileField from 'components/input/InputSingleFileField'
 import BottomStickyButton from 'components/button/BottomStickyButton'
@@ -23,7 +27,9 @@ function EditUser() {
     formState: { errors },
     reset,
     handleSubmit,
+    control,
     watch,
+    setValue,
   } = useForm<UpdateProfileRequest>()
   const { data: userDetails, isLoading } = useGetUserProfile()
   const { mutate } = useUpdateUserProfile()
@@ -31,16 +37,59 @@ function EditUser() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const picture = watch('picture')
 
+  const [defaultCityOptions, setDefaultCityOptions] = useState<CityOption[]>([])
+  const [selectedCity, setSelectedCity] = useState<CityOption | null>(null)
+  const cityId = watch('cityId')
+  const cityName = watch('cityName')
+
   const [newImageFile, setNewImageFile] = useState<File | null>(null)
   const handleNewFile = (file: File | null) => {
     setNewImageFile(file)
   }
 
+  const [shouldReset, setShouldReset] = useState(true)
+
   useEffect(() => {
-    if (userDetails) {
+    if (userDetails && shouldReset) {
       reset(userDetails)
     }
-  }, [userDetails, reset])
+  }, [userDetails, reset, shouldReset])
+
+  useEffect(() => {
+    if (userDetails && !selectedCity) {
+      const defaultCity = {
+        label: userDetails.cityName,
+        value: userDetails.cityId,
+      }
+      setSelectedCity(defaultCity as CityOption)
+      setValue('cityId', defaultCity.value)
+    }
+  }, [userDetails, selectedCity])
+
+  useEffect(() => {
+    fetchDefaultCities().then((cities) => {
+      const cityOptions = cities.map((city) => ({
+        label: city.name || 'Unknown city',
+        value: city.id || 0,
+      }))
+      setDefaultCityOptions(cityOptions)
+
+      if (cityId && cityName && typeof cityName === 'string' && shouldReset) {
+        const initialCity = cityOptions.find(
+          (option) => option.value === cityId,
+        ) || {
+          label: cityName,
+          value: cityId,
+        }
+        setSelectedCity(initialCity as CityOption)
+      }
+    })
+  }, [cityId, cityName, setValue])
+
+  const handleCityChange = (cityOption: SetStateAction<CityOption | null>) => {
+    setSelectedCity(cityOption)
+    setShouldReset(false)
+  }
 
   const handleCopyText = () => {
     const inputElement = document.getElementById(
@@ -127,13 +176,15 @@ function EditUser() {
             placeholderValue="Isi dengan awalan 0 atau +"
             errorFieldName={errors.phoneNumber}
           />
-          <SelectField
+          <CustomSelectField
+            control={control}
+            name="cityId"
+            placeholder="Pilih Kota"
             label="Daerah Operasi"
-            registerHook={register('city', { required: true })}
-            selectOptions={LISTING_OPTIONS.cities.options}
-            defaultOption="Pilih Kota"
-            errorFieldName={errors.city}
-            errorMessage="Kota harus diisi"
+            loadOptions={getDebouncedCities}
+            defaultOptions={defaultCityOptions}
+            defaultValue={selectedCity ?? undefined}
+            onCityChange={handleCityChange}
           />
           <TextareaField
             label="Deskripsi"
