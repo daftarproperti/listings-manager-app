@@ -48,8 +48,15 @@ export type UpdateSavedSearchParams = {
 }
 export type DeleteSavedSearchRes =
   operations['saved_searches.delete']['responses']['200']['content']['application/json']
+export type CitiesListRes =
+  operations['cities.index']['responses']['200']['content']['application/json']
+export type CitybyIdRes =
+  operations['cities.getCityById']['responses']['200']['content']['application/json']
 
 export type FilterMinMax = components['schemas']['FilterMinMax']
 export type FilterSet = components['schemas']['FilterSet']
 export type PropertyType = components['schemas']['PropertyType']
 export type ListingType = components['schemas']['ListingType']
+
+export type City = components['schemas']['City']
+export type CityOption = { label: string; value: number }

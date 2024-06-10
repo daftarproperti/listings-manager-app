@@ -13,6 +13,25 @@ export interface paths {
     /** Verify OTP */
     post: operations["auth.verify_otp"];
   };
+  "/api/auth/logout": {
+    /** Logout */
+    post: operations["auth.logout"];
+  };
+  "/api/auth/impersonate": {
+    /** Impersonate */
+    post: operations["auth.impersonate"];
+  };
+  "/api/tele-app/cities": {
+    /**
+     * Get cities
+     * @description Returns city items
+     */
+    get: operations["cities.index"];
+  };
+  "/api/tele-app/cities/{id}": {
+    /** Get city by id */
+    get: operations["cities.getCityById"];
+  };
   "/api/tele-app/listings": {
     /**
      * Get listing items
@@ -125,6 +144,8 @@ export interface components {
       ownership?: string;
       /** @example Bandung */
       city?: string;
+      /** @example 1 */
+      cityId?: number;
       listingType?: components["schemas"]["ListingType"];
       propertyType?: components["schemas"]["PropertyType"];
       /** @example false */
@@ -151,6 +172,10 @@ export interface components {
       phoneNumber?: string;
       /** @example Surabaya */
       city?: string;
+      /** @example 123 */
+      cityId?: number;
+      /** @example Surabaya */
+      cityName?: string;
       /** @example Agen terpercaya */
       description?: string;
       /** @example Agen XXX */
@@ -253,6 +278,12 @@ export interface components {
      * @enum {string}
      */
     PropertyType: "unknown" | "house" | "apartment" | "warehouse" | "shophouse" | "land" | "villa";
+    City: {
+      id?: number;
+      name?: string;
+      latitude?: number;
+      longitude?: number;
+    };
     Listing: {
       id?: string;
       sourceText?: string;
@@ -277,6 +308,8 @@ export interface components {
       facing?: components["schemas"]["FacingDirection"];
       ownership?: components["schemas"]["PropertyOwnership"];
       verifyStatus?: components["schemas"]["VerifyStatus"];
+      cityName?: string;
+      cityId?: number;
       city?: string;
       pictureUrls?: string[];
       coordinate?: {
@@ -292,6 +325,8 @@ export interface components {
         name?: string;
         profilePictureURL?: string;
         city?: string;
+        cityId?: number;
+        cityName?: string;
         company?: string;
         description?: string;
         phoneNumber?: string;
@@ -323,6 +358,8 @@ export interface components {
       facing?: components["schemas"]["FacingDirection"];
       ownership?: components["schemas"]["PropertyOwnership"];
       verifyStatus?: components["schemas"]["VerifyStatus"];
+      cityId?: number;
+      cityName?: string;
       city?: string;
       pictureUrls?: string[];
       coordinate?: {
@@ -358,6 +395,10 @@ export interface components {
       phoneNumber?: string;
       /** @example New York */
       city?: string;
+      /** @example 123 */
+      cityId?: number;
+      /** @example New York */
+      cityName?: string;
       /** @example I am a programmer */
       description?: string;
       /** @example https://example.com/image.jpg */
@@ -369,12 +410,15 @@ export interface components {
     };
     User: {
       id?: string;
+      publicId?: string;
       username?: string;
       phoneNumber?: string;
       accountType?: components["schemas"]["AccountType"];
       email?: string;
       name?: string;
       city?: string;
+      cityId?: number;
+      cityName?: string;
       description?: string;
       picture?: string;
       company?: string;
@@ -454,6 +498,112 @@ export interface operations {
              */
             accessToken?: string;
             user?: components["schemas"]["User"];
+          };
+        };
+      };
+    };
+  };
+  /** Logout */
+  "auth.logout": {
+    responses: {
+      /** @description Success response */
+      200: {
+        content: {
+          "application/json": {
+            /**
+             * @description Logout status
+             * @example true
+             */
+            success?: boolean;
+          };
+        };
+      };
+      /** @description Token not found response */
+      404: {
+        content: {
+          "application/json": {
+            /**
+             * @description Logout status
+             * @example false
+             */
+            success?: boolean;
+          };
+        };
+      };
+    };
+  };
+  /** Impersonate */
+  "auth.impersonate": {
+    parameters: {
+      path: {
+        /** @description Phone Number */
+        phoneNumber: string;
+      };
+    };
+    responses: {
+      /** @description Success response */
+      200: {
+        content: {
+          "application/json": {
+            /**
+             * @description Verify status
+             * @example true
+             */
+            success?: boolean;
+            /**
+             * @description Access token
+             * @example Akoasdk131o3ipIaskdlz
+             */
+            accessToken?: string;
+            user?: components["schemas"]["User"];
+          };
+        };
+      };
+    };
+  };
+  /**
+   * Get cities
+   * @description Returns city items
+   */
+  "cities.index": {
+    parameters: {
+      query?: {
+        /** @description Search city by keyword */
+        q?: string;
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": {
+            cities?: components["schemas"]["City"][];
+          };
+        };
+      };
+    };
+  };
+  /** Get city by id */
+  "cities.getCityById": {
+    parameters: {
+      path: {
+        /** @description City Id */
+        id: number;
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": components["schemas"]["City"];
+        };
+      };
+      /** @description City not found */
+      404: {
+        content: {
+          "application/json": {
+            /** @example City not found */
+            error?: string;
           };
         };
       };

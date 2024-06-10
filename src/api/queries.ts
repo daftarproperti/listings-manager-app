@@ -1,6 +1,7 @@
 import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query'
 import axios, { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
+import { debounce } from 'lodash'
 
 import type {
   PropertyDetailRes,
@@ -22,6 +23,9 @@ import type {
   UpdateSavedSearchRes,
   UpdateSavedSearchParams,
   DeleteSavedSearchRes,
+  City,
+  CityOption,
+  CitiesListRes,
 } from './types'
 
 // If x-init-data is in local storage (as a result of login widget), attach it
@@ -323,6 +327,7 @@ export const verifyOTP = async (
     )
     return response.data
   } catch (error) {
+    // eslint-disable-next-line import/no-named-as-default-member
     if (axios.isAxiosError(error) && error.response?.status === 429) {
       throw new Error(
         'Too many attempts, please wait 1 minute before trying again.',
@@ -341,4 +346,51 @@ export const logout = async () => {
   } catch (error) {
     throw new Error('Failed to logout. Please try again.')
   }
+}
+
+export const fetchDefaultCities = async (): Promise<City[]> => {
+  try {
+    const response = await axios.get<{ cities: City[] }>('/cities')
+    return response.data.cities
+  } catch (error) {
+    console.error('Error fetching default cities:', error)
+    return []
+  }
+}
+
+async function fetchCities(inputValue: string): Promise<CityOption[]> {
+  if (inputValue.length < 2) return []
+
+  try {
+    const response = await axios.get<CitiesListRes>(
+      `/cities?q=${encodeURIComponent(inputValue)}`,
+    )
+    if (response.data && Array.isArray(response.data.cities)) {
+      return response.data.cities.map((city) => ({
+        label: city.name || 'Unknown city',
+        value: city.id || 0,
+      }))
+    }
+    return []
+  } catch (error) {
+    console.error('Error fetching cities:', error)
+    return []
+  }
+}
+
+export const debouncedFetchCities = debounce(
+  (
+    inputValue: string,
+    resolve: (result: CityOption[]) => void,
+    reject: (error: string) => void,
+  ) => {
+    fetchCities(inputValue).then(resolve).catch(reject)
+  },
+  1000,
+)
+
+export function getDebouncedCities(inputValue: string): Promise<CityOption[]> {
+  return new Promise((resolve, reject) => {
+    debouncedFetchCities(inputValue, resolve, reject)
+  })
 }
