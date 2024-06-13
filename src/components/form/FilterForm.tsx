@@ -4,8 +4,17 @@ import { NumericFormat } from 'react-number-format'
 import { Button } from '@material-tailwind/react'
 import { toast } from 'react-toastify'
 import { searchparamsToSavedSearch, useValidateMinMaxValue } from 'utils'
-import { useAddSavedSearch, useUpdateSavedSearch } from 'api/queries'
+import {
+  useAddSavedSearch,
+  useUpdateSavedSearch,
+  fetchDefaultCities,
+  getDebouncedCities,
+  getCityById,
+} from 'api/queries'
 import { ArrowDownIconSVG } from 'assets/icons'
+import AsyncSelect from 'react-select/async'
+import { type CityOption } from 'api/types'
+import { useEffect, useState } from 'react'
 
 import { FILTER_OPTIONS } from './constant'
 import BottomStickyButton from '../button/BottomStickyButton'
@@ -34,6 +43,30 @@ const ButtonFilterChip = ({
   </Button>
 )
 
+const customStyles = {
+  control: () => ({
+    width: '100%',
+    border: '1px solid #C6CAFF',
+    borderRadius: '0.5rem',
+    padding: '0.2rem 2.2rem 0.2rem 0.3rem',
+    height: '46px',
+    boxShadow: 'none',
+    fontSize: '16px',
+    display: 'flex',
+    alignItems: 'center',
+    background: 'white',
+  }),
+  dropdownIndicator: () => ({
+    display: 'none',
+  }),
+  indicatorSeparator: () => ({
+    display: 'none',
+  }),
+  clearIndicator: () => ({
+    padding: '0 8px',
+  }),
+}
+
 export const filterKeyStrings = {
   minPrice: 'price[min]',
   maxPrice: 'price[max]',
@@ -51,7 +84,7 @@ export const filterKeyStrings = {
   ownership: 'ownership',
   carCount: 'carCount[min]',
   electricPower: 'electricPower',
-  city: 'city',
+  cityId: 'cityId',
 }
 
 type FilterFormProps = {
@@ -62,6 +95,37 @@ const FilterForm = ({ type }: FilterFormProps) => {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const { validationMessage } = useValidateMinMaxValue(searchParams)
+  const [defaultCityOptions, setDefaultCityOptions] = useState<CityOption[]>([])
+  const [selectedCity, setSelectedCity] = useState<CityOption | null>(null)
+  const cityIdParam = searchParams.get(filterKeyStrings.cityId)
+
+  useEffect(() => {
+    const loadDefaultCity = async () => {
+      if (cityIdParam) {
+        try {
+          const city = await getCityById(parseInt(cityIdParam))
+          if (city) {
+            const defaultCity = {
+              label: city.name || 'Unknown city',
+              value: city.id || 0,
+            }
+            setSelectedCity(defaultCity as CityOption)
+          }
+        } catch (error) {
+          console.error('Error fetching city by ID:', error)
+        }
+      }
+    }
+
+    loadDefaultCity()
+    fetchDefaultCities().then((cities) => {
+      const cityOptions = cities.map((city) => ({
+        label: city.name || 'Unknown city',
+        value: city.id || 0,
+      }))
+      setDefaultCityOptions(cityOptions)
+    })
+  }, [cityIdParam])
 
   const searchId = searchParams.get('searchId')
 
@@ -408,22 +472,20 @@ const FilterForm = ({ type }: FilterFormProps) => {
         <div className="mt-6 w-full text-lg font-semibold leading-7 lg:text-sm lg:font-bold lg:uppercase lg:text-slate-500">
           Kota
         </div>
-        <div className="relative mt-2 flex flex-wrap gap-2">
-          <select
-            name="city"
-            value={searchParams.get(filterKeyStrings.city) || ''}
-            onChange={(event) =>
-              controlSearchParams(filterKeyStrings.city, event.target.value)
-            }
-            className="h-full w-full appearance-none rounded-lg border border-solid border-slate-400 p-3 py-2.5 ring-0"
-          >
-            <option>Pilih Kota</option>
-            {FILTER_OPTIONS.city.options.map((option, index) => (
-              <option value={option.value} key={index}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+        <div className="relative mt-2">
+          <AsyncSelect
+            placeholder={'Pilih Kota'}
+            loadOptions={getDebouncedCities}
+            defaultOptions={defaultCityOptions || true}
+            value={selectedCity}
+            onChange={(selectedOption) => {
+              if (selectedOption !== null) {
+                setSelectedCity(selectedOption)
+                controlSearchParams('cityId', selectedOption.value.toString())
+              }
+            }}
+            styles={customStyles}
+          />
           <div className="pointer-events-none absolute right-3 top-2.5 group-hover:pointer-events-auto">
             <ArrowDownIconSVG />
           </div>

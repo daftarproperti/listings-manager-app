@@ -395,6 +395,16 @@ export function getDebouncedCities(inputValue: string): Promise<CityOption[]> {
   })
 }
 
+export async function getCityById(cityId: number): Promise<City | null> {
+  try {
+    const response = await axios.get<City>(`/cities/${cityId}`)
+    return response.data
+  } catch (error) {
+    console.error('Failed to fetch city:', error)
+    return null
+  }
+}
+
 export const impersonate = async (
   phoneNumber: string,
 ): Promise<{ accessToken: string }> => {

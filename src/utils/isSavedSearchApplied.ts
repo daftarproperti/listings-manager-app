@@ -13,9 +13,7 @@ export const isSavedSearchApplied = (searchParams: URLSearchParams) => {
     }
   }
 
-  if (activeFilters.length === 0) {
-    return 'Calon Pembeli'
-  } else {
-    return searchParams.get('title') ?? ''
-  }
+  return activeFilters.length === 0
+    ? 'Calon Pembeli'
+    : searchParams.get('title') ?? 'Calon Pembeli'
 }
