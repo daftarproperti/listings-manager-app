@@ -221,7 +221,7 @@ function ListingDetail({
                         {data?.user?.name}
                       </div>
                       <div className="whitespace-nowrap text-sm leading-5 text-slate-500">
-                        {data?.user?.phoneNumber}
+                        [Hubungi]
                       </div>
                     </span>
                   </div>

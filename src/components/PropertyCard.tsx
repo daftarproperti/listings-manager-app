@@ -44,13 +44,13 @@ const PropertyCard = ({ data }: { data: Property }) => {
   const contact = data?.listings?.[0]?.user?.name
     ? {
         name: data?.listings?.[0]?.user?.name,
-        phoneNumber: data?.listings?.[0]?.user?.phoneNumber,
+        phoneNumber: '[Hubungi]',
         profilePictureURL: data?.listings?.[0]?.user?.profilePictureURL,
       }
     : data?.listings?.[0]?.contact?.name
       ? {
           name: data?.listings?.[0]?.contact?.name,
-          phoneNumber: data?.listings?.[0]?.contact?.phoneNumber,
+          phoneNumber: '[Hubungi]',
           profilePictureURL: null,
         }
       : null

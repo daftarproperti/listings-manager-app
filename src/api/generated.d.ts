@@ -253,6 +253,8 @@ export interface components {
       order?: string | null;
       /** @description City */
       city?: string | null;
+      /** @description City (OSM) ID */
+      cityId?: number | null;
     };
     /**
      * @description Sort Listing By
@@ -318,7 +320,6 @@ export interface components {
       };
       contact?: {
         name?: string;
-        phoneNumber?: string;
         company?: string;
       };
       user?: {
@@ -329,7 +330,6 @@ export interface components {
         cityName?: string;
         company?: string;
         description?: string;
-        phoneNumber?: string;
       };
       userCanEdit?: boolean;
       isPrivate?: boolean;
@@ -369,6 +369,37 @@ export interface components {
       /** Format: date-time */
       updatedAt?: string;
       listings?: components["schemas"]["Listing"][];
+    };
+    /** @description Representation of a Listing which is available publicly. */
+    PublicListing: {
+      listingId?: number;
+      title?: string;
+      propertyType?: components["schemas"]["PropertyType"];
+      listingForSale?: boolean;
+      listingForRent?: boolean;
+      address?: string;
+      description?: string;
+      price?: number;
+      rentPrice?: number;
+      lotSize?: number;
+      buildingSize?: number;
+      carCount?: number;
+      bedroomCount?: number;
+      bathroomCount?: number;
+      floorCount?: number;
+      electricPower?: number;
+      facing?: components["schemas"]["FacingDirection"];
+      ownership?: components["schemas"]["PropertyOwnership"];
+      isVerified?: boolean;
+      cityName?: string;
+      cityId?: number;
+      pictureUrls?: string[];
+      coordinate?: {
+        latitude?: number;
+        longitude?: number;
+      };
+      /** Format: date-time */
+      updatedAt?: string;
     };
     SavedSearch: {
       id?: string;
@@ -664,6 +695,8 @@ export interface operations {
         "carCount[max]"?: number;
         /** @description Electric Power */
         electricPower?: number;
+        /** @description City Id */
+        cityId?: number;
         /** @description Sort By */
         sort?: components["schemas"]["ListingSort"];
         /** @description Order By */
@@ -867,6 +900,8 @@ export interface operations {
         "carCount[max]"?: number;
         /** @description Electric Power */
         electricPower?: number;
+        /** @description City Id */
+        cityId?: number;
         /** @description Sort By */
         sort?: components["schemas"]["ListingSort"];
         /** @description Order By */

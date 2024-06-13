@@ -372,7 +372,7 @@ function EditListing({ id }: { id: string }) {
             </tr>
             <tr>
               <td className="pr-4">No HP</td>
-              <td>: {watch('user.phoneNumber')}</td>
+              <td>: [Hubungi]</td>
             </tr>
           </tbody>
         </table>
