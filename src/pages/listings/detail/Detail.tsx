@@ -29,7 +29,9 @@ function ListingDetail({
   }
   const location = useLocation()
   const updateSuccess = location.state?.updateSuccess
-  const listingPublicUrl = dpPath(`/public/listings/${data?.id || ''}`)
+  const listingPublicUrl = dpPath(
+    `/public/listings/${data?.listingIdStr || ''}`,
+  )
 
   useEffect(() => {
     if (updateSuccess) {

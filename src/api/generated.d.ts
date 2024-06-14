@@ -288,6 +288,8 @@ export interface components {
     };
     Listing: {
       id?: string;
+      listingId?: number;
+      listingIdStr?: string;
       sourceText?: string;
       title?: string;
       propertyType?: components["schemas"]["PropertyType"];
