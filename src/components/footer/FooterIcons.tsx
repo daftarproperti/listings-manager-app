@@ -1,11 +1,7 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
-import {
-  ListingIconSVG,
-  SearchIconSVG,
-  AccountIconSVG,
-} from '../../assets/icons'
+import { ListingIconSVG, AccountIconSVG } from '../../assets/icons'
 
 type FooterIconsProps = {
   activeIcon?: boolean
@@ -28,15 +24,6 @@ const FooterIcons: React.FC<FooterIconsProps> = () => {
         >
           <ListingIconSVG className="inline-block" />
           <span className="block pt-2 text-xs">Listing Saya</span>
-        </Link>
-        <Link
-          to="/properties"
-          className={`inline-block w-1/3 justify-center p-2 text-center ${getClassName(
-            isActive('/properties'),
-          )}`}
-        >
-          <SearchIconSVG className="inline-block" />
-          <span className="block pt-2 text-xs">Cari</span>
         </Link>
         <Link
           to="/user"

@@ -23,7 +23,6 @@ import {
   ListingIconSVG,
   LogoSVG,
   LogoTypeSVG,
-  SearchIconSVG,
 } from 'assets/icons'
 import {
   Bars3BottomLeftIcon,
@@ -45,7 +44,6 @@ import {
 
 const MENU = [
   { name: 'Listing Saya', link: '/', icon: ListingIconSVG },
-  { name: 'Cari Properti', link: '/properties', icon: SearchIconSVG },
   { name: 'Akun Saya', link: '/user', icon: AccountIconSVG },
 ]
 
