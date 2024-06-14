@@ -117,7 +117,7 @@ const Card = ({ data }: { data: Listing }) => {
           )}
         </div>
       </div>
-      {import.meta.env.VITE_PHASE1 === 'true' && (
+      {import.meta.env.VITE_FEATURE_VIEW_COUNT === 'true' && (
         <div className="flex bg-slate-200 px-4 py-3">
           <div className="flex gap-1">
             <EyeIcon className="w-5 text-slate-500" />
