@@ -236,7 +236,7 @@ const MainLayout = ({ children }: PropsWithChildren) => {
                     </Badge>
                     {isSorted(searchParams)
                       ? getSortLabel(searchParams)
-                      : 'Urut Berdasarkan'}
+                      : 'Urutkan Berdasarkan'}
                   </Button>
                 </MenuHandler>
                 <MenuList>
