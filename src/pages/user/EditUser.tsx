@@ -8,16 +8,11 @@ import {
   fetchDefaultCities,
 } from 'api/queries'
 import { useNavigate } from 'react-router-dom'
-import { ClipboardIcon } from '@heroicons/react/24/solid'
 import InputField from 'components/input/InputField'
 import CustomSelectField from 'components/input/CustomSelectField'
-import TextareaField from 'components/input/TextareaField'
 import InputSingleFileField from 'components/input/InputSingleFileField'
 import BottomStickyButton from 'components/button/BottomStickyButton'
-import InputCheckboxField from 'components/input/InputCheckboxField'
-import { toast } from 'react-toastify'
 import { Button } from '@material-tailwind/react'
-import { dpPath } from 'utils'
 
 import { onSubmit } from './handleUserForm'
 
@@ -91,33 +86,6 @@ function EditUser() {
     setShouldReset(false)
   }
 
-  const handleCopyText = () => {
-    const inputElement = document.getElementById(
-      'publicUrlInput',
-    ) as HTMLInputElement | null
-
-    if (inputElement && navigator.clipboard) {
-      navigator.clipboard
-        .writeText(inputElement.value)
-        .then(() => {
-          toast(`Successfully copied to clipboard`, { type: 'info' })
-        })
-        .catch(() => {
-          toast(`Failed to copy to clipboard`, { type: 'error' })
-        })
-    }
-  }
-
-  const handleInputClick = () => {
-    const inputElement = document.getElementById(
-      'publicUrlInput',
-    ) as HTMLInputElement | null
-
-    if (inputElement) {
-      inputElement.select()
-    }
-  }
-
   const phoneNumberPattern = /^(\+[1-9]\d{1,14}|0\d{5,14})$/
 
   return (
@@ -161,6 +129,7 @@ function EditUser() {
           />
           <InputField
             label="Perusahaan"
+            additionalLabel="(Jika Agen/Broker Profesional)"
             registerHook={register('company')}
             placeholderValue="Tulis Nama Perusahaan Anda"
           />
@@ -180,49 +149,12 @@ function EditUser() {
             control={control}
             name="cityId"
             placeholder="Pilih Kota"
-            label="Daerah Operasi"
+            label="Kota"
             loadOptions={getDebouncedCities}
             defaultOptions={defaultCityOptions}
             defaultValue={selectedCity ?? undefined}
             onCityChange={handleCityChange}
           />
-          <TextareaField
-            label="Deskripsi"
-            registerHook={register('description')}
-            placeholderValue="Tulis deskripsi tentang Anda di sini"
-            errorFieldName={errors.description}
-          />
-          <div className="mb-5">
-            <InputCheckboxField
-              label="Profil Publik"
-              registerHook={register('isPublicProfile')}
-              inputID="isPrivate"
-              showTooltip
-              tooltipContent="Dapatkan halaman web profile yang dapat dikunjungi oleh publik."
-            />
-            {watch('isPublicProfile') ? (
-              <div className="mt-2 flex items-center gap-2">
-                <input
-                  id="publicUrlInput"
-                  onClick={handleInputClick}
-                  type="text"
-                  value={dpPath(
-                    `/public/agents/${userDetails?.publicId || ''}`,
-                  )}
-                  readOnly
-                  className="w-full items-start justify-center self-stretch whitespace-nowrap rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-gray-100 px-2 py-1 text-sm leading-7 text-gray-800"
-                />
-                <Button
-                  size="sm"
-                  color="blue"
-                  className="h-full text-center"
-                  onClick={handleCopyText}
-                >
-                  <ClipboardIcon className="h-5 w-5" />
-                </Button>
-              </div>
-            ) : null}
-          </div>
         </div>
         <div className="lg:hidden">
           <BottomStickyButton
