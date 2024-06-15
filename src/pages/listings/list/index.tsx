@@ -143,7 +143,7 @@ const ListingListPage = () => {
             onClick={() => navigate('/listings/add')}
           >
             <PlusIcon className="w-5" />
-            Properti Baru
+            Tambah Listing Baru
           </Button>
         </div>
 
@@ -171,11 +171,15 @@ const ListingListPage = () => {
                               <div className="shrink-0">
                                 <InformationCircleIcon className="h-5 w-5 text-slate-800" />
                               </div>
-                              <div className="text-sm">
-                                Anda dapat dengan mudah menambahkan listing
-                                dengan cara menyalin dan menempelkan seluruh
-                                informasi listing Anda pada bot chat Telegram
-                                Anda.
+                              <div className="text-center text-sm">
+                                Anda belum mempunyai listing.{' '}
+                                <Link
+                                  className="text-blue-600 underline transition duration-300 ease-in-out hover:text-blue-800 hover:no-underline focus:text-blue-800 focus:no-underline active:text-blue-900 active:no-underline"
+                                  to="/listings/add"
+                                >
+                                  Tambahkan listing baru
+                                </Link>
+                                .
                               </div>
                             </div>
                           ) : (
