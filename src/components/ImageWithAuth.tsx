@@ -9,12 +9,14 @@ interface ImageWithAuthProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   useOrientation?: boolean
   noWrapper?: boolean
   noRounded?: boolean
+  useFrom?: string
 }
 const ImageWithAuth: React.FC<ImageWithAuthProps> = ({
   link,
   useOrientation,
   noWrapper,
   noRounded,
+  useFrom,
   ...props
 }) => {
   const [imageSrc, setImageSrc] = useState<string | null>(null)
@@ -55,7 +57,10 @@ const ImageWithAuth: React.FC<ImageWithAuthProps> = ({
       {...props}
       loading="lazy"
       className={clsx(
-        'h-full max-h-46 w-full object-cover object-center',
+        'h-full',
+        useFrom === 'swiper'
+          ? 'max-h-52 lg:max-h-80'
+          : 'max-h-52 w-full object-cover object-center',
         !noRounded && 'rounded-tl-lg',
         orientation,
       )}

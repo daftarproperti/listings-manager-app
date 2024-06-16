@@ -13,3 +13,29 @@
 .swiper-pagination-bullet-active {
     @apply bg-white;
 }
+:global(.swiper-button-next),
+:global(.swiper-button-prev) {
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border-radius: 50%;
+}
+
+:global(.swiper-button-next::after),
+:global(.swiper-button-prev::after) {
+    font-size: 16px;
+    color: white;
+}
+
+:global(.swiper-button-next:hover),
+:global(.swiper-button-prev:hover) {
+    background-color: rgba(255, 255, 255, 0.8);
+    color: black;
+}
+:global(.swiper-button-lock){
+    display: none;
+}
