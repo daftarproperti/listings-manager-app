@@ -23,6 +23,7 @@ import {
   ListingIconSVG,
   LogoSVG,
   LogoTypeSVG,
+  LogoutIconSVG,
 } from 'assets/icons'
 import {
   Bars3BottomLeftIcon,
@@ -127,12 +128,11 @@ const MainLayout = ({ children }: PropsWithChildren) => {
           </div>
           <div className="mt-4">
             <Button
-              color="red"
-              size="sm"
-              className="w-full"
+              className="flex w-full bg-transparent px-2 text-base font-normal capitalize text-blue-500 shadow-none hover:shadow-none"
               onClick={handleLogout}
             >
-              Logout
+              <LogoutIconSVG className="mt-0.5 text-blue-500" />
+              <span>Keluar</span>
             </Button>
           </div>
           <div className="px-2 text-xs leading-5 text-slate-400">

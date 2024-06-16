@@ -251,8 +251,8 @@ const FilterForm = ({ type }: FilterFormProps) => {
             </div>
           </>
         )}
-        <div className="w-full text-lg font-semibold leading-7 text-slate-800">
-          Tampilkan
+        <div className="w-full text-lg font-semibold leading-7 lg:text-sm lg:font-bold lg:uppercase lg:text-slate-500">
+          Tipe Listing
         </div>
         <div className="mb-5 mt-1 flex w-full gap-2">
           <ButtonFilterChip
