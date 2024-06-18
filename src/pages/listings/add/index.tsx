@@ -1,4 +1,4 @@
-import { useState, useEffect, type SetStateAction } from 'react'
+import { useState, useEffect, type SetStateAction, useRef } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -12,7 +12,7 @@ import {
 } from 'api/queries'
 import { type UpdateListingRequest, type CityOption } from 'api/types'
 import BottomStickyButton from 'components/button/BottomStickyButton'
-import { getDynamicFormSchema } from 'components/form/addEditSchema'
+import { schema } from 'components/form/addEditSchema'
 import IntuitiveCurrencyInputField from 'components/input/IntuitiveCurrencyInputField'
 import InputField from 'components/input/InputField'
 import InputFileField from 'components/input/InputFileField'
@@ -27,9 +27,8 @@ const AddPage = () => {
   const navigate = useNavigate()
   const [formExistingImages, setFormExistingImages] = useState<string[]>([])
   const [formNewImageFiles, setFormNewImageFiles] = useState<File[]>([])
-  const [schema, setSchema] = useState(() =>
-    getDynamicFormSchema(false, false, 'house'),
-  )
+
+  const checkboxSectionRef = useRef<HTMLDivElement | null>(null)
 
   const {
     register,
@@ -40,9 +39,9 @@ const AddPage = () => {
     setValue,
   } = useForm<UpdateListingRequest>({
     defaultValues: {
-      isPrivate: false,
       listingForSale: true,
       listingForRent: false,
+      isPrivate: false,
       ownership: 'unknown',
       city: '',
     },
@@ -51,28 +50,13 @@ const AddPage = () => {
 
   const { mutate, isPending } = useAddListing()
 
-  const listingForSale = watch('listingForSale', false)
-  const listingForRent = watch('listingForRent', false)
+  const listingForSale = watch('listingForSale')
+  const listingForRent = watch('listingForRent')
   const propertyType = watch('propertyType')
 
   const [defaultCityOptions, setDefaultCityOptions] = useState<CityOption[]>([])
   const { data: userProfile, isFetched } = useGetUserProfile()
   const [selectedCity, setSelectedCity] = useState<CityOption | null>(null)
-
-  useEffect(() => {
-    if (
-      typeof listingForSale === 'boolean' &&
-      typeof listingForRent === 'boolean' &&
-      propertyType
-    ) {
-      const updatedSchema = getDynamicFormSchema(
-        listingForSale,
-        listingForRent,
-        propertyType,
-      )
-      setSchema(updatedSchema)
-    }
-  }, [listingForSale, listingForRent, propertyType])
 
   useEffect(() => {
     if (isFetched) {
@@ -107,6 +91,12 @@ const AddPage = () => {
       setValue('cityId', selectedCity.value, { shouldValidate: true })
     }
   }, [selectedCity, setValue])
+
+  useEffect(() => {
+    if (errors.listingType && Object.keys(errors).length === 1) {
+      checkboxSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [errors.listingType])
 
   const handleCityChange = (cityOption: SetStateAction<CityOption | null>) => {
     setSelectedCity(cityOption)
@@ -174,7 +164,7 @@ const AddPage = () => {
           errorFieldName={errors.title}
           halfWidth={false}
         />
-        <div className="mt-3">
+        <div className="mt-3" ref={checkboxSectionRef}>
           <span className="text-lg font-semibold leading-7 text-gray-800">
             Tipe Listing
           </span>
@@ -190,11 +180,12 @@ const AddPage = () => {
               inputID="listingForRent"
             />
           </div>
-          <div>
-            {errors.listingType && (
-              <p className="text-red-500">{errors.listingType.message}</p>
-            )}
-          </div>
+          {!listingForSale && !listingForRent && (
+            <p className="mt-1 self-stretch text-sm leading-5 text-red-500">
+              {errors.listingType?.message ||
+                'Harus memilih minimal satu tipe listing'}
+            </p>
+          )}
         </div>
         <SelectField
           label="Tipe Properti"
