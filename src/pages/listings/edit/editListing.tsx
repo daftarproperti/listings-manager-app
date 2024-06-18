@@ -1,4 +1,4 @@
-import { type SetStateAction, useEffect, useState } from 'react'
+import { type SetStateAction, useEffect, useState, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -10,7 +10,7 @@ import {
   fetchDefaultCities,
 } from 'api/queries'
 import { type CityOption, type Listing } from 'api/types'
-import { getDynamicFormSchema } from 'components/form/addEditSchema'
+import { schema } from 'components/form/addEditSchema'
 import IntuitiveCurrencyInputField from 'components/input/IntuitiveCurrencyInputField'
 import InputField from 'components/input/InputField'
 import InputFileField from 'components/input/InputFileField'
@@ -28,9 +28,8 @@ function EditListing({ id }: { id: string }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formExistingImages, setFormExistingImages] = useState<string[]>([])
   const [formNewImageFiles, setFormNewImageFiles] = useState<File[]>([])
-  const [schema, setSchema] = useState(() =>
-    getDynamicFormSchema(false, false, 'house'),
-  )
+
+  const checkboxSectionRef = useRef<HTMLDivElement | null>(null)
 
   const {
     register,
@@ -43,8 +42,6 @@ function EditListing({ id }: { id: string }) {
   } = useForm<Listing>({
     defaultValues: {
       isPrivate: false,
-      listingForSale: false,
-      listingForRent: false,
       ownership: 'unknown',
     },
     resolver: zodResolver(schema),
@@ -58,8 +55,8 @@ function EditListing({ id }: { id: string }) {
 
   const { mutate } = useUpdateListing()
 
-  const listingForSale = watch('listingForSale', false)
-  const listingForRent = watch('listingForRent', false)
+  const listingForSale = watch('listingForSale')
+  const listingForRent = watch('listingForRent')
   const propertyType = watch('propertyType')
 
   const [defaultCityOptions, setDefaultCityOptions] = useState<CityOption[]>([])
@@ -67,21 +64,6 @@ function EditListing({ id }: { id: string }) {
     label: string
     value: number
   } | null>(null)
-
-  useEffect(() => {
-    if (
-      typeof listingForSale === 'boolean' &&
-      typeof listingForRent === 'boolean' &&
-      propertyType
-    ) {
-      const updatedSchema = getDynamicFormSchema(
-        listingForSale,
-        listingForRent,
-        propertyType,
-      )
-      setSchema(updatedSchema)
-    }
-  }, [listingForSale, listingForRent, propertyType])
 
   const cityId = watch('cityId')
   const cityName = watch('cityName')
@@ -123,6 +105,12 @@ function EditListing({ id }: { id: string }) {
       }
     })
   }, [cityId, cityName, setValue])
+
+  useEffect(() => {
+    if (errors.listingType && Object.keys(errors).length === 1) {
+      checkboxSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [errors.listingType])
 
   const handleCityChange = (cityOption: SetStateAction<CityOption | null>) => {
     setSelectedCity(cityOption)
@@ -195,7 +183,7 @@ function EditListing({ id }: { id: string }) {
           placeholderValue="Tulis Judul"
           errorFieldName={errors.title}
         />
-        <div className="mt-3">
+        <div className="mt-3" ref={checkboxSectionRef}>
           <span className="text-lg font-semibold leading-7 text-gray-800">
             Tipe Listing
           </span>
@@ -211,6 +199,12 @@ function EditListing({ id }: { id: string }) {
               inputID="listingForRent"
             />
           </div>
+          {!listingForSale && !listingForRent && (
+            <p className="mt-1 self-stretch text-sm leading-5 text-red-500">
+              {errors.listingType?.message ||
+                'Harus memilih minimal satu tipe listing'}
+            </p>
+          )}
         </div>
         <SelectField
           label="Tipe Properti"
