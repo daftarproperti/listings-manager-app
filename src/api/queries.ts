@@ -197,6 +197,9 @@ export const useGetListingDetail = ({ id }: { id: string }) =>
         throw error
       }
     },
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
     retry: false,
     staleTime: 0,
   })
