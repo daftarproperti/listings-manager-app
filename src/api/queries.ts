@@ -43,6 +43,17 @@ axios.interceptors.request.use(
   },
 )
 
+axios.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  (error) => {
+    console.log('error occured. redirecting to login page . . .')
+    window.location.href = '/login'
+    return Promise.reject(error)
+  },
+)
+
 export const useGetPropertyList = ({
   searchParams,
 }: {
