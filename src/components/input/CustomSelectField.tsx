@@ -12,6 +12,7 @@ interface CustomSelectFieldProps {
   defaultValue?: CityOption
   defaultOptions?: CityOption[]
   onCityChange?: (option: CityOption) => void
+  required?: boolean
 }
 
 const customStyles = {
@@ -46,13 +47,14 @@ const CustomSelectField: React.FC<CustomSelectFieldProps> = ({
   defaultValue,
   defaultOptions,
   onCityChange = () => {},
+  required = true,
 }) => {
   const {
     fieldState: { error },
   } = useController({
     control,
     name,
-    rules: { required: 'Kota harus diisi' },
+    rules: required ? { required: label + 'harus diisi' } : {},
   })
 
   return (
@@ -84,8 +86,10 @@ const CustomSelectField: React.FC<CustomSelectFieldProps> = ({
         )}
       />
       {error && (
-        <p className="self-stretch text-sm leading-5 text-red-500">
-          {error.message === 'Required' ? 'Kota harus diisi' : error.message}
+        <p className="mt-1 self-stretch text-sm leading-5 text-red-500">
+          {error.message === 'Required'
+            ? label + ' harus diisi'
+            : error.message}
         </p>
       )}
       <div className="pointer-events-none absolute right-3 top-11 group-hover:pointer-events-auto">

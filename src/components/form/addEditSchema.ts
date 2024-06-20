@@ -104,7 +104,7 @@ export const baseFormSchema = z.object({
   bedroomCount: getMandatoryField('Kamar Tidur').number,
   buildingSize: getMandatoryField('Luas Bangunan').numberMoreThanZero,
   carCount: getOptionalField('Kapasitas Mobil').number,
-  cityId: getOptionalField('Kota').number,
+  cityId: getMandatoryField('Kota').number,
   description: getMandatoryField('Deskripsi').string,
   electricPower: getOptionalField('Daya Listrik').number,
   facing: getOptionalField().string,

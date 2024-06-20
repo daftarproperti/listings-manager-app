@@ -51,12 +51,12 @@ function EditUser() {
   }, [userDetails, reset, shouldReset])
 
   useEffect(() => {
-    if (userDetails && !selectedCity) {
+    if (userDetails?.cityId && !selectedCity) {
       const defaultCity = {
         label: userDetails.cityName,
         value: userDetails.cityId,
       }
-      setSelectedCity(defaultCity as CityOption)
+      setSelectedCity((defaultCity as CityOption) || null)
       setValue('cityId', defaultCity.value)
     }
   }, [userDetails, selectedCity])
@@ -89,7 +89,7 @@ function EditUser() {
   const phoneNumberPattern = /^(\+[1-9]\d{1,14}|0\d{5,14})$/
 
   return (
-    <div>
+    <div className="min-h-screen">
       <form
         className="w-full bg-slate-100 pb-20 pt-16 lg:pb-4 lg:pt-0"
         onSubmit={handleSubmit((formData) => {
@@ -154,6 +154,7 @@ function EditUser() {
             defaultOptions={defaultCityOptions}
             defaultValue={selectedCity ?? undefined}
             onCityChange={handleCityChange}
+            required={false}
           />
         </div>
         <div className="lg:hidden">
