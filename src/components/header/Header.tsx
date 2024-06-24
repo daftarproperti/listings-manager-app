@@ -1,40 +1,32 @@
 import { ArrowLeftIcon } from '@heroicons/react/24/solid'
 import React from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { LogoSVG, ShareIconSVG } from 'assets/icons'
-import { useGetUserProfile } from 'api/queries'
-import ShareButton from 'components/button/ShareButton'
+import { LogoSVG } from 'assets/icons'
 import { IconButton } from '@material-tailwind/react'
-import { dpPath } from 'utils'
 
 import DotsHeaderButton from './DotsHeaderButton'
 import ResetHeaderButton from './ResetHeaderButton'
+import HomeHeaderButton from './HomeHeaderButton'
 
 type HeaderProps = {
   title?: string
   canEdit?: boolean
   isWithoutBackButton?: boolean
-  isWithShareButton?: boolean
+  isWithHomeHeaderButton?: boolean
 }
 
 const Header: React.FC<HeaderProps> = ({
   title = 'Judul Halaman',
   canEdit = false,
   isWithoutBackButton = false,
-  isWithShareButton = false,
+  isWithHomeHeaderButton = false,
 }) => {
   const { id } = useParams<{ id: string }>()
   const location = useLocation()
   const navigate = useNavigate()
 
-  const searchParams = new URLSearchParams(location.search)
-
   const isFilterPage = location.pathname.includes('/filter')
   const isHomePage = location.pathname === '/' || isWithoutBackButton
-
-  const { data: userDetails } = useGetUserProfile()
-  const userPublicUrl = dpPath(`/public/agents/${userDetails?.publicId || ''}`)
-  const shareUrl = `${userPublicUrl}?${searchParams.toString()}`
 
   return (
     <header className="fixed top-0 z-10 flex h-16 w-full items-center justify-between border-b border-slate-300 bg-blue-50 px-4 lg:hidden">
@@ -56,12 +48,8 @@ const Header: React.FC<HeaderProps> = ({
         <DotsHeaderButton propertyId={id} />
       ) : isFilterPage ? (
         <ResetHeaderButton />
-      ) : isWithShareButton ? (
-        <ShareButton title={title} url={shareUrl}>
-          <IconButton variant="text" color="blue-gray" className="rounded-full">
-            <ShareIconSVG />
-          </IconButton>
-        </ShareButton>
+      ) : isWithHomeHeaderButton ? (
+        <HomeHeaderButton />
       ) : null}
     </header>
   )

@@ -53,7 +53,7 @@ const router = createBrowserRouter(
           path: '/',
           element: (
             <MainLayout>
-              <Header title="Listing Saya" isWithShareButton={true} />
+              <Header title="Listing Saya" isWithHomeHeaderButton={true} />
               <ListingListPage />
               <FooterIcons />
             </MainLayout>
