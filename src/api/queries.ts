@@ -48,9 +48,11 @@ axios.interceptors.response.use(
     return response
   },
   (error) => {
-    console.log('error occured. redirecting to login page . . .')
-    window.location.href = '/login'
-    return Promise.reject(error)
+    if (error.response && error.response.status === 403) {
+      console.log('Auth error occured. redirecting to login page . . .')
+      window.location.href = '/login'
+      return Promise.reject(error)
+    }
   },
 )
 
