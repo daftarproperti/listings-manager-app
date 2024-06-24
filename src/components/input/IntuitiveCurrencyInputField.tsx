@@ -31,11 +31,30 @@ const convertAbbreviationToNumber = (input: string) => {
 
     if (abbreviation && customAbbreviations[abbreviation]) {
       const multiplier = customAbbreviations[abbreviation]
-      if (/,/.test(match[1])) {
-        return (parseFloat(match[1].replace(/,/g, '')) * multiplier) / 10
+      let numberString = match[1].replace(/,/g, '')
+
+      // Remove any potential leading zeros
+      numberString = numberString.replace(/^0+/, '') || '0'
+
+      let numberValue
+      if (numberString.includes('.')) {
+        // Handle decimal part
+        const [integerPart, decimalPart] = numberString.split('.')
+
+        // Remove trailing zeros from the decimal part
+        const trimmedDecimalPart = decimalPart.replace(/0+$/, '')
+        const trimmedDecimalPlaces = trimmedDecimalPart.length
+
+        // Convert to BigInt and scale by the multiplier
+        numberValue =
+          BigInt(integerPart) * BigInt(multiplier) +
+          BigInt(trimmedDecimalPart) *
+            (BigInt(multiplier) / BigInt(Math.pow(10, trimmedDecimalPlaces)))
       } else {
-        return parseFloat(match[1].replace(/,/g, '')) * multiplier
+        numberValue = BigInt(numberString) * BigInt(multiplier)
       }
+
+      return numberValue.toString()
     } else {
       return input
     }
