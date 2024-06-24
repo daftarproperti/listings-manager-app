@@ -86,108 +86,91 @@ const getMandatoryField = (fieldName: string) => ({
     }),
 })
 
+const priceSchema = z
+  .union([getMandatoryField('Harga Jual').price, z.literal(false)])
+  .transform((price) => (price === false ? undefined : price))
+
+const rentPriceSchema = z
+  .union([getMandatoryField('Harga Sewa').price, z.literal(false)])
+  .transform((rentPrice) => (rentPrice === false ? undefined : rentPrice))
+
 export const baseFormSchema = z.object({
   title: getMandatoryField('Judul Listing').string,
   propertyType: getMandatoryField('Tipe Properti').string,
   listingForSale: z.boolean(),
   listingForRent: z.boolean(),
   address: getMandatoryField('Alamat').string,
-  bathroomCount: getOptionalField('Kamar Mandi').number,
-  bedroomCount: getOptionalField('Kamar Tidur').number,
-  buildingSize: getOptionalField('Luas Bangunan').number,
+  bathroomCount: getMandatoryField('Kamar Mandi').number,
+  bedroomCount: getMandatoryField('Kamar Tidur').number,
+  buildingSize: getMandatoryField('Luas Bangunan').numberMoreThanZero,
   carCount: getOptionalField('Kapasitas Mobil').number,
   cityId: getMandatoryField('Kota').number,
   description: getMandatoryField('Deskripsi').string,
   electricPower: getOptionalField('Daya Listrik').number,
   facing: getOptionalField().string,
-  floorCount: getOptionalField('Lantai').number,
-  lotSize: getOptionalField('Luas Tanah').number,
+  floorCount: getMandatoryField('Lantai').numberMoreThanZero,
+  lotSize: getMandatoryField('Luas Tanah').numberMoreThanZero,
   ownership: getMandatoryField('Sertifikat').string,
   pictureUrls: getOptionalField().picture,
   isPrivate: z.boolean(),
-  price: getOptionalField('Harga Jual').string,
-  rentPrice: getOptionalField('Harga Sewa').string,
+  price: priceSchema,
 })
+export const getDynamicFormSchema = (
+  listingForSale: boolean,
+  listingForRent: boolean,
+  propertyType: string,
+) => {
+  let schema = baseFormSchema
 
-export const schema = baseFormSchema.superRefine((data, ctx) => {
-  type DataType = z.infer<typeof baseFormSchema>
-  type MandatoryFieldsType = {
-    code: keyof DataType
-    name: string
-    canbeZero?: boolean
-  }
-
-  // Check listing type and add errors to respective fields
-  if (data.listingForSale && (!data.price || !/\d/.test(data.price))) {
-    ctx.addIssue({
-      path: ['price'],
-      message: 'Harga Jual harus diisi untuk listing jual',
-      code: z.ZodIssueCode.custom,
+  if (listingForSale && listingForRent) {
+    schema = schema.extend({
+      price: priceSchema,
+      rentPrice: rentPriceSchema,
     })
-  }
-  if (data.listingForRent && (!data.rentPrice || !/\d/.test(data.rentPrice))) {
-    ctx.addIssue({
-      path: ['rentPrice'],
-      message: 'Harga Sewa harus diisi untuk listing sewa',
-      code: z.ZodIssueCode.custom,
-    })
-  }
-  if (!data.listingForSale && !data.listingForRent) {
-    ctx.addIssue({
-      path: ['listingType', 'listingForSale', 'listingForRent'],
-      message: 'Harus memilih minimal satu tipe listing',
-      code: z.ZodIssueCode.custom,
-    })
-  }
-
-  const checkMandatoryFields = (mandatoryFields: MandatoryFieldsType[]) => {
-    mandatoryFields.forEach((field) => {
-      if (!data[field.code]) {
-        ctx.addIssue({
-          path: [field.code],
-          message: `${field.name} harus diisi`,
-          code: z.ZodIssueCode.custom,
-        })
-      }
-      if (
-        !field.canbeZero &&
-        (data[field.code] === 0 || data[field.code] === '0')
-      ) {
-        ctx.addIssue({
-          path: [field.code],
-          message: `${field.name} tidak boleh 0`,
-          code: z.ZodIssueCode.custom,
-        })
-      }
-    })
+  } else if (listingForSale && !listingForRent) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    schema = schema
+      .extend({
+        price: priceSchema,
+      })
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      .omit({ rentPrice: true })
+  } else if (!listingForSale && listingForRent) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    schema = schema
+      .extend({
+        rentPrice: rentPriceSchema,
+      })
+      .omit({ price: true })
   }
 
-  switch (data.propertyType) {
+  switch (propertyType) {
     case 'apartment':
-      checkMandatoryFields([
-        { code: 'buildingSize', name: 'Luas Bangunan' },
-        { code: 'bathroomCount', name: 'Kamar Mandi', canbeZero: true },
-        { code: 'bedroomCount', name: 'Kamar Tidur', canbeZero: true },
-        { code: 'facing', name: 'Arah Bangunan' },
-      ])
-      break
+      return schema.omit({
+        lotSize: true,
+        floorCount: true,
+      })
     case 'land':
-      checkMandatoryFields([{ code: 'lotSize', name: 'Luas Tanah' }])
-      break
+      return schema.omit({
+        buildingSize: true,
+        floorCount: true,
+        bathroomCount: true,
+        bedroomCount: true,
+        electricPower: true,
+        facing: true,
+      })
     case 'warehouse':
-      checkMandatoryFields([
-        { code: 'buildingSize', name: 'Luas Bangunan' },
-        { code: 'lotSize', name: 'Luas Bangunan' },
-      ])
-      break
+      return schema.omit({
+        bedroomCount: true,
+        bathroomCount: true,
+        floorCount: true,
+      })
     default:
-      checkMandatoryFields([
-        { code: 'bathroomCount', name: 'Kamar Mandi', canbeZero: true },
-        { code: 'bedroomCount', name: 'Kamar Tidur', canbeZero: true },
-        { code: 'buildingSize', name: 'Luas Bangunan' },
-        { code: 'floorCount', name: 'Lantai' },
-        { code: 'lotSize', name: 'Luas Bangunan' },
-      ])
-      break
+      return schema
   }
-})
+}
+
+export type DynamicFormSchema = ReturnType<typeof getDynamicFormSchema>
