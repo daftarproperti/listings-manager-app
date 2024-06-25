@@ -12,7 +12,7 @@ import {
 } from 'api/queries'
 import { type UpdateListingRequest, type CityOption } from 'api/types'
 import BottomStickyButton from 'components/button/BottomStickyButton'
-import { getDynamicFormSchema } from 'components/form/addEditSchema'
+import { schema } from 'components/form/addEditSchema'
 import IntuitiveCurrencyInputField from 'components/input/IntuitiveCurrencyInputField'
 import InputField from 'components/input/InputField'
 import InputFileField from 'components/input/InputFileField'
@@ -27,9 +27,6 @@ const AddPage = () => {
   const navigate = useNavigate()
   const [formExistingImages, setFormExistingImages] = useState<string[]>([])
   const [formNewImageFiles, setFormNewImageFiles] = useState<File[]>([])
-  const [schema, setSchema] = useState(() =>
-    getDynamicFormSchema(false, false, 'house'),
-  )
 
   const {
     register,
@@ -58,21 +55,6 @@ const AddPage = () => {
   const [defaultCityOptions, setDefaultCityOptions] = useState<CityOption[]>([])
   const { data: userProfile, isFetched } = useGetUserProfile()
   const [selectedCity, setSelectedCity] = useState<CityOption | null>(null)
-
-  useEffect(() => {
-    if (
-      typeof listingForSale === 'boolean' &&
-      typeof listingForRent === 'boolean' &&
-      propertyType
-    ) {
-      const updatedSchema = getDynamicFormSchema(
-        listingForSale,
-        listingForRent,
-        propertyType,
-      )
-      setSchema(updatedSchema)
-    }
-  }, [listingForSale, listingForRent, propertyType])
 
   useEffect(() => {
     if (isFetched) {

@@ -99,7 +99,7 @@ const IntuitiveCurrencyInputField: React.FC<
             placeholder={placeholderValue}
             value={value ? formatNumber(value) : ''}
             onChange={(e) => {
-              const rawValue = e.target.value.replace(/\./g, '')
+              const rawValue = e.target.value.replace(/[Rp.,\s]/g, '')
               onChange(convertAbbreviationToNumber(rawValue))
             }}
             className="mt-1 w-full items-start justify-center self-stretch whitespace-nowrap rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-white px-3 py-2.5 text-lg leading-7 text-gray-800"

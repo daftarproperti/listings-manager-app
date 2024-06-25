@@ -1,5 +1,5 @@
 import { uploadImage } from 'api/queries'
-import { type UpdateListingRequest } from 'api/types'
+import type { UpdateListingRequest } from 'api/types'
 
 const transformListingObjectToFormData = async ({
   data,
@@ -16,6 +16,9 @@ const transformListingObjectToFormData = async ({
 
   Object.keys(data).forEach((key) => {
     const value = data[key as keyof typeof data]
+    if (value === null || value === undefined || value === '') {
+      return
+    }
     if (key !== 'pictureUrls' && !key.startsWith('contacts')) {
       if (key === 'price' && typeof value === 'string') {
         data[key] = parseFloat(value)
