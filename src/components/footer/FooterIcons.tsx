@@ -18,7 +18,7 @@ const FooterIcons: React.FC<FooterIconsProps> = () => {
       <div className="flex w-full justify-between">
         <Link
           to="/"
-          className={`inline-block w-1/3 justify-center p-2 text-center ${getClassName(
+          className={`inline-block w-1/2 justify-center p-2 text-center ${getClassName(
             isActive('/'),
           )}`}
         >
@@ -27,7 +27,7 @@ const FooterIcons: React.FC<FooterIconsProps> = () => {
         </Link>
         <Link
           to="/user"
-          className={`inline-block w-1/3 justify-center p-2 text-center ${getClassName(
+          className={`inline-block w-1/2 justify-center p-2 text-center ${getClassName(
             isActive('/user'),
           )}`}
         >
