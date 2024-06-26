@@ -333,7 +333,8 @@ const AddPage = () => {
           <InputCheckboxField
             label="Saya setuju dengan persetujuan imbalan (0,5% jual / 2% sewa) ketika properti mendapatkan pembeli/penyewa melalui jaringan pemasar Daftar Properti"
             registerHook={register('withRewardAgreement')}
-            inputID="agreement"
+            inputID="withRewardAgreement"
+            errorFieldName={errors.withRewardAgreement}
           />
         </div>
       </div>
