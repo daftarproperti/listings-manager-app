@@ -15,46 +15,28 @@ type IntuitiveCurrencyInputFieldProps = {
   name: keyof FieldValues
 }
 
-type Abbreviation = 'juta' | 'm' | 't'
+type Abbreviation = 'juta' | 'jt' | 'm' | 't'
 
 const customAbbreviations: Record<Abbreviation, number> = {
   juta: 1000000,
+  jt: 1000000,
   m: 1000000000,
   t: 1000000000000,
 }
 
-const convertAbbreviationToNumber = (input: string) => {
+export const convertAbbreviationToNumber = (input: string): string | number => {
   const match = input.toLowerCase().match(/([\d.,]*\d)\s*([a-zA-Z]*)?/)
 
   if (match) {
+    const numberPart = match[1]?.replace(/\./g, '').replace(/,/g, '.')
     const abbreviation = match[2]?.trim() as Abbreviation | undefined
 
     if (abbreviation && customAbbreviations[abbreviation]) {
       const multiplier = customAbbreviations[abbreviation]
-      let numberString = match[1].replace(/,/g, '')
-
-      // Remove any potential leading zeros
-      numberString = numberString.replace(/^0+/, '') || '0'
-
-      let numberValue
-      if (numberString.includes('.')) {
-        // Handle decimal part
-        const [integerPart, decimalPart] = numberString.split('.')
-
-        // Remove trailing zeros from the decimal part
-        const trimmedDecimalPart = decimalPart.replace(/0+$/, '')
-        const trimmedDecimalPlaces = trimmedDecimalPart.length
-
-        // Convert to BigInt and scale by the multiplier
-        numberValue =
-          BigInt(integerPart) * BigInt(multiplier) +
-          BigInt(trimmedDecimalPart) *
-            (BigInt(multiplier) / BigInt(Math.pow(10, trimmedDecimalPlaces)))
-      } else {
-        numberValue = BigInt(numberString) * BigInt(multiplier)
+      const parsedNumber = parseFloat(numberPart)
+      if (!isNaN(parsedNumber)) {
+        return parsedNumber * multiplier
       }
-
-      return numberValue.toString()
     } else {
       return input
     }
@@ -99,7 +81,11 @@ const IntuitiveCurrencyInputField: React.FC<
             placeholder={placeholderValue}
             value={value ? formatNumber(value) : ''}
             onChange={(e) => {
-              const rawValue = e.target.value.replace(/[Rp.,\s]/g, '')
+              const rawValue = e.target.value.replace(/\./g, '')
+              onChange(rawValue)
+            }}
+            onBlur={(e) => {
+              const rawValue = e.target.value.replace(/\./g, '')
               onChange(convertAbbreviationToNumber(rawValue))
             }}
             className="mt-1 w-full items-start justify-center self-stretch whitespace-nowrap rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-white px-3 py-2.5 text-lg leading-7 text-gray-800"
