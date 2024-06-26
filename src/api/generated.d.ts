@@ -328,6 +328,7 @@ export interface components {
       };
       user?: {
         name?: string;
+        phoneNumber?: string;
         profilePictureURL?: string;
         city?: string;
         cityId?: number;

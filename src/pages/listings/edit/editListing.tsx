@@ -9,6 +9,7 @@ import {
   getDebouncedCities,
   fetchDefaultCities,
 } from 'api/queries'
+import { appPath } from 'utils'
 import { type CityOption, type Listing } from 'api/types'
 import { schema } from 'components/form/addEditSchema'
 import IntuitiveCurrencyInputField from 'components/input/IntuitiveCurrencyInputField'
@@ -150,7 +151,7 @@ function EditListing({ id }: { id: string }) {
         Lengkapi data dibawah ini
       </div>
       <div className="sticky top-0 z-10 hidden items-center justify-between border-b bg-white p-4 pt-8 lg:flex">
-        <div className="text-xl font-semibold">Edit Properti</div>
+        <div className="text-xl font-semibold">Edit Listing</div>
         <Button
           size="sm"
           color="blue"
@@ -354,24 +355,28 @@ function EditListing({ id }: { id: string }) {
         </div>
       </div>
       <div className="w-full bg-blue-100 px-4 py-3 text-lg lg:w-4/5">
-        Keterangan Agen
+        Kontak
       </div>
       <div className="bg-slate-50 p-4">
-        <table>
-          <tbody>
-            <tr>
-              <td className="pr-4">Nama</td>
-              <td>: {watch('user.name')}</td>
-            </tr>
-            <tr>
-              <td className="pr-4">No HP</td>
-              <td>: [Hubungi]</td>
-            </tr>
-          </tbody>
-        </table>
+        {watch('user.profilePictureURL') && (
+          <div className="relative h-16 w-16 overflow-hidden rounded-full">
+            <img
+              loading="lazy"
+              src={watch('user.profilePictureURL')}
+              className="absolute inset-0 h-full w-full object-cover"
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null
+                currentTarget.src = appPath('/logo.svg')
+              }}
+            />
+          </div>
+        )}
+        Nama: {watch('user.name')}
+        <br />
+        No. HP/WA: {watch('user.phoneNumber')}
         <br />
         <Link to="/user" className="cursor-pointer text-blue-500">
-          Ubah Data Pribadi
+          Ubah Profil
         </Link>
       </div>
       <div className="lg:hidden">
