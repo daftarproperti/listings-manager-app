@@ -212,6 +212,7 @@ export const useGetListingDetail = ({ id }: { id: string }) =>
         throw error
       }
     },
+    refetchOnWindowFocus: false,
     retry: false,
     staleTime: 0,
   })

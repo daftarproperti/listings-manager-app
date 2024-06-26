@@ -10,7 +10,10 @@ import {
   fetchDefaultCities,
   useGetUserProfile,
 } from 'api/queries'
-import { type UpdateListingRequest, type CityOption } from 'api/types'
+import type {
+  UpdateListingRequest as GeneratedListing,
+  CityOption,
+} from 'api/types'
 import BottomStickyButton from 'components/button/BottomStickyButton'
 import { schema } from 'components/form/addEditSchema'
 import IntuitiveCurrencyInputField from 'components/input/IntuitiveCurrencyInputField'
@@ -22,6 +25,11 @@ import TextareaField from 'components/input/TextareaField'
 import InputCheckboxField from 'components/input/InputCheckboxField'
 import transformListingObjectToFormData from 'components/input/transformObjectToFormdata'
 import { LISTING_OPTIONS } from 'pages/listings/edit/dummy'
+
+interface ExtendedListing extends GeneratedListing {
+  bedroomCounts?: string
+  bathroomCounts?: string
+}
 
 const AddPage = () => {
   const navigate = useNavigate()
@@ -35,7 +43,7 @@ const AddPage = () => {
     control,
     watch,
     setValue,
-  } = useForm<UpdateListingRequest>({
+  } = useForm<ExtendedListing>({
     defaultValues: {
       isPrivate: false,
       listingForSale: true,
@@ -101,7 +109,7 @@ const AddPage = () => {
     setFormNewImageFiles(newFiles)
   }
 
-  const onSubmit = async (data: UpdateListingRequest) => {
+  const onSubmit = async (data: GeneratedListing) => {
     const addNewListingPayload = await transformListingObjectToFormData({
       data,
       formExistingImages,
@@ -274,16 +282,19 @@ const AddPage = () => {
               halfWidth={true}
               leftPosition={true}
               label="Kamar Tidur"
-              registerHook={register('bedroomCount', { required: true })}
-              placeholderValue="Silahkan isi"
-              errorFieldName={errors.bedroomCount}
+              registerHook={register('bedroomCounts', { required: true })}
+              placeholderValue="Contoh: 3 atau 3+1"
+              errorFieldName={errors.bedroomCounts}
             />
             <InputField
               halfWidth={true}
+              leftPosition={true}
               label="Kamar Mandi"
-              registerHook={register('bathroomCount', { required: true })}
-              placeholderValue="Silahkan isi"
-              errorFieldName={errors.bathroomCount}
+              registerHook={register('bathroomCounts', {
+                required: true,
+              })}
+              placeholderValue="Contoh: 2 atau 2+1"
+              errorFieldName={errors.bathroomCounts}
             />
           </div>
         )}

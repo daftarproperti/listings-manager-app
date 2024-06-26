@@ -132,8 +132,12 @@ export interface components {
       carCount?: number;
       /** @example 3 */
       bedroomCount?: number;
+      /** @example 3 */
+      additionalBedroomCount?: number;
       /** @example 2 */
       bathroomCount?: number;
+      /** @example 2 */
+      additionalBathroomCount?: number;
       /** @example 2 */
       floorCount?: number;
       /** @example 2200 */
@@ -306,7 +310,9 @@ export interface components {
       buildingSize?: number;
       carCount?: number;
       bedroomCount?: number;
+      additionalBedroomCount?: number;
       bathroomCount?: number;
+      additionalBathroomCount?: number;
       floorCount?: number;
       electricPower?: number;
       viewCount?: number;
@@ -678,12 +684,16 @@ export interface operations {
         "bedroomCount[min]"?: number;
         /** @description Maximum Bedroom count */
         "bedroomCount[max]"?: number;
+        /** @description Additional Bedroom count */
+        additionalBedroomCount?: number;
         /** @description Bathroom count */
         bathroomCount?: number;
         /** @description Minimum Bathroom count */
         "bathroomCount[min]"?: number;
         /** @description Maximum Bathroom count */
         "bathroomCount[max]"?: number;
+        /** @description Additional Bathroom count */
+        additionalBathroomCount?: number;
         /** @description Minimum lot size */
         "lotSize[min]"?: number;
         /** @description Maximum lot size */

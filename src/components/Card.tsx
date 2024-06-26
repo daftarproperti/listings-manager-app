@@ -70,13 +70,21 @@ const Card = ({ data }: { data: Listing }) => {
             <div className="flex items-center justify-between gap-1">
               <BedIconSVG />
               <div className="grow self-stretch whitespace-nowrap text-base leading-6 text-slate-800">
-                {data.bedroomCount} KT
+                {data.bedroomCount}
+                {data.additionalBedroomCount
+                  ? `+` + `${data.additionalBedroomCount}`
+                  : ''}{' '}
+                KT
               </div>
             </div>
             <div className="flex items-center justify-between gap-1">
               <BathIconSVG />
               <div className="grow self-stretch whitespace-nowrap text-base leading-6 text-slate-800">
-                {data.bathroomCount} KM
+                {data.bathroomCount}
+                {data.additionalBathroomCount
+                  ? `+` + `${data.additionalBathroomCount}`
+                  : ''}{' '}
+                KM
               </div>
             </div>
             <div className="flex items-center justify-start gap-1">

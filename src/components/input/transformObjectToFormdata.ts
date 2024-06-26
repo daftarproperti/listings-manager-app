@@ -1,12 +1,17 @@
 import { uploadImage } from 'api/queries'
-import type { UpdateListingRequest } from 'api/types'
+import { type UpdateListingRequest as GeneratedListing } from 'api/types'
+
+interface ExtendedListing extends GeneratedListing {
+  bedroomCounts?: string
+  bathroomCounts?: string
+}
 
 const transformListingObjectToFormData = async ({
   data,
   formExistingImages,
   formNewImageFiles,
 }: {
-  data: UpdateListingRequest
+  data: ExtendedListing
   formExistingImages: string[]
   formNewImageFiles: File[]
 }): Promise<FormData> => {
@@ -19,24 +24,53 @@ const transformListingObjectToFormData = async ({
     'listingForRent',
   ]
 
+  if (data.bedroomCounts) {
+    const parts = data.bedroomCounts
+      .split('+')
+      .map((part) => parseInt(part, 10))
+    formData.append('bedroomCount', parts[0].toString())
+    formData.append(
+      'additionalBedroomCount',
+      parts.length > 1 ? parts[1].toString() : '0',
+    )
+    delete data.bedroomCounts
+  }
+
+  if (data.bathroomCounts) {
+    const parts = data.bathroomCounts
+      .split('+')
+      .map((part) => parseInt(part, 10))
+    formData.append('bathroomCount', parts[0].toString())
+    formData.append(
+      'additionalBathroomCount',
+      parts.length > 1 ? parts[1].toString() : '0',
+    )
+    delete data.bathroomCounts
+  }
+
   Object.keys(data).forEach((key) => {
     const value = data[key as keyof typeof data]
     if (value === null || value === undefined || value === '') {
       return
     }
-    if (key !== 'pictureUrls' && !key.startsWith('contacts')) {
+
+    if (
+      key !== 'pictureUrls' &&
+      !key.startsWith('contacts') &&
+      key !== 'bedroomCount' &&
+      key !== 'bathroomCount' &&
+      key !== 'additionalBedroomCount' &&
+      key !== 'additionalBathroomCount'
+    ) {
       if (key === 'price' && typeof value === 'string') {
         data[key] = parseFloat(value)
       } else if (
         typeof value === 'string' &&
-        (key === 'lotSize' ||
-          key === 'buildingSize' ||
-          key === 'bedroomCount' ||
-          key === 'bathroomCount' ||
-          key === 'floorCount')
+        (key === 'lotSize' || key === 'buildingSize' || key === 'floorCount')
       ) {
         data[key] = parseInt(value, 10)
       }
+
       if (value !== null && value !== undefined) {
         formData.append(key, value.toString())
       }

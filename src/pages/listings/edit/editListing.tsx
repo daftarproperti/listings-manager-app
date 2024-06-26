@@ -10,8 +10,8 @@ import {
   fetchDefaultCities,
 } from 'api/queries'
 import { appPath } from 'utils'
-import { type CityOption, type Listing } from 'api/types'
 import { schema } from 'components/form/addEditSchema'
+import type { CityOption, Listing as GeneratedListing } from 'api/types'
 import IntuitiveCurrencyInputField from 'components/input/IntuitiveCurrencyInputField'
 import InputField from 'components/input/InputField'
 import InputFileField from 'components/input/InputFileField'
@@ -23,6 +23,11 @@ import BottomStickyButton from 'components/button/BottomStickyButton'
 
 import { LISTING_OPTIONS } from './dummy'
 import { onSubmit } from './handleFormSubmit'
+
+interface ExtendedListing extends GeneratedListing {
+  bedroomCounts?: string
+  bathroomCounts?: string
+}
 
 function EditListing({ id }: { id: string }) {
   const navigate = useNavigate()
@@ -38,7 +43,7 @@ function EditListing({ id }: { id: string }) {
     handleSubmit,
     control,
     setValue,
-  } = useForm<Listing>({
+  } = useForm<ExtendedListing>({
     defaultValues: {
       isPrivate: false,
       listingForSale: false,
@@ -65,6 +70,22 @@ function EditListing({ id }: { id: string }) {
     label: string
     value: number
   } | null>(null)
+
+  useEffect(() => {
+    if (listingDetails) {
+      const { bedroomCount, additionalBedroomCount } = listingDetails
+      const bedroomCombinedValue = `${bedroomCount}${
+        additionalBedroomCount ? `+${additionalBedroomCount}` : ''
+      }`
+      setValue('bedroomCounts', bedroomCombinedValue)
+
+      const { bathroomCount, additionalBathroomCount } = listingDetails
+      const bathroomCombinedValue = `${bathroomCount}${
+        additionalBathroomCount ? `+${additionalBathroomCount}` : ''
+      }`
+      setValue('bathroomCounts', bathroomCombinedValue)
+    }
+  }, [listingDetails])
 
   const cityId = watch('cityId')
   const cityName = watch('cityName')
@@ -290,16 +311,19 @@ function EditListing({ id }: { id: string }) {
               halfWidth={true}
               leftPosition={true}
               label="Kamar Tidur"
-              registerHook={register('bedroomCount', { required: true })}
-              placeholderValue="Silahkan isi"
-              errorFieldName={errors.bedroomCount}
+              registerHook={register('bedroomCounts', { required: true })}
+              placeholderValue="Contoh: 3 atau 3+1"
+              errorFieldName={errors.bedroomCounts}
             />
             <InputField
               halfWidth={true}
+              leftPosition={true}
               label="Kamar Mandi"
-              registerHook={register('bathroomCount', { required: true })}
-              placeholderValue="Silahkan isi"
-              errorFieldName={errors.bathroomCount}
+              registerHook={register('bathroomCounts', {
+                required: true,
+              })}
+              placeholderValue="Contoh: 2 atau 2+1"
+              errorFieldName={errors.bathroomCounts}
             />
           </div>
         )}

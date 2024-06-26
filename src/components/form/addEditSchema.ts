@@ -96,8 +96,8 @@ export const baseFormSchema = z.object({
   listingForSale: z.boolean(),
   listingForRent: z.boolean(),
   address: getMandatoryField('Alamat').string,
-  bathroomCount: getOptionalField('Kamar Mandi').number,
-  bedroomCount: getOptionalField('Kamar Tidur').number,
+  bathroomCounts: getOptionalField('Kamar Mandi').number,
+  bedroomCounts: getOptionalField('Kamar Tidur').number,
   buildingSize: getOptionalField('Luas Bangunan').number,
   carCount: getOptionalField('Kapasitas Mobil').number,
   cityId: getOptionalField('Kota').number,
@@ -179,8 +179,8 @@ export const schema = baseFormSchema.superRefine((data, ctx) => {
     case 'apartment':
       checkMandatoryFields([
         { code: 'buildingSize', name: 'Luas Bangunan' },
-        { code: 'bathroomCount', name: 'Kamar Mandi', canbeZero: true },
-        { code: 'bedroomCount', name: 'Kamar Tidur', canbeZero: true },
+        { code: 'bathroomCounts', name: 'Kamar Mandi', canbeZero: true },
+        { code: 'bedroomCounts', name: 'Kamar Tidur', canbeZero: true },
         { code: 'facing', name: 'Arah Bangunan' },
       ])
       break
@@ -195,8 +195,8 @@ export const schema = baseFormSchema.superRefine((data, ctx) => {
       break
     default:
       checkMandatoryFields([
-        { code: 'bathroomCount', name: 'Kamar Mandi', canbeZero: true },
-        { code: 'bedroomCount', name: 'Kamar Tidur', canbeZero: true },
+        { code: 'bathroomCounts', name: 'Kamar Mandi', canbeZero: true },
+        { code: 'bedroomCounts', name: 'Kamar Tidur', canbeZero: true },
         { code: 'buildingSize', name: 'Luas Bangunan' },
         { code: 'floorCount', name: 'Lantai' },
         { code: 'lotSize', name: 'Luas Bangunan' },
