@@ -12,7 +12,12 @@ const transformListingObjectToFormData = async ({
 }): Promise<FormData> => {
   const formData = new FormData()
 
-  const binaryKeys = ['isPrivate', 'listingForSale', 'listingForRent']
+  const binaryKeys = [
+    'isPrivate',
+    'withRewardAgreement',
+    'listingForSale',
+    'listingForRent',
+  ]
 
   Object.keys(data).forEach((key) => {
     const value = data[key as keyof typeof data]

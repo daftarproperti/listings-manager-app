@@ -159,6 +159,8 @@ export interface components {
       };
       /** @example false */
       isPrivate?: boolean;
+      /** @example true */
+      withRewardAgreement?: boolean;
     };
     SavedSearchRequest: {
       /** @example Pak Eko */
@@ -335,6 +337,7 @@ export interface components {
       };
       userCanEdit?: boolean;
       isPrivate?: boolean;
+      withRewardAgreement?: boolean;
       /** Format: date-time */
       updatedAt?: string;
     };
@@ -375,6 +378,7 @@ export interface components {
     /** @description Representation of a Listing which is available publicly. */
     PublicListing: {
       listingId?: number;
+      listingIdStr?: string;
       title?: string;
       propertyType?: components["schemas"]["PropertyType"];
       listingForSale?: boolean;

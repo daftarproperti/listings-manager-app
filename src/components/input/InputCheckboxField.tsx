@@ -19,7 +19,7 @@ const InputCheckboxField: React.FC<InputCheckboxFieldProps> = ({
   tooltipContent,
 }) => {
   return (
-    <div className="mt-3 flex w-auto items-center">
+    <div className="mt-2 flex w-auto items-center">
       <label
         htmlFor={inputID}
         className="flex items-center gap-1 text-gray-900"

@@ -109,6 +109,7 @@ export const baseFormSchema = z.object({
   ownership: getMandatoryField('Sertifikat').string,
   pictureUrls: getOptionalField().picture,
   isPrivate: z.boolean(),
+  withRewardAgreement: z.boolean(),
   price: getOptionalField('Harga Jual').number,
   rentPrice: getOptionalField('Harga Sewa').number,
 })

@@ -326,6 +326,16 @@ const AddPage = () => {
             errorFieldName={errors.ownership}
           />
         )}
+        <div className="relative mt-3 w-full self-stretch">
+          <span className="text-lg font-semibold leading-7 text-gray-800">
+            Persetujuan Imbalan
+          </span>
+          <InputCheckboxField
+            label="Saya setuju dengan persetujuan imbalan (0,5% jual / 2% sewa) ketika properti mendapatkan pembeli/penyewa melalui jaringan pemasar Daftar Properti"
+            registerHook={register('withRewardAgreement')}
+            inputID="agreement"
+          />
+        </div>
       </div>
       <div className="lg:hidden">
         <BottomStickyButton type="submit" disabled={isPending}>
