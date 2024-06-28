@@ -41,7 +41,8 @@ const InputField: React.FC<InputFieldProps> = ({
           event.key === 'Backspace' ||
           event.key === 'Delete' ||
           event.key === 'ArrowLeft' ||
-          event.key === 'ArrowRight'
+          event.key === 'ArrowRight' ||
+          event.key === 'Tab'
         )
       ) {
         event.preventDefault()

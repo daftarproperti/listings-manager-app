@@ -4,6 +4,7 @@ import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid'
 import { Checkbox, Tooltip, Typography } from '@material-tailwind/react'
 
 type InputCheckboxFieldProps = {
+  title?: string
   label: string
   registerHook: UseFormRegisterReturn<string>
   inputID: string
@@ -13,6 +14,7 @@ type InputCheckboxFieldProps = {
 }
 
 const InputCheckboxField: React.FC<InputCheckboxFieldProps> = ({
+  title,
   label,
   registerHook,
   inputID,
@@ -22,22 +24,24 @@ const InputCheckboxField: React.FC<InputCheckboxFieldProps> = ({
 }) => {
   return (
     <>
-      <div className="mt-2 flex w-auto items-center">
+      <div className="mt-2 flex w-auto items-start">
         <label
           htmlFor={inputID}
-          className="flex items-center gap-1 text-gray-900"
+          className="flex items-start gap-1 text-gray-900"
         >
           <Checkbox
             id={inputID}
             {...registerHook}
             crossOrigin={undefined}
             containerProps={{
-              className: 'm-0 p-0 rounded-none',
-              style: { marginLeft: '0' },
+              className: 'm-0 mt-0.5 p-0 rounded-none',
             }}
             className="mr-0 p-0 hover:before:opacity-0"
           />
-          <span className="ml-1">{label}</span>
+          <div className="ml-1">
+            {title && <h5 className="text-lg leading-7">{title}</h5>}
+            <p>{label}</p>
+          </div>
           {showTooltip && (
             <Tooltip
               className="border border-blue-gray-100 bg-white px-4 py-3 shadow shadow-black/10"

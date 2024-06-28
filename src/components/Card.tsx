@@ -90,13 +90,13 @@ const Card = ({ data }: { data: Listing }) => {
             <div className="flex items-center justify-start gap-1">
               <HouseIconSVG />
               <div className="grow self-stretch whitespace-nowrap text-base leading-6 text-slate-800">
-                {data.buildingSize}m2
+                {data.buildingSize} m2
               </div>
             </div>
             <div className="flex items-center justify-between gap-1">
               <LotIconSVG />
               <div className="grow self-stretch whitespace-nowrap text-base leading-6 text-slate-800">
-                {data.lotSize}m2
+                {data.lotSize ? `${data.lotSize} m2` : '-'}
               </div>
             </div>
           </div>
