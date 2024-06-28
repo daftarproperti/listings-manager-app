@@ -24,6 +24,7 @@ import {
   LogoSVG,
   LogoTypeSVG,
   LogoutIconSVG,
+  WAIconSVG,
 } from 'assets/icons'
 import {
   Bars3BottomLeftIcon,
@@ -125,6 +126,18 @@ const MainLayout = ({ children }: PropsWithChildren) => {
                 </Link>
               ))}
             </List>
+          </div>
+          <div className="p-2">
+            Ada pertanyaan?
+            <br />
+            <WAIconSVG className="inline h-5 w-5 translate-y-[-1px]" /> Hubungi{' '}
+            <Link
+              className="text-blue-600 underline transition duration-300 ease-in-out hover:text-blue-800 hover:no-underline focus:text-blue-800 focus:no-underline active:text-blue-900 active:no-underline"
+              target="_blank"
+              to="https://api.whatsapp.com/send?phone=6285186856707"
+            >
+              0851-8685-6707
+            </Link>
           </div>
           <div className="mt-4">
             <Button

@@ -134,7 +134,7 @@ const ListingListPage = () => {
           </div>
         </div>
         <div className="sticky top-0 z-10 hidden items-center justify-between bg-slate-100 p-4 pt-8 lg:flex">
-          <div className="text-lg">Listing Saya</div>
+          <div className="text-lg font-semibold">Listing Saya</div>
           <Button
             size="sm"
             color="blue"

@@ -98,9 +98,6 @@ function EditUser() {
           onSubmit(otherData, mutate, navigate, setIsSubmitting, newImageFile)
         })}
       >
-        <div className="items-start justify-center whitespace-nowrap border-b border-solid border-slate-200 bg-slate-50 py-3 pl-4 pr-16 text-sm font-semibold leading-5 text-slate-500 lg:hidden">
-          Lengkapi data dibawah ini
-        </div>
         <div className="sticky top-0 z-10 hidden items-center justify-between border-b bg-white p-4 pt-8 lg:flex">
           <div className="text-xl font-semibold">Informasi Profil Saya</div>
           <Button
@@ -115,7 +112,7 @@ function EditUser() {
         </div>
         <div className="p-4 lg:w-4/5">
           <InputSingleFileField
-            label="Foto profil"
+            label="Foto Profil"
             registerHook={register('picture')}
             existingImageUrl={picture}
             onImageUpload={handleNewFile}

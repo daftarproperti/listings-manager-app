@@ -1,6 +1,6 @@
-import { MoreIconSVG, LogoutIconSVG } from 'assets/icons'
+import { MoreIconSVG, LogoutIconSVG, WAIconSVG } from 'assets/icons'
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import {
   IconButton,
   Menu,
@@ -40,6 +40,15 @@ const HomeHeaderButton = () => {
           >
             <LogoutIconSVG className="mt-2 h-8 w-auto text-gray-400" />
             <span>Keluar</span>
+          </MenuItem>
+          <MenuItem className="flex items-center rounded-none bg-white text-lg">
+            <WAIconSVG className="mr-[12px] h-5 w-auto text-gray-400" />
+            <Link
+              target="_blank"
+              to="https://api.whatsapp.com/send?phone=6285186856707"
+            >
+              <span>Hubungi</span>
+            </Link>
           </MenuItem>
         </MenuList>
       </Menu>
