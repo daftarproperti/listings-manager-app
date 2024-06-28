@@ -2,6 +2,7 @@ import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query'
 import axios, { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 import { debounce } from 'lodash'
+import { appPath } from 'utils'
 
 import type {
   PropertyDetailRes,
@@ -50,7 +51,7 @@ axios.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 403) {
       console.log('Auth error occured. redirecting to login page . . .')
-      window.location.href = '/login'
+      window.location.href = appPath('/login')
       return Promise.reject(error)
     }
 
