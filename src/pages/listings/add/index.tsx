@@ -250,6 +250,7 @@ const AddPage = () => {
                   m<sup>2</sup>
                 </>
               }
+              type="number"
             />
           )}
           {propertyType !== 'land' && (
@@ -264,6 +265,7 @@ const AddPage = () => {
                   m<sup>2</sup>
                 </>
               }
+              type="number"
             />
           )}
         </div>
@@ -285,16 +287,17 @@ const AddPage = () => {
               registerHook={register('bedroomCounts', { required: true })}
               placeholderValue="Contoh: 3 atau 3+1"
               errorFieldName={errors.bedroomCounts}
+              allowOnlyNumbersAndPlus={true}
             />
             <InputField
               halfWidth={true}
-              leftPosition={true}
               label="Kamar Mandi"
               registerHook={register('bathroomCounts', {
                 required: true,
               })}
               placeholderValue="Contoh: 2 atau 2+1"
               errorFieldName={errors.bathroomCounts}
+              allowOnlyNumbersAndPlus={true}
             />
           </div>
         )}
@@ -309,6 +312,7 @@ const AddPage = () => {
                 registerHook={register('floorCount', { required: true })}
                 placeholderValue="Silahkan isi"
                 errorFieldName={errors.floorCount}
+                type="number"
               />
               <InputField
                 halfWidth={true}
@@ -316,6 +320,7 @@ const AddPage = () => {
                 registerHook={register('carCount', { required: false })}
                 placeholderValue="Silahkan isi"
                 errorFieldName={errors.carCount}
+                type="number"
               />
             </div>
           )}

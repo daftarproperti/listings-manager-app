@@ -4,7 +4,7 @@ import { type FieldError, type UseFormRegisterReturn } from 'react-hook-form'
 type InputFieldProps = {
   halfWidth?: boolean
   leftPosition?: boolean
-  label: string
+  label?: string
   registerHook: UseFormRegisterReturn<string>
   placeholderValue: string
   errorFieldName?: FieldError
@@ -13,7 +13,8 @@ type InputFieldProps = {
   linkHref?: string
   linkText?: string
   rightContent?: ReactNode
-}
+  allowOnlyNumbersAndPlus?: boolean
+} & React.InputHTMLAttributes<HTMLInputElement>
 
 const InputField: React.FC<InputFieldProps> = ({
   halfWidth,
@@ -27,7 +28,27 @@ const InputField: React.FC<InputFieldProps> = ({
   linkHref,
   linkText,
   rightContent,
+  allowOnlyNumbersAndPlus,
+  ...inputProps
 }) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (allowOnlyNumbersAndPlus) {
+      const charCode = event.key.charCodeAt(0)
+      if (
+        !(
+          (charCode >= 48 && charCode <= 57) ||
+          charCode === 43 ||
+          event.key === 'Backspace' ||
+          event.key === 'Delete' ||
+          event.key === 'ArrowLeft' ||
+          event.key === 'ArrowRight'
+        )
+      ) {
+        event.preventDefault()
+      }
+    }
+  }
+
   return (
     <div
       className={`mt-3 self-stretch 
@@ -56,7 +77,8 @@ const InputField: React.FC<InputFieldProps> = ({
           {...registerHook}
           placeholder={placeholderValue}
           className="h-full w-full items-start justify-center whitespace-nowrap rounded-lg px-3 py-2.5 text-lg leading-7 text-gray-800"
-          type="text"
+          onKeyDown={handleKeyDown}
+          {...inputProps}
         />
         {rightContent && (
           <div className="absolute right-0 top-0 flex h-full min-w-11 items-center justify-center rounded-r-lg bg-slate-200 text-lg text-slate-700">
