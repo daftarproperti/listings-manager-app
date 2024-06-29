@@ -9,7 +9,7 @@ import {
   getDebouncedCities,
   fetchDefaultCities,
 } from 'api/queries'
-import { appPath } from 'utils'
+import { appPath, dpPath } from 'utils'
 import { schema } from 'components/form/addEditSchema'
 import type { CityOption, Listing as GeneratedListing } from 'api/types'
 import IntuitiveCurrencyInputField from 'components/input/IntuitiveCurrencyInputField'
@@ -228,7 +228,7 @@ function EditListing({ id }: { id: string }) {
           placeholderValue="Isi alamat lengkap"
           errorFieldName={errors.address}
           additionalLabel="Pelajari lebih lanjut di "
-          linkHref="http://www.daftarproperti.org/address-required"
+          linkHref={dpPath('/peraturan')}
           linkText="sini"
         />
         <CustomSelectField

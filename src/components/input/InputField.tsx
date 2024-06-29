@@ -51,7 +51,7 @@ const InputField: React.FC<InputFieldProps> = ({
 
   return (
     <div
-      className={`mt-3 self-stretch 
+      className={`mt-3 self-stretch
         ${halfWidth ? 'w-1/2' : 'w-full'} ${
           leftPosition ? 'mr-1' : halfWidth ? 'ml-1' : 'ml-0'
         }`}
@@ -64,8 +64,10 @@ const InputField: React.FC<InputFieldProps> = ({
           <div className="ml-2 text-sm leading-7 text-gray-500">
             {additionalLabel}
             <a
+              target="_blank"
               href={linkHref}
               className="text-blue-500 underline hover:no-underline"
+              rel="noreferrer"
             >
               {linkText}
             </a>

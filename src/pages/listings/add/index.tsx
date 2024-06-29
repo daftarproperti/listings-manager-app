@@ -14,6 +14,7 @@ import type {
   UpdateListingRequest as GeneratedListing,
   CityOption,
 } from 'api/types'
+import { dpPath } from 'utils'
 import BottomStickyButton from 'components/button/BottomStickyButton'
 import { schema } from 'components/form/addEditSchema'
 import IntuitiveCurrencyInputField from 'components/input/IntuitiveCurrencyInputField'
@@ -199,7 +200,7 @@ const AddPage = () => {
           placeholderValue="Isi alamat lengkap"
           errorFieldName={errors.address}
           additionalLabel="Pelajari lebih lanjut di "
-          linkHref="http://www.daftarproperti.org/address-required"
+          linkHref={dpPath('/peraturan')}
           linkText="sini"
         />
         <CustomSelectField
