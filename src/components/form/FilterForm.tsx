@@ -1,9 +1,13 @@
 import { clsx } from 'clsx'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { NumericFormat } from 'react-number-format'
 import { Button } from '@material-tailwind/react'
 import { toast } from 'react-toastify'
-import { searchparamsToSavedSearch, useValidateMinMaxValue } from 'utils'
+import {
+  searchparamsToSavedSearch,
+  useValidateMinMaxValue,
+  convertAbbreviationToNumber,
+  formatNumber,
+} from 'utils'
 import {
   useAddSavedSearch,
   useUpdateSavedSearch,
@@ -159,6 +163,13 @@ const FilterForm = ({ type }: FilterFormProps) => {
 
     if (value === undefined || value === null || value === '') {
       searchParams.delete(key)
+    } else if (
+      key === 'price[min]' ||
+      key === 'price[max]' ||
+      key === 'rentPrice[min]' ||
+      key === 'rentPrice[max]'
+    ) {
+      searchParams.set(key, value.replace('Rp', '').trim())
     } else {
       searchParams.set(key, value)
     }
@@ -297,31 +308,45 @@ const FilterForm = ({ type }: FilterFormProps) => {
             </div>
             <div className="mt-1 flex w-full justify-between gap-2">
               <div className="relative flex grow gap-1 rounded-lg border border-solid border-slate-400 bg-white">
-                <NumericFormat
-                  placeholder="Rp Minimum"
-                  thousandSeparator="."
-                  decimalSeparator=","
-                  prefix="Rp "
-                  decimalScale={2}
-                  value={searchParams.get(filterKeyStrings.minPrice) ?? ''}
-                  onValueChange={(event) =>
-                    controlSearchParams(filterKeyStrings.minPrice, event.value)
-                  }
+                <input
+                  type="text"
                   className="h-full w-full rounded-lg border-none p-3 py-2.5 ring-0"
+                  placeholder="Rp Minimum"
+                  value={formatNumber(
+                    searchParams.get(filterKeyStrings.minPrice) ?? '',
+                  )}
+                  onChange={(e) => {
+                    const rawValue = e.target.value.replace(/\./g, '')
+                    controlSearchParams(filterKeyStrings.minPrice, rawValue)
+                  }}
+                  onBlur={(e) => {
+                    const rawValue = e.target.value.replace(/\./g, '')
+                    controlSearchParams(
+                      filterKeyStrings.minPrice,
+                      convertAbbreviationToNumber(rawValue).toString(),
+                    )
+                  }}
                 />
               </div>
               <div className="relative flex grow gap-1 rounded-lg border border-solid border-slate-400 bg-white">
-                <NumericFormat
-                  thousandSeparator="."
-                  decimalSeparator=","
-                  prefix="Rp "
-                  decimalScale={2}
-                  placeholder="Rp Maximum"
-                  value={searchParams.get(filterKeyStrings.maxPrice) ?? ''}
-                  onValueChange={(event) =>
-                    controlSearchParams(filterKeyStrings.maxPrice, event.value)
-                  }
+                <input
+                  type="text"
                   className="h-full w-full rounded-lg border-none p-3 py-2.5 ring-0"
+                  placeholder="Rp Maximum"
+                  value={formatNumber(
+                    searchParams.get(filterKeyStrings.maxPrice) ?? '',
+                  )}
+                  onChange={(e) => {
+                    const rawValue = e.target.value.replace(/\./g, '')
+                    controlSearchParams(filterKeyStrings.maxPrice, rawValue)
+                  }}
+                  onBlur={(e) => {
+                    const rawValue = e.target.value.replace(/\./g, '')
+                    controlSearchParams(
+                      filterKeyStrings.maxPrice,
+                      convertAbbreviationToNumber(rawValue).toString(),
+                    )
+                  }}
                 />
               </div>
             </div>
@@ -371,37 +396,45 @@ const FilterForm = ({ type }: FilterFormProps) => {
             </div>
             <div className="mt-1 flex w-full justify-between gap-2">
               <div className="relative flex grow gap-1 rounded-lg border border-solid border-slate-400 bg-white">
-                <NumericFormat
+                <input
+                  type="text"
+                  className="h-full w-full rounded-lg border-none p-3 py-2.5 ring-0"
                   placeholder="Rp Minimum"
-                  thousandSeparator="."
-                  decimalSeparator=","
-                  prefix="Rp "
-                  decimalScale={2}
-                  value={searchParams.get(filterKeyStrings.minRentPrice) ?? ''}
-                  onValueChange={(event) =>
+                  value={formatNumber(
+                    searchParams.get(filterKeyStrings.minRentPrice) ?? '',
+                  )}
+                  onChange={(e) => {
+                    const rawValue = e.target.value.replace(/\./g, '')
+                    controlSearchParams(filterKeyStrings.minRentPrice, rawValue)
+                  }}
+                  onBlur={(e) => {
+                    const rawValue = e.target.value.replace(/\./g, '')
                     controlSearchParams(
                       filterKeyStrings.minRentPrice,
-                      event.value,
+                      convertAbbreviationToNumber(rawValue).toString(),
                     )
-                  }
-                  className="h-full w-full rounded-lg border-none p-3 py-2.5 ring-0"
+                  }}
                 />
               </div>
               <div className="relative flex grow gap-1 rounded-lg border border-solid border-slate-400 bg-white">
-                <NumericFormat
-                  thousandSeparator="."
-                  decimalSeparator=","
-                  prefix="Rp "
-                  decimalScale={2}
-                  placeholder="Rp Maximum"
-                  value={searchParams.get(filterKeyStrings.maxRentPrice) ?? ''}
-                  onValueChange={(event) =>
+                <input
+                  type="text"
+                  className="h-full w-full rounded-lg border-none p-3 py-2.5 ring-0"
+                  placeholder="Rp Maksimum"
+                  value={formatNumber(
+                    searchParams.get(filterKeyStrings.maxRentPrice) ?? '',
+                  )}
+                  onChange={(e) => {
+                    const rawValue = e.target.value.replace(/\./g, '')
+                    controlSearchParams(filterKeyStrings.maxRentPrice, rawValue)
+                  }}
+                  onBlur={(e) => {
+                    const rawValue = e.target.value.replace(/\./g, '')
                     controlSearchParams(
                       filterKeyStrings.maxRentPrice,
-                      event.value,
+                      convertAbbreviationToNumber(rawValue).toString(),
                     )
-                  }
-                  className="h-full w-full rounded-lg border-none p-3 py-2.5 ring-0"
+                  }}
                 />
               </div>
             </div>
