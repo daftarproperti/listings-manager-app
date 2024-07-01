@@ -168,9 +168,6 @@ function EditListing({ id }: { id: string }) {
         ),
       )}
     >
-      <div className="items-start justify-center whitespace-nowrap border-b border-solid border-slate-200 bg-slate-50 py-3 pl-4 pr-16 text-sm font-semibold leading-5 text-slate-500 lg:hidden">
-        Lengkapi data dibawah ini
-      </div>
       <div className="sticky top-0 z-10 hidden items-center justify-between border-b bg-white p-4 pt-8 lg:flex">
         <div className="text-xl font-semibold">Edit Listing</div>
         <Button
@@ -182,6 +179,17 @@ function EditListing({ id }: { id: string }) {
         >
           Simpan
         </Button>
+      </div>
+      <div className="items-start justify-center border-b border-solid border-slate-200 bg-slate-50 py-3 pl-4 pr-16 text-sm font-semibold leading-5 text-slate-500">
+        Dengan mengisi formulir listing ini, anda telah memahami{' '}
+        <a
+          target="_blank"
+          className="text-blue-500 hover:underline"
+          href="/peraturan"
+        >
+          peraturan
+        </a>{' '}
+        Daftar Properti.
       </div>
       <div className="p-4 lg:w-4/5">
         <InputFileField
