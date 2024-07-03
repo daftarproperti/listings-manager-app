@@ -29,6 +29,7 @@ import { LISTING_OPTIONS } from 'pages/listings/edit/dummy'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import GoogleMaps from 'components/GoogleMaps'
 import { DEFAULT_LAT_LNG } from 'utils/constant'
+import ConfirmationDialog from 'components/header/ConfirmationDialog'
 
 interface ExtendedListing extends GeneratedListing {
   bedroomCounts?: string
@@ -39,6 +40,7 @@ const AddPage = () => {
   const navigate = useNavigate()
   const [formExistingImages, setFormExistingImages] = useState<string[]>([])
   const [formNewImageFiles, setFormNewImageFiles] = useState<File[]>([])
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   const checkboxSectionRef = useRef<HTMLDivElement | null>(null)
 
@@ -131,7 +133,33 @@ const AddPage = () => {
     setFormNewImageFiles(newFiles)
   }
 
+  const confirmTitle = 'Apakah Anda yakin tidak menyetujui persetujuan imbalan?'
+  const confirmSubtitle =
+    'Jika Anda ingin listing Anda cepat terjual, Anda harus menyetujui persetujuan imbalan.'
+
+  const handleConfirmation = async () => {
+    setIsDialogOpen(false)
+    const currentData = watch()
+    await submitData(currentData)
+  }
+
+  const handleCancel = () => {
+    setIsDialogOpen(false)
+  }
+
   const onSubmit = async (data: GeneratedListing) => {
+    if (import.meta.env.VITE_OPTIONAL_REWARD_AGREEMENT === 'true') {
+      if (!data.withRewardAgreement) {
+        setIsDialogOpen(true)
+      } else {
+        await submitData(data)
+      }
+    } else {
+      await submitData(data)
+    }
+  }
+
+  const submitData = async (data: GeneratedListing) => {
     const addNewListingPayload = await transformListingObjectToFormData({
       data,
       formExistingImages,
@@ -151,304 +179,319 @@ const AddPage = () => {
   }
 
   return (
-    <form
-      className="w-full bg-slate-50 pb-20 pt-16 lg:pb-4 lg:pt-0"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className="sticky top-0 z-10 hidden items-center justify-between border-b bg-white p-4 pt-8 lg:flex">
-        <div className="text-xl font-semibold">Tambah Properti</div>
-        <Button
-          size="sm"
-          color="blue"
-          type="submit"
-          className="flex items-center gap-2 text-sm font-normal capitalize"
-          disabled={isPending}
-        >
-          Simpan
-        </Button>
-      </div>
-      <div className="items-start justify-center border-b border-solid border-slate-200 bg-slate-50 py-3 pl-4 pr-16 text-sm font-semibold leading-5 text-slate-500">
-        Dengan mengisi formulir listing ini, anda telah memahami{' '}
-        <a
-          target="_blank"
-          className="text-blue-500 hover:underline"
-          href="/peraturan"
-        >
-          peraturan
-        </a>{' '}
-        Daftar Properti.
-      </div>
-      <div className="p-4 lg:w-4/5">
-        <InputFileField
-          label="Foto Properti"
-          additionalLabel="Maksimal 10 foto, format .jpg, .png, @10mb"
-          registerHook={register('pictureUrls')}
-          onNewFiles={handleNewFiles}
-          onExistingImagesChange={handleExistingImagesChange}
-          errorFieldName={errors.pictureUrls}
-        />
-        <InputField
-          label="Judul Listing"
-          registerHook={register('title', { required: true })}
-          placeholderValue="Tulis Judul"
-          errorFieldName={errors.title}
-          halfWidth={false}
-        />
-        <div className="mt-3" ref={checkboxSectionRef}>
-          <span className="text-lg font-semibold leading-7 text-gray-800">
-            Tipe Listing
-          </span>
-          <div className="flex items-center space-x-8">
-            <InputCheckboxField
-              label="Dijual"
-              registerHook={register('listingForSale')}
-              inputID="listingForSale"
-            />
-            <InputCheckboxField
-              label="Disewa"
-              registerHook={register('listingForRent')}
-              inputID="listingForRent"
-            />
-          </div>
-          {!listingForSale && !listingForRent && (
-            <p className="mt-1 self-stretch text-sm leading-5 text-red-500">
-              {errors.listingType?.message ||
-                'Harus memilih minimal satu tipe listing'}
-            </p>
-          )}
-        </div>
-        <SelectField
-          label="Tipe Properti"
-          registerHook={register('propertyType', { required: true })}
-          selectOptions={LISTING_OPTIONS.propertyType.options}
-          defaultOption="Pilih Tipe Properti"
-          errorFieldName={errors.propertyType}
-        />
-        <InputField
-          label="Alamat"
-          registerHook={register('address', { required: true })}
-          placeholderValue="Isi alamat lengkap"
-          errorFieldName={errors.address}
-          additionalLabel="Pelajari lebih lanjut di "
-          linkHref={dpPath('/peraturan')}
-          linkText="sini"
-        />
-        <CustomSelectField
-          control={control}
-          name="cityId"
-          placeholder="Pilih Kota"
-          label="Kota"
-          loadOptions={getDebouncedCities}
-          defaultOptions={defaultCityOptions}
-          defaultValue={selectedCity ?? undefined}
-          onCityChange={handleCityChange}
-        />
-        <TextareaField
-          label="Deskripsi"
-          registerHook={register('description', { required: true })}
-          placeholderValue="Tulis keterangan untuk listing ini"
-          errorFieldName={errors.description}
-        />
-        {listingForSale && (
-          <IntuitiveCurrencyInputField
-            name="price"
-            control={control}
-            label="Harga Jual"
-            placeholderValue="Isi Harga"
-            errorFieldName={errors.price}
-          />
-        )}
-        {listingForRent && (
-          <IntuitiveCurrencyInputField
-            name="rentPrice"
-            control={control}
-            label="Harga Sewa per tahun"
-            placeholderValue="Isi Harga"
-            errorFieldName={errors.rentPrice}
-          />
-        )}
-        <div className="flex w-full">
-          {propertyType !== 'apartment' && (
-            <InputField
-              halfWidth={propertyType !== 'land'}
-              leftPosition={true}
-              label="Luas Tanah"
-              registerHook={register('lotSize', { required: true })}
-              placeholderValue="Luas Tanah"
-              errorFieldName={errors.lotSize}
-              rightContent={
-                <>
-                  m<sup>2</sup>
-                </>
-              }
-              type="number"
-            />
-          )}
-          {propertyType !== 'land' && (
-            <InputField
-              halfWidth={propertyType !== 'apartment'}
-              label="Luas Bangunan"
-              registerHook={register('buildingSize', { required: true })}
-              placeholderValue="Luas Bangunan"
-              errorFieldName={errors.buildingSize}
-              rightContent={
-                <>
-                  m<sup>2</sup>
-                </>
-              }
-              type="number"
-            />
-          )}
-        </div>
-        {propertyType !== 'land' && (
-          <SelectField
-            label="Bangunan Menghadap"
-            registerHook={register('facing', { required: false })}
-            selectOptions={LISTING_OPTIONS.facing.options}
-            defaultOption="Pilih Arah"
-            errorFieldName={errors.facing}
-          />
-        )}
-        {propertyType !== 'land' && propertyType !== 'warehouse' && (
-          <div className="flex w-full">
-            <InputField
-              halfWidth={true}
-              leftPosition={true}
-              label="Kamar Tidur"
-              registerHook={register('bedroomCounts', { required: true })}
-              placeholderValue="Contoh: 3 atau 3+1"
-              errorFieldName={errors.bedroomCounts}
-              allowOnlyNumbersAndPlus={true}
-            />
-            <InputField
-              halfWidth={true}
-              label="Kamar Mandi"
-              registerHook={register('bathroomCounts', {
-                required: true,
-              })}
-              placeholderValue="Contoh: 2 atau 2+1"
-              errorFieldName={errors.bathroomCounts}
-              allowOnlyNumbersAndPlus={true}
-            />
-          </div>
-        )}
-        {propertyType !== 'land' &&
-          propertyType !== 'warehouse' &&
-          propertyType !== 'apartment' && (
-            <div className="flex w-full">
-              <InputField
-                halfWidth={true}
-                leftPosition={true}
-                label="Lantai"
-                registerHook={register('floorCount', { required: true })}
-                placeholderValue="Silahkan isi"
-                errorFieldName={errors.floorCount}
-                type="number"
-              />
-              <InputField
-                halfWidth={true}
-                label="Kapasitas Mobil"
-                registerHook={register('carCount', { required: false })}
-                placeholderValue="Silahkan isi"
-                errorFieldName={errors.carCount}
-                type="number"
-              />
-            </div>
-          )}
-        {propertyType !== 'land' && (
-          <SelectField
-            label="Daya Listrik"
-            registerHook={register('electricPower')}
-            selectOptions={LISTING_OPTIONS.electric_power.options}
-            defaultOption="Pilih Daya Listrik"
-            errorFieldName={errors.electricPower}
-          />
-        )}
-        {listingForSale && (
-          <SelectField
-            label="Jenis Sertifikat"
-            registerHook={register('ownership')}
-            selectOptions={LISTING_OPTIONS.ownership.options}
-            defaultOption="Pilih Jenis Sertifikat"
-            errorFieldName={errors.ownership}
-          />
-        )}
-        <div className="relative mt-3 w-full self-stretch">
-          <InputCheckboxField
-            title="Persetujuan Imbalan"
-            label="Saya setuju dengan persetujuan imbalan (0,5% jual / 2% sewa) ketika properti mendapatkan pembeli/penyewa melalui jaringan pemasar Daftar Properti"
-            registerHook={register('withRewardAgreement')}
-            inputID="withRewardAgreement"
-            errorFieldName={errors.withRewardAgreement}
-          />
-        </div>
-        {import.meta.env.VITE_WITH_LATLNG_PICKER && (
+    <>
+      <form
+        className="w-full bg-slate-50 pb-20 pt-16 lg:pb-4 lg:pt-0"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <div className="sticky top-0 z-10 hidden items-center justify-between border-b bg-white p-4 pt-8 lg:flex">
+          <div className="text-xl font-semibold">Tambah Properti</div>
           <Button
-            size="md"
+            size="sm"
             color="blue"
-            onClick={() =>
-              setCoord((prevState) => (prevState ? undefined : DEFAULT_LAT_LNG))
-            }
-            className="mt-4 w-full lg:w-auto"
+            type="submit"
+            className="flex items-center gap-2 text-sm font-normal capitalize"
+            disabled={isPending}
           >
-            {coord ? 'Hapus Koordinat' : 'Tambahkan Koordinat'}
+            Simpan
           </Button>
-        )}
-        {import.meta.env.VITE_WITH_LATLNG_PICKER && coord && (
-          <>
+        </div>
+        <div className="items-start justify-center border-b border-solid border-slate-200 bg-slate-50 py-3 pl-4 pr-16 text-sm font-semibold leading-5 text-slate-500">
+          Dengan mengisi formulir listing ini, anda telah memahami{' '}
+          <a
+            target="_blank"
+            className="text-blue-500 hover:underline"
+            href="/peraturan"
+          >
+            peraturan
+          </a>{' '}
+          Daftar Properti.
+        </div>
+        <div className="p-4 lg:w-4/5">
+          <InputFileField
+            label="Foto Properti"
+            additionalLabel="Maksimal 10 foto, format .jpg, .png, @10mb"
+            registerHook={register('pictureUrls')}
+            onNewFiles={handleNewFiles}
+            onExistingImagesChange={handleExistingImagesChange}
+            errorFieldName={errors.pictureUrls}
+          />
+          <InputField
+            label="Judul Listing"
+            registerHook={register('title', { required: true })}
+            placeholderValue="Tulis Judul"
+            errorFieldName={errors.title}
+            halfWidth={false}
+          />
+          <div className="mt-3" ref={checkboxSectionRef}>
+            <span className="text-lg font-semibold leading-7 text-gray-800">
+              Tipe Listing
+            </span>
+            <div className="flex items-center space-x-8">
+              <InputCheckboxField
+                label="Dijual"
+                registerHook={register('listingForSale')}
+                inputID="listingForSale"
+              />
+              <InputCheckboxField
+                label="Disewa"
+                registerHook={register('listingForRent')}
+                inputID="listingForRent"
+              />
+            </div>
+            {!listingForSale && !listingForRent && (
+              <p className="mt-1 self-stretch text-sm leading-5 text-red-500">
+                {errors.listingType?.message ||
+                  'Harus memilih minimal satu tipe listing'}
+              </p>
+            )}
+          </div>
+          <SelectField
+            label="Tipe Properti"
+            registerHook={register('propertyType', { required: true })}
+            selectOptions={LISTING_OPTIONS.propertyType.options}
+            defaultOption="Pilih Tipe Properti"
+            errorFieldName={errors.propertyType}
+          />
+          <InputField
+            label="Alamat"
+            registerHook={register('address', { required: true })}
+            placeholderValue="Isi alamat lengkap"
+            errorFieldName={errors.address}
+            additionalLabel="Pelajari lebih lanjut di "
+            linkHref={dpPath('/peraturan')}
+            linkText="sini"
+          />
+          <CustomSelectField
+            control={control}
+            name="cityId"
+            placeholder="Pilih Kota"
+            label="Kota"
+            loadOptions={getDebouncedCities}
+            defaultOptions={defaultCityOptions}
+            defaultValue={selectedCity ?? undefined}
+            onCityChange={handleCityChange}
+          />
+          <TextareaField
+            label="Deskripsi"
+            registerHook={register('description', { required: true })}
+            placeholderValue="Tulis keterangan untuk listing ini"
+            errorFieldName={errors.description}
+          />
+          {listingForSale && (
+            <IntuitiveCurrencyInputField
+              name="price"
+              control={control}
+              label="Harga Jual"
+              placeholderValue="Isi Harga"
+              errorFieldName={errors.price}
+            />
+          )}
+          {listingForRent && (
+            <IntuitiveCurrencyInputField
+              name="rentPrice"
+              control={control}
+              label="Harga Sewa per tahun"
+              placeholderValue="Isi Harga"
+              errorFieldName={errors.rentPrice}
+            />
+          )}
+          <div className="flex w-full">
+            {propertyType !== 'apartment' && (
+              <InputField
+                halfWidth={propertyType !== 'land'}
+                leftPosition={true}
+                label="Luas Tanah"
+                registerHook={register('lotSize', { required: true })}
+                placeholderValue="Luas Tanah"
+                errorFieldName={errors.lotSize}
+                rightContent={
+                  <>
+                    m<sup>2</sup>
+                  </>
+                }
+                type="number"
+              />
+            )}
+            {propertyType !== 'land' && (
+              <InputField
+                halfWidth={propertyType !== 'apartment'}
+                label="Luas Bangunan"
+                registerHook={register('buildingSize', { required: true })}
+                placeholderValue="Luas Bangunan"
+                errorFieldName={errors.buildingSize}
+                rightContent={
+                  <>
+                    m<sup>2</sup>
+                  </>
+                }
+                type="number"
+              />
+            )}
+          </div>
+          {propertyType !== 'land' && (
+            <SelectField
+              label="Bangunan Menghadap"
+              registerHook={register('facing', { required: false })}
+              selectOptions={LISTING_OPTIONS.facing.options}
+              defaultOption="Pilih Arah"
+              errorFieldName={errors.facing}
+            />
+          )}
+          {propertyType !== 'land' && propertyType !== 'warehouse' && (
             <div className="flex w-full">
               <InputField
                 halfWidth={true}
                 leftPosition={true}
-                label={
-                  <span className="flex items-center gap-1">
-                    Koordinat{' '}
-                    <Tooltip
-                      className="border border-blue-gray-100 bg-white px-4 py-3 shadow shadow-black/10"
-                      content={
-                        <div className="w-60">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal opacity-80"
-                          >
-                            Ketuk map atau pindahkan pin di dalam map untuk
-                            mendapatkan koordinat yang sesuai
-                          </Typography>
-                        </div>
-                      }
-                    >
-                      <InformationCircleIcon className="h-5 w-5 text-slate-500" />
-                    </Tooltip>
-                  </span>
-                }
-                registerHook={register('coordinate.latitude')}
-                placeholderValue="Lat"
-                disabled
-                errorFieldName={errors.coordinate?.latitude}
+                label="Kamar Tidur"
+                registerHook={register('bedroomCounts', { required: true })}
+                placeholderValue="Contoh: 3 atau 3+1"
+                errorFieldName={errors.bedroomCounts}
+                allowOnlyNumbersAndPlus={true}
               />
               <InputField
                 halfWidth={true}
-                registerHook={register('coordinate.longitude')}
-                placeholderValue="Long"
-                disabled
-                errorFieldName={errors.coordinate?.longitude}
+                label="Kamar Mandi"
+                registerHook={register('bathroomCounts', {
+                  required: true,
+                })}
+                placeholderValue="Contoh: 2 atau 2+1"
+                errorFieldName={errors.bathroomCounts}
+                allowOnlyNumbersAndPlus={true}
               />
             </div>
-            <GoogleMaps
-              coord={coord}
-              setCoord={setCoord}
-              initialAddress={watch('address')}
+          )}
+          {propertyType !== 'land' &&
+            propertyType !== 'warehouse' &&
+            propertyType !== 'apartment' && (
+              <div className="flex w-full">
+                <InputField
+                  halfWidth={true}
+                  leftPosition={true}
+                  label="Lantai"
+                  registerHook={register('floorCount', { required: true })}
+                  placeholderValue="Silahkan isi"
+                  errorFieldName={errors.floorCount}
+                  type="number"
+                />
+                <InputField
+                  halfWidth={true}
+                  label="Kapasitas Mobil"
+                  registerHook={register('carCount', { required: false })}
+                  placeholderValue="Silahkan isi"
+                  errorFieldName={errors.carCount}
+                  type="number"
+                />
+              </div>
+            )}
+          {propertyType !== 'land' && (
+            <SelectField
+              label="Daya Listrik"
+              registerHook={register('electricPower')}
+              selectOptions={LISTING_OPTIONS.electric_power.options}
+              defaultOption="Pilih Daya Listrik"
+              errorFieldName={errors.electricPower}
             />
-          </>
-        )}
-      </div>
-      <div className="lg:hidden">
-        <BottomStickyButton type="submit" disabled={isPending}>
-          Simpan
-        </BottomStickyButton>
-      </div>
-    </form>
+          )}
+          {listingForSale && (
+            <SelectField
+              label="Jenis Sertifikat"
+              registerHook={register('ownership')}
+              selectOptions={LISTING_OPTIONS.ownership.options}
+              defaultOption="Pilih Jenis Sertifikat"
+              errorFieldName={errors.ownership}
+            />
+          )}
+          {import.meta.env.VITE_WITH_LATLNG_PICKER && (
+            <Button
+              size="md"
+              color="blue"
+              onClick={() =>
+                setCoord((prevState) =>
+                  prevState ? undefined : DEFAULT_LAT_LNG,
+                )
+              }
+              className="mt-4 w-full lg:w-auto"
+            >
+              {coord ? 'Hapus Koordinat' : 'Tambahkan Koordinat'}
+            </Button>
+          )}
+          {import.meta.env.VITE_WITH_LATLNG_PICKER && coord && (
+            <>
+              <div className="flex w-full">
+                <InputField
+                  halfWidth={true}
+                  leftPosition={true}
+                  label={
+                    <span className="flex items-center gap-1">
+                      Koordinat{' '}
+                      <Tooltip
+                        className="border border-blue-gray-100 bg-white px-4 py-3 shadow shadow-black/10"
+                        content={
+                          <div className="w-60">
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal opacity-80"
+                            >
+                              Ketuk map atau pindahkan pin di dalam map untuk
+                              mendapatkan koordinat yang sesuai
+                            </Typography>
+                          </div>
+                        }
+                      >
+                        <InformationCircleIcon className="h-5 w-5 text-slate-500" />
+                      </Tooltip>
+                    </span>
+                  }
+                  registerHook={register('coordinate.latitude')}
+                  placeholderValue="Lat"
+                  disabled
+                  errorFieldName={errors.coordinate?.latitude}
+                />
+                <InputField
+                  halfWidth={true}
+                  registerHook={register('coordinate.longitude')}
+                  placeholderValue="Long"
+                  disabled
+                  errorFieldName={errors.coordinate?.longitude}
+                />
+              </div>
+              <GoogleMaps
+                coord={coord}
+                setCoord={setCoord}
+                initialAddress={watch('address')}
+              />
+            </>
+          )}
+          <div className="relative mt-3 w-full self-stretch">
+            <InputCheckboxField
+              title="Persetujuan Imbalan"
+              label="Saya setuju dengan persetujuan imbalan (0,5% jual / 2% sewa) ketika properti mendapatkan pembeli/penyewa melalui jaringan pemasar Daftar Properti"
+              registerHook={register('withRewardAgreement')}
+              inputID="withRewardAgreement"
+              errorFieldName={errors.withRewardAgreement}
+            />
+          </div>
+        </div>
+
+        <div className="lg:hidden">
+          <BottomStickyButton type="submit" disabled={isPending}>
+            Simpan
+          </BottomStickyButton>
+        </div>
+      </form>
+      {import.meta.env.VITE_OPTIONAL_REWARD_AGREEMENT === 'true' && (
+        <ConfirmationDialog
+          title={confirmTitle}
+          subtitle={confirmSubtitle}
+          buttonText="Ya, saya yakin"
+          isOpen={isDialogOpen}
+          setIsOpen={handleCancel}
+          onConfirm={handleConfirmation}
+        />
+      )}
+    </>
   )
 }
 

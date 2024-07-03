@@ -57,10 +57,13 @@ const SavedSearchListPage = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedId, setSelectedId] = useState<string>()
 
-  const title = useMemo(
-    () => data?.saved_searches?.find((s) => s.id === selectedId)?.title,
-    [selectedId],
-  )
+  const title =
+    'Yakin akan hapus listing ' +
+    useMemo(
+      () => data?.saved_searches?.find((s) => s.id === selectedId)?.title,
+      [selectedId],
+    ) +
+    ' ?'
 
   const handleClickSearch = (search: SavedSearch) => {
     const newSearchParams = savedSearchToSearchParams(search)
@@ -309,6 +312,7 @@ const SavedSearchListPage = () => {
       <ConfirmationDialog
         title={title}
         subtitle="Setelah terhapus, permintaan tidak bisa ditemukan kembali."
+        buttonText="Ya, Hapus"
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         onConfirm={() => handleDelete(selectedId)}

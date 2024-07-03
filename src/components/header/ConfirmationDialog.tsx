@@ -5,6 +5,7 @@ import { Button } from '@material-tailwind/react'
 const ConfirmationDialog = ({
   title,
   subtitle,
+  buttonText,
   isOpen,
   setIsOpen,
   onConfirm,
@@ -12,6 +13,7 @@ const ConfirmationDialog = ({
 }: {
   title?: string | null
   subtitle?: string | null
+  buttonText?: string
   isOpen: boolean
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
   onConfirm: () => void
@@ -36,7 +38,7 @@ const ConfirmationDialog = ({
       }}
     >
       <div className="space-y-4 px-4 pb-4 lg:px-6 lg:py-4">
-        <h2 className="text-xl">Yakin akan hapus {title}?</h2>
+        <h2 className="text-xl">{title}</h2>
         <p className="font-normal text-slate-500">{subtitle}</p>
         <div className="flex gap-x-2">
           <Button
@@ -55,7 +57,7 @@ const ConfirmationDialog = ({
             className="border-red-100 bg-red-100 text-sm font-normal capitalize"
             onClick={handleConfirm}
           >
-            Ya, hapus
+            {buttonText}
           </Button>
         </div>
       </div>

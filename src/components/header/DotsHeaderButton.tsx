@@ -18,7 +18,10 @@ interface DotsButtonProps {
 const DotsHeaderButton: React.FC<DotsButtonProps> = ({ propertyId }) => {
   const [showDropdown, setShowDropdown] = useState(false)
 
-  const title = document.querySelector('h1')?.textContent
+  const title =
+    'Yakin akan hapus listing ' +
+    document.querySelector('h1')?.textContent +
+    ' ?'
   const subtitle =
     'Setelah terhapus, listing tidak bisa ditemukan di jaringan Daftar Properti.'
 
@@ -58,6 +61,7 @@ const DotsHeaderButton: React.FC<DotsButtonProps> = ({ propertyId }) => {
       <ConfirmationDialog
         title={title}
         subtitle={subtitle}
+        buttonText="Ya, Hapus"
         isOpen={isDialogOpen}
         setIsOpen={handleDeleteCancellation}
         onConfirm={handleDeleteConfirmation}

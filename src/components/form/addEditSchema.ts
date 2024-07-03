@@ -90,6 +90,17 @@ const getMandatoryField = (fieldName: string) => ({
     }),
 })
 
+const isRewardAgreementOptional =
+  import.meta.env.VITE_OPTIONAL_REWARD_AGREEMENT === 'true'
+
+const getWithRewardAgreementSchema = () => {
+  return isRewardAgreementOptional
+    ? z.boolean()
+    : z.boolean().refine((val) => val === true, {
+        message: 'Persetujuan Imbalan harus disetujui',
+      })
+}
+
 export const baseFormSchema = z.object({
   title: getMandatoryField('Judul Listing').string,
   propertyType: getMandatoryField('Tipe Properti').string,
@@ -109,9 +120,7 @@ export const baseFormSchema = z.object({
   ownership: getMandatoryField('Sertifikat').string,
   pictureUrls: getOptionalField().picture,
   isPrivate: z.boolean(),
-  withRewardAgreement: z.boolean().refine((val) => val === true, {
-    message: 'Persetujuan Imbalan harus disetujui',
-  }),
+  withRewardAgreement: getWithRewardAgreementSchema(),
   price: getOptionalField('Harga Jual').number,
   rentPrice: getOptionalField('Harga Sewa').number,
   coordinate: z
