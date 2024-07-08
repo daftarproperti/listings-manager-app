@@ -1,9 +1,9 @@
-import { useState, useEffect, type SetStateAction } from 'react'
+import { useState, useEffect, type SetStateAction, useRef } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { Button } from '@material-tailwind/react'
+import { Button, Tooltip, Typography } from '@material-tailwind/react'
 import {
   useAddListing,
   getDebouncedCities,
@@ -26,6 +26,9 @@ import TextareaField from 'components/input/TextareaField'
 import InputCheckboxField from 'components/input/InputCheckboxField'
 import transformListingObjectToFormData from 'components/input/transformObjectToFormdata'
 import { LISTING_OPTIONS } from 'pages/listings/edit/dummy'
+import { InformationCircleIcon } from '@heroicons/react/24/outline'
+import GoogleMaps from 'components/GoogleMaps'
+import { DEFAULT_LAT_LNG } from 'utils/constant'
 
 interface ExtendedListing extends GeneratedListing {
   bedroomCounts?: string
@@ -36,6 +39,8 @@ const AddPage = () => {
   const navigate = useNavigate()
   const [formExistingImages, setFormExistingImages] = useState<string[]>([])
   const [formNewImageFiles, setFormNewImageFiles] = useState<File[]>([])
+
+  const checkboxSectionRef = useRef<HTMLDivElement | null>(null)
 
   const {
     register,
@@ -57,13 +62,14 @@ const AddPage = () => {
 
   const { mutate, isPending } = useAddListing()
 
-  const listingForSale = watch('listingForSale', false)
-  const listingForRent = watch('listingForRent', false)
+  const listingForSale = watch('listingForSale')
+  const listingForRent = watch('listingForRent')
   const propertyType = watch('propertyType')
 
   const [defaultCityOptions, setDefaultCityOptions] = useState<CityOption[]>([])
   const { data: userProfile, isFetched } = useGetUserProfile()
   const [selectedCity, setSelectedCity] = useState<CityOption | null>(null)
+  const [coord, setCoord] = useState<google.maps.LatLngLiteral | undefined>()
 
   useEffect(() => {
     if (isFetched) {
@@ -97,7 +103,22 @@ const AddPage = () => {
     if (selectedCity) {
       setValue('cityId', selectedCity.value, { shouldValidate: true })
     }
-  }, [selectedCity, setValue])
+  }, [selectedCity])
+
+  useEffect(() => {
+    if (coord) {
+      setValue('coordinate.latitude', coord.lat)
+      setValue('coordinate.longitude', coord.lng)
+    } else {
+      setValue('coordinate', undefined)
+    }
+  }, [coord])
+
+  useEffect(() => {
+    if (errors.listingType && Object.keys(errors).length === 1) {
+      checkboxSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [errors.listingType])
 
   const handleCityChange = (cityOption: SetStateAction<CityOption | null>) => {
     setSelectedCity(cityOption)
@@ -173,7 +194,7 @@ const AddPage = () => {
           errorFieldName={errors.title}
           halfWidth={false}
         />
-        <div className="mt-3">
+        <div className="mt-3" ref={checkboxSectionRef}>
           <span className="text-lg font-semibold leading-7 text-gray-800">
             Tipe Listing
           </span>
@@ -189,11 +210,12 @@ const AddPage = () => {
               inputID="listingForRent"
             />
           </div>
-          <div>
-            {errors.listingType && (
-              <p className="text-red-500">{errors.listingType.message}</p>
-            )}
-          </div>
+          {!listingForSale && !listingForRent && (
+            <p className="mt-1 self-stretch text-sm leading-5 text-red-500">
+              {errors.listingType?.message ||
+                'Harus memilih minimal satu tipe listing'}
+            </p>
+          )}
         </div>
         <SelectField
           label="Tipe Properti"
@@ -360,6 +382,66 @@ const AddPage = () => {
             errorFieldName={errors.withRewardAgreement}
           />
         </div>
+        {import.meta.env.VITE_WITH_LATLNG_PICKER && (
+          <Button
+            size="md"
+            color="blue"
+            onClick={() =>
+              setCoord((prevState) => (prevState ? undefined : DEFAULT_LAT_LNG))
+            }
+            className="mt-4 w-full lg:w-auto"
+          >
+            {coord ? 'Hapus Koordinat' : 'Tambahkan Koordinat'}
+          </Button>
+        )}
+        {import.meta.env.VITE_WITH_LATLNG_PICKER && coord && (
+          <>
+            <div className="flex w-full">
+              <InputField
+                halfWidth={true}
+                leftPosition={true}
+                label={
+                  <span className="flex items-center gap-1">
+                    Koordinat{' '}
+                    <Tooltip
+                      className="border border-blue-gray-100 bg-white px-4 py-3 shadow shadow-black/10"
+                      content={
+                        <div className="w-60">
+                          <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal opacity-80"
+                          >
+                            Ketuk map atau pindahkan pin di dalam map untuk
+                            mendapatkan koordinat yang sesuai
+                          </Typography>
+                        </div>
+                      }
+                    >
+                      <InformationCircleIcon className="h-5 w-5 text-slate-500" />
+                    </Tooltip>
+                  </span>
+                }
+                registerHook={register('coordinate.latitude')}
+                placeholderValue="Lat"
+                disabled
+                errorFieldName={errors.coordinate?.latitude}
+              />
+              <InputField
+                halfWidth={true}
+                registerHook={register('coordinate.longitude')}
+                placeholderValue="Long"
+                disabled
+                errorFieldName={errors.coordinate?.longitude}
+              />
+            </div>
+            <GoogleMaps
+              coord={coord}
+              setCoord={setCoord}
+              initialAddress={watch('address')}
+            />
+          </>
+        )}
       </div>
       <div className="lg:hidden">
         <BottomStickyButton type="submit" disabled={isPending}>

@@ -23,6 +23,7 @@ const transformListingObjectToFormData = async ({
     'listingForSale',
     'listingForRent',
   ]
+  const deleteAbleKeys = ['coordinate']
 
   if (data.bedroomCounts) {
     const parts = data.bedroomCounts
@@ -50,7 +51,10 @@ const transformListingObjectToFormData = async ({
 
   Object.keys(data).forEach((key) => {
     const value = data[key as keyof typeof data]
-    if (value === null || value === undefined || value === '') {
+    if (
+      (value === null || value === undefined || value === '') &&
+      !deleteAbleKeys.includes(key)
+    ) {
       return
     }
 
@@ -71,16 +75,33 @@ const transformListingObjectToFormData = async ({
         data[key] = parseInt(value, 10)
       }
 
-      if (value !== null && value !== undefined) {
-        formData.append(key, value.toString())
-      }
-      if (binaryKeys.includes(key)) {
+      if (key === 'coordinate') {
+        if (!value) {
+          formData.append('coordinate[latitude]', '')
+          formData.append('coordinate[longitude]', '')
+          return
+        }
+        const coordValue = value as { latitude?: number; longitude?: number }
+        if (coordValue.latitude !== undefined) {
+          formData.append(
+            'coordinate[latitude]',
+            coordValue.latitude.toString(),
+          )
+        }
+        if (coordValue.longitude !== undefined) {
+          formData.append(
+            'coordinate[longitude]',
+            coordValue.longitude.toString(),
+          )
+        }
+      } else if (binaryKeys.includes(key)) {
         const binaryValue = value ? 1 : 0
         formData.append(key, binaryValue.toString())
       } else if (value !== null && value !== undefined) {
         formData.append(key, value.toString())
       }
     }
+
     if (key.startsWith('contacts')) {
       if (typeof value === 'object' && value !== null) {
         Object.keys(value).forEach((contactKey: string) => {
@@ -92,6 +113,7 @@ const transformListingObjectToFormData = async ({
         })
       }
     }
+
     if (key === 'pictureUrls') {
       formExistingImages.forEach((url: string) => {
         formData.append(`pictureUrls[]`, url)
@@ -111,6 +133,7 @@ const transformListingObjectToFormData = async ({
       }
     })
   }
+
   return formData
 }
 

@@ -4,12 +4,12 @@ import { type FieldError, type UseFormRegisterReturn } from 'react-hook-form'
 type InputFieldProps = {
   halfWidth?: boolean
   leftPosition?: boolean
-  label?: string
-  registerHook: UseFormRegisterReturn<string>
+  label?: ReactNode
+  registerHook?: UseFormRegisterReturn<string>
   placeholderValue: string
   errorFieldName?: FieldError
   errorMessage?: string
-  additionalLabel?: string
+  additionalLabel?: ReactNode
   linkHref?: string
   linkText?: string
   rightContent?: ReactNode
@@ -52,13 +52,13 @@ const InputField: React.FC<InputFieldProps> = ({
 
   return (
     <div
-      className={`mt-3 self-stretch
+      className={`mt-3
         ${halfWidth ? 'w-1/2' : 'w-full'} ${
           leftPosition ? 'mr-1' : halfWidth ? 'ml-1' : 'ml-0'
         }`}
     >
       <div className="flex justify-between">
-        <div className="text-lg font-semibold leading-7 text-gray-800">
+        <div className="min-h-7 text-lg font-semibold leading-7 text-gray-800">
           {label}
         </div>
         {additionalLabel && (
@@ -77,6 +77,7 @@ const InputField: React.FC<InputFieldProps> = ({
       </div>
       <div className="relative mt-1 w-full self-stretch rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-white">
         <input
+          {...inputProps}
           {...registerHook}
           placeholder={placeholderValue}
           className="h-full w-full items-start justify-center whitespace-nowrap rounded-lg px-3 py-2.5 text-lg leading-7 text-gray-800"

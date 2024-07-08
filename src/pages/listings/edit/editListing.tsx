@@ -1,8 +1,8 @@
-import { type SetStateAction, useEffect, useState } from 'react'
+import { type SetStateAction, useEffect, useState, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@material-tailwind/react'
+import { Button, Tooltip, Typography } from '@material-tailwind/react'
 import {
   useGetListingDetail,
   useUpdateListing,
@@ -20,9 +20,12 @@ import TextareaField from 'components/input/TextareaField'
 import InputCheckboxField from 'components/input/InputCheckboxField'
 import CustomSelectField from 'components/input/CustomSelectField'
 import BottomStickyButton from 'components/button/BottomStickyButton'
+import { DEFAULT_LAT_LNG } from 'utils/constant'
+import { InformationCircleIcon } from '@heroicons/react/24/outline'
+import GoogleMaps from 'components/GoogleMaps'
 
-import { LISTING_OPTIONS } from './dummy'
 import { onSubmit } from './handleFormSubmit'
+import { LISTING_OPTIONS } from './dummy'
 
 interface ExtendedListing extends GeneratedListing {
   bedroomCounts?: string
@@ -34,6 +37,9 @@ function EditListing({ id }: { id: string }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formExistingImages, setFormExistingImages] = useState<string[]>([])
   const [formNewImageFiles, setFormNewImageFiles] = useState<File[]>([])
+  const [coord, setCoord] = useState<google.maps.LatLngLiteral | undefined>()
+
+  const checkboxSectionRef = useRef<HTMLDivElement | null>(null)
 
   const {
     register,
@@ -46,8 +52,6 @@ function EditListing({ id }: { id: string }) {
   } = useForm<ExtendedListing>({
     defaultValues: {
       isPrivate: false,
-      listingForSale: false,
-      listingForRent: false,
       ownership: 'unknown',
     },
     resolver: zodResolver(schema),
@@ -61,8 +65,8 @@ function EditListing({ id }: { id: string }) {
 
   const { mutate } = useUpdateListing()
 
-  const listingForSale = watch('listingForSale', false)
-  const listingForRent = watch('listingForRent', false)
+  const listingForSale = watch('listingForSale')
+  const listingForRent = watch('listingForRent')
   const propertyType = watch('propertyType')
 
   const [defaultCityOptions, setDefaultCityOptions] = useState<CityOption[]>([])
@@ -84,6 +88,15 @@ function EditListing({ id }: { id: string }) {
         additionalBathroomCount ? `+${additionalBathroomCount}` : ''
       }`
       setValue('bathroomCounts', bathroomCombinedValue)
+      if (
+        listingDetails.coordinate?.latitude &&
+        listingDetails.coordinate.longitude
+      ) {
+        setCoord({
+          lat: listingDetails.coordinate.latitude,
+          lng: listingDetails.coordinate.longitude,
+        })
+      }
     }
   }, [listingDetails])
 
@@ -126,7 +139,22 @@ function EditListing({ id }: { id: string }) {
         setSelectedCity(initialCity as CityOption)
       }
     })
-  }, [cityId, cityName, setValue])
+  }, [cityId, cityName])
+
+  useEffect(() => {
+    if (errors.listingType && Object.keys(errors).length === 1) {
+      checkboxSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [errors.listingType])
+
+  useEffect(() => {
+    if (coord) {
+      setValue('coordinate.latitude', coord.lat)
+      setValue('coordinate.longitude', coord.lng)
+    } else {
+      setValue('coordinate', undefined)
+    }
+  }, [coord])
 
   const handleCityChange = (cityOption: SetStateAction<CityOption | null>) => {
     setSelectedCity(cityOption)
@@ -207,7 +235,7 @@ function EditListing({ id }: { id: string }) {
           placeholderValue="Tulis Judul"
           errorFieldName={errors.title}
         />
-        <div className="mt-3">
+        <div className="mt-3" ref={checkboxSectionRef}>
           <span className="text-lg font-semibold leading-7 text-gray-800">
             Tipe Listing
           </span>
@@ -223,6 +251,12 @@ function EditListing({ id }: { id: string }) {
               inputID="listingForRent"
             />
           </div>
+          {!listingForSale && !listingForRent && (
+            <p className="mt-1 self-stretch text-sm leading-5 text-red-500">
+              {errors.listingType?.message ||
+                'Harus memilih minimal satu tipe listing'}
+            </p>
+          )}
         </div>
         <SelectField
           label="Tipe Properti"
@@ -388,6 +422,78 @@ function EditListing({ id }: { id: string }) {
             errorFieldName={errors.withRewardAgreement}
           />
         </div>
+        {import.meta.env.VITE_WITH_LATLNG_PICKER && (
+          <Button
+            size="md"
+            color="blue"
+            onClick={() =>
+              setCoord((prevState) =>
+                prevState
+                  ? undefined
+                  : listingDetails?.coordinate?.latitude &&
+                      listingDetails?.coordinate?.longitude
+                    ? {
+                        lat: listingDetails.coordinate.latitude,
+                        lng: listingDetails.coordinate.longitude,
+                      }
+                    : DEFAULT_LAT_LNG,
+              )
+            }
+            className="mt-4 w-full lg:w-auto"
+          >
+            {coord ? 'Hapus Koordinat' : 'Tambahkan Koordinat'}
+          </Button>
+        )}
+        {import.meta.env.VITE_WITH_LATLNG_PICKER && coord && (
+          <>
+            <div className="flex w-full">
+              <InputField
+                halfWidth={true}
+                leftPosition={true}
+                label={
+                  <span className="flex items-center gap-1">
+                    Koordinat{' '}
+                    <Tooltip
+                      className="border border-blue-gray-100 bg-white px-4 py-3 shadow shadow-black/10"
+                      content={
+                        <div className="w-60">
+                          <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal opacity-80"
+                          >
+                            Ketuk map atau pindahkan pin di dalam map untuk
+                            mendapatkan koordinat yang sesuai
+                          </Typography>
+                        </div>
+                      }
+                    >
+                      <InformationCircleIcon className="h-5 w-5 text-slate-500" />
+                    </Tooltip>
+                  </span>
+                }
+                registerHook={register('coordinate.latitude')}
+                placeholderValue="Lat"
+                disabled
+                errorFieldName={errors.coordinate?.latitude}
+              />
+              <InputField
+                halfWidth={true}
+                registerHook={register('coordinate.longitude')}
+                placeholderValue="Long"
+                disabled
+                errorFieldName={errors.coordinate?.longitude}
+              />
+            </div>
+            <GoogleMaps
+              coord={coord}
+              setCoord={setCoord}
+              initialAddress={
+                listingDetails?.coordinate ? undefined : watch('address')
+              }
+            />
+          </>
+        )}
       </div>
       <div className="w-full bg-blue-100 px-4 py-3 text-lg lg:w-4/5">
         Kontak
