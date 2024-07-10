@@ -116,10 +116,11 @@ export const baseFormSchema = z.object({
   rentPrice: getOptionalField('Harga Sewa').number,
   coordinate: z
     .object({
-      latitude: z.number().optional(),
-      longitude: z.number().optional(),
+      latitude: z.number().optional().nullable(),
+      longitude: z.number().optional().nullable(),
     })
-    .optional(),
+    .optional()
+    .nullable(),
 })
 
 export const schema = baseFormSchema.superRefine((data, ctx) => {
