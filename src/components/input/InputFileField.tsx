@@ -1,11 +1,18 @@
 import { CancelIconSVG } from 'assets/icons'
 import React, { useEffect, useRef, useState } from 'react'
-import type { FieldError, Merge, UseFormRegisterReturn } from 'react-hook-form'
+import type {
+  FieldError,
+  Merge,
+  UseFormClearErrors,
+  UseFormRegisterReturn,
+  UseFormSetError,
+} from 'react-hook-form'
 import { getMobileOperatingSystem, useImageHandler } from 'utils'
 import AlertDialog from 'components/AlertDialog'
 import { Button } from '@material-tailwind/react'
 import WebApp from '@twa-dev/sdk'
 import { CameraIcon } from '@heroicons/react/24/solid'
+import type { ExtendedListing } from 'pages/listings/edit/editListing'
 
 type InputFileProps = {
   label: string
@@ -15,6 +22,8 @@ type InputFileProps = {
   onNewFiles: (newFiles: File[]) => void
   onExistingImagesChange: (existingImages: string[]) => void
   errorFieldName?: Merge<FieldError, (FieldError | undefined)[]>
+  setError?: UseFormSetError<ExtendedListing>
+  clearErrors?: UseFormClearErrors<ExtendedListing>
 }
 
 const InputFileField: React.FC<InputFileProps> = ({
@@ -25,6 +34,8 @@ const InputFileField: React.FC<InputFileProps> = ({
   onNewFiles,
   onExistingImagesChange,
   errorFieldName,
+  setError,
+  clearErrors,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -46,11 +57,31 @@ const InputFileField: React.FC<InputFileProps> = ({
 
   useEffect(() => {
     onNewFiles(newImageFiles)
-  }, [newImageFiles, onNewFiles])
+  }, [newImageFiles])
 
   useEffect(() => {
     onExistingImagesChange(existingImages)
-  }, [existingImages, onExistingImagesChange])
+  }, [existingImages])
+
+  useEffect(() => {
+    if (
+      !!dataListing?.pictureUrls?.length &&
+      existingImages.length === 0 &&
+      newImageFiles.length === 0
+    ) {
+      setError &&
+        setError('pictureUrls', {
+          message: 'Harus memiliki minimal 1 gambar',
+          type: 'manual',
+        })
+    } else {
+      clearErrors && clearErrors('pictureUrls')
+    }
+  }, [
+    dataListing?.pictureUrls?.length,
+    existingImages.length,
+    newImageFiles.length,
+  ])
 
   return (
     <div className="w-auto">

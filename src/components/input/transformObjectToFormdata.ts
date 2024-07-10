@@ -82,13 +82,13 @@ const transformListingObjectToFormData = async ({
           return
         }
         const coordValue = value as { latitude?: number; longitude?: number }
-        if (coordValue.latitude !== undefined) {
+        if (coordValue.latitude) {
           formData.append(
             'coordinate[latitude]',
             coordValue.latitude.toString(),
           )
         }
-        if (coordValue.longitude !== undefined) {
+        if (coordValue.longitude) {
           formData.append(
             'coordinate[longitude]',
             coordValue.longitude.toString(),
@@ -115,9 +115,11 @@ const transformListingObjectToFormData = async ({
     }
 
     if (key === 'pictureUrls') {
-      formExistingImages.forEach((url: string) => {
-        formData.append(`pictureUrls[]`, url)
-      })
+      if (formExistingImages.length > 0) {
+        formExistingImages.forEach((url: string, index) => {
+          formData.append(`pictureUrls[${index}]`, url)
+        })
+      }
     }
   })
 
@@ -127,9 +129,12 @@ const transformListingObjectToFormData = async ({
       formNewImageFiles.map(uploadImage),
     )
 
-    uploadedFileNames.forEach((file) => {
+    uploadedFileNames.forEach((file, index) => {
       if (file) {
-        formData.append('pictureUrls[]', `${file.fileId}_${file.fileName}`)
+        formData.append(
+          `pictureUrls[${(formExistingImages.length ?? 0) + index}]`,
+          `${file.fileId}_${file.fileName}`,
+        )
       }
     })
   }

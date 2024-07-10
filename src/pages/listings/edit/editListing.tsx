@@ -27,7 +27,7 @@ import GoogleMaps from 'components/GoogleMaps'
 import { onSubmit } from './handleFormSubmit'
 import { LISTING_OPTIONS } from './dummy'
 
-interface ExtendedListing extends GeneratedListing {
+export interface ExtendedListing extends GeneratedListing {
   bedroomCounts?: string
   bathroomCounts?: string
 }
@@ -49,6 +49,8 @@ function EditListing({ id }: { id: string }) {
     handleSubmit,
     control,
     setValue,
+    setError,
+    clearErrors,
   } = useForm<ExtendedListing>({
     defaultValues: {
       isPrivate: false,
@@ -68,6 +70,7 @@ function EditListing({ id }: { id: string }) {
   const listingForSale = watch('listingForSale')
   const listingForRent = watch('listingForRent')
   const propertyType = watch('propertyType')
+  const isErrorsExist = Object.keys(errors).length > 0
 
   const [defaultCityOptions, setDefaultCityOptions] = useState<CityOption[]>([])
   const [selectedCity, setSelectedCity] = useState<{
@@ -108,7 +111,7 @@ function EditListing({ id }: { id: string }) {
     if (listingDetails && shouldReset) {
       reset(listingDetails)
     }
-  }, [listingDetails, reset])
+  }, [listingDetails])
 
   useEffect(() => {
     if (listingDetails && !selectedCity) {
@@ -203,7 +206,7 @@ function EditListing({ id }: { id: string }) {
           color="blue"
           type="submit"
           className="flex items-center gap-2 text-sm font-normal capitalize"
-          disabled={isSubmitting}
+          disabled={isSubmitting || isErrorsExist}
         >
           Simpan
         </Button>
@@ -228,6 +231,8 @@ function EditListing({ id }: { id: string }) {
           onNewFiles={handleNewFiles}
           onExistingImagesChange={handleExistingImagesChange}
           errorFieldName={errors.pictureUrls}
+          setError={setError}
+          clearErrors={clearErrors}
         />
         <InputField
           label="Judul Listing"
@@ -521,7 +526,10 @@ function EditListing({ id }: { id: string }) {
         </Link>
       </div>
       <div className="lg:hidden">
-        <BottomStickyButton type="submit" disabled={isSubmitting}>
+        <BottomStickyButton
+          type="submit"
+          disabled={isSubmitting || isErrorsExist}
+        >
           Simpan
         </BottomStickyButton>
       </div>

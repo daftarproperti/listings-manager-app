@@ -14,7 +14,7 @@ export const useImageHandler = (
     if (propertyDetails && propertyDetails.pictureUrls) {
       setExistingImages(propertyDetails.pictureUrls)
     }
-  }, [propertyDetails])
+  }, [])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
