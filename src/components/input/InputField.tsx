@@ -80,7 +80,7 @@ const InputField: React.FC<InputFieldProps> = ({
           {...inputProps}
           {...registerHook}
           placeholder={placeholderValue}
-          className="h-full w-full items-start justify-center whitespace-nowrap rounded-lg px-3 py-2.5 text-lg leading-7 text-gray-800"
+          className="h-full w-full items-start justify-center whitespace-nowrap rounded-lg px-3 py-2.5 text-lg leading-7 text-gray-800 disabled:bg-blue-gray-50"
           onKeyDown={handleKeyDown}
           {...inputProps}
         />

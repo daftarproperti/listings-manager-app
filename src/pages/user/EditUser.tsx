@@ -36,6 +36,7 @@ function EditUser() {
   const [selectedCity, setSelectedCity] = useState<CityOption | null>(null)
   const cityId = watch('cityId')
   const cityName = watch('cityName')
+  const phoneNumber = userDetails?.phoneNumber
 
   const [newImageFile, setNewImageFile] = useState<File | null>(null)
   const handleNewFile = (file: File | null) => {
@@ -141,6 +142,7 @@ function EditUser() {
             })}
             placeholderValue="Isi dengan awalan 0 atau +"
             errorFieldName={errors.phoneNumber}
+            disabled={phoneNumber !== '' && phoneNumber !== undefined}
           />
           <CustomSelectField
             control={control}
