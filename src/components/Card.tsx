@@ -1,7 +1,18 @@
-import { type Listing } from 'api/types'
-import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
+import type { Listing, VerifyStatus } from 'api/types'
+import {
+  BathIconSVG,
+  BedIconSVG,
+  CancelIconSVG,
+  HouseIconSVG,
+  LotIconSVG,
+  VerifyIconSVG,
+} from 'assets/icons'
 import ImageWithAuth from 'components/ImageWithAuth'
-import { formatCurrencyToIDRText, getLabelForValue } from 'utils'
+import {
+  formatCurrencyToIDRText,
+  getLabelForValue,
+  getVerifyStatus,
+} from 'utils'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '@material-tailwind/react'
 import { EyeIcon } from '@heroicons/react/24/solid'
@@ -135,7 +146,23 @@ const Card = ({ data }: { data: Listing }) => {
           </div>
         </div>
       )}
-      <div className="flex w-full justify-end gap-5 rounded-b-lg bg-blue-100 px-3 py-2.5">
+      <div className="w-full justify-end gap-5 rounded-b-lg bg-blue-100 px-3 py-2.5">
+        <div className="flex items-center pb-2 text-sm">
+          {data.verifyStatus === 'rejected' ? (
+            <CancelIconSVG className="text-red-500" />
+          ) : (
+            <VerifyIconSVG
+              className={
+                data.verifyStatus === 'approved'
+                  ? 'text-blue-500'
+                  : 'text-slate-500'
+              }
+            />
+          )}
+          <span className="ml-2">
+            {getVerifyStatus(data.verifyStatus as VerifyStatus)}
+          </span>
+        </div>
         <Button
           size="sm"
           fullWidth

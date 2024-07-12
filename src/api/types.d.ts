@@ -57,6 +57,7 @@ export type FilterMinMax = components['schemas']['FilterMinMax']
 export type FilterSet = components['schemas']['FilterSet']
 export type PropertyType = components['schemas']['PropertyType']
 export type ListingType = components['schemas']['ListingType']
+export type VerifyStatus = components['schemas']['VerifyStatus']
 
 export type City = components['schemas']['City']
 export type CityOption = { label: string; value: number }

@@ -3,17 +3,26 @@ import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, type ButtonProps, Chip } from '@material-tailwind/react'
 import { useGetListingDetail } from 'api/queries'
-import { BathIconSVG, BedIconSVG, HouseIconSVG, LotIconSVG } from 'assets/icons'
+import {
+  BathIconSVG,
+  BedIconSVG,
+  CancelIconSVG,
+  HouseIconSVG,
+  LotIconSVG,
+  VerifyIconSVG,
+} from 'assets/icons'
 import {
   formatCurrencyToIDRText,
   appPath,
   dpPath,
   getLabelForValue,
   replaceWithBr,
+  getVerifyStatus,
 } from 'utils'
 import DetailListingTable from 'components/DetailListingTable'
 import ShareButton from 'components/button/ShareButton'
 import DotsHeaderButton from 'components/header/DotsHeaderButton'
+import { type VerifyStatus } from 'api/types'
 
 function ListingDetail({
   id,
@@ -191,6 +200,24 @@ function ListingDetail({
                   </div>
                 </>
               )}
+              <div className="w-full justify-end border-b border-solid border-t-slate-200 px-3 py-2.5">
+                <div className="flex items-center text-sm">
+                  {data.verifyStatus === 'rejected' ? (
+                    <CancelIconSVG className="text-red-500" />
+                  ) : (
+                    <VerifyIconSVG
+                      className={
+                        data.verifyStatus === 'approved'
+                          ? 'text-blue-500'
+                          : 'text-slate-500'
+                      }
+                    />
+                  )}
+                  <span className="ml-2">
+                    {getVerifyStatus(data.verifyStatus as VerifyStatus)}
+                  </span>
+                </div>
+              </div>
               <div className="px-4 py-1 text-sm">
                 <h2 className="text-sm font-semibold leading-7 text-slate-500">
                   Detail Listing

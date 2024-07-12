@@ -1,4 +1,8 @@
-import { type PropertyType, type ListingType } from 'api/types'
+import {
+  type PropertyType,
+  type ListingType,
+  type VerifyStatus,
+} from 'api/types'
 
 export const PROPERTY_TYPE_ENUM: { [key in PropertyType]: string } = {
   house: 'Rumah',
@@ -13,6 +17,11 @@ export const LISTING_TYPE_ENUM: { [key in ListingType]: string } = {
   sale: 'Dijual',
   rent: 'Disewakan',
   unknown: 'Lainnya',
+}
+export const VERIFY_STATUS_ENUM: { [key in VerifyStatus]: string } = {
+  on_review: 'Sedang ditinjau',
+  approved: 'Disetujui',
+  rejected: 'Ditolak',
 }
 
 export const LISTING_OPTIONS = {
