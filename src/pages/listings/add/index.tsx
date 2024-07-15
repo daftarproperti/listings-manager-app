@@ -71,7 +71,7 @@ const AddPage = () => {
   const [defaultCityOptions, setDefaultCityOptions] = useState<CityOption[]>([])
   const { data: userProfile, isFetched } = useGetUserProfile()
   const [selectedCity, setSelectedCity] = useState<CityOption | null>(null)
-  const [coord, setCoord] = useState<google.maps.LatLngLiteral | undefined>()
+  const [coord, setCoord] = useState<google.maps.LatLngLiteral>(DEFAULT_LAT_LNG)
 
   useEffect(() => {
     if (isFetched) {
@@ -403,25 +403,11 @@ const AddPage = () => {
             />
           )}
           {import.meta.env.VITE_WITH_LATLNG_PICKER && (
-            <Button
-              size="md"
-              color="blue"
-              onClick={() =>
-                setCoord((prevState) =>
-                  prevState ? undefined : DEFAULT_LAT_LNG,
-                )
-              }
-              className="mt-4 w-full lg:w-auto"
-            >
-              {coord ? 'Hapus Koordinat' : 'Tambahkan Koordinat'}
-            </Button>
-          )}
-          {import.meta.env.VITE_WITH_LATLNG_PICKER && coord && (
             <>
               <div className="flex w-full">
                 <InputField
-                  halfWidth={true}
-                  leftPosition={true}
+                  halfWidth
+                  leftPosition
                   label={
                     <span className="flex items-center gap-1">
                       Koordinat{' '}
@@ -444,24 +430,24 @@ const AddPage = () => {
                       </Tooltip>
                     </span>
                   }
-                  registerHook={register('coordinate.latitude')}
+                  registerHook={register('coordinate.latitude', {
+                    valueAsNumber: true,
+                  })}
                   placeholderValue="Lat"
-                  disabled
+                  readOnly
                   errorFieldName={errors.coordinate?.latitude}
                 />
                 <InputField
-                  halfWidth={true}
-                  registerHook={register('coordinate.longitude')}
+                  halfWidth
+                  registerHook={register('coordinate.longitude', {
+                    valueAsNumber: true,
+                  })}
                   placeholderValue="Long"
-                  disabled
+                  readOnly
                   errorFieldName={errors.coordinate?.longitude}
                 />
               </div>
-              <GoogleMaps
-                coord={coord}
-                setCoord={setCoord}
-                initialAddress={watch('address')}
-              />
+              <GoogleMaps coord={coord} setCoord={setCoord} />
             </>
           )}
           <div className="relative mt-3 w-full self-stretch">

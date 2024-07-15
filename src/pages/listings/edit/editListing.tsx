@@ -39,7 +39,7 @@ function EditListing({ id }: { id: string }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [formExistingImages, setFormExistingImages] = useState<string[]>([])
   const [formNewImageFiles, setFormNewImageFiles] = useState<File[]>([])
-  const [coord, setCoord] = useState<google.maps.LatLngLiteral | undefined>()
+  const [coord, setCoord] = useState<google.maps.LatLngLiteral>(DEFAULT_LAT_LNG)
 
   const checkboxSectionRef = useRef<HTMLDivElement | null>(null)
 
@@ -77,6 +77,21 @@ function EditListing({ id }: { id: string }) {
     value: number
   } | null>(null)
 
+  const resetFormValues = (data: ExtendedListing) =>
+    reset({
+      ...data,
+      coordinate:
+        data?.coordinate?.latitude && data?.coordinate?.longitude
+          ? {
+              latitude: data.coordinate.latitude,
+              longitude: data.coordinate.longitude,
+            }
+          : {
+              latitude: DEFAULT_LAT_LNG.lat,
+              longitude: DEFAULT_LAT_LNG.lng,
+            },
+    })
+
   useEffect(() => {
     if (listingDetails) {
       const { bedroomCount, additionalBedroomCount } = listingDetails
@@ -90,6 +105,8 @@ function EditListing({ id }: { id: string }) {
         additionalBathroomCount ? `+${additionalBathroomCount}` : ''
       }`
       setValue('bathroomCounts', bathroomCombinedValue)
+
+      resetFormValues(listingDetails)
       if (
         listingDetails.coordinate?.latitude &&
         listingDetails.coordinate.longitude
@@ -104,13 +121,6 @@ function EditListing({ id }: { id: string }) {
 
   const cityId = watch('cityId')
   const cityName = watch('cityName')
-  const [shouldReset, setShouldReset] = useState(true)
-
-  useEffect(() => {
-    if (listingDetails && shouldReset) {
-      reset(listingDetails)
-    }
-  }, [listingDetails, reset])
 
   useEffect(() => {
     if (listingDetails && !selectedCity) {
@@ -131,7 +141,7 @@ function EditListing({ id }: { id: string }) {
       }))
       setDefaultCityOptions(cityOptions)
 
-      if (cityId && cityName && typeof cityName === 'string' && shouldReset) {
+      if (cityId && cityName && typeof cityName === 'string') {
         const initialCity = cityOptions.find(
           (option) => option.value === cityId,
         ) || {
@@ -150,17 +160,15 @@ function EditListing({ id }: { id: string }) {
   }, [errors.listingType])
 
   useEffect(() => {
-    if (coord) {
+    if (coord.lat && coord.lng) {
       setValue('coordinate.latitude', coord.lat)
       setValue('coordinate.longitude', coord.lng)
-    } else {
-      setValue('coordinate', undefined)
     }
-  }, [coord])
+  }, [coord.lat, coord.lng])
 
   const handleCityChange = (cityOption: SetStateAction<CityOption | null>) => {
     setSelectedCity(cityOption)
-    setShouldReset(false)
+    listingDetails && resetFormValues(listingDetails)
   }
 
   const handleExistingImagesChange = (existingImages: string[]) => {
@@ -434,28 +442,6 @@ function EditListing({ id }: { id: string }) {
             />
           )}
           {import.meta.env.VITE_WITH_LATLNG_PICKER && (
-            <Button
-              size="md"
-              color="blue"
-              onClick={() =>
-                setCoord((prevState) =>
-                  prevState
-                    ? undefined
-                    : listingDetails?.coordinate?.latitude &&
-                        listingDetails?.coordinate?.longitude
-                      ? {
-                          lat: listingDetails.coordinate.latitude,
-                          lng: listingDetails.coordinate.longitude,
-                        }
-                      : DEFAULT_LAT_LNG,
-                )
-              }
-              className="mt-4 w-full lg:w-auto"
-            >
-              {coord ? 'Hapus Koordinat' : 'Tambahkan Koordinat'}
-            </Button>
-          )}
-          {import.meta.env.VITE_WITH_LATLNG_PICKER && coord && (
             <>
               <div className="flex w-full">
                 <InputField
@@ -483,26 +469,24 @@ function EditListing({ id }: { id: string }) {
                       </Tooltip>
                     </span>
                   }
-                  registerHook={register('coordinate.latitude')}
+                  registerHook={register('coordinate.latitude', {
+                    valueAsNumber: true,
+                  })}
                   placeholderValue="Lat"
-                  disabled
+                  readOnly
                   errorFieldName={errors.coordinate?.latitude}
                 />
                 <InputField
                   halfWidth={true}
-                  registerHook={register('coordinate.longitude')}
+                  registerHook={register('coordinate.longitude', {
+                    valueAsNumber: true,
+                  })}
                   placeholderValue="Long"
-                  disabled
+                  readOnly
                   errorFieldName={errors.coordinate?.longitude}
                 />
               </div>
-              <GoogleMaps
-                coord={coord}
-                setCoord={setCoord}
-                initialAddress={
-                  listingDetails?.coordinate ? undefined : watch('address')
-                }
-              />
+              <GoogleMaps coord={coord} setCoord={setCoord} />
             </>
           )}
           <div className="relative mt-3 w-full self-stretch">

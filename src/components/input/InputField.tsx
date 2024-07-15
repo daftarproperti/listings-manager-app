@@ -77,7 +77,6 @@ const InputField: React.FC<InputFieldProps> = ({
       </div>
       <div className="relative mt-1 w-full self-stretch rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-white">
         <input
-          {...inputProps}
           {...registerHook}
           placeholder={placeholderValue}
           className="h-full w-full items-start justify-center whitespace-nowrap rounded-lg px-3 py-2.5 text-lg leading-7 text-gray-800 disabled:bg-blue-gray-50"

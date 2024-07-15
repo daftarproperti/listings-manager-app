@@ -1,3 +1,4 @@
+import { DEFAULT_LAT_LNG } from 'utils/constant'
 import { z } from 'zod'
 
 const mustContainValueRefine = (value: string | number) => {
@@ -77,6 +78,14 @@ const getMandatoryField = (fieldName: string) => ({
     .refine(mustContainNumberRefine, {
       message: `${fieldName} harus berupa angka`,
     }),
+  strictNumber: z
+    .number()
+    .refine(mustContainValueRefine, {
+      message: `${fieldName} harus diisi`,
+    })
+    .refine(mustContainNumberRefine, {
+      message: `${fieldName} harus berupa angka`,
+    }),
   price: z
     .any()
     .or(z.string())
@@ -123,13 +132,18 @@ export const baseFormSchema = z.object({
   withRewardAgreement: getWithRewardAgreementSchema(),
   price: getOptionalField('Harga Jual').number,
   rentPrice: getOptionalField('Harga Sewa').number,
-  coordinate: z
-    .object({
-      latitude: z.number().optional().nullable(),
-      longitude: z.number().optional().nullable(),
-    })
-    .optional()
-    .nullable(),
+  coordinate: import.meta.env.VITE_WITH_LATLNG_PICKER
+    ? z.object({
+        latitude: getMandatoryField('Koordinat').strictNumber,
+        longitude: getMandatoryField('Koordinat').strictNumber,
+      })
+    : z
+        .object({
+          latitude: z.number().optional().nullable(),
+          longitude: z.number().optional().nullable(),
+        })
+        .optional()
+        .nullable(),
 })
 
 export const schema = baseFormSchema.superRefine((data, ctx) => {
@@ -165,6 +179,21 @@ export const schema = baseFormSchema.superRefine((data, ctx) => {
     ctx.addIssue({
       path: ['listingType', 'listingForSale', 'listingForRent'],
       message: 'Harus memilih minimal satu tipe listing',
+      code: z.ZodIssueCode.custom,
+    })
+  }
+  if (
+    data?.coordinate?.latitude === DEFAULT_LAT_LNG.lat &&
+    data?.coordinate?.longitude === DEFAULT_LAT_LNG.lng
+  ) {
+    ctx.addIssue({
+      path: ['coordinate.latitude'],
+      message: 'Mohon pilih lokasi pada peta',
+      code: z.ZodIssueCode.custom,
+    })
+    ctx.addIssue({
+      path: ['coordinate.longitude'],
+      message: 'Mohon pilih lokasi pada peta',
       code: z.ZodIssueCode.custom,
     })
   }

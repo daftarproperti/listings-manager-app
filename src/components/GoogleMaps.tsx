@@ -8,56 +8,33 @@ export const DEFAULT_MAP_CENTER = { lat: -6.175403, lng: 106.824584 }
 
 type GoogleMapsProps = {
   coord?: google.maps.LatLngLiteral
-  setCoord: Dispatch<SetStateAction<google.maps.LatLngLiteral | undefined>>
-  initialAddress?: string
+  setCoord: Dispatch<SetStateAction<google.maps.LatLngLiteral>>
 }
 
 export default function GoogleMaps({
   coord,
   setCoord,
-  initialAddress,
 }: GoogleMapsProps): JSX.Element {
   const [mapRef] = useIsVisible<HTMLDivElement>()
+  const [inputRef] = useIsVisible<HTMLInputElement>()
 
   const initMap = async (
     mapElement: HTMLElement,
-    initialAddress?: string,
+    inputElement: HTMLInputElement,
   ): Promise<void> => {
     const { Map } = (await google.maps.importLibrary(
       'maps',
     )) as google.maps.MapsLibrary
+    const { SearchBox } = (await google.maps.importLibrary(
+      'places',
+    )) as google.maps.PlacesLibrary
     const { AdvancedMarkerElement } = (await google.maps.importLibrary(
       'marker',
     )) as google.maps.MarkerLibrary
 
-    let defaultCenter = {
+    const defaultCenter = {
       lat: coord?.lat ?? DEFAULT_MAP_CENTER.lat,
       lng: coord?.lng ?? DEFAULT_MAP_CENTER.lng,
-    }
-
-    if (initialAddress) {
-      try {
-        const { Geocoder } = (await google.maps.importLibrary(
-          'geocoding',
-        )) as google.maps.GeocodingLibrary
-        const geocoder = new Geocoder()
-        const geocodeResult = await geocoder.geocode({
-          address: initialAddress,
-        })
-        if (geocodeResult.results.length > 0) {
-          const location = geocodeResult.results[0].geometry.location
-          setCoord({
-            lat: location.lat(),
-            lng: location.lng(),
-          })
-          defaultCenter = {
-            lat: location.lat(),
-            lng: location.lng(),
-          }
-        }
-      } catch (error) {
-        console.error(error)
-      }
     }
 
     const maps = new Map(mapElement, {
@@ -67,6 +44,7 @@ export default function GoogleMaps({
       disableDefaultUI: true,
       streetViewControl: true,
     })
+    const searchBox = new SearchBox(inputElement)
     const marker = new AdvancedMarkerElement({
       map: maps,
       position: defaultCenter,
@@ -81,6 +59,37 @@ export default function GoogleMaps({
           lng: parseFloat(e.latLng.lng().toFixed(7)),
         })
       }
+    })
+
+    maps.addListener('bounds_changed', () => {
+      searchBox.setBounds(maps.getBounds() as google.maps.LatLngBounds | null)
+    })
+
+    searchBox.addListener('places_changed', () => {
+      const places = searchBox.getPlaces()
+      if (places?.length === 0) {
+        return
+      }
+
+      const bounds = new google.maps.LatLngBounds()
+      places?.forEach((place) => {
+        if (place.geometry?.location == null) {
+          // Returned place contains no geometry
+          return
+        }
+        if (place.geometry.viewport != null) {
+          bounds.union(place.geometry.viewport)
+        } else {
+          bounds.extend(place.geometry.location)
+        }
+
+        marker.position = place.geometry.location
+        setCoord({
+          lat: parseFloat(place.geometry.location.lat().toFixed(7)),
+          lng: parseFloat(place.geometry.location.lng().toFixed(7)),
+        })
+      })
+      maps.fitBounds(bounds)
     })
 
     marker.addListener('dragend', () => {
@@ -108,14 +117,19 @@ export default function GoogleMaps({
   }
 
   useEffect(() => {
-    // initMap only gets called when component is rendered in the first time
-    if (mapRef.current !== null) {
-      initMap(mapRef.current, initialAddress)
+    if (mapRef.current !== null && inputRef.current !== null) {
+      initMap(mapRef.current, inputRef.current)
     }
-  }, [mapRef.current])
+  }, [mapRef.current, inputRef.current])
 
   return (
     <>
+      <input
+        type="text"
+        ref={inputRef}
+        placeholder="Ketik alamat untuk mencari koordinat"
+        className="relative mt-2 h-full w-full whitespace-nowrap rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-white px-3 py-2.5 text-lg leading-7 text-gray-800 disabled:bg-blue-gray-50"
+      />
       <Wrapper
         apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string}
         render={render}
