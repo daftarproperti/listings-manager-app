@@ -5,7 +5,8 @@ import {
   type UpdateListingParams,
 } from 'api/types'
 import transformListingObjectToFormData from 'components/input/transformObjectToFormdata'
-import { type NavigateFunction } from 'react-router-dom'
+import type { CombinedImage } from 'components/input/types'
+import type { NavigateFunction } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 export const onSubmit = async (
@@ -14,14 +15,12 @@ export const onSubmit = async (
   mutate: UseMutateFunction<UpdateListingRes, Error, UpdateListingParams>,
   navigate: NavigateFunction,
   setIsSubmitting: (isSubmitting: boolean) => void,
-  formExistingImages: string[],
-  formNewImageFiles: File[],
+  combinedImages: CombinedImage[] | undefined,
 ) => {
   setIsSubmitting(true)
   const dataToSubmit = await transformListingObjectToFormData({
     data: formData,
-    formExistingImages,
-    formNewImageFiles,
+    combinedImages,
   })
 
   mutate(

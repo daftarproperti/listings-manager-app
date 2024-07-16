@@ -9,12 +9,14 @@ export const useImageHandler = (
   const [selectedImages, setSelectedImages] = useState<string[]>([])
   const [existingImages, setExistingImages] = useState<string[]>([])
   const [newImageFiles, setNewImageFiles] = useState<File[]>([])
+  const [newlyAddedImages, setNewlyAddedImages] =
+    useState<{ file: File; url: string }[]>()
 
   useEffect(() => {
-    if (propertyDetails && propertyDetails.pictureUrls) {
+    if (propertyDetails?.pictureUrls) {
       setExistingImages(propertyDetails.pictureUrls)
     }
-  }, [])
+  }, [propertyDetails?.pictureUrls])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
@@ -29,19 +31,26 @@ export const useImageHandler = (
     if (files) {
       const fileList = Array.from(validateImageFiles(files)) as File[]
       const fileUrls = fileList.map((file) => URL.createObjectURL(file))
+      const combinedFileAndUrls = fileList.map((file, index) => ({
+        file,
+        url: fileUrls[index],
+      }))
 
+      setNewlyAddedImages(combinedFileAndUrls)
       setNewImageFiles((prevFiles) => [...prevFiles, ...fileList])
       setSelectedImages((prevImages) => [...prevImages, ...fileUrls])
     }
   }
 
-  const removeImage = (index: number, isExistingImage: boolean) => {
+  const removeImage = (url: string, isExistingImage: boolean) => {
     if (isExistingImage) {
       setExistingImages((prevImages) =>
-        prevImages.filter((_, i) => i !== index),
+        prevImages.filter((existingImage) => existingImage !== url),
       )
     } else {
+      const index = selectedImages.findIndex((image) => image === url)
       URL.revokeObjectURL(selectedImages[index])
+      setNewlyAddedImages(undefined)
       setNewImageFiles((prevFiles) => prevFiles.filter((_, i) => i !== index))
       setSelectedImages((prevImages) =>
         prevImages.filter((_, i) => i !== index),
@@ -53,6 +62,7 @@ export const useImageHandler = (
     selectedImages,
     existingImages,
     newImageFiles,
+    newlyAddedImages,
     handleImageChange,
     removeImage,
   }

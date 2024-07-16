@@ -1,6 +1,8 @@
 import { uploadImage } from 'api/queries'
 import { type UpdateListingRequest as GeneratedListing } from 'api/types'
 
+import type { CombinedImage } from './types'
+
 interface ExtendedListing extends GeneratedListing {
   bedroomCounts?: string
   bathroomCounts?: string
@@ -8,12 +10,10 @@ interface ExtendedListing extends GeneratedListing {
 
 const transformListingObjectToFormData = async ({
   data,
-  formExistingImages,
-  formNewImageFiles,
+  combinedImages,
 }: {
   data: ExtendedListing
-  formExistingImages: string[]
-  formNewImageFiles: File[]
+  combinedImages?: CombinedImage[]
 }): Promise<FormData> => {
   const formData = new FormData()
 
@@ -113,27 +113,21 @@ const transformListingObjectToFormData = async ({
         })
       }
     }
-
-    if (key === 'pictureUrls') {
-      if (formExistingImages.length > 0) {
-        formExistingImages.forEach((url: string, index) => {
-          formData.append(`pictureUrls[${index}]`, url)
-        })
-      }
-    }
   })
 
   // Upload new images and wait for all uploads to complete
-  if (formNewImageFiles.length) {
-    const uploadedFileNames = await Promise.all(
-      formNewImageFiles.map(uploadImage),
+  if (combinedImages?.length) {
+    const pictureUrls = await Promise.all(
+      combinedImages.map((file) =>
+        file?.isExistingImage ? file.url : uploadImage(file.file),
+      ),
     )
 
-    uploadedFileNames.forEach((file, index) => {
+    pictureUrls.forEach((file, index) => {
       if (file) {
         formData.append(
-          `pictureUrls[${(formExistingImages.length ?? 0) + index}]`,
-          `${file.fileId}_${file.fileName}`,
+          `pictureUrls[${index}]`,
+          typeof file === 'string' ? file : `${file.fileId}_${file.fileName}`,
         )
       }
     })

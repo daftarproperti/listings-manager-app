@@ -24,6 +24,7 @@ import { DEFAULT_LAT_LNG } from 'utils/constant'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import GoogleMaps from 'components/GoogleMaps'
 import ConfirmationDialog from 'components/header/ConfirmationDialog'
+import type { CombinedImage } from 'components/input/types'
 
 import { onSubmit } from './handleFormSubmit'
 import { LISTING_OPTIONS } from './dummy'
@@ -37,8 +38,6 @@ function EditListing({ id }: { id: string }) {
   const navigate = useNavigate()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [formExistingImages, setFormExistingImages] = useState<string[]>([])
-  const [formNewImageFiles, setFormNewImageFiles] = useState<File[]>([])
   const [coord, setCoord] = useState<google.maps.LatLngLiteral>(DEFAULT_LAT_LNG)
 
   const checkboxSectionRef = useRef<HTMLDivElement | null>(null)
@@ -51,6 +50,8 @@ function EditListing({ id }: { id: string }) {
     handleSubmit,
     control,
     setValue,
+    setError,
+    clearErrors,
   } = useForm<ExtendedListing>({
     defaultValues: {
       isPrivate: false,
@@ -58,12 +59,13 @@ function EditListing({ id }: { id: string }) {
     },
     resolver: zodResolver(schema),
   })
+  const isErrorExist = Object.keys(errors).length > 0
 
   const {
     data: listingDetails,
     isLoading,
     isError,
-  } = useGetListingDetail({ id: id })
+  } = useGetListingDetail({ id })
 
   const { mutate } = useUpdateListing()
 
@@ -76,6 +78,9 @@ function EditListing({ id }: { id: string }) {
     label: string
     value: number
   } | null>(null)
+  const [combinedImages, setCombinedImages] = useState<
+    CombinedImage[] | undefined
+  >()
 
   const resetFormValues = (data: ExtendedListing) =>
     reset({
@@ -171,13 +176,6 @@ function EditListing({ id }: { id: string }) {
     listingDetails && resetFormValues(listingDetails)
   }
 
-  const handleExistingImagesChange = (existingImages: string[]) => {
-    setFormExistingImages(existingImages)
-  }
-  const handleNewFiles = (newFiles: File[]) => {
-    setFormNewImageFiles(newFiles)
-  }
-
   const confirmTitle = 'Apakah Anda yakin tidak menyetujui persetujuan imbalan?'
   const confirmSubtitle =
     'Jika Anda ingin listing Anda cepat terjual, Anda harus menyetujui persetujuan imbalan.'
@@ -185,15 +183,7 @@ function EditListing({ id }: { id: string }) {
   const handleConfirmation = async () => {
     setIsDialogOpen(false)
     const formData = watch()
-    onSubmit(
-      id,
-      formData,
-      mutate,
-      navigate,
-      setIsSubmitting,
-      formExistingImages,
-      formNewImageFiles,
-    )
+    onSubmit(id, formData, mutate, navigate, setIsSubmitting, combinedImages)
   }
 
   const handleCancel = () => {
@@ -205,26 +195,10 @@ function EditListing({ id }: { id: string }) {
       if (!data.withRewardAgreement) {
         setIsDialogOpen(true)
       } else {
-        onSubmit(
-          id,
-          data,
-          mutate,
-          navigate,
-          setIsSubmitting,
-          formExistingImages,
-          formNewImageFiles,
-        )
+        onSubmit(id, data, mutate, navigate, setIsSubmitting, combinedImages)
       }
     } else {
-      onSubmit(
-        id,
-        data,
-        mutate,
-        navigate,
-        setIsSubmitting,
-        formExistingImages,
-        formNewImageFiles,
-      )
+      onSubmit(id, data, mutate, navigate, setIsSubmitting, combinedImages)
     }
   }
 
@@ -254,7 +228,7 @@ function EditListing({ id }: { id: string }) {
             color="blue"
             type="submit"
             className="flex items-center gap-2 text-sm font-normal capitalize"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isErrorExist}
           >
             Simpan
           </Button>
@@ -276,9 +250,11 @@ function EditListing({ id }: { id: string }) {
             additionalLabel="Maksimal 10 foto, format .jpg, .png, @10mb"
             registerHook={register('pictureUrls')}
             dataListing={{ pictureUrls: listingDetails?.pictureUrls }}
-            onNewFiles={handleNewFiles}
-            onExistingImagesChange={handleExistingImagesChange}
             errorFieldName={errors.pictureUrls}
+            combinedImages={combinedImages}
+            setCombinedImages={setCombinedImages}
+            clearErrors={clearErrors}
+            setError={setError}
           />
           <InputField
             label="Judul Listing"
@@ -525,7 +501,10 @@ function EditListing({ id }: { id: string }) {
           </Link>
         </div>
         <div className="lg:hidden">
-          <BottomStickyButton type="submit" disabled={isSubmitting}>
+          <BottomStickyButton
+            type="submit"
+            disabled={isSubmitting || isErrorExist}
+          >
             Simpan
           </BottomStickyButton>
         </div>

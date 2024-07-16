@@ -30,6 +30,7 @@ import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import GoogleMaps from 'components/GoogleMaps'
 import { DEFAULT_LAT_LNG } from 'utils/constant'
 import ConfirmationDialog from 'components/header/ConfirmationDialog'
+import type { CombinedImage } from 'components/input/types'
 
 interface ExtendedListing extends GeneratedListing {
   bedroomCounts?: string
@@ -38,9 +39,10 @@ interface ExtendedListing extends GeneratedListing {
 
 const AddPage = () => {
   const navigate = useNavigate()
-  const [formExistingImages, setFormExistingImages] = useState<string[]>([])
-  const [formNewImageFiles, setFormNewImageFiles] = useState<File[]>([])
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [combinedImages, setCombinedImages] = useState<
+    CombinedImage[] | undefined
+  >()
 
   const checkboxSectionRef = useRef<HTMLDivElement | null>(null)
 
@@ -126,13 +128,6 @@ const AddPage = () => {
     setSelectedCity(cityOption)
   }
 
-  const handleExistingImagesChange = (existingImages: string[]) => {
-    setFormExistingImages(existingImages)
-  }
-  const handleNewFiles = (newFiles: File[]) => {
-    setFormNewImageFiles(newFiles)
-  }
-
   const confirmTitle = 'Apakah Anda yakin tidak menyetujui persetujuan imbalan?'
   const confirmSubtitle =
     'Jika Anda ingin listing Anda cepat terjual, Anda harus menyetujui persetujuan imbalan.'
@@ -162,8 +157,7 @@ const AddPage = () => {
   const submitData = async (data: GeneratedListing) => {
     const addNewListingPayload = await transformListingObjectToFormData({
       data,
-      formExistingImages,
-      formNewImageFiles,
+      combinedImages,
     })
     mutate(addNewListingPayload, {
       onSuccess() {
@@ -212,9 +206,9 @@ const AddPage = () => {
             label="Foto Properti"
             additionalLabel="Maksimal 10 foto, format .jpg, .png, @10mb"
             registerHook={register('pictureUrls')}
-            onNewFiles={handleNewFiles}
-            onExistingImagesChange={handleExistingImagesChange}
             errorFieldName={errors.pictureUrls}
+            combinedImages={combinedImages}
+            setCombinedImages={setCombinedImages}
           />
           <InputField
             label="Judul Listing"
