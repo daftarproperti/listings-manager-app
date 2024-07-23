@@ -132,6 +132,7 @@ export const baseFormSchema = z.object({
   pictureUrls: getOptionalField().picture,
   isPrivate: z.boolean(),
   withRewardAgreement: getWithRewardAgreementSchema(),
+  isMultipleUnits: z.boolean(),
   price: getOptionalField('Harga Jual').number,
   rentPrice: getOptionalField('Harga Sewa').number,
   coordinate: isWithLatLong

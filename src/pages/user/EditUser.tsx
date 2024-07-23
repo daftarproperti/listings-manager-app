@@ -47,7 +47,13 @@ function EditUser() {
 
   useEffect(() => {
     if (userDetails && shouldReset) {
-      reset(userDetails)
+      const safeUserDetails = {
+        name: userDetails.name || '',
+        company: userDetails.company || '',
+        phoneNumber: userDetails.phoneNumber || '',
+        cityId: userDetails.cityId || 0,
+      }
+      reset(safeUserDetails)
     }
   }, [userDetails, reset, shouldReset])
 

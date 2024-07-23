@@ -22,6 +22,7 @@ const transformListingObjectToFormData = async ({
     'withRewardAgreement',
     'listingForSale',
     'listingForRent',
+    'isMultipleUnits',
   ]
   const deleteAbleKeys = ['coordinate']
 

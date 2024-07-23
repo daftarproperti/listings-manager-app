@@ -247,6 +247,16 @@ const AddPage = () => {
             defaultOption="Pilih Tipe Properti"
             errorFieldName={errors.propertyType}
           />
+          <div className="my-5">
+            <InputCheckboxField
+              label="Listing dengan Multi Unit"
+              registerHook={register('isMultipleUnits')}
+              inputID="isMultipleUnits"
+              errorFieldName={errors.isMultipleUnits}
+              showTooltip={true}
+              tooltipContent="Centang jika di listing ini tersedia lebih dari 1 unit, misalnya cluster perumahan atau apartemen."
+            />
+          </div>
           <InputField
             label="Alamat"
             registerHook={register('address', { required: true })}

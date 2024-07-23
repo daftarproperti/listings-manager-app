@@ -85,15 +85,6 @@ export interface paths {
     /** Delete saved searches */
     delete: operations["saved_searches.delete"];
   };
-  "/api/tele-app/telegram-users/profile": {
-    /**
-     * Get profile
-     * @description Returns user profile
-     */
-    get: operations["telegramProfile"];
-    /** Update profile */
-    post: operations["updateTelegramProfile"];
-  };
   "/api/tele-app/users/profile": {
     /**
      * Get profile
@@ -165,6 +156,8 @@ export interface components {
       isPrivate?: boolean;
       /** @example true */
       withRewardAgreement?: boolean;
+      /** @example true */
+      isMultipleUnits?: boolean;
     };
     SavedSearchRequest: {
       /** @example Pak Eko */
@@ -209,6 +202,17 @@ export interface components {
      * @enum {string}
      */
     AccountType: "individual" | "professional";
+    /**
+     * @example waitlisted
+     * @enum {string}
+     */
+    ActiveStatus: "waitlisted" | "active" | "archived";
+    /**
+     * @description Closing Type
+     * @example sold
+     * @enum {string}
+     */
+    ClosingType: "sold" | "rented";
     /**
      * @description Verification status
      * @example approved
@@ -320,6 +324,8 @@ export interface components {
       facing?: components["schemas"]["FacingDirection"];
       ownership?: components["schemas"]["PropertyOwnership"];
       verifyStatus?: components["schemas"]["VerifyStatus"];
+      activeStatus?: components["schemas"]["ActiveStatus"];
+      statusNote?: components["schemas"]["StatusNote"];
       cityName?: string;
       cityId?: number;
       city?: string;
@@ -345,8 +351,11 @@ export interface components {
       userCanEdit?: boolean;
       isPrivate?: boolean;
       withRewardAgreement?: boolean;
+      isMultipleUnits?: boolean;
       /** Format: date-time */
       updatedAt?: string;
+      /** Format: date-time */
+      createdAt?: string;
     };
     Property: {
       id?: string;
@@ -428,30 +437,6 @@ export interface components {
       allowed?: boolean;
       createdAt?: string;
     };
-    TelegramUserProfile: {
-      /** @example 123 */
-      id?: number;
-      /** @example id-123 */
-      publicId?: string;
-      /** @example John Doe */
-      name?: string;
-      /** @example 0811111 */
-      phoneNumber?: string;
-      /** @example New York */
-      city?: string;
-      /** @example 123 */
-      cityId?: number;
-      /** @example New York */
-      cityName?: string;
-      /** @example I am a programmer */
-      description?: string;
-      /** @example https://example.com/image.jpg */
-      picture?: string;
-      /** @example Google */
-      company?: string;
-      /** @example true */
-      isPublicProfile?: boolean;
-    };
     User: {
       id?: string;
       publicId?: string;
@@ -467,6 +452,34 @@ export interface components {
       picture?: string;
       company?: string;
       isPublicProfile?: boolean;
+    };
+    StatusNote: {
+      /** @example john@doe.web */
+      email?: string;
+      /** @example Hello World */
+      message?: string;
+      /** Format: date-time */
+      date?: string;
+    };
+    TelegramUserProfile: {
+      /** @example John Doe */
+      name?: string | null;
+      /** @example +6281234567890 */
+      phoneNumber?: string | null;
+      /** @example Jakarta */
+      city?: string | null;
+      /** @example 1 */
+      cityId?: number | null;
+      /** @example Jakarta */
+      cityName?: string | null;
+      /** @example Lorem ipsum */
+      description?: string | null;
+      /** @example Company Name */
+      company?: string | null;
+      /** @example https://example.com/image.jpg */
+      picture?: string | null;
+      /** @example true */
+      isPublicProfile?: boolean | null;
     };
   };
   responses: never;
@@ -1082,36 +1095,6 @@ export interface operations {
             /** @example Saved search not found */
             error?: string;
           };
-        };
-      };
-    };
-  };
-  /**
-   * Get profile
-   * @description Returns user profile
-   */
-  telegramProfile: {
-    responses: {
-      /** @description success */
-      200: {
-        content: {
-          "application/json": components["schemas"]["TelegramUserProfile"];
-        };
-      };
-    };
-  };
-  /** Update profile */
-  updateTelegramProfile: {
-    requestBody: {
-      content: {
-        "multipart/form-data": components["schemas"]["TelegramUserProfileRequest"];
-      };
-    };
-    responses: {
-      /** @description success */
-      200: {
-        content: {
-          "application/json": components["schemas"]["TelegramUserProfile"];
         };
       };
     };
