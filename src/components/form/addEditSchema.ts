@@ -1,6 +1,8 @@
 import { DEFAULT_LAT_LNG } from 'utils/constant'
 import { z } from 'zod'
 
+const isWithLatLong = !!import.meta.env.VITE_WITH_LATLNG_PICKER
+
 const mustContainValueRefine = (value: string | number) => {
   if (typeof value === 'number') {
     return true
@@ -132,7 +134,7 @@ export const baseFormSchema = z.object({
   withRewardAgreement: getWithRewardAgreementSchema(),
   price: getOptionalField('Harga Jual').number,
   rentPrice: getOptionalField('Harga Sewa').number,
-  coordinate: import.meta.env.VITE_WITH_LATLNG_PICKER
+  coordinate: isWithLatLong
     ? z.object({
         latitude: getMandatoryField('Koordinat').strictNumber,
         longitude: getMandatoryField('Koordinat').strictNumber,
@@ -183,6 +185,7 @@ export const schema = baseFormSchema.superRefine((data, ctx) => {
     })
   }
   if (
+    isWithLatLong &&
     data?.coordinate?.latitude === DEFAULT_LAT_LNG.lat &&
     data?.coordinate?.longitude === DEFAULT_LAT_LNG.lng
   ) {
