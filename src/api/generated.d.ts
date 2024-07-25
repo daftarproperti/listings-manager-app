@@ -49,6 +49,14 @@ export interface paths {
     /** Delete listing */
     delete: operations["listings.delete"];
   };
+  "/api/tele-app/listings/generate-from-text": {
+    /** Generate Listing from Text */
+    post: operations["listings.generateFromText"];
+  };
+  "/api/tele-app/listings/getGenerateResult": {
+    /** Get Generate Listing Result */
+    post: operations["listings.getGenerateResult"];
+  };
   "/api/photo/{fileId}/{fileName}": {
     /** Show image */
     get: operations["image.show"];
@@ -832,6 +840,45 @@ export interface operations {
           "application/json": {
             /** @example Listing deleted successfully */
             message?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Generate Listing from Text */
+  "listings.generateFromText": {
+    parameters: {
+      path: {
+        /** @description Listing Message */
+        text: string;
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": {
+            /** @example sample-result-id-1 */
+            jobId?: string;
+          };
+        };
+      };
+    };
+  };
+  /** Get Generate Listing Result */
+  "listings.getGenerateResult": {
+    parameters: {
+      path: {
+        /** @description Generate Listing Id */
+        jobId: string;
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": {
+            generatedListing?: components["schemas"]["Listing"];
           };
         };
       };

@@ -31,6 +31,14 @@ export type DeleteListingRes =
 export type AddListingRequest = FormData
 export type AddListingResponse =
   operations['listings.create']['responses']['200']['content']['application/json']
+export type GenerateFromTextRequest =
+  operations['listings.generateFromText']['parameters']['path']
+export type GenerateFromTextResponse =
+  operations['listings.generateFromText']['responses']['200']['content']['application/json']
+export type GetGenerateResultRequest =
+  operations['listings.getGenerateResult']['parameters']['path']
+export type GetGenerateResultResponse =
+  operations['listings.getGenerateResult']['responses']['200']['content']['application/json']
 export type UploadImageRes =
   operations['image.upload']['responses']['200']['content']['application/json']
 

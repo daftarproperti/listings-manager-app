@@ -9,6 +9,8 @@ import {
   getDebouncedCities,
   fetchDefaultCities,
   useGetUserProfile,
+  useGenerateListingFromText,
+  useGetGenerateResult,
 } from 'api/queries'
 import type {
   UpdateListingRequest as GeneratedListing,
@@ -26,11 +28,15 @@ import TextareaField from 'components/input/TextareaField'
 import InputCheckboxField from 'components/input/InputCheckboxField'
 import transformListingObjectToFormData from 'components/input/transformObjectToFormdata'
 import { LISTING_OPTIONS } from 'pages/listings/edit/dummy'
-import { InformationCircleIcon } from '@heroicons/react/24/outline'
+import {
+  InformationCircleIcon,
+  QuestionMarkCircleIcon,
+} from '@heroicons/react/24/outline'
 import GoogleMaps from 'components/GoogleMaps'
 import { DEFAULT_LAT_LNG } from 'utils/constant'
 import ConfirmationDialog from 'components/header/ConfirmationDialog'
 import type { CombinedImage } from 'components/input/types'
+import InputModal from 'components/InputModal'
 
 interface ExtendedListing extends GeneratedListing {
   bedroomCounts?: string
@@ -43,6 +49,10 @@ const AddPage = () => {
   const [combinedImages, setCombinedImages] = useState<
     CombinedImage[] | undefined
   >()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [generationFailed, setGenerationFailed] = useState(false)
+  const [modalText, setModalText] = useState('')
 
   const checkboxSectionRef = useRef<HTMLDivElement | null>(null)
 
@@ -73,6 +83,9 @@ const AddPage = () => {
   const [defaultCityOptions, setDefaultCityOptions] = useState<CityOption[]>([])
   const { data: userProfile, isFetched } = useGetUserProfile()
   const [selectedCity, setSelectedCity] = useState<CityOption | null>(null)
+  const { mutate: generateListing } = useGenerateListingFromText()
+  const { mutate: getGenerateResult } = useGetGenerateResult()
+
   const [coord, setCoord] = useState<google.maps.LatLngLiteral>(DEFAULT_LAT_LNG)
 
   useEffect(() => {
@@ -172,6 +185,83 @@ const AddPage = () => {
     })
   }
 
+  const retryGetGenerateResult = (jobId: string, attempt = 1) => {
+    getGenerateResult(
+      { jobId },
+      {
+        onSuccess: (resultData) => {
+          const generatedListing = resultData.generatedListing
+          if (!generatedListing) {
+            setGenerationFailed(true)
+            setIsLoading(false)
+            return
+          }
+
+          const bedroomCountStr = generatedListing.additionalBedroomCount
+            ? `${generatedListing.bedroomCount}+${generatedListing.additionalBedroomCount}`
+            : `${generatedListing.bedroomCount}`
+          const bathroomCountStr = generatedListing.additionalBathroomCount
+            ? `${generatedListing.bathroomCount}+${generatedListing.additionalBathroomCount}`
+            : `${generatedListing.bathroomCount}`
+
+          setValue('title', generatedListing.title)
+          setValue('propertyType', generatedListing.propertyType)
+          setValue('listingType', generatedListing.listingType)
+          setValue('listingForSale', generatedListing.listingForSale)
+          setValue('listingForRent', generatedListing.listingForRent)
+          setValue('address', generatedListing.address)
+          setValue('description', generatedListing.description)
+          setValue('price', generatedListing.price)
+          setValue('rentPrice', generatedListing.rentPrice)
+          setValue('lotSize', generatedListing.lotSize)
+          setValue('buildingSize', generatedListing.buildingSize)
+          setValue('carCount', generatedListing.carCount)
+          setValue('bedroomCounts', bedroomCountStr)
+          setValue('bathroomCounts', bathroomCountStr)
+          setValue('floorCount', generatedListing.floorCount)
+          setValue('electricPower', generatedListing.electricPower)
+          setValue('facing', generatedListing.facing)
+          setValue('ownership', generatedListing.ownership)
+          setIsLoading(false)
+        },
+        onError: (error) => {
+          console.error(error)
+          if (attempt < 5) {
+            const delay = 2 ** attempt * 1000
+            setTimeout(() => retryGetGenerateResult(jobId, attempt + 1), delay)
+          } else {
+            setGenerationFailed(true)
+            setIsLoading(false)
+          }
+        },
+      },
+    )
+  }
+
+  const handleSave = () => {
+    setIsModalOpen(false)
+    setGenerationFailed(false)
+    setIsLoading(true)
+    generateListing(
+      { text: modalText },
+      {
+        onSuccess: (data) => {
+          const jobId = data.jobId
+          if (!jobId) {
+            console.error('No job ID returned')
+            setIsLoading(false)
+            return
+          }
+          retryGetGenerateResult(jobId)
+        },
+        onError: (error) => {
+          console.error(error)
+          setIsLoading(false)
+        },
+      },
+    )
+  }
+
   return (
     <>
       <form
@@ -200,6 +290,32 @@ const AddPage = () => {
             peraturan
           </a>{' '}
           Daftar Properti.
+          <div className="mt-4 flex items-center">
+            <span>Punya teks Listing? Tempelkan disini </span>
+            <span
+              className="ml-2 cursor-pointer text-blue-500 hover:underline"
+              onClick={() => setIsModalOpen(true)}
+            >
+              Ekstrak dari teks
+            </span>
+            <Tooltip
+              className="ml-2 border border-blue-gray-100 bg-white px-4 py-3 shadow shadow-black/10"
+              content={
+                <div className="w-60">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal opacity-80"
+                  >
+                    Ekstrak teks dari listing Anda untuk menghasilkan listing
+                    baru secara otomatis.
+                  </Typography>
+                </div>
+              }
+            >
+              <QuestionMarkCircleIcon className="ml-2 h-5 w-5 text-slate-500" />
+            </Tooltip>
+          </div>
         </div>
         <div className="p-4 lg:w-4/5">
           <InputFileField
@@ -480,6 +596,43 @@ const AddPage = () => {
           setIsOpen={handleCancel}
           onConfirm={handleConfirmation}
         />
+      )}
+      <InputModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleSave}
+        title="Ekstrak Listing dari Teks"
+      >
+        <label className="mb-2 block text-sm font-medium text-gray-700">
+          Teks Listing
+        </label>
+        <textarea
+          className="w-full rounded-md border border-gray-300 p-2"
+          rows={4}
+          value={modalText}
+          onChange={(e) => setModalText(e.target.value)}
+        ></textarea>
+      </InputModal>
+      {isLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="flex flex-col items-center rounded-lg bg-white p-6">
+            <div className="mb-4 h-8 w-8 animate-spin rounded-full border-y-2 border-blue-500"></div>
+            <p>Sedang mengekstrak teks . . .</p>
+          </div>
+        </div>
+      )}
+      {generationFailed && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="rounded-lg bg-white p-6">
+            <p>Ekstraksi gagal, silahkan coba kembali</p>
+            <button
+              onClick={() => setGenerationFailed(false)}
+              className="mt-4 justify-center rounded-md bg-blue-500 px-4 py-2 text-white transition-shadow duration-200 hover:shadow-lg"
+            >
+              Close
+            </button>
+          </div>
+        </div>
       )}
     </>
   )

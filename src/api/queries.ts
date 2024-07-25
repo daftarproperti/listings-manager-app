@@ -27,6 +27,10 @@ import type {
   City,
   CityOption,
   CitiesListRes,
+  GenerateFromTextRequest,
+  GenerateFromTextResponse,
+  GetGenerateResultRequest,
+  GetGenerateResultResponse,
 } from './types'
 
 // If x-init-data is in local storage (as a result of login widget), attach it
@@ -143,6 +147,28 @@ export const useAddListing = () =>
       return response.data
     },
   })
+
+export const useGenerateListingFromText = () => {
+  return useMutation<GenerateFromTextResponse, Error, GenerateFromTextRequest>({
+    mutationFn: async (data: GenerateFromTextRequest) => {
+      const response = await axios.post('/listings/generate-from-text', data)
+      return response.data
+    },
+  })
+}
+
+export const useGetGenerateResult = () => {
+  return useMutation<
+    GetGenerateResultResponse,
+    Error,
+    GetGenerateResultRequest
+  >({
+    mutationFn: async (data: GetGenerateResultRequest) => {
+      const response = await axios.post('/listings/get-generate-result', data)
+      return response.data
+    },
+  })
+}
 
 export const useGetUserProfile = () =>
   useQuery<UserProfileResponse>({
