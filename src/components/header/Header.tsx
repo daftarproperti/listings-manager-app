@@ -11,6 +11,8 @@ import HomeHeaderButton from './HomeHeaderButton'
 type HeaderProps = {
   title?: string
   canEdit?: boolean
+  multipleUnit?: boolean
+  closings?: number
   isWithoutBackButton?: boolean
   isWithHomeHeaderButton?: boolean
 }
@@ -18,6 +20,8 @@ type HeaderProps = {
 const Header: React.FC<HeaderProps> = ({
   title = 'Judul Halaman',
   canEdit = false,
+  multipleUnit = false,
+  closings,
   isWithoutBackButton = false,
   isWithHomeHeaderButton = false,
 }) => {
@@ -45,7 +49,11 @@ const Header: React.FC<HeaderProps> = ({
         <h2 className="font-semibold">{title}</h2>
       </div>
       {id && canEdit ? (
-        <DotsHeaderButton propertyId={id} />
+        <DotsHeaderButton
+          propertyId={id}
+          multipleUnit={multipleUnit}
+          closings={closings}
+        />
       ) : isFilterPage ? (
         <ResetHeaderButton />
       ) : isWithHomeHeaderButton ? (

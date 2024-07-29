@@ -32,6 +32,8 @@ import type {
   GetGenerateResultRequest,
   GetGenerateResultResponse,
   UpdateCancellationNoteParams,
+  ClosingListingRes,
+  ClosingListingParams,
 } from './types'
 
 // If x-init-data is in local storage (as a result of login widget), attach it
@@ -486,4 +488,17 @@ export const useUpdateCancellationNote = () => {
       throw new Error('Failed to send cancellation note. Please try again.')
     },
   })
+}
+
+export const useClosingListing = () => {
+  const mutation = useMutation<ClosingListingRes, Error, ClosingListingParams>({
+    mutationFn: async ({ listingId, updateData }) => {
+      const response = await axios.post(
+        `/listings/${listingId}/closings`,
+        updateData,
+      )
+      return response.data
+    },
+  })
+  return mutation
 }

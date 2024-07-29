@@ -82,3 +82,12 @@ type UpdateCancellationNoteParams = {
 }
 export type CancelListingRes =
   operations['listings.cancel']['responses']['200']['content']['application/json']
+export type Closing = components['schemas']['Closing']
+export type UpdateClosingRequest = components['schemas']['ClosingRequest']
+export type ClosingType = components['schemas']['ClosingType']
+export type ClosingListingRes =
+  operations['listings.closing']['responses']['200']['content']['application/json']
+export type ClosingListingParams = {
+  listingId: string
+  updateData: FormData
+}

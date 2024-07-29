@@ -3,6 +3,7 @@ import type {
   ListingType,
   VerifyStatus,
   ActiveStatus,
+  ClosingType,
 } from 'api/types'
 
 export const PROPERTY_TYPE_ENUM: { [key in PropertyType]: string } = {
@@ -28,6 +29,10 @@ export const ACTIVE_STATUS_ENUM: { [key in ActiveStatus]: string } = {
   waitlisted: 'Dalam Antrian',
   active: 'Aktif',
   archived: 'Diarsipkan',
+}
+export const CLOSING_TYPE_ENUM: { [key in ClosingType]: string } = {
+  sold: 'Jual',
+  rented: 'Sewa',
 }
 
 export const LISTING_OPTIONS = {
@@ -163,6 +168,12 @@ export const LISTING_OPTIONS = {
   propertyType: {
     options: Object.keys(PROPERTY_TYPE_ENUM).map((value) => ({
       label: PROPERTY_TYPE_ENUM[value as PropertyType],
+      value,
+    })),
+  },
+  closingType: {
+    options: Object.keys(CLOSING_TYPE_ENUM).map((value) => ({
+      label: CLOSING_TYPE_ENUM[value as ClosingType],
       value,
     })),
   },

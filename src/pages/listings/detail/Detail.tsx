@@ -31,9 +31,13 @@ import type { VerifyStatus, ActiveStatus } from 'api/types'
 function ListingDetail({
   id,
   setCanEdit,
+  checkMultipleUnit,
+  checkClosings,
 }: {
   id: string
   setCanEdit: (canEdit: boolean) => void
+  checkMultipleUnit: (multipleUnit: boolean) => void
+  checkClosings: (closing: number) => void
 }) {
   const { data, isFetching, isError, refetch } = useGetListingDetail({ id })
   const navigate = useNavigate()
@@ -61,6 +65,17 @@ function ListingDetail({
   useEffect(() => {
     setCanEdit(data?.userCanEdit ?? false)
   }, [data?.userCanEdit, setCanEdit])
+
+  useEffect(() => {
+    checkMultipleUnit(data?.isMultipleUnits ?? false)
+  }, [data?.isMultipleUnits, checkMultipleUnit])
+
+  useEffect(() => {
+    if (data?.closings) {
+      const closingsCount = data.closings.length
+      checkClosings(closingsCount)
+    }
+  }, [data?.closings])
 
   const actionButton = ({ size }: Omit<ButtonProps, 'children'>) => (
     <>
