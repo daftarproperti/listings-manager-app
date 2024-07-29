@@ -1,18 +1,21 @@
-import type { Listing, VerifyStatus } from 'api/types'
+import type { Listing, VerifyStatus, ActiveStatus } from 'api/types'
 import {
   BathIconSVG,
   BedIconSVG,
   CancelIconSVG,
   HouseIconSVG,
   LotIconSVG,
+  NewReleaseIconSVG,
   VerifyIconSVG,
   ArrowDownIconSVG,
+  MinusCircleIconSVG,
 } from 'assets/icons'
 import ImageWithAuth from 'components/ImageWithAuth'
 import {
   formatCurrencyToIDRText,
   getLabelForValue,
   getVerifyStatus,
+  getActiveStatus,
 } from 'utils'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '@material-tailwind/react'
@@ -155,21 +158,32 @@ const Card = ({ data }: { data: Listing }) => {
       )}
       <div className="w-full justify-end gap-5 rounded-b-lg bg-blue-100 px-3 py-2.5">
         <div className="flex justify-between">
-          <div className="flex flex-1 items-start pb-2 text-sm">
-            {data.verifyStatus === 'rejected' ? (
-              <CancelIconSVG className="text-red-500" />
+          <div className="flex items-center pb-2 text-sm">
+            {data.verifyStatus !== 'approved' ? (
+              <>
+                {data.verifyStatus === 'rejected' ? (
+                  <CancelIconSVG className="text-red-500" />
+                ) : (
+                  <NewReleaseIconSVG className="text-slate-500" />
+                )}
+                <span className="ml-2">
+                  {getVerifyStatus(data.verifyStatus as VerifyStatus)}
+                </span>
+              </>
             ) : (
-              <VerifyIconSVG
-                className={
-                  data.verifyStatus === 'approved'
-                    ? 'text-blue-500'
-                    : 'text-slate-500'
-                }
-              />
+              <>
+                {data.activeStatus === 'archived' ? (
+                  <MinusCircleIconSVG className="w-6 text-slate-600" />
+                ) : data.activeStatus === 'waitlisted' ? (
+                  <NewReleaseIconSVG className="text-fireBush-400" />
+                ) : (
+                  <VerifyIconSVG className="text-blue-500" />
+                )}
+                <span className="ml-2">
+                  {getActiveStatus(data.activeStatus as ActiveStatus)}
+                </span>
+              </>
             )}
-            <span className="ml-2">
-              {getVerifyStatus(data.verifyStatus as VerifyStatus)}
-            </span>
           </div>
           {data.adminNote?.message && (
             <div className="flex-1 justify-end text-right text-sm lg:max-w-96">

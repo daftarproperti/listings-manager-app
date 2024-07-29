@@ -67,6 +67,7 @@ export type PropertyType = components['schemas']['PropertyType']
 export type ListingType = components['schemas']['ListingType']
 export type VerifyStatus = components['schemas']['VerifyStatus']
 export type AdminNote = components['schemas']['AdminNote']
+export type ActiveStatus = components['schemas']['ActiveStatus']
 
 export type City = components['schemas']['City']
 export type CityOption = { label: string; value: number }

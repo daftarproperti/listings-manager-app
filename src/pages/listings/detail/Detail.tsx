@@ -11,6 +11,8 @@ import {
   LotIconSVG,
   VerifyIconSVG,
   ArrowDownIconSVG,
+  NewReleaseIconSVG,
+  MinusCircleIconSVG,
 } from 'assets/icons'
 import {
   formatCurrencyToIDRText,
@@ -19,11 +21,12 @@ import {
   getLabelForValue,
   replaceWithBr,
   getVerifyStatus,
+  getActiveStatus,
 } from 'utils'
 import DetailListingTable from 'components/DetailListingTable'
 import ShareButton from 'components/button/ShareButton'
 import DotsHeaderButton from 'components/header/DotsHeaderButton'
-import { type VerifyStatus } from 'api/types'
+import type { VerifyStatus, ActiveStatus } from 'api/types'
 
 function ListingDetail({
   id,
@@ -208,21 +211,32 @@ function ListingDetail({
                 </>
               )}
               <div className="flex w-full justify-between border-b border-solid border-t-slate-200 px-3 py-2.5">
-                <div className="flex flex-1 items-start text-sm">
-                  {data.verifyStatus === 'rejected' ? (
-                    <CancelIconSVG className="text-red-500" />
+                <div className="flex items-center pb-2 text-sm">
+                  {data.verifyStatus !== 'approved' ? (
+                    <>
+                      {data.verifyStatus === 'rejected' ? (
+                        <CancelIconSVG className="text-red-500" />
+                      ) : (
+                        <NewReleaseIconSVG className="text-slate-500" />
+                      )}
+                      <span className="ml-2">
+                        {getVerifyStatus(data.verifyStatus as VerifyStatus)}
+                      </span>
+                    </>
                   ) : (
-                    <VerifyIconSVG
-                      className={
-                        data.verifyStatus === 'approved'
-                          ? 'text-blue-500'
-                          : 'text-slate-500'
-                      }
-                    />
+                    <>
+                      {data.activeStatus === 'archived' ? (
+                        <MinusCircleIconSVG className="w-6 text-slate-600" />
+                      ) : data.activeStatus === 'waitlisted' ? (
+                        <NewReleaseIconSVG className="text-fireBush-400" />
+                      ) : (
+                        <VerifyIconSVG className="text-blue-500" />
+                      )}
+                      <span className="ml-2">
+                        {getActiveStatus(data.activeStatus as ActiveStatus)}
+                      </span>
+                    </>
                   )}
-                  <span className="ml-2">
-                    {getVerifyStatus(data.verifyStatus as VerifyStatus)}
-                  </span>
                 </div>
                 {data.adminNote?.message && (
                   <div className="flex-1 justify-end text-right text-sm lg:max-w-96">

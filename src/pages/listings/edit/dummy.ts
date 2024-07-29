@@ -1,7 +1,8 @@
-import {
-  type PropertyType,
-  type ListingType,
-  type VerifyStatus,
+import type {
+  PropertyType,
+  ListingType,
+  VerifyStatus,
+  ActiveStatus,
 } from 'api/types'
 
 export const PROPERTY_TYPE_ENUM: { [key in PropertyType]: string } = {
@@ -22,6 +23,11 @@ export const VERIFY_STATUS_ENUM: { [key in VerifyStatus]: string } = {
   on_review: 'Sedang ditinjau',
   approved: 'Disetujui',
   rejected: 'Ditolak',
+}
+export const ACTIVE_STATUS_ENUM: { [key in ActiveStatus]: string } = {
+  waitlisted: 'Dalam Antrian',
+  active: 'Aktif',
+  archived: 'Diarsipkan',
 }
 
 export const LISTING_OPTIONS = {
