@@ -210,6 +210,14 @@ export interface components {
      * @enum {string}
      */
     AccountType: "individual" | "professional";
+    AdminNote: {
+      /** @example john@doe.web */
+      email?: string;
+      /** @example Hello World */
+      message?: string;
+      /** Format: date-time */
+      date?: string;
+    };
     /**
      * @example waitlisted
      * @enum {string}
@@ -333,7 +341,7 @@ export interface components {
       ownership?: components["schemas"]["PropertyOwnership"];
       verifyStatus?: components["schemas"]["VerifyStatus"];
       activeStatus?: components["schemas"]["ActiveStatus"];
-      statusNote?: components["schemas"]["StatusNote"];
+      adminNote?: components["schemas"]["AdminNote"];
       cityName?: string;
       cityId?: number;
       city?: string;
@@ -460,14 +468,6 @@ export interface components {
       picture?: string;
       company?: string;
       isPublicProfile?: boolean;
-    };
-    StatusNote: {
-      /** @example john@doe.web */
-      email?: string;
-      /** @example Hello World */
-      message?: string;
-      /** Format: date-time */
-      date?: string;
     };
     TelegramUserProfile: {
       /** @example John Doe */

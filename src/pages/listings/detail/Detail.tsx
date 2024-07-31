@@ -1,5 +1,5 @@
 import SwiperSlider from 'components/SwiperSlider'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, type ButtonProps, Chip } from '@material-tailwind/react'
 import { useGetListingDetail } from 'api/queries'
@@ -10,6 +10,7 @@ import {
   HouseIconSVG,
   LotIconSVG,
   VerifyIconSVG,
+  ArrowDownIconSVG,
 } from 'assets/icons'
 import {
   formatCurrencyToIDRText,
@@ -41,6 +42,12 @@ function ListingDetail({
   const listingPublicUrl = dpPath(
     `/public/listings/${data?.listingIdStr || ''}`,
   )
+
+  const [showAdminNote, setShowAdminNote] = useState(false)
+
+  const toggleAdminNote = () => {
+    setShowAdminNote((prev) => !prev)
+  }
 
   useEffect(() => {
     if (updateSuccess) {
@@ -200,8 +207,8 @@ function ListingDetail({
                   </div>
                 </>
               )}
-              <div className="w-full justify-end border-b border-solid border-t-slate-200 px-3 py-2.5">
-                <div className="flex items-center text-sm">
+              <div className="flex w-full justify-between border-b border-solid border-t-slate-200 px-3 py-2.5">
+                <div className="flex flex-1 items-start text-sm">
                   {data.verifyStatus === 'rejected' ? (
                     <CancelIconSVG className="text-red-500" />
                   ) : (
@@ -217,6 +224,28 @@ function ListingDetail({
                     {getVerifyStatus(data.verifyStatus as VerifyStatus)}
                   </span>
                 </div>
+                {data.adminNote?.message && (
+                  <div className="flex-1 justify-end text-right text-sm lg:max-w-96">
+                    <div className="inline-block">
+                      <button
+                        className="flex text-blue-500"
+                        onClick={toggleAdminNote}
+                      >
+                        {showAdminNote ? 'Tutup Catatan' : 'Lihat Catatan'}
+                        <ArrowDownIconSVG
+                          className={`ml-2 h-5 w-5 ${
+                            showAdminNote ? 'rotate-180' : 'rotate-0'
+                          }`}
+                        />
+                      </button>
+                    </div>
+                    {showAdminNote && (
+                      <div className="block w-full py-3 text-justify">
+                        <p>{data.adminNote.message}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
               <div className="px-4 py-1 text-sm">
                 <h2 className="text-sm font-semibold leading-7 text-slate-500">

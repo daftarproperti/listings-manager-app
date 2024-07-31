@@ -6,6 +6,7 @@ import {
   HouseIconSVG,
   LotIconSVG,
   VerifyIconSVG,
+  ArrowDownIconSVG,
 } from 'assets/icons'
 import ImageWithAuth from 'components/ImageWithAuth'
 import {
@@ -16,6 +17,7 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '@material-tailwind/react'
 import { EyeIcon } from '@heroicons/react/24/solid'
+import { useState } from 'react'
 
 const Card = ({ data }: { data: Listing }) => {
   const navigate = useNavigate()
@@ -31,6 +33,11 @@ const Card = ({ data }: { data: Listing }) => {
   const searchParams = new URLSearchParams(location.search)
   const listingForSaleParam = searchParams.get('listingForSale') === 'true'
   const listingForRentParam = searchParams.get('listingForRent') === 'true'
+  const [showAdminNote, setShowAdminNote] = useState(false)
+
+  const toggleAdminNote = () => {
+    setShowAdminNote((prev) => !prev)
+  }
 
   const getPriceDisplay = (data: Listing) => {
     if (listingForSaleParam) return formatCurrencyToIDRText(data.price)
@@ -147,21 +154,45 @@ const Card = ({ data }: { data: Listing }) => {
         </div>
       )}
       <div className="w-full justify-end gap-5 rounded-b-lg bg-blue-100 px-3 py-2.5">
-        <div className="flex items-center pb-2 text-sm">
-          {data.verifyStatus === 'rejected' ? (
-            <CancelIconSVG className="text-red-500" />
-          ) : (
-            <VerifyIconSVG
-              className={
-                data.verifyStatus === 'approved'
-                  ? 'text-blue-500'
-                  : 'text-slate-500'
-              }
-            />
+        <div className="flex justify-between">
+          <div className="flex flex-1 items-start pb-2 text-sm">
+            {data.verifyStatus === 'rejected' ? (
+              <CancelIconSVG className="text-red-500" />
+            ) : (
+              <VerifyIconSVG
+                className={
+                  data.verifyStatus === 'approved'
+                    ? 'text-blue-500'
+                    : 'text-slate-500'
+                }
+              />
+            )}
+            <span className="ml-2">
+              {getVerifyStatus(data.verifyStatus as VerifyStatus)}
+            </span>
+          </div>
+          {data.adminNote?.message && (
+            <div className="flex-1 justify-end text-right text-sm lg:max-w-96">
+              <div className="inline-block">
+                <button
+                  className="flex text-blue-500"
+                  onClick={toggleAdminNote}
+                >
+                  {showAdminNote ? 'Tutup Catatan' : 'Lihat Catatan'}
+                  <ArrowDownIconSVG
+                    className={`ml-2 h-5 w-5 ${
+                      showAdminNote ? 'rotate-180' : 'rotate-0'
+                    }`}
+                  />
+                </button>
+              </div>
+              {showAdminNote && (
+                <div className="block w-full py-3 text-justify">
+                  <p>{data.adminNote.message}</p>
+                </div>
+              )}
+            </div>
           )}
-          <span className="ml-2">
-            {getVerifyStatus(data.verifyStatus as VerifyStatus)}
-          </span>
         </div>
         <Button
           size="sm"
