@@ -455,6 +455,7 @@ export interface components {
     };
     User: {
       id?: string;
+      userId?: number;
       publicId?: string;
       username?: string;
       phoneNumber?: string;
@@ -1155,7 +1156,7 @@ export interface operations {
       /** @description success */
       200: {
         content: {
-          "application/json": components["schemas"]["TelegramUserProfile"];
+          "application/json": components["schemas"]["User"];
         };
       };
     };
@@ -1171,7 +1172,7 @@ export interface operations {
       /** @description success */
       200: {
         content: {
-          "application/json": components["schemas"]["TelegramUserProfile"];
+          "application/json": components["schemas"]["User"];
         };
       };
     };
