@@ -174,7 +174,15 @@ const AddPage = () => {
     })
     mutate(addNewListingPayload, {
       onSuccess() {
-        toast('Listing berhasil ditambahkan!', { type: 'success' })
+        toast(
+          'Listing berhasil ditambahkan. Status listing saat ini adalah sedang ditinjau. Silahkan menunggu proses peninjauan terlebih dahulu dari Daftar Properti.',
+          {
+            containerId: 'addListing',
+            type: 'success',
+            autoClose: false,
+            className: 'w-full',
+          },
+        )
         navigate(-1)
       },
       onError(error) {

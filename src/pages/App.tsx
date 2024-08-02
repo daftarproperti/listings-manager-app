@@ -18,6 +18,11 @@ const App = () => (
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={routes} />
           <ToastContainer position="top-center" />
+          <ToastContainer
+            containerId="addListing"
+            position="top-center"
+            className={'w-full'}
+          />
         </QueryClientProvider>
       </ThemeProvider>
     </main>
