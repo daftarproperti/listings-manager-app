@@ -171,6 +171,17 @@ function EditListing({ id }: { id: string }) {
     }
   }, [coord.lat, coord.lng])
 
+  useEffect(() => {
+    if (combinedImages && combinedImages.length > 0) {
+      clearErrors('pictureUrls')
+    } else {
+      setError('pictureUrls', {
+        type: 'manual',
+        message: 'Foto Properti harus berisi minimal 1 gambar',
+      })
+    }
+  }, [combinedImages, setError, clearErrors])
+
   const handleCityChange = (cityOption: SetStateAction<CityOption | null>) => {
     setSelectedCity(cityOption)
     listingDetails && resetFormValues(listingDetails)
@@ -253,8 +264,17 @@ function EditListing({ id }: { id: string }) {
             errorFieldName={errors.pictureUrls}
             combinedImages={combinedImages}
             setCombinedImages={setCombinedImages}
-            clearErrors={clearErrors}
             setError={setError}
+            onImageExistChange={(noExist) => {
+              if (noExist) {
+                setError('pictureUrls', {
+                  message: 'Foto Properti harus berisi minimal 1 gambar',
+                  type: 'manual',
+                })
+              } else {
+                clearErrors && clearErrors('pictureUrls')
+              }
+            }}
           />
           <InputField
             label="Judul Listing"

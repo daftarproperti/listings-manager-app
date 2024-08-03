@@ -29,6 +29,7 @@ type InputFileProps = {
   setCombinedImages: React.Dispatch<
     React.SetStateAction<CombinedImage[] | undefined>
   >
+  onImageExistChange: (noExist: boolean) => void
 }
 
 const InputFileField: React.FC<InputFileProps> = ({
@@ -41,6 +42,7 @@ const InputFileField: React.FC<InputFileProps> = ({
   clearErrors,
   combinedImages,
   setCombinedImages,
+  onImageExistChange,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -93,19 +95,19 @@ const InputFileField: React.FC<InputFileProps> = ({
   }, [existingImages, newImageFiles, newlyAddedImages])
 
   useEffect(() => {
-    if (
-      !!dataListing?.pictureUrls?.length &&
-      existingImages.length === 0 &&
+    const noExist =
+      (!!dataListing?.pictureUrls?.length && existingImages.length === 0) ||
       newImageFiles?.length === 0
-    ) {
+    if (noExist) {
       setError &&
         setError('pictureUrls', {
-          message: 'Harus memiliki minimal 1 gambar',
+          message: 'Foto Properti harus berisi minimal 1 gambar',
           type: 'manual',
         })
     } else {
       clearErrors && clearErrors('pictureUrls')
     }
+    onImageExistChange(noExist)
   }, [
     dataListing?.pictureUrls?.length,
     existingImages.length,

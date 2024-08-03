@@ -55,6 +55,7 @@ const AddPage = () => {
   const [modalText, setModalText] = useState('')
 
   const checkboxSectionRef = useRef<HTMLDivElement | null>(null)
+  const imageSectionRef = useRef<HTMLDivElement | null>(null)
 
   const {
     register,
@@ -63,6 +64,8 @@ const AddPage = () => {
     control,
     watch,
     setValue,
+    setError,
+    clearErrors,
   } = useForm<ExtendedListing>({
     defaultValues: {
       isPrivate: false,
@@ -156,6 +159,16 @@ const AddPage = () => {
   }
 
   const onSubmit = async (data: GeneratedListing) => {
+    if (combinedImages && combinedImages.length > 0) {
+      clearErrors('pictureUrls')
+    } else {
+      setError('pictureUrls', {
+        type: 'manual',
+        message: 'Foto Properti harus berisi minimal 1 gambar',
+      })
+      imageSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
+      return
+    }
     if (import.meta.env.VITE_OPTIONAL_REWARD_AGREEMENT === 'true') {
       if (!data.withRewardAgreement) {
         setIsDialogOpen(true)
@@ -326,14 +339,27 @@ const AddPage = () => {
           </div>
         </div>
         <div className="p-4 lg:w-4/5">
-          <InputFileField
-            label="Foto Properti"
-            additionalLabel="Maksimal 10 foto, format .jpg, .png, @10mb"
-            registerHook={register('pictureUrls')}
-            errorFieldName={errors.pictureUrls}
-            combinedImages={combinedImages}
-            setCombinedImages={setCombinedImages}
-          />
+          <div ref={imageSectionRef}>
+            <InputFileField
+              label="Foto Properti"
+              additionalLabel="Maksimal 10 foto, format .jpg, .png, @10mb"
+              registerHook={register('pictureUrls')}
+              errorFieldName={errors.pictureUrls}
+              combinedImages={combinedImages}
+              setCombinedImages={setCombinedImages}
+              onImageExistChange={(noExist) => {
+                if (noExist) {
+                  setError('pictureUrls', {
+                    message: 'Foto Properti harus berisi minimal 1 gambar',
+                    type: 'manual',
+                  })
+                } else {
+                  clearErrors && clearErrors('pictureUrls')
+                }
+              }}
+            />
+          </div>
+
           <InputField
             label="Judul Listing"
             registerHook={register('title', { required: true })}
