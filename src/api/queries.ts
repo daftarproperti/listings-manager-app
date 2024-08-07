@@ -31,6 +31,7 @@ import type {
   GenerateFromTextResponse,
   GetGenerateResultRequest,
   GetGenerateResultResponse,
+  UpdateCancellationNoteParams,
 } from './types'
 
 // If x-init-data is in local storage (as a result of login widget), attach it
@@ -461,4 +462,28 @@ export const impersonate = async (
   } catch (error) {
     throw new Error('Failed to impersonate. Please try again.')
   }
+}
+
+export const useUpdateCancellationNote = () => {
+  return useMutation({
+    mutationKey: ['updateCancellationNote'],
+    mutationFn: async ({
+      listingId,
+      updateData,
+    }: UpdateCancellationNoteParams) => {
+      const response = await axios.put(
+        `/listings/${listingId}/cancel`,
+        JSON.stringify(updateData),
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      return response.data
+    },
+    onError: () => {
+      throw new Error('Failed to send cancellation note. Please try again.')
+    },
+  })
 }

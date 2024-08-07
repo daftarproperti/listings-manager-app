@@ -71,3 +71,14 @@ export type ActiveStatus = components['schemas']['ActiveStatus']
 
 export type City = components['schemas']['City']
 export type CityOption = { label: string; value: number }
+
+export type CancellationNote = components['schemas']['CancellationNote']
+export type UpdateCancellationNoteRequest =
+  components['schemas']['CancellationNote']
+
+type UpdateCancellationNoteParams = {
+  listingId: string
+  updateData: CancellationNote
+}
+export type CancelListingRes =
+  operations['listings.cancel']['responses']['200']['content']['application/json']

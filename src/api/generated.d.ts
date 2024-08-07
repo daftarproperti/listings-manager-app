@@ -32,6 +32,10 @@ export interface paths {
     /** Get city by id */
     get: operations["cities.getCityById"];
   };
+  "/api/tele-app/listings/{id}/closings": {
+    /** Add a closing to a listing */
+    post: operations["listings.closing"];
+  };
   "/api/tele-app/listings": {
     /**
      * Get listing items
@@ -108,6 +112,14 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    ClosingRequest: {
+      closingType?: components["schemas"]["ClosingType"];
+      clientName?: string;
+      clientPhoneNumber?: string;
+      transactionValue?: number;
+      /** Format: date */
+      date?: string;
+    };
     ImageUploadRequest: {
       /** Format: binary */
       image?: string;
@@ -218,17 +230,40 @@ export interface components {
       /** Format: date-time */
       date?: string;
     };
+    CancellationNote: {
+      /** @example Hello World */
+      reason?: string;
+      /** @example on_review */
+      status?: string;
+    };
     /**
      * @example waitlisted
      * @enum {string}
      */
     ActiveStatus: "waitlisted" | "active" | "archived";
     /**
+     * @example on_review
+     * @enum {string}
+     */
+    CancellationStatus: "on_review" | "approved" | "rejected";
+    /**
+     * @description Closing Status
+     * @example approved
+     * @enum {string}
+     */
+    ClosingStatus: "on_review" | "approved" | "rejected";
+    /**
      * @description Closing Type
      * @example sold
      * @enum {string}
      */
     ClosingType: "sold" | "rented";
+    /**
+     * @description Commission Status
+     * @example paid
+     * @enum {string}
+     */
+    CommissionStatus: "pending" | "paid" | "unpaid";
     /**
      * @description Verification status
      * @example approved
@@ -312,6 +347,27 @@ export interface components {
       latitude?: number;
       longitude?: number;
     };
+    Closing: {
+      /** @example 6asdasd */
+      id?: string;
+      /** @example 1 */
+      listingId?: number;
+      closingType?: components["schemas"]["ClosingType"];
+      /** @example John Doe */
+      clientName?: string;
+      /** @example +6281234567890 */
+      clientPhoneNumber?: string;
+      /** @example 100000 */
+      transactionValue?: number;
+      /**
+       * Format: date-time
+       * @example 2024-03-01T23:00:00+00:00
+       */
+      date?: string;
+      /** @example Notes */
+      notes?: string;
+      status?: components["schemas"]["ClosingStatus"];
+    };
     Listing: {
       id?: string;
       listingId?: number;
@@ -342,6 +398,7 @@ export interface components {
       verifyStatus?: components["schemas"]["VerifyStatus"];
       activeStatus?: components["schemas"]["ActiveStatus"];
       adminNote?: components["schemas"]["AdminNote"];
+      cancellationNote?: components["schemas"]["CancellationNote"];
       cityName?: string;
       cityId?: number;
       city?: string;
@@ -368,6 +425,7 @@ export interface components {
       isPrivate?: boolean;
       withRewardAgreement?: boolean;
       isMultipleUnits?: boolean;
+      closings?: components["schemas"]["Closing"][];
       /** Format: date-time */
       updatedAt?: string;
       /** Format: date-time */
@@ -671,6 +729,24 @@ export interface operations {
             /** @example City not found */
             error?: string;
           };
+        };
+      };
+    };
+  };
+  /** Add a closing to a listing */
+  "listings.closing": {
+    parameters: {
+      path: {
+        /** @description Listing Id */
+        id: string;
+      };
+    };
+    requestBody: components["schemas"]["ClosingRequest"];
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": components["schemas"]["Listing"];
         };
       };
     };

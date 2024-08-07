@@ -11,6 +11,7 @@ import ImpersonatePage from './auth/impersonate'
 import AddPage from './listings/add'
 import ListingDetailPage from './listings/detail'
 import EditListingPage from './listings/edit'
+import CancelListingPage from './listings/cancel'
 import ListingFilterPage from './listings/filter'
 import ListingListPage from './listings/list'
 import EditUserPage from './user'
@@ -100,6 +101,15 @@ const router = createBrowserRouter(
             <MainLayout>
               <Header title="Data Listing" />
               <EditListingPage />
+            </MainLayout>
+          ),
+        },
+        {
+          path: '/listings/cancel/:id',
+          element: (
+            <MainLayout>
+              <Header title="Pembatalan Listing" />
+              <CancelListingPage />
             </MainLayout>
           ),
         },
