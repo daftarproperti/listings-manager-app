@@ -139,7 +139,7 @@ function EditUser() {
           />
           <InputField
             label="Nomor HP"
-            additionalLabel={`(User ID: ${userDetails?.userId})`}
+            additionalLabel={`(User ID: ${userDetails?.userIdStr})`}
             registerHook={register('phoneNumber', {
               required: 'Nomor HP harus diisi',
               pattern: {

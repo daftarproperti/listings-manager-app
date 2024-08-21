@@ -514,6 +514,7 @@ export interface components {
     User: {
       id?: string;
       userId?: number;
+      userIdStr?: string;
       publicId?: string;
       username?: string;
       phoneNumber?: string;
