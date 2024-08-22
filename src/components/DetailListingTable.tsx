@@ -49,6 +49,12 @@ const DetailListingTable = ({ dataTable }: { dataTable: Listing }) => {
             <td>: {getLabelForValue('ownership', dataTable.ownership)}</td>
           </tr>
         )}
+        {dataTable?.isMultipleUnits && (
+          <tr>
+            <td className="w-1/3 min-w-24 align-top">Multiunit</td>
+            <td>: {dataTable.isMultipleUnits ? 'Ya' : 'Tidak'}</td>
+          </tr>
+        )}
       </tbody>
     </table>
   )

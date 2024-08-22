@@ -13,6 +13,7 @@ import ListingDetailPage from './listings/detail'
 import EditListingPage from './listings/edit'
 import CancelListingPage from './listings/cancel'
 import ClosingListingPage from './listings/closing'
+import ClosingDetailListingPage from './listings/closing/detail'
 import ListingFilterPage from './listings/filter'
 import ListingListPage from './listings/list'
 import EditUserPage from './user'
@@ -120,6 +121,15 @@ const router = createBrowserRouter(
             <MainLayout>
               <Header title="Closing Listing" />
               <ClosingListingPage />
+            </MainLayout>
+          ),
+        },
+        {
+          path: '/listings/:id/closing/:closingId/detail',
+          element: (
+            <MainLayout>
+              <Header title="Closing Detail" />
+              <ClosingDetailListingPage />
             </MainLayout>
           ),
         },

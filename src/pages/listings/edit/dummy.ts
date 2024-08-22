@@ -4,6 +4,8 @@ import type {
   VerifyStatus,
   ActiveStatus,
   ClosingType,
+  ClosingStatus,
+  CancellationStatus,
 } from 'api/types'
 
 export const PROPERTY_TYPE_ENUM: { [key in PropertyType]: string } = {
@@ -34,6 +36,17 @@ export const CLOSING_TYPE_ENUM: { [key in ClosingType]: string } = {
   sold: 'Jual',
   rented: 'Sewa',
 }
+export const CLOSING_STATUS_ENUM: { [key in ClosingStatus]: string } = {
+  on_review: 'Sedang ditinjau',
+  approved: 'Disetujui',
+  rejected: 'Ditolak',
+}
+export const CANCELLATION_STATUS_ENUM: { [key in CancellationStatus]: string } =
+  {
+    on_review: 'Sedang ditinjau',
+    approved: 'Disetujui',
+    rejected: 'Ditolak',
+  }
 
 export const LISTING_OPTIONS = {
   cities: {

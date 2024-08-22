@@ -22,11 +22,18 @@ import {
   replaceWithBr,
   getVerifyStatus,
   getActiveStatus,
+  getCancellationStatus,
+  getClosingStatus,
 } from 'utils'
 import DetailListingTable from 'components/DetailListingTable'
 import ShareButton from 'components/button/ShareButton'
 import DotsHeaderButton from 'components/header/DotsHeaderButton'
-import type { VerifyStatus, ActiveStatus } from 'api/types'
+import type {
+  VerifyStatus,
+  ActiveStatus,
+  CancellationStatus,
+  ClosingStatus,
+} from 'api/types'
 
 function ListingDetail({
   id,
@@ -226,7 +233,7 @@ function ListingDetail({
                 </>
               )}
               <div className="flex w-full justify-between border-b border-solid border-t-slate-200 px-3 py-2.5">
-                <div className="flex items-center pb-2 text-sm">
+                <div className="flex items-center text-sm">
                   {data.verifyStatus !== 'approved' ? (
                     <>
                       {data.verifyStatus === 'rejected' ? (
@@ -253,28 +260,59 @@ function ListingDetail({
                     </>
                   )}
                 </div>
-                {data.adminNote?.message && (
-                  <div className="flex-1 justify-end text-right text-sm lg:max-w-96">
+                <div className="flex-1 justify-end text-right text-sm lg:max-w-96">
+                  {data?.cancellationNote?.status !== undefined && (
                     <div className="inline-block">
-                      <button
-                        className="flex text-blue-500"
-                        onClick={toggleAdminNote}
-                      >
-                        {showAdminNote ? 'Tutup Catatan' : 'Lihat Catatan'}
-                        <ArrowDownIconSVG
-                          className={`ml-2 h-5 w-5 ${
-                            showAdminNote ? 'rotate-180' : 'rotate-0'
-                          }`}
-                        />
-                      </button>
+                      Status Pembatalan:
+                      <span className="ml-2">
+                        {getCancellationStatus(
+                          data.cancellationNote.status as CancellationStatus,
+                        )}
+                      </span>
                     </div>
-                    {showAdminNote && (
-                      <div className="block w-full py-3 text-justify">
-                        <p>{data.adminNote.message}</p>
+                  )}
+                  {data?.closings?.[0]?.status &&
+                    data?.closings?.length == 1 && (
+                      <div className="inline-block">
+                        Status Closing:
+                        <span
+                          className="ml-2 cursor-pointer underline"
+                          onClick={() =>
+                            navigate(
+                              `/listings/${data.id}/closing/${data?.closings?.[0]?.id}/detail`,
+                            )
+                          }
+                        >
+                          {getClosingStatus(
+                            data?.closings?.[0]?.status as ClosingStatus,
+                          )}
+                        </span>
                       </div>
                     )}
-                  </div>
-                )}
+                  {data.adminNote?.message &&
+                    data.cancellationNote?.status === undefined && (
+                      <>
+                        <div className="inline-block">
+                          <button
+                            className="flex text-blue-500"
+                            onClick={toggleAdminNote}
+                          >
+                            {showAdminNote ? 'Tutup Catatan' : 'Lihat Catatan'}
+                            <ArrowDownIconSVG
+                              className={`ml-2 h-5 w-5 ${
+                                showAdminNote ? 'rotate-180' : 'rotate-0'
+                              }`}
+                            />
+                          </button>
+                        </div>
+                        {showAdminNote && (
+                          <div className="block w-full py-3 text-justify">
+                            <p>{data.adminNote.message}</p>
+                          </div>
+                        )}
+                      </>
+                    )}
+                </div>
               </div>
               <div className="px-4 py-1 text-sm">
                 <h2 className="text-sm font-semibold leading-7 text-slate-500">
