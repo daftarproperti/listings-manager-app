@@ -11,6 +11,7 @@ import {
   useGetUserProfile,
   useGenerateListingFromText,
   useGetGenerateResult,
+  fetchPropertyDetails,
 } from 'api/queries'
 import type {
   UpdateListingRequest as GeneratedListing,
@@ -88,6 +89,73 @@ const AddPage = () => {
   const [selectedCity, setSelectedCity] = useState<CityOption | null>(null)
   const { mutate: generateListing } = useGenerateListingFromText()
   const { mutate: getGenerateResult } = useGetGenerateResult()
+  const [isEasyFindModalOpen, setIsEasyFindModalOpen] = useState(false)
+  const [easyFindId, setEasyFindId] = useState('')
+  const [picUrls, setPicUrls] = useState<string[]>([])
+  const hash = window.location.hash
+
+  useEffect(() => {
+    if (hash.includes('#easyfind')) {
+      setIsEasyFindModalOpen(true)
+    }
+  }, [])
+
+  const handleCloseModal = () => {
+    setIsEasyFindModalOpen(false)
+  }
+
+  const handleSaveModal = async () => {
+    setIsEasyFindModalOpen(false)
+
+    try {
+      const propertyDetails = await fetchPropertyDetails(easyFindId)
+
+      if (propertyDetails) {
+        const extractData = propertyDetails.data.attributes
+
+        const bedroomCountStr = extractData.bedroomCount.toString()
+        const bathroomCountStr = extractData.bathroomCount.toString()
+        const price = extractData.price * 1000000
+
+        const pictures = extractData.pictures.data || []
+        setPicUrls(pictures.map((picture) => picture.attributes.url))
+
+        const osmId = extractData.city?.data?.attributes?.osmId
+        const cityName = extractData.city?.data?.attributes?.name
+        const defaultCity = {
+          label: cityName,
+          value: osmId,
+        }
+        setSelectedCity(defaultCity as CityOption)
+
+        setValue('title', extractData.title)
+        setValue('address', extractData.address)
+        setValue('description', extractData.description)
+        setValue('price', price)
+        setValue('lotSize', extractData.lotSize)
+        setValue('buildingSize', extractData.buildingSize)
+        setValue('carCount', extractData.carCount)
+        setValue('bedroomCounts', bedroomCountStr)
+        setValue('bathroomCounts', bathroomCountStr)
+        setValue('floorCount', extractData.floorCount)
+        setValue('facing', extractData.facing)
+        setValue('ownership', extractData.ownership)
+        setValue('cityId', osmId)
+        setValue('pictureUrls', picUrls)
+        if (
+          import.meta.env.VITE_WITH_LATLNG_PICKER &&
+          extractData.latitude &&
+          extractData.longitude
+        ) {
+          setValue('coordinate.latitude', extractData.latitude)
+          setValue('coordinate.longitude', extractData.longitude)
+        }
+        setIsLoading(false)
+      }
+    } catch (error) {
+      console.error('Error fetching property details:', error)
+    }
+  }
 
   const [coord, setCoord] = useState<google.maps.LatLngLiteral>(DEFAULT_LAT_LNG)
 
@@ -196,7 +264,11 @@ const AddPage = () => {
             className: 'w-full',
           },
         )
-        navigate(-1)
+        if (hash.includes('#easyfind')) {
+          navigate('/')
+        } else {
+          navigate(-1)
+        }
       },
       onError(error) {
         toast(`Mohon maaf, telah terjadi kesalahan (${error?.message})`, {
@@ -346,9 +418,10 @@ const AddPage = () => {
               registerHook={register('pictureUrls')}
               errorFieldName={errors.pictureUrls}
               combinedImages={combinedImages}
+              dataListing={{ pictureUrls: picUrls }}
               setCombinedImages={setCombinedImages}
               onImageExistChange={(noExist) => {
-                if (noExist) {
+                if (noExist && picUrls.length === 0) {
                   setError('pictureUrls', {
                     message: 'Foto Properti harus berisi minimal 1 gambar',
                     type: 'manual',
@@ -668,6 +741,22 @@ const AddPage = () => {
           </div>
         </div>
       )}
+      <InputModal
+        isOpen={isEasyFindModalOpen}
+        onClose={handleCloseModal}
+        onSave={handleSaveModal}
+        title="Masukkan Easyfind ID Properti"
+      >
+        <label className="mb-2 block text-sm font-medium text-gray-700">
+          Properti ID
+        </label>
+        <input
+          type="text"
+          value={easyFindId}
+          onChange={(e) => setEasyFindId(e.target.value)}
+          className="w-full rounded-md border border-gray-300 p-2"
+        />
+      </InputModal>
     </>
   )
 }

@@ -34,6 +34,7 @@ import type {
   UpdateCancellationNoteParams,
   ClosingListingRes,
   ClosingListingParams,
+  PropertyDetailsResponse,
 } from './types'
 
 // If x-init-data is in local storage (as a result of login widget), attach it
@@ -501,4 +502,27 @@ export const useClosingListing = () => {
     },
   })
   return mutation
+}
+
+export const fetchPropertyDetails = async (
+  propertyId: string,
+): Promise<PropertyDetailsResponse> => {
+  const url = `https://admin.easyfind.id/api/properties/${propertyId}?populate=*`
+
+  try {
+    const response = await fetch(url)
+    if (!response.ok) {
+      throw new Error(
+        'Failed to fetch property details: ' + response.statusText,
+      )
+    }
+    const data = await response.json()
+    return data
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error('Network error: ' + error.message)
+    } else {
+      throw new Error('An unexpected error occurred')
+    }
+  }
 }

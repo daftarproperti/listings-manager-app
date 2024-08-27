@@ -92,3 +92,101 @@ export type ClosingListingParams = {
   updateData: FormData
 }
 export type ClosingStatus = components['schemas']['ClosingStatus']
+
+export interface PropertyDetailsResponse {
+  data: {
+    id: number
+    attributes: {
+      title: string
+      address: string
+      description: string
+      price: number
+      lotSize: number
+      buildingSize: number
+      carCount: number
+      floorCount: number
+      bedroomCount: number
+      bathroomCount: number
+      facing: string
+      ownership: string
+      sellerName: string
+      sellerPhoneNumber: string
+      latitude: number
+      longitude: number
+      createdAt: Date
+      updatedAt: Date
+      publishedAt: Date
+      placeId: number
+      dpId: number
+      pictures: {
+        data: {
+          id: number
+          attributes: {
+            name: string
+            alternativeText: string
+            caption: string
+            width: number
+            height: number
+            formats: {
+              small: {
+                ext: string
+                url: string
+                hash: string
+                mime: string
+                name: string
+                path: string
+                size: number
+                width: number
+                height: number
+              }
+              medium: {
+                ext: string
+                url: string
+                hash: string
+                mime: string
+                name: string
+                path: string
+                size: number
+                width: number
+                height: number
+              }
+              thumbnail: {
+                ext: string
+                url: string
+                hash: string
+                mime: string
+                name: string
+                path: string
+                size: number
+                width: number
+                height: number
+              }
+            }
+            hash: string
+            ext: string
+            mime: string
+            size: number
+            url: string
+            previewUrl: string
+            provider: string
+            provider_metadata: string
+            createdAt: string
+            updatedAt: string
+          }
+        }[]
+      }
+      city: {
+        data: {
+          id: number
+          attributes: {
+            name: string
+            createdAt: string
+            updatedAt: string
+            publishedAt: string
+            osmId: number
+          }
+        }
+      }
+    }
+  }
+}
