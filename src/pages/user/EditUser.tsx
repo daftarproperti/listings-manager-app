@@ -6,13 +6,15 @@ import {
   useUpdateUserProfile,
   getDebouncedCities,
   fetchDefaultCities,
+  useGenerateSecretKey,
 } from 'api/queries'
 import { useNavigate } from 'react-router-dom'
 import InputField from 'components/input/InputField'
 import CustomSelectField from 'components/input/CustomSelectField'
 import InputSingleFileField from 'components/input/InputSingleFileField'
 import BottomStickyButton from 'components/button/BottomStickyButton'
-import { Button } from '@material-tailwind/react'
+import { Button, IconButton } from '@material-tailwind/react'
+import { DocumentDuplicateIcon } from '@heroicons/react/24/outline'
 
 import { onSubmit } from './handleUserForm'
 
@@ -28,7 +30,10 @@ function EditUser() {
   } = useForm<UpdateProfileRequest>()
   const { data: userDetails, isLoading } = useGetUserProfile()
   const { mutate } = useUpdateUserProfile()
+  const { mutate: generateSecretKey, data: user } = useGenerateSecretKey()
   const navigate = useNavigate()
+  const searchParams = new URLSearchParams(location.search)
+  const showSecretKey = searchParams.get('withSecretKey') === 'true'
   const [isSubmitting, setIsSubmitting] = useState(false)
   const picture = watch('picture')
 
@@ -52,6 +57,7 @@ function EditUser() {
         company: userDetails.company || '',
         phoneNumber: userDetails.phoneNumber || '',
         cityId: userDetails.cityId || 0,
+        secretKey: userDetails.secretKey || '',
       }
       reset(safeUserDetails)
     }
@@ -87,6 +93,11 @@ function EditUser() {
       }
     })
   }, [cityId, cityName, setValue])
+
+  useEffect(() => {
+    if (!user?.secretKey) return
+    setValue('secretKey', user?.secretKey)
+  }, [user])
 
   const handleCityChange = (cityOption: SetStateAction<CityOption | null>) => {
     setSelectedCity(cityOption)
@@ -162,6 +173,36 @@ function EditUser() {
             onCityChange={handleCityChange}
             required={false}
           />
+          {showSecretKey && (
+            <InputField
+              disabled
+              label="Kode Secret"
+              placeholderValue="Klik button untuk generate"
+              registerHook={register('secretKey')}
+              rightContent={
+                !watch('secretKey') ? (
+                  <Button
+                    variant="outlined"
+                    className="bg-white"
+                    onClick={() => generateSecretKey()}
+                  >
+                    Generate Secret Key
+                  </Button>
+                ) : (
+                  <IconButton
+                    variant="text"
+                    onClick={() =>
+                      navigator.clipboard.writeText(
+                        watch('secretKey') as string,
+                      )
+                    }
+                  >
+                    <DocumentDuplicateIcon className="h-5 w-5" />
+                  </IconButton>
+                )
+              }
+            />
+          )}
         </div>
         <div className="lg:hidden">
           <BottomStickyButton

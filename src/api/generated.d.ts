@@ -61,6 +61,10 @@ export interface paths {
     /** Get Generate Listing Result */
     post: operations["listings.getGenerateResult"];
   };
+  "/api/tele-app/listings/{id}/likely-connected": {
+    /** Get Likely Connected Listing */
+    post: operations["listings.likely-connected"];
+  };
   "/api/photo/{fileId}/{fileName}": {
     /** Show image */
     get: operations["image.show"];
@@ -105,6 +109,10 @@ export interface paths {
     get: operations["profile"];
     /** Update profile */
     post: operations["updateProfile"];
+  };
+  "/api/tele-app/users/generate-secret-key": {
+    /** Generate Secret Key */
+    post: operations["generateSecretKey"];
   };
 }
 
@@ -350,8 +358,8 @@ export interface components {
     Closing: {
       /** @example 6asdasd */
       id?: string;
-      /** @example 1 */
-      listingId?: number;
+      /** @example 15000 */
+      listingId?: string;
       closingType?: components["schemas"]["ClosingType"];
       /** @example John Doe */
       clientName?: string;
@@ -367,6 +375,7 @@ export interface components {
       /** @example Notes */
       notes?: string;
       status?: components["schemas"]["ClosingStatus"];
+      commissionStatus?: components["schemas"]["CommissionStatus"];
     };
     Listing: {
       id?: string;
@@ -528,6 +537,7 @@ export interface components {
       picture?: string;
       company?: string;
       isPublicProfile?: boolean;
+      secretKey?: string;
     };
     TelegramUserProfile: {
       /** @example John Doe */
@@ -962,6 +972,30 @@ export interface operations {
       };
     };
   };
+  /** Get Likely Connected Listing */
+  "listings.likely-connected": {
+    parameters: {
+      path: {
+        /** @description Listing Id */
+        id: string;
+      };
+    };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": {
+            connectedListings?: {
+                /** @example listing-id-1 */
+                id?: string;
+                /** @example title-1 */
+                title?: string;
+              }[];
+          };
+        };
+      };
+    };
+  };
   /** Show image */
   "image.show": {
     parameters: {
@@ -1245,6 +1279,17 @@ export interface operations {
         "multipart/form-data": components["schemas"]["TelegramUserProfileRequest"];
       };
     };
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": components["schemas"]["User"];
+        };
+      };
+    };
+  };
+  /** Generate Secret Key */
+  generateSecretKey: {
     responses: {
       /** @description success */
       200: {

@@ -35,6 +35,7 @@ import type {
   ClosingListingRes,
   ClosingListingParams,
   PropertyDetailsResponse,
+  GenerateSecretKeyRes,
 } from './types'
 
 // If x-init-data is in local storage (as a result of login widget), attach it
@@ -186,6 +187,14 @@ export const useUpdateUserProfile = () =>
   useMutation<UpdateProfileRes, Error, UpdateProfileParams>({
     mutationFn: async ({ userData }) => {
       const response = await axios.post('/users/profile', userData)
+      return response.data
+    },
+  })
+
+export const useGenerateSecretKey = () =>
+  useMutation<GenerateSecretKeyRes>({
+    mutationFn: async () => {
+      const response = await axios.post('/users/generate-secret-key')
       return response.data
     },
   })

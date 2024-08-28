@@ -8,12 +8,13 @@ export type PropertyDetailRes =
 export type UpdateProfileParams = {
   userData: FormData
 }
-export type UpdateProfileRequest =
-  components['schemas']['TelegramUserProfileRequest']
+export type UpdateProfileRequest = components['schemas']['User']
 export type UpdateProfileRes =
   operations['updateProfile']['responses']['200']['content']['application/json']
 export type UserProfileResponse =
   operations['profile']['responses']['200']['content']['application/json']
+export type GenerateSecretKeyRes =
+  operations['generateSecretKey']['responses']['200']['content']['application/json']
 export type ListingListRes =
   operations['listings.index']['responses']['200']['content']['application/json']
 export type Listing = components['schemas']['Listing']
