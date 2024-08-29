@@ -202,7 +202,7 @@ function EditListing({ id }: { id: string }) {
   }
 
   const submitProcess = async (data: GeneratedListing) => {
-    if (import.meta.env.VITE_OPTIONAL_REWARD_AGREEMENT === 'true') {
+    if (localStorage.getItem('optional-agreement') === 'true') {
       if (!data.withRewardAgreement) {
         setIsDialogOpen(true)
       } else {
@@ -539,7 +539,7 @@ function EditListing({ id }: { id: string }) {
           </BottomStickyButton>
         </div>
       </form>
-      {import.meta.env.VITE_OPTIONAL_REWARD_AGREEMENT === 'true' && (
+      {localStorage.getItem('optional-agreement') === 'true' && (
         <ConfirmationDialog
           title={confirmTitle}
           subtitle={confirmSubtitle}

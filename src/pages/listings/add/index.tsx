@@ -237,7 +237,7 @@ const AddPage = () => {
       imageSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
       return
     }
-    if (import.meta.env.VITE_OPTIONAL_REWARD_AGREEMENT === 'true') {
+    if (localStorage.getItem('optional-agreement') === 'true') {
       if (!data.withRewardAgreement) {
         setIsDialogOpen(true)
       } else {
@@ -694,7 +694,7 @@ const AddPage = () => {
           </BottomStickyButton>
         </div>
       </form>
-      {import.meta.env.VITE_OPTIONAL_REWARD_AGREEMENT === 'true' && (
+      {localStorage.getItem('optional-agreement') === 'true' && (
         <ConfirmationDialog
           title={confirmTitle}
           subtitle={confirmSubtitle}

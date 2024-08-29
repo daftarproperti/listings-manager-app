@@ -5,6 +5,7 @@ import ScrollRestoration from 'components/ScrollRestoration'
 import MainLayout from 'components/layout/MainLayout'
 
 import AuthenticationWrapper from './AuthWrapper'
+import EnableOptionalAgreement from './EnableOptionalAgreement'
 import LoginPage from './auth/login'
 import VerifyPage from './auth/verify'
 import ImpersonatePage from './auth/impersonate'
@@ -27,6 +28,14 @@ import NotFoundPage from './NotFoundPage'
 
 const router = createBrowserRouter(
   [
+    {
+      path: '/enable-optional-agreement',
+      element: (
+        <>
+          <EnableOptionalAgreement />
+        </>
+      ),
+    },
     {
       path: '/login',
       element: (

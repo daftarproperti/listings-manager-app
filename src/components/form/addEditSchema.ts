@@ -102,7 +102,7 @@ const getMandatoryField = (fieldName: string) => ({
 })
 
 const isRewardAgreementOptional =
-  import.meta.env.VITE_OPTIONAL_REWARD_AGREEMENT === 'true'
+  localStorage.getItem('optional-agreement') === 'true'
 
 const getWithRewardAgreementSchema = () => {
   return isRewardAgreementOptional
