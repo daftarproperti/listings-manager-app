@@ -8,6 +8,7 @@ import AuthenticationWrapper from './AuthWrapper'
 import EnableOptionalAgreement from './EnableOptionalAgreement'
 import LoginPage from './auth/login'
 import VerifyPage from './auth/verify'
+import VerifyTotpPage from './auth/verifyTotp'
 import ImpersonatePage from './auth/impersonate'
 import AddPage from './listings/add'
 import ListingDetailPage from './listings/detail'
@@ -49,6 +50,14 @@ const router = createBrowserRouter(
       element: (
         <>
           <VerifyPage />
+        </>
+      ),
+    },
+    {
+      path: '/verify-totp',
+      element: (
+        <>
+          <VerifyTotpPage />
         </>
       ),
     },

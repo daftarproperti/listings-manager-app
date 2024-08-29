@@ -3,6 +3,7 @@ import React from 'react'
 import Login from './login'
 import Verify from './verify'
 import Impersonate from './impersonate'
+import VerifyTotp from './verifyTotp'
 
 const LoginPage: React.FC = () => {
   return (
@@ -28,4 +29,12 @@ const ImpersonatePage: React.FC = () => {
   )
 }
 
-export default { LoginPage, VerifyPage, ImpersonatePage }
+const VerifyTotpPage: React.FC = () => {
+  return (
+    <div>
+      <VerifyTotp />
+    </div>
+  )
+}
+
+export default { LoginPage, VerifyPage, ImpersonatePage, VerifyTotpPage }

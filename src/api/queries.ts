@@ -36,6 +36,10 @@ import type {
   ClosingListingParams,
   PropertyDetailsResponse,
   GenerateSecretKeyRes,
+  VerifyTOTPRes,
+  VerifyTOTPReq,
+  SendOTPRes,
+  SendOTPReq,
 } from './types'
 
 // If x-init-data is in local storage (as a result of login widget), attach it
@@ -345,13 +349,16 @@ export const uploadImage = async (file: File) => {
 }
 
 export const sendOTP = async (
-  phoneNumber: string,
-): Promise<{ token: string; timestamp: number }> => {
+  input: SendOTPReq,
+  forceSend?: boolean,
+): Promise<SendOTPRes> => {
   try {
     const response = await axios.post(
-      '/send-otp',
-      { phoneNumber },
-      { baseURL: `${import.meta.env.VITE_DP_HOME}/api/auth` },
+      `/send-otp${forceSend ? '?forceSend=true' : ''}`,
+      input,
+      {
+        baseURL: `${import.meta.env.VITE_DP_HOME}/api/auth`,
+      },
     )
     return response.data
   } catch (error) {
@@ -535,3 +542,13 @@ export const fetchPropertyDetails = async (
     }
   }
 }
+
+export const useVerifyTOTP = () =>
+  useMutation<VerifyTOTPRes, AxiosError, VerifyTOTPReq>({
+    mutationFn: async (input) => {
+      const response = await axios.post('/verify-totp', input, {
+        baseURL: `${import.meta.env.VITE_DP_HOME}/api/auth`,
+      })
+      return response.data
+    },
+  })

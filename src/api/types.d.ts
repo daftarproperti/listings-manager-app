@@ -93,6 +93,13 @@ export type ClosingListingParams = {
   updateData: FormData
 }
 export type ClosingStatus = components['schemas']['ClosingStatus']
+export type SendOTPReq = operations['auth.send_otp']['parameters']['path']
+export type SendOTPRes =
+  operations['auth.send_otp']['responses']['200']['content']['application/json']
+export type VerifyTOTPReq =
+  operations['auth.verify_totp']['requestBody']['content']['application/json']
+export type VerifyTOTPRes =
+  operations['auth.verify_totp']['responses']['200']['content']['application/json']
 
 export interface PropertyDetailsResponse {
   data: {

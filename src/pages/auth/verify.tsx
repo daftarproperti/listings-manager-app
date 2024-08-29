@@ -64,7 +64,8 @@ function Verify() {
     setLoading(true)
 
     try {
-      await sendOTP(phone)
+      const { token, timestamp } = await sendOTP({ phoneNumber: phone }, true)
+      navigate('/verify', { state: { phone, token, timestamp } })
       setResendTimer(60)
     } catch (error) {
       if (error instanceof Error) {

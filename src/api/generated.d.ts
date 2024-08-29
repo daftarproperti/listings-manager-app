@@ -21,6 +21,10 @@ export interface paths {
     /** Impersonate */
     post: operations["auth.impersonate"];
   };
+  "/api/auth/verify-totp": {
+    /** Verify TOTP */
+    post: operations["auth.verify_totp"];
+  };
   "/api/tele-app/cities": {
     /**
      * Get cities
@@ -111,7 +115,7 @@ export interface paths {
     post: operations["updateProfile"];
   };
   "/api/tele-app/users/generate-secret-key": {
-    /** Generate Secret Key */
+    /** Generate Secret Key for TOTP */
     post: operations["generateSecretKey"];
   };
 }
@@ -593,6 +597,8 @@ export interface operations {
              * @description Timestamp of when the OTP was created
              */
             timestamp?: number;
+            /** @description If TOTP is enabled */
+            totp?: boolean;
           };
         };
       };
@@ -673,6 +679,39 @@ export interface operations {
       path: {
         /** @description Phone Number */
         phoneNumber: string;
+      };
+    };
+    responses: {
+      /** @description Success response */
+      200: {
+        content: {
+          "application/json": {
+            /**
+             * @description Verify status
+             * @example true
+             */
+            success?: boolean;
+            /**
+             * @description Access token
+             * @example Akoasdk131o3ipIaskdlz
+             */
+            accessToken?: string;
+            user?: components["schemas"]["User"];
+          };
+        };
+      };
+    };
+  };
+  /** Verify TOTP */
+  "auth.verify_totp": {
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @description User's phone number */
+          phoneNumber: string;
+          /** @description User's TOTP Code */
+          totpCode: string;
+        };
       };
     };
     responses: {
@@ -1288,7 +1327,7 @@ export interface operations {
       };
     };
   };
-  /** Generate Secret Key */
+  /** Generate Secret Key for TOTP */
   generateSecretKey: {
     responses: {
       /** @description success */

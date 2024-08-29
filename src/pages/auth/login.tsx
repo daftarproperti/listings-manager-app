@@ -18,8 +18,12 @@ function Login() {
     setLoading(true)
 
     try {
-      const { token, timestamp } = await sendOTP(phone)
-      navigate('/verify', { state: { phone, token, timestamp } })
+      const { token, timestamp, totp } = await sendOTP({ phoneNumber: phone })
+      if (totp) {
+        navigate('/verify-totp', { state: { phone } })
+      } else {
+        navigate('/verify', { state: { phone, token, timestamp } })
+      }
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message)
