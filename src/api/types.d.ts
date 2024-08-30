@@ -15,6 +15,8 @@ export type UserProfileResponse =
   operations['profile']['responses']['200']['content']['application/json']
 export type GenerateSecretKeyRes =
   operations['generateSecretKey']['responses']['200']['content']['application/json']
+export type DeleteSecretKeyRes =
+  operations['deleteSecretKey']['responses']['200']['content']['application/json']
 export type ListingListRes =
   operations['listings.index']['responses']['200']['content']['application/json']
 export type Listing = components['schemas']['Listing']

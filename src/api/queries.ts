@@ -40,6 +40,7 @@ import type {
   VerifyTOTPReq,
   SendOTPRes,
   SendOTPReq,
+  DeleteSecretKeyRes,
 } from './types'
 
 // If x-init-data is in local storage (as a result of login widget), attach it
@@ -198,7 +199,15 @@ export const useUpdateUserProfile = () =>
 export const useGenerateSecretKey = () =>
   useMutation<GenerateSecretKeyRes>({
     mutationFn: async () => {
-      const response = await axios.post('/users/generate-secret-key')
+      const response = await axios.post('/users/secret-key')
+      return response.data
+    },
+  })
+
+export const useDeleteSecretKey = () =>
+  useMutation<DeleteSecretKeyRes>({
+    mutationFn: async () => {
+      const response = await axios.delete('/users/secret-key')
       return response.data
     },
   })

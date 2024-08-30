@@ -7,12 +7,14 @@ import {
   getDebouncedCities,
   fetchDefaultCities,
   useGenerateSecretKey,
+  useDeleteSecretKey,
 } from 'api/queries'
 import { useNavigate } from 'react-router-dom'
 import InputField from 'components/input/InputField'
 import CustomSelectField from 'components/input/CustomSelectField'
 import InputSingleFileField from 'components/input/InputSingleFileField'
 import BottomStickyButton from 'components/button/BottomStickyButton'
+import ConfirmDialog from 'components/ConfirmDialog'
 import { Button, IconButton } from '@material-tailwind/react'
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline'
 
@@ -30,17 +32,18 @@ function EditUser() {
   } = useForm<UpdateProfileRequest>()
   const { data: userDetails, isLoading } = useGetUserProfile()
   const { mutate } = useUpdateUserProfile()
+  const { mutate: deleteSecretKey } = useDeleteSecretKey()
   const { mutate: generateSecretKey, data: user } = useGenerateSecretKey()
   const navigate = useNavigate()
   const searchParams = new URLSearchParams(location.search)
   const showSecretKey = searchParams.get('withSecretKey') === 'true'
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const picture = watch('picture')
-
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [defaultCityOptions, setDefaultCityOptions] = useState<CityOption[]>([])
   const [selectedCity, setSelectedCity] = useState<CityOption | null>(null)
   const cityId = watch('cityId')
   const cityName = watch('cityName')
+  const picture = watch('picture')
   const phoneNumber = userDetails?.phoneNumber
 
   const [newImageFile, setNewImageFile] = useState<File | null>(null)
@@ -102,6 +105,16 @@ function EditUser() {
   const handleCityChange = (cityOption: SetStateAction<CityOption | null>) => {
     setSelectedCity(cityOption)
     setShouldReset(false)
+  }
+
+  const handleDeleteSecretKey = () => {
+    setValue('secretKey', '')
+    deleteSecretKey()
+    handleDialog()
+  }
+
+  const handleDialog = () => {
+    setIsDialogOpen((prev) => !prev)
   }
 
   const phoneNumberPattern = /^(\+[1-9]\d{1,14}|0\d{5,14})$/
@@ -201,6 +214,19 @@ function EditUser() {
                   </IconButton>
                 )
               }
+              additionalLabel={
+                watch('secretKey') ? (
+                  <button
+                    className="text-sm text-red-500"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      handleDialog()
+                    }}
+                  >
+                    * Hapus Kode Secret
+                  </button>
+                ) : null
+              }
             />
           )}
         </div>
@@ -213,6 +239,17 @@ function EditUser() {
           </BottomStickyButton>
         </div>
       </form>
+      <ConfirmDialog
+        confirmDelete
+        open={isDialogOpen}
+        cancelLabel="Batal"
+        confirmLabel="Hapus"
+        title="Hapus Kode Secret"
+        body="Apakah Anda yakin ingin menghapus kode secret?"
+        handleOpen={handleDialog}
+        handleCancel={handleDialog}
+        handleConfirm={handleDeleteSecretKey}
+      />
     </div>
   )
 }

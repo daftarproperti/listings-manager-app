@@ -114,9 +114,11 @@ export interface paths {
     /** Update profile */
     post: operations["updateProfile"];
   };
-  "/api/tele-app/users/generate-secret-key": {
+  "/api/tele-app/users/secret-key": {
     /** Generate Secret Key for TOTP */
     post: operations["generateSecretKey"];
+    /** Delete Secret Key for TOTP */
+    delete: operations["deleteSecretKey"];
   };
 }
 
@@ -1329,6 +1331,17 @@ export interface operations {
   };
   /** Generate Secret Key for TOTP */
   generateSecretKey: {
+    responses: {
+      /** @description success */
+      200: {
+        content: {
+          "application/json": components["schemas"]["User"];
+        };
+      };
+    };
+  };
+  /** Delete Secret Key for TOTP */
+  deleteSecretKey: {
     responses: {
       /** @description success */
       200: {
