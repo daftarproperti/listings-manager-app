@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Button } from '@material-tailwind/react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
@@ -16,7 +16,6 @@ function VerifyTotp() {
     defaultValues: { phoneNumber: phone, totpCode: '' },
     mode: 'onChange',
   })
-  const [resendTimer, setResendTimer] = useState(60)
 
   const handleTotpCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
@@ -36,13 +35,6 @@ function VerifyTotp() {
     localStorage.setItem('accessToken', accessToken)
     navigate('/', { state: { accessToken } })
   }, [data, navigate])
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setResendTimer((prev) => (prev > 0 ? prev - 1 : 0))
-    }, 1000)
-    return () => clearInterval(timer)
-  }, [])
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100">
@@ -92,15 +84,15 @@ function VerifyTotp() {
             <p className="text-center text-sm text-red-500">{error.message}</p>
           )}
           <p className="block text-center text-sm text-gray-500">
-            Kirim OTP via WA? ({resendTimer})
-            {resendTimer === 0 && (
+            Kirim OTP via WA?{' '}
+            {
               <button
                 onClick={handleSendOTP}
                 className="text-blue-600 hover:underline"
               >
                 Klik di sini
               </button>
-            )}
+            }
           </p>
         </form>
       </div>
