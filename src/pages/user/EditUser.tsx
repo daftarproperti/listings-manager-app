@@ -17,6 +17,7 @@ import BottomStickyButton from 'components/button/BottomStickyButton'
 import ConfirmDialog from 'components/ConfirmDialog'
 import { Button, IconButton } from '@material-tailwind/react'
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline'
+import QRCode from 'react-qr-code'
 
 import { onSubmit } from './handleUserForm'
 
@@ -187,47 +188,62 @@ function EditUser() {
             required={false}
           />
           {showSecretKey && (
-            <InputField
-              disabled
-              label="Kode Secret"
-              placeholderValue="Klik button untuk generate"
-              registerHook={register('secretKey')}
-              rightContent={
-                !watch('secretKey') ? (
-                  <Button
-                    variant="outlined"
-                    className="bg-white"
-                    onClick={() => generateSecretKey()}
-                  >
-                    Generate Secret Key
-                  </Button>
-                ) : (
-                  <IconButton
-                    variant="text"
-                    onClick={() =>
-                      navigator.clipboard.writeText(
-                        watch('secretKey') as string,
-                      )
+            <>
+              <InputField
+                disabled
+                label="Kode Secret"
+                placeholderValue="Klik button untuk generate"
+                registerHook={register('secretKey')}
+                rightContent={
+                  !watch('secretKey') ? (
+                    <Button
+                      variant="outlined"
+                      className="bg-white"
+                      onClick={() => generateSecretKey()}
+                    >
+                      Generate Secret Key
+                    </Button>
+                  ) : (
+                    <IconButton
+                      variant="text"
+                      onClick={() =>
+                        navigator.clipboard.writeText(
+                          watch('secretKey') as string,
+                        )
+                      }
+                    >
+                      <DocumentDuplicateIcon className="h-5 w-5" />
+                    </IconButton>
+                  )
+                }
+                additionalLabel={
+                  watch('secretKey') ? (
+                    <button
+                      className="text-sm text-red-500"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        handleDialog()
+                      }}
+                    >
+                      * Hapus Kode Secret
+                    </button>
+                  ) : null
+                }
+              />
+              {watch('secretKey') && (
+                <div className="mt-4 inline-block border border-solid border-slate-300 p-4">
+                  <QRCode
+                    value={
+                      'otpauth://totp/DaftarProperti:' +
+                      phoneNumber +
+                      '?secret=' +
+                      (watch('secretKey') || '')
                     }
-                  >
-                    <DocumentDuplicateIcon className="h-5 w-5" />
-                  </IconButton>
-                )
-              }
-              additionalLabel={
-                watch('secretKey') ? (
-                  <button
-                    className="text-sm text-red-500"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      handleDialog()
-                    }}
-                  >
-                    * Hapus Kode Secret
-                  </button>
-                ) : null
-              }
-            />
+                    size={128}
+                  />
+                </div>
+              )}
+            </>
           )}
         </div>
         <div className="lg:hidden">
