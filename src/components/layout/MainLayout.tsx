@@ -34,7 +34,7 @@ import {
 } from '@heroicons/react/24/solid'
 import FilterForm from 'components/form/FilterForm'
 import { SORT_OPTIONS } from 'components/SortBottomSheet'
-import { useGetSavedSearchList, logout } from 'api/queries'
+import { useGetSavedSearchList, useGetUserProfile, logout } from 'api/queries'
 import type { SavedSearch } from 'api/types'
 import {
   countActiveFilters,
@@ -44,10 +44,7 @@ import {
   savedSearchToSearchParams,
 } from 'utils'
 
-const MENU = [
-  { name: 'Listing Saya', link: '/', icon: ListingIconSVG },
-  { name: 'Akun Saya', link: '/user', icon: AccountIconSVG },
-]
+const MENU = [{ name: 'Listing Saya', link: '/', icon: ListingIconSVG }]
 
 const MainLayout = ({ children }: PropsWithChildren) => {
   const navigate = useNavigate()
@@ -56,6 +53,8 @@ const MainLayout = ({ children }: PropsWithChildren) => {
   const [searchText, setSearchText] = useState(searchParams.get('q'))
 
   const { data } = useGetSavedSearchList()
+
+  const { data: profile } = useGetUserProfile()
 
   const query = searchParams.get('q')
   const savedSearchTitle = isSavedSearchApplied(searchParams)
@@ -98,6 +97,11 @@ const MainLayout = ({ children }: PropsWithChildren) => {
     navigate('/login')
   }
 
+  const phoneNumber = profile?.phoneNumber
+  const menu = MENU.concat([
+    { name: `Akun Saya (${phoneNumber})`, link: '/user', icon: AccountIconSVG },
+  ])
+
   return (
     <div className="grid max-h-screen grid-cols-7">
       <div className="col-span-2 hidden lg:block">
@@ -108,7 +112,7 @@ const MainLayout = ({ children }: PropsWithChildren) => {
               <LogoTypeSVG />
             </div>
             <List className="mt-8">
-              {MENU.map((item) => (
+              {menu.map((item) => (
                 <Link key={item.name} to={item.link}>
                   <ListItem
                     selected={isActive(item.link)}
