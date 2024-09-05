@@ -61,6 +61,11 @@ const Card = ({ data }: { data: Listing }) => {
     }
   }
 
+  const isExpired =
+    data.rawExpiredAt &&
+    new Date(data.rawExpiredAt).setHours(0, 0, 0, 0) <=
+      new Date().setHours(0, 0, 0, 0)
+
   return (
     <div className="flex flex-col rounded-lg bg-white shadow-sm">
       <div
@@ -157,8 +162,8 @@ const Card = ({ data }: { data: Listing }) => {
         </div>
       )}
       <div className="w-full justify-end gap-5 rounded-b-lg bg-blue-100 px-3 py-2.5">
-        <div className="flex justify-between">
-          <div className="flex items-center pb-2 text-sm">
+        <div className="flex justify-between gap-4">
+          <div className="flex pb-2 text-sm">
             {data.verifyStatus !== 'approved' ? (
               <>
                 {data.verifyStatus === 'rejected' ? (
@@ -166,7 +171,7 @@ const Card = ({ data }: { data: Listing }) => {
                 ) : (
                   <NewReleaseIconSVG className="text-slate-500" />
                 )}
-                <span className="ml-2">
+                <span className="ml-2 pt-0.5">
                   {getVerifyStatus(data.verifyStatus as VerifyStatus)}
                 </span>
               </>
@@ -179,10 +184,18 @@ const Card = ({ data }: { data: Listing }) => {
                 ) : (
                   <VerifyIconSVG className="text-blue-500" />
                 )}
-                <span className="ml-2">
+                <span className="ml-2 pt-0.5">
                   {getActiveStatus(data.activeStatus as ActiveStatus)}
                 </span>
               </>
+            )}
+            {isExpired && (
+              <div className="py-0.5 pr-3 text-sm font-semibold">
+                &nbsp;-&nbsp;
+                <span className="text-red-500">
+                  Masa berlaku listing telah berakhir
+                </span>
+              </div>
             )}
           </div>
           {data.adminNote?.message && (

@@ -63,6 +63,11 @@ function ListingDetail({
     setShowAdminNote((prev) => !prev)
   }
 
+  const isExpired =
+    data?.rawExpiredAt &&
+    new Date(data.rawExpiredAt).setHours(0, 0, 0, 0) <=
+      new Date().setHours(0, 0, 0, 0)
+
   useEffect(() => {
     if (updateSuccess) {
       refetch()
@@ -258,6 +263,14 @@ function ListingDetail({
                         {getActiveStatus(data.activeStatus as ActiveStatus)}
                       </span>
                     </>
+                  )}
+                  {isExpired && (
+                    <div className="py-0.5 pr-3 text-sm font-semibold">
+                      &nbsp;-&nbsp;
+                      <span className="text-red-500">
+                        Masa berlaku listing telah berakhir
+                      </span>
+                    </div>
                   )}
                 </div>
                 <div className="flex-1 justify-end text-right text-sm lg:max-w-96">

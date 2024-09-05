@@ -445,6 +445,10 @@ export interface components {
       updatedAt?: string;
       /** Format: date-time */
       createdAt?: string;
+      /** Format: date-time */
+      expiredAt?: string;
+      /** Format: date-time */
+      rawExpiredAt?: string;
     };
     Property: {
       id?: string;
@@ -868,6 +872,8 @@ export interface operations {
         sort?: components["schemas"]["ListingSort"];
         /** @description Order By */
         order?: "asc" | "desc";
+        /** @description Filter or sort by expiration date */
+        expiredAt?: string;
       };
     };
     responses: {
