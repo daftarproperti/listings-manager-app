@@ -25,6 +25,7 @@ import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import GoogleMaps from 'components/GoogleMaps'
 import ConfirmationDialog from 'components/header/ConfirmationDialog'
 import type { CombinedImage } from 'components/input/types'
+import { useDirty } from 'contexts/DirtyContext'
 
 import { onSubmit } from './handleFormSubmit'
 import { LISTING_OPTIONS } from './dummy'
@@ -39,6 +40,7 @@ function EditListing({ id }: { id: string }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [coord, setCoord] = useState<google.maps.LatLngLiteral>(DEFAULT_LAT_LNG)
+  const { setDirty } = useDirty()
 
   const checkboxSectionRef = useRef<HTMLDivElement | null>(null)
 
@@ -195,6 +197,7 @@ function EditListing({ id }: { id: string }) {
     setIsDialogOpen(false)
     const formData = watch()
     onSubmit(id, formData, mutate, navigate, setIsSubmitting, combinedImages)
+    setDirty(false)
   }
 
   const handleCancel = () => {
@@ -207,9 +210,11 @@ function EditListing({ id }: { id: string }) {
         setIsDialogOpen(true)
       } else {
         onSubmit(id, data, mutate, navigate, setIsSubmitting, combinedImages)
+        setDirty(false)
       }
     } else {
       onSubmit(id, data, mutate, navigate, setIsSubmitting, combinedImages)
+      setDirty(false)
     }
   }
 
@@ -271,8 +276,10 @@ function EditListing({ id }: { id: string }) {
                   message: 'Foto Properti harus berisi minimal 1 gambar',
                   type: 'manual',
                 })
+                setDirty(false)
               } else {
                 clearErrors && clearErrors('pictureUrls')
+                setDirty(true)
               }
             }}
           />

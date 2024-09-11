@@ -43,6 +43,7 @@ import {
   isSorted,
   savedSearchToSearchParams,
 } from 'utils'
+import { useDirty } from 'contexts/DirtyContext'
 
 const MENU = [{ name: 'Listing Saya', link: '/', icon: ListingIconSVG }]
 
@@ -51,6 +52,7 @@ const MainLayout = ({ children }: PropsWithChildren) => {
   const location = useLocation()
   const [searchParams, setSearchParams] = useSearchParams()
   const [searchText, setSearchText] = useState(searchParams.get('q'))
+  const { isDirty } = useDirty()
 
   const { data } = useGetSavedSearchList()
 
@@ -87,11 +89,35 @@ const MainLayout = ({ children }: PropsWithChildren) => {
     }
   }
 
+  const handleNavigation = (
+    event: React.MouseEvent<HTMLElement>,
+    path: string,
+  ) => {
+    event.preventDefault()
+    if (isDirty) {
+      const confirmLeave = window.confirm(
+        'You have unsaved changes. Do you really want to leave?',
+      )
+      if (!confirmLeave) {
+        return
+      }
+    }
+    navigate(path)
+  }
+
   useEffect(() => {
     setSearchText(query)
   }, [query])
 
   const handleLogout = () => {
+    if (isDirty) {
+      const confirmLeave = window.confirm(
+        'You have unsaved changes. Do you really want to leave?',
+      )
+      if (!confirmLeave) {
+        return
+      }
+    }
     localStorage.clear()
     logout()
     navigate('/login')
@@ -121,6 +147,7 @@ const MainLayout = ({ children }: PropsWithChildren) => {
                         ? 'bg-blue-100 text-blue-600 focus:bg-blue-100 focus:text-blue-600'
                         : 'focus:bg-inherit focus:text-inherit'
                     }`}
+                    onClick={(e) => handleNavigation(e, item.link)}
                   >
                     <ListItemPrefix>
                       <item.icon className="text-inherit" />

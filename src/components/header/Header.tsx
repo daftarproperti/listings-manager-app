@@ -3,6 +3,7 @@ import React from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { LogoSVG } from 'assets/icons'
 import { IconButton } from '@material-tailwind/react'
+import { useDirty } from 'contexts/DirtyContext'
 
 import DotsHeaderButton from './DotsHeaderButton'
 import ResetHeaderButton from './ResetHeaderButton'
@@ -28,9 +29,23 @@ const Header: React.FC<HeaderProps> = ({
   const { id } = useParams<{ id: string }>()
   const location = useLocation()
   const navigate = useNavigate()
+  const { isDirty } = useDirty()
 
   const isFilterPage = location.pathname.includes('/filter')
   const isHomePage = location.pathname === '/' || isWithoutBackButton
+
+  const handleBackNavigation = () => {
+    if (isDirty) {
+      const confirmLeave = window.confirm(
+        'You have unsaved changes. Do you really want to leave?',
+      )
+      if (confirmLeave) {
+        navigate(-1)
+      }
+    } else {
+      navigate(-1)
+    }
+  }
 
   return (
     <header className="fixed top-0 z-10 flex h-16 w-full items-center justify-between border-b border-slate-300 bg-blue-50 px-4 lg:hidden">
@@ -40,7 +55,7 @@ const Header: React.FC<HeaderProps> = ({
             variant="text"
             color="blue-gray"
             className="rounded-full"
-            onClick={() => navigate(-1)}
+            onClick={handleBackNavigation}
           >
             <ArrowLeftIcon className="w-6" />
           </IconButton>

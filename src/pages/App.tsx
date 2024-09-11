@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { ThemeProvider } from '@material-tailwind/react'
 import { BackButton } from '@twa-dev/sdk/react'
 
+import { DirtyProvider } from '../contexts/DirtyContext'
 import routes from './routes'
 
 const queryClient = new QueryClient()
@@ -16,13 +17,15 @@ const App = () => (
     <main className="mx-auto h-auto min-h-screen w-full bg-white font-inter text-slate-800">
       <ThemeProvider>
         <QueryClientProvider client={queryClient}>
-          <RouterProvider router={routes} />
-          <ToastContainer position="top-center" />
-          <ToastContainer
-            containerId="addListing"
-            position="top-center"
-            className={'w-full'}
-          />
+          <DirtyProvider>
+            <RouterProvider router={routes} />
+            <ToastContainer position="top-center" />
+            <ToastContainer
+              containerId="addListing"
+              position="top-center"
+              className={'w-full'}
+            />
+          </DirtyProvider>
         </QueryClientProvider>
       </ThemeProvider>
     </main>

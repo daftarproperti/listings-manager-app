@@ -38,6 +38,7 @@ import { DEFAULT_LAT_LNG } from 'utils/constant'
 import ConfirmationDialog from 'components/header/ConfirmationDialog'
 import type { CombinedImage } from 'components/input/types'
 import InputModal from 'components/InputModal'
+import { useDirty } from 'contexts/DirtyContext'
 
 interface ExtendedListing extends GeneratedListing {
   bedroomCounts?: string
@@ -54,6 +55,7 @@ const AddPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [generationFailed, setGenerationFailed] = useState(false)
   const [modalText, setModalText] = useState('')
+  const { setDirty } = useDirty()
 
   const checkboxSectionRef = useRef<HTMLDivElement | null>(null)
   const imageSectionRef = useRef<HTMLDivElement | null>(null)
@@ -220,6 +222,7 @@ const AddPage = () => {
     setIsDialogOpen(false)
     const currentData = watch()
     await submitData(currentData)
+    setDirty(false)
   }
 
   const handleCancel = () => {
@@ -242,9 +245,11 @@ const AddPage = () => {
         setIsDialogOpen(true)
       } else {
         await submitData(data)
+        setDirty(false)
       }
     } else {
       await submitData(data)
+      setDirty(false)
     }
   }
 
@@ -426,8 +431,10 @@ const AddPage = () => {
                     message: 'Foto Properti harus berisi minimal 1 gambar',
                     type: 'manual',
                   })
+                  setDirty(false)
                 } else {
                   clearErrors && clearErrors('pictureUrls')
+                  setDirty(true)
                 }
               }}
             />
