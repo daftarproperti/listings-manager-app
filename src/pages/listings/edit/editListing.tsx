@@ -9,7 +9,7 @@ import {
   getDebouncedCities,
   fetchDefaultCities,
 } from 'api/queries'
-import { appPath, dpPath } from 'utils'
+import { appPath, dpPath, formatCalculatedPrice } from 'utils'
 import { schema } from 'components/form/addEditSchema'
 import type { CityOption, Listing as GeneratedListing } from 'api/types'
 import IntuitiveCurrencyInputField from 'components/input/IntuitiveCurrencyInputField'
@@ -70,10 +70,13 @@ function EditListing({ id }: { id: string }) {
   } = useGetListingDetail({ id })
 
   const { mutate } = useUpdateListing()
+  const [pricePerMeter, setPricePerMeter] = useState<number | null>(null)
 
   const listingForSale = watch('listingForSale')
   const listingForRent = watch('listingForRent')
   const propertyType = watch('propertyType')
+  const price = watch('price')
+  const lotSize = watch('lotSize')
 
   const [defaultCityOptions, setDefaultCityOptions] = useState<CityOption[]>([])
   const [selectedCity, setSelectedCity] = useState<{
@@ -98,6 +101,14 @@ function EditListing({ id }: { id: string }) {
               longitude: DEFAULT_LAT_LNG.lng,
             },
     })
+
+  useEffect(() => {
+    if (price && lotSize && lotSize > 0) {
+      setPricePerMeter(price / lotSize)
+    } else {
+      setPricePerMeter(null)
+    }
+  }, [price, lotSize])
 
   useEffect(() => {
     if (listingDetails) {
@@ -403,6 +414,18 @@ function EditListing({ id }: { id: string }) {
                 type="number"
               />
             )}
+            {propertyType == 'land' &&
+              pricePerMeter !== null &&
+              listingForSale && (
+                <div className="ml-3 mt-3">
+                  <label className="text-lg font-semibold leading-7">
+                    Harga Jual /m<sup>2</sup>
+                  </label>
+                  <div className="mt-1 h-11 w-full rounded-lg border border-solid border-slate-300 bg-slate-200 px-3 py-2">
+                    {`${formatCalculatedPrice(pricePerMeter)}`}/m<sup>2</sup>
+                  </div>
+                </div>
+              )}
           </div>
           {propertyType !== 'land' && (
             <SelectField

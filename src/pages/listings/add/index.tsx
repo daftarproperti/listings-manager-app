@@ -17,7 +17,7 @@ import type {
   UpdateListingRequest as GeneratedListing,
   CityOption,
 } from 'api/types'
-import { dpPath } from 'utils'
+import { dpPath, formatCalculatedPrice } from 'utils'
 import BottomStickyButton from 'components/button/BottomStickyButton'
 import { schema } from 'components/form/addEditSchema'
 import IntuitiveCurrencyInputField from 'components/input/IntuitiveCurrencyInputField'
@@ -81,10 +81,13 @@ const AddPage = () => {
   })
 
   const { mutate, isPending } = useAddListing()
+  const [pricePerMeter, setPricePerMeter] = useState<number | null>(null)
 
   const listingForSale = watch('listingForSale')
   const listingForRent = watch('listingForRent')
   const propertyType = watch('propertyType')
+  const price = watch('price')
+  const lotSize = watch('lotSize')
 
   const [defaultCityOptions, setDefaultCityOptions] = useState<CityOption[]>([])
   const { data: userProfile, isFetched } = useGetUserProfile()
@@ -160,6 +163,14 @@ const AddPage = () => {
   }
 
   const [coord, setCoord] = useState<google.maps.LatLngLiteral>(DEFAULT_LAT_LNG)
+
+  useEffect(() => {
+    if (price && lotSize && lotSize > 0) {
+      setPricePerMeter(price / lotSize)
+    } else {
+      setPricePerMeter(null)
+    }
+  }, [price, lotSize])
 
   useEffect(() => {
     if (isFetched) {
@@ -533,7 +544,7 @@ const AddPage = () => {
           <div className="flex w-full">
             {propertyType !== 'apartment' && (
               <InputField
-                halfWidth={propertyType !== 'land'}
+                halfWidth={true}
                 leftPosition={true}
                 label="Luas Tanah"
                 registerHook={register('lotSize', { required: true })}
@@ -562,6 +573,18 @@ const AddPage = () => {
                 type="number"
               />
             )}
+            {propertyType == 'land' &&
+              pricePerMeter !== null &&
+              listingForSale && (
+                <div className="ml-3 mt-3">
+                  <label className="text-lg font-semibold leading-7">
+                    Harga Jual /m<sup>2</sup>
+                  </label>
+                  <div className="mt-1 h-11 w-full rounded-lg border border-solid border-slate-300 bg-slate-200 px-3 py-2">
+                    {`${formatCalculatedPrice(pricePerMeter)}`}/m<sup>2</sup>
+                  </div>
+                </div>
+              )}
           </div>
           {propertyType !== 'land' && (
             <SelectField
