@@ -38,6 +38,7 @@ function EditUser() {
   const navigate = useNavigate()
   const searchParams = new URLSearchParams(location.search)
   const showSecretKey = searchParams.get('withSecretKey') === 'true'
+  const [isSecretKeyVisible, setIsSecretKeyVisible] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [defaultCityOptions, setDefaultCityOptions] = useState<CityOption[]>([])
@@ -188,62 +189,80 @@ function EditUser() {
             required={false}
           />
           {showSecretKey && (
-            <>
-              <InputField
-                disabled
-                label="Kode Secret"
-                placeholderValue="Klik button untuk generate"
-                registerHook={register('secretKey')}
-                rightContent={
-                  !watch('secretKey') ? (
-                    <Button
-                      variant="outlined"
-                      className="bg-white"
-                      onClick={() => generateSecretKey()}
-                    >
-                      Generate Secret Key
-                    </Button>
-                  ) : (
-                    <IconButton
-                      variant="text"
-                      onClick={() =>
-                        navigator.clipboard.writeText(
-                          watch('secretKey') as string,
-                        )
-                      }
-                    >
-                      <DocumentDuplicateIcon className="h-5 w-5" />
-                    </IconButton>
-                  )
-                }
-                additionalLabel={
-                  watch('secretKey') ? (
-                    <button
-                      className="text-sm text-red-500"
-                      onClick={(e) => {
-                        e.preventDefault()
-                        handleDialog()
-                      }}
-                    >
-                      * Hapus Kode Secret
-                    </button>
-                  ) : null
-                }
-              />
-              {watch('secretKey') && (
-                <div className="mt-4 inline-block border border-solid border-slate-300 p-4">
-                  <QRCode
-                    value={
-                      'otpauth://totp/DaftarProperti:' +
-                      phoneNumber +
-                      '?secret=' +
-                      (watch('secretKey') || '')
+            <div>
+              {isSecretKeyVisible ? (
+                <>
+                  <InputField
+                    disabled
+                    label="Kode Secret"
+                    placeholderValue="Klik button untuk generate"
+                    registerHook={register('secretKey')}
+                    rightContent={
+                      !watch('secretKey') ? (
+                        <Button
+                          variant="outlined"
+                          className="bg-white"
+                          onClick={() => generateSecretKey()}
+                        >
+                          Generate Secret Key
+                        </Button>
+                      ) : (
+                        <IconButton
+                          variant="text"
+                          onClick={() =>
+                            navigator.clipboard.writeText(
+                              watch('secretKey') as string,
+                            )
+                          }
+                        >
+                          <DocumentDuplicateIcon className="h-5 w-5" />
+                        </IconButton>
+                      )
                     }
-                    size={128}
+                    additionalLabel={
+                      watch('secretKey') ? (
+                        <button
+                          className="text-sm text-red-500"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            handleDialog()
+                          }}
+                        >
+                          * Hapus Kode Secret
+                        </button>
+                      ) : null
+                    }
                   />
+                  {watch('secretKey') && (
+                    <div className="mt-4 inline-block border border-solid border-slate-300 p-4">
+                      <QRCode
+                        value={`otpauth://totp/DaftarProperti:${phoneNumber}?secret=${watch(
+                          'secretKey',
+                        )}`}
+                        size={128}
+                      />
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="py-4">
+                  Anda bisa menggunakan kode rahasia untuk memudahkan Anda
+                  mengelola akun Anda. <br /> Jika Anda ingin menggunakan Kode
+                  Secret, silahkan klik{' '}
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      setIsSecretKeyVisible(true)
+                    }}
+                    className="text-blue-500"
+                  >
+                    link berikut
+                  </a>
+                  .
                 </div>
               )}
-            </>
+            </div>
           )}
         </div>
         <div className="lg:hidden">
