@@ -27,7 +27,7 @@ const Card = ({ data }: { data: Listing }) => {
   const location = useLocation()
 
   const navigateToEditForm = (id: string) => {
-    navigate(`/listings/edit/${id}`)
+    navigate(`/listings/${id}/edit`)
   }
   const onClickCard = (id: string) => {
     navigate(`/listings/${id}`)

@@ -49,7 +49,7 @@ function ListingDetail({
   const { data, isFetching, isError, refetch } = useGetListingDetail({ id })
   const navigate = useNavigate()
   const navigateToEditForm = (id: string) => {
-    navigate(`/listings/edit/${id}`, { replace: true })
+    navigate(`/listings/${id}/edit`, { replace: true })
   }
   const location = useLocation()
   const updateSuccess = location.state?.updateSuccess

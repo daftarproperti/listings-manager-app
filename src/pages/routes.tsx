@@ -116,7 +116,7 @@ const router = createBrowserRouter(
           ),
         },
         {
-          path: '/listings/edit/:id',
+          path: '/listings/:id/edit',
           element: (
             <MainLayout>
               <Header title="Data Listing" />
@@ -125,7 +125,7 @@ const router = createBrowserRouter(
           ),
         },
         {
-          path: '/listings/cancel/:id',
+          path: '/listings/:id/cancel',
           element: (
             <MainLayout>
               <Header title="Pembatalan Listing" />
@@ -134,7 +134,7 @@ const router = createBrowserRouter(
           ),
         },
         {
-          path: '/listings/closing/:id',
+          path: '/listings/:id/closing',
           element: (
             <MainLayout>
               <Header title="Closing Listing" />

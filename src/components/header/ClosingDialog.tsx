@@ -29,7 +29,7 @@ const ClosingDialog = ({
         <div data-no-drag className="mx-6 mb-6 text-gray-800">
           <div className="mb-4 border-b border-solid border-b-gray-200 pb-2">
             <Link
-              to={`/listings/closing/${listingId}`}
+              to={`/listings/${listingId}/closing`}
               onClick={() => {
                 setMode('closing')
                 setIsFilterBottomBarOpen(false)
@@ -44,7 +44,7 @@ const ClosingDialog = ({
           </div>
           <div className="mb-4 border-b border-solid border-b-gray-200 pb-2">
             <Link
-              to={`/listings/cancel/${listingId}`}
+              to={`/listings/${listingId}/cancel`}
               onClick={() => {
                 setMode('cancel')
                 setIsFilterBottomBarOpen(false)
