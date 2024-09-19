@@ -243,8 +243,8 @@ function ListingDetail({
                   </div>
                 </>
               )}
-              <div className="flex w-full justify-between border-b border-solid border-t-slate-200 px-3 py-2.5">
-                <div className="flex items-center text-sm">
+              <div className="flex w-full justify-between gap-5 border-b border-solid border-t-slate-200 px-3 py-2.5">
+                <div className="flex text-sm">
                   {data.verifyStatus !== 'approved' ? (
                     <>
                       {data.verifyStatus === 'rejected' ? (
@@ -326,7 +326,12 @@ function ListingDetail({
                         </div>
                         {showAdminNote && (
                           <div className="block w-full py-3 text-justify">
-                            <p>{data.adminNote.message}</p>
+                            <p
+                              dangerouslySetInnerHTML={{
+                                __html: replaceWithBr(data.adminNote.message),
+                              }}
+                              className="whitespace-pre-wrap text-sm"
+                            />
                           </div>
                         )}
                       </>

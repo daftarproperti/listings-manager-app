@@ -16,6 +16,7 @@ import {
   getLabelForValue,
   getVerifyStatus,
   getActiveStatus,
+  replaceWithBr,
 } from 'utils'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '@material-tailwind/react'
@@ -215,7 +216,12 @@ const Card = ({ data }: { data: Listing }) => {
               </div>
               {showAdminNote && (
                 <div className="block w-full py-3 text-justify">
-                  <p>{data.adminNote.message}</p>
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: replaceWithBr(data.adminNote.message),
+                    }}
+                    className="whitespace-pre-wrap text-sm"
+                  />
                 </div>
               )}
             </div>
