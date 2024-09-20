@@ -40,11 +40,13 @@ function ListingDetail({
   setCanEdit,
   checkMultipleUnit,
   checkClosings,
+  setIsApproved,
 }: {
   id: string
   setCanEdit: (canEdit: boolean) => void
   checkMultipleUnit: (multipleUnit: boolean) => void
   checkClosings: (closing: number) => void
+  setIsApproved: (isApproved: boolean) => void
 }) {
   const { data, isFetching, isError, refetch } = useGetListingDetail({ id })
   const navigate = useNavigate()
@@ -73,6 +75,10 @@ function ListingDetail({
       refetch()
     }
   }, [updateSuccess, refetch])
+
+  useEffect(() => {
+    setIsApproved(data?.verifyStatus === 'approved')
+  }, [data?.verifyStatus, setIsApproved])
 
   useEffect(() => {
     setCanEdit(data?.userCanEdit ?? false)

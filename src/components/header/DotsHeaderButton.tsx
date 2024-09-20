@@ -16,12 +16,14 @@ interface DotsButtonProps {
   propertyId?: string
   multipleUnit?: boolean
   closings?: number
+  isApproved?: boolean
 }
 
 const DotsHeaderButton: React.FC<DotsButtonProps> = ({
   propertyId,
   multipleUnit,
   closings = 0,
+  isApproved = false,
 }) => {
   const [showDropdown, setShowDropdown] = useState(false)
   const [isNewListingSheetOpen, setIsNewListingSheetOpen] = useState(false)
@@ -89,13 +91,15 @@ const DotsHeaderButton: React.FC<DotsButtonProps> = ({
               </div>
             </MenuItem>
           )}
-          <MenuItem
-            className="flex items-center gap-2 rounded-none text-lg"
-            onClick={initiateDelete}
-          >
-            <TrashIconSVG className="w-6" />
-            Hapus
-          </MenuItem>
+          {!isApproved && (
+            <MenuItem
+              className="flex items-center gap-2 rounded-none text-lg"
+              onClick={initiateDelete}
+            >
+              <TrashIconSVG className="w-6" />
+              Hapus
+            </MenuItem>
+          )}
         </MenuList>
       </Menu>
       <ConfirmationDialog

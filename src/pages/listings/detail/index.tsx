@@ -9,6 +9,11 @@ const ListingDetailPage = () => {
   const [canEdit, setCanEdit] = useState<boolean>(false)
   const [multipleUnit, checkMultipleUnit] = useState<boolean>(false)
   const [closings, checkClosings] = useState<number>(0)
+  const [isApproved, setIsApproved] = useState<boolean>(false)
+
+  const handleSetIsApproved = (approvedStatus: boolean) => {
+    setIsApproved(approvedStatus)
+  }
 
   return (
     <>
@@ -17,6 +22,7 @@ const ListingDetailPage = () => {
         canEdit={canEdit}
         multipleUnit={multipleUnit}
         closings={closings}
+        isApproved={isApproved}
       />
       {id && (
         <ListingDetail
@@ -24,6 +30,7 @@ const ListingDetailPage = () => {
           setCanEdit={setCanEdit}
           checkMultipleUnit={checkMultipleUnit}
           checkClosings={checkClosings}
+          setIsApproved={handleSetIsApproved}
         />
       )}
     </>

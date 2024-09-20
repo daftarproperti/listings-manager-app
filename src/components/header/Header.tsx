@@ -16,6 +16,7 @@ type HeaderProps = {
   closings?: number
   isWithoutBackButton?: boolean
   isWithHomeHeaderButton?: boolean
+  isApproved?: boolean
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -25,6 +26,7 @@ const Header: React.FC<HeaderProps> = ({
   closings,
   isWithoutBackButton = false,
   isWithHomeHeaderButton = false,
+  isApproved = false,
 }) => {
   const { id } = useParams<{ id: string }>()
   const location = useLocation()
@@ -68,6 +70,7 @@ const Header: React.FC<HeaderProps> = ({
           propertyId={id}
           multipleUnit={multipleUnit}
           closings={closings}
+          isApproved={isApproved}
         />
       ) : isFilterPage ? (
         <ResetHeaderButton />
