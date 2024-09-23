@@ -1,4 +1,9 @@
-import type { Listing, VerifyStatus, ActiveStatus } from 'api/types'
+import type {
+  Listing,
+  VerifyStatus,
+  ActiveStatus,
+  ClosingStatus,
+} from 'api/types'
 import {
   BathIconSVG,
   BedIconSVG,
@@ -17,6 +22,7 @@ import {
   getVerifyStatus,
   getActiveStatus,
   replaceWithBr,
+  getClosingStatus,
 } from 'utils'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '@material-tailwind/react'
@@ -199,34 +205,53 @@ const Card = ({ data }: { data: Listing }) => {
               </div>
             )}
           </div>
-          {data.adminNote?.message && (
-            <div className="flex-1 justify-end text-right text-sm lg:max-w-96">
-              <div className="inline-block">
-                <button
-                  className="flex text-blue-500"
-                  onClick={toggleAdminNote}
+          <div className="lg:flex">
+            {data?.closings?.[0]?.status && data?.closings?.length == 1 && (
+              <div className="inline-block text-sm">
+                Status Closing: &nbsp;
+                <span
+                  className="cursor-pointer underline"
+                  onClick={() =>
+                    navigate(
+                      `/listings/${data.id}/closing/${data?.closings?.[0]?.id}/detail`,
+                    )
+                  }
                 >
-                  {showAdminNote ? 'Tutup Catatan' : 'Lihat Catatan'}
-                  <ArrowDownIconSVG
-                    className={`ml-2 h-5 w-5 ${
-                      showAdminNote ? 'rotate-180' : 'rotate-0'
-                    }`}
-                  />
-                </button>
+                  {getClosingStatus(
+                    data?.closings?.[0]?.status as ClosingStatus,
+                  )}
+                </span>
               </div>
-              {showAdminNote && (
-                <div className="block w-full py-3 text-justify">
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: replaceWithBr(data.adminNote.message),
-                    }}
-                    className="whitespace-pre-wrap text-sm"
-                  />
+            )}
+            {data.adminNote?.message && (
+              <div className="my-2 ml-2 flex-1 justify-end text-right text-sm lg:my-0 lg:max-w-96">
+                <div className="inline-block">
+                  <button
+                    className="flex text-blue-500"
+                    onClick={toggleAdminNote}
+                  >
+                    {showAdminNote ? 'Tutup Catatan' : 'Lihat Catatan'}
+                    <ArrowDownIconSVG
+                      className={`ml-2 h-5 w-5 ${
+                        showAdminNote ? 'rotate-180' : 'rotate-0'
+                      }`}
+                    />
+                  </button>
                 </div>
-              )}
-            </div>
-          )}
+              </div>
+            )}
+          </div>
         </div>
+        {showAdminNote && data.adminNote?.message && (
+          <div className="mb-2 block w-full rounded-lg border border-solid border-slate-300 bg-slate-200 p-4 py-3 text-justify">
+            <p
+              dangerouslySetInnerHTML={{
+                __html: replaceWithBr(data.adminNote.message),
+              }}
+              className="whitespace-pre-wrap text-sm"
+            />
+          </div>
+        )}
         <Button
           size="sm"
           fullWidth

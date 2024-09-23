@@ -243,100 +243,106 @@ function ListingDetail({
                   </div>
                 </>
               )}
-              <div className="flex w-full justify-between gap-5 border-b border-solid border-t-slate-200 px-3 py-2.5">
-                <div className="flex text-sm">
-                  {data.verifyStatus !== 'approved' ? (
-                    <>
-                      {data.verifyStatus === 'rejected' ? (
-                        <CancelIconSVG className="text-red-500" />
-                      ) : (
-                        <NewReleaseIconSVG className="text-slate-500" />
-                      )}
-                      <span className="ml-2">
-                        {getVerifyStatus(data.verifyStatus as VerifyStatus)}
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      {data.activeStatus === 'archived' ? (
-                        <MinusCircleIconSVG className="w-6 text-slate-600" />
-                      ) : data.activeStatus === 'waitlisted' ? (
-                        <NewReleaseIconSVG className="text-fireBush-400" />
-                      ) : (
-                        <VerifyIconSVG className="text-blue-500" />
-                      )}
-                      <span className="ml-2">
-                        {getActiveStatus(data.activeStatus as ActiveStatus)}
-                      </span>
-                    </>
-                  )}
-                  {isExpired && (
-                    <div className="py-0.5 pr-3 text-sm font-semibold">
-                      &nbsp;-&nbsp;
-                      <span className="text-red-500">
-                        Masa berlaku listing telah berakhir
-                      </span>
-                    </div>
-                  )}
-                </div>
-                <div className="flex-1 justify-end text-right text-sm lg:max-w-96">
-                  {data?.cancellationNote?.status !== undefined && (
-                    <div className="inline-block">
-                      Status Pembatalan:
-                      <span className="ml-2">
-                        {getCancellationStatus(
-                          data.cancellationNote.status as CancellationStatus,
+              <div className="border-b border-solid border-t-slate-200 px-3 py-2.5">
+                <div className="flex w-full justify-between gap-5">
+                  <div className="flex text-sm">
+                    {data.verifyStatus !== 'approved' ? (
+                      <>
+                        {data.verifyStatus === 'rejected' ? (
+                          <CancelIconSVG className="text-red-500" />
+                        ) : (
+                          <NewReleaseIconSVG className="text-slate-500" />
                         )}
-                      </span>
-                    </div>
-                  )}
-                  {data?.closings?.[0]?.status &&
-                    data?.closings?.length == 1 && (
+                        <span className="ml-2">
+                          {getVerifyStatus(data.verifyStatus as VerifyStatus)}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        {data.activeStatus === 'archived' ? (
+                          <MinusCircleIconSVG className="w-6 text-slate-600" />
+                        ) : data.activeStatus === 'waitlisted' ? (
+                          <NewReleaseIconSVG className="text-fireBush-400" />
+                        ) : (
+                          <VerifyIconSVG className="text-blue-500" />
+                        )}
+                        <span className="ml-2">
+                          {getActiveStatus(data.activeStatus as ActiveStatus)}
+                        </span>
+                      </>
+                    )}
+                    {isExpired && (
+                      <div className="py-0.5 pr-3 text-sm font-semibold">
+                        &nbsp;-&nbsp;
+                        <span className="text-red-500">
+                          Masa berlaku listing telah berakhir
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 justify-end text-right text-sm lg:max-w-96">
+                    {data?.cancellationNote?.status !== undefined && (
                       <div className="inline-block">
-                        Status Closing:
-                        <span
-                          className="ml-2 cursor-pointer underline"
-                          onClick={() =>
-                            navigate(
-                              `/listings/${data.id}/closing/${data?.closings?.[0]?.id}/detail`,
-                            )
-                          }
-                        >
-                          {getClosingStatus(
-                            data?.closings?.[0]?.status as ClosingStatus,
+                        Status Pembatalan:
+                        <span className="ml-2">
+                          {getCancellationStatus(
+                            data.cancellationNote.status as CancellationStatus,
                           )}
                         </span>
                       </div>
                     )}
-                  {data.adminNote?.message &&
-                    data.cancellationNote?.status === undefined && (
-                      <>
+                    {data?.closings?.[0]?.status &&
+                      data?.closings?.length == 1 && (
                         <div className="inline-block">
-                          <button
-                            className="flex text-blue-500"
-                            onClick={toggleAdminNote}
+                          Status Closing:
+                          <span
+                            className="ml-2 cursor-pointer underline"
+                            onClick={() =>
+                              navigate(
+                                `/listings/${data.id}/closing/${data?.closings?.[0]?.id}/detail`,
+                              )
+                            }
                           >
-                            {showAdminNote ? 'Tutup Catatan' : 'Lihat Catatan'}
-                            <ArrowDownIconSVG
-                              className={`ml-2 h-5 w-5 ${
-                                showAdminNote ? 'rotate-180' : 'rotate-0'
-                              }`}
-                            />
-                          </button>
+                            {getClosingStatus(
+                              data?.closings?.[0]?.status as ClosingStatus,
+                            )}
+                          </span>
                         </div>
-                        {showAdminNote && (
-                          <div className="block w-full py-3 text-justify">
-                            <p
-                              dangerouslySetInnerHTML={{
-                                __html: replaceWithBr(data.adminNote.message),
-                              }}
-                              className="whitespace-pre-wrap text-sm"
-                            />
+                      )}
+                    {data.adminNote?.message &&
+                      data.cancellationNote?.status === undefined && (
+                        <>
+                          <div className="my-2 inline-block lg:my-0 lg:ml-4">
+                            <button
+                              className="flex text-blue-500"
+                              onClick={toggleAdminNote}
+                            >
+                              {showAdminNote
+                                ? 'Tutup Catatan'
+                                : 'Lihat Catatan'}
+                              <ArrowDownIconSVG
+                                className={`ml-2 h-5 w-5 ${
+                                  showAdminNote ? 'rotate-180' : 'rotate-0'
+                                }`}
+                              />
+                            </button>
                           </div>
-                        )}
-                      </>
-                    )}
+                        </>
+                      )}
+                  </div>
                 </div>
+                {showAdminNote && data.adminNote?.message && (
+                  <div className="lg:flex lg:justify-between">
+                    <div className="my-4 rounded-lg border border-solid border-slate-300 bg-slate-200 p-4 py-3 text-justify lg:ml-auto lg:w-1/2">
+                      <p
+                        dangerouslySetInnerHTML={{
+                          __html: replaceWithBr(data.adminNote.message),
+                        }}
+                        className="whitespace-pre-wrap text-sm"
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="px-4 py-1 text-sm">
                 <h2 className="text-sm font-semibold leading-7 text-slate-500">
