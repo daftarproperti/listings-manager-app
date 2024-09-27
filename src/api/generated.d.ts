@@ -198,7 +198,7 @@ export interface components {
       title?: string;
       filterSet?: components["schemas"]["FilterSet"];
     };
-    TelegramUserProfileRequest: {
+    UserProfileRequest: {
       /** @example Jono Doe */
       name?: string;
       /** @example 081111111111 */
@@ -547,7 +547,7 @@ export interface components {
       isPublicProfile?: boolean;
       secretKey?: string;
     };
-    TelegramUserProfile: {
+    UserProfile: {
       /** @example John Doe */
       name?: string | null;
       /** @example +6281234567890 */
@@ -1321,7 +1321,7 @@ export interface operations {
   updateProfile: {
     requestBody: {
       content: {
-        "multipart/form-data": components["schemas"]["TelegramUserProfileRequest"];
+        "multipart/form-data": components["schemas"]["UserProfileRequest"];
       };
     };
     responses: {
