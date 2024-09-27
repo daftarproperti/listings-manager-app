@@ -69,10 +69,6 @@ export interface paths {
     /** Get Likely Connected Listing */
     post: operations["listings.likely-connected"];
   };
-  "/api/photo/{fileId}/{fileName}": {
-    /** Show image */
-    get: operations["image.show"];
-  };
   "/api/app/upload/image": {
     /** Upload Image */
     post: operations["image.upload"];
@@ -1037,25 +1033,6 @@ export interface operations {
                 title?: string;
               }[];
           };
-        };
-      };
-    };
-  };
-  /** Show image */
-  "image.show": {
-    parameters: {
-      path: {
-        /** @description File Id */
-        fileId: number;
-        /** @description Filename */
-        fileName: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "image/*": string;
         };
       };
     };
