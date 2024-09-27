@@ -256,6 +256,12 @@ export interface components {
      */
     ActiveStatus: "waitlisted" | "active" | "archived";
     /**
+     * @description AiReview Status
+     * @example done
+     * @enum {string}
+     */
+    AiReviewStatus: "processing" | "done";
+    /**
      * @example on_review
      * @enum {string}
      */
@@ -521,14 +527,6 @@ export interface components {
       userId?: number;
       title?: string;
       filterSet?: components["schemas"]["FilterSet"];
-    };
-    TelegramAllowlistGroup: {
-      id?: string;
-      chatId?: number;
-      groupName?: string;
-      sampleMessage?: string;
-      allowed?: boolean;
-      createdAt?: string;
     };
     User: {
       id?: string;
