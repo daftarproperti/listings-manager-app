@@ -25,22 +25,22 @@ export interface paths {
     /** Verify TOTP */
     post: operations["auth.verify_totp"];
   };
-  "/api/tele-app/cities": {
+  "/api/app/cities": {
     /**
      * Get cities
      * @description Returns city items
      */
     get: operations["cities.index"];
   };
-  "/api/tele-app/cities/{id}": {
+  "/api/app/cities/{id}": {
     /** Get city by id */
     get: operations["cities.getCityById"];
   };
-  "/api/tele-app/listings/{id}/closings": {
+  "/api/app/listings/{id}/closings": {
     /** Add a closing to a listing */
     post: operations["listings.closing"];
   };
-  "/api/tele-app/listings": {
+  "/api/app/listings": {
     /**
      * Get listing items
      * @description Returns listing items
@@ -49,7 +49,7 @@ export interface paths {
     /** Create listing */
     post: operations["listings.create"];
   };
-  "/api/tele-app/listings/{id}": {
+  "/api/app/listings/{id}": {
     /** Get listing by id */
     get: operations["listings.show"];
     /** Update listing */
@@ -57,15 +57,15 @@ export interface paths {
     /** Delete listing */
     delete: operations["listings.delete"];
   };
-  "/api/tele-app/listings/generate-from-text": {
+  "/api/app/listings/generate-from-text": {
     /** Generate Listing from Text */
     post: operations["listings.generateFromText"];
   };
-  "/api/tele-app/listings/getGenerateResult": {
+  "/api/app/listings/getGenerateResult": {
     /** Get Generate Listing Result */
     post: operations["listings.getGenerateResult"];
   };
-  "/api/tele-app/listings/{id}/likely-connected": {
+  "/api/app/listings/{id}/likely-connected": {
     /** Get Likely Connected Listing */
     post: operations["listings.likely-connected"];
   };
@@ -73,22 +73,22 @@ export interface paths {
     /** Show image */
     get: operations["image.show"];
   };
-  "/api/tele-app/upload/image": {
+  "/api/app/upload/image": {
     /** Upload Image */
     post: operations["image.upload"];
   };
-  "/api/tele-app/properties": {
+  "/api/app/properties": {
     /**
      * Get list of property
      * @description Returns list of property
      */
     get: operations["index"];
   };
-  "/api/tele-app/properties/{id}": {
+  "/api/app/properties/{id}": {
     /** Get property by id */
     get: operations["show"];
   };
-  "/api/tele-app/saved-searches": {
+  "/api/app/saved-searches": {
     /**
      * Get saved search items
      * @description Returns saved search items
@@ -97,7 +97,7 @@ export interface paths {
     /** Create saved search */
     post: operations["saved_searches.create"];
   };
-  "/api/tele-app/saved-searches/{id}": {
+  "/api/app/saved-searches/{id}": {
     /** Get saved search by id */
     get: operations["saved_searches.show"];
     /** Update saved searches */
@@ -105,7 +105,7 @@ export interface paths {
     /** Delete saved searches */
     delete: operations["saved_searches.delete"];
   };
-  "/api/tele-app/users/profile": {
+  "/api/app/users/profile": {
     /**
      * Get profile
      * @description Returns user profile
@@ -114,7 +114,7 @@ export interface paths {
     /** Update profile */
     post: operations["updateProfile"];
   };
-  "/api/tele-app/users/secret-key": {
+  "/api/app/users/secret-key": {
     /** Generate Secret Key for TOTP */
     post: operations["generateSecretKey"];
     /** Delete Secret Key for TOTP */

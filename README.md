@@ -1,23 +1,10 @@
 ## Daftar Properti UI
 
-This repo contains the UI for Daftar Properti.
-
-Dev environment is automatically deployed to app engine every push to the main
-branch (see [`bitbucket-pipelines.yml`](bitbucket-pipelines.yml)).
-
-To force deploy to dev environment:
-
-* Push to a any branch to bitbucket:
-  `git push origin some-branch`
-* Open bitbucket's [Pipelines page](https://bitbucket.org/jelajah-rumah/tele-app/pipelines).
-* Click "Run pipeline" button.
-* Select your branch you just pushed into.
-* Select pipeline called `main`.
-* Click "Run" button.
-
----
+This repo contains the UI for Daftar Properti Listings Manager.
 
 (below is the original documentation from https://github.com/joaopaulomoraes/reactjs-vite-tailwindcss-boilerplate)
+
+---
 
 ## Getting Started
 
