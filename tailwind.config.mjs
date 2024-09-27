@@ -3,6 +3,13 @@
 import colors from 'tailwindcss/colors'
 import withMT from '@material-tailwind/react/utils/withMT'
 
+// Remove old colors to suppress warnings.
+delete colors.lightBlue;
+delete colors.warmGray;
+delete colors.trueGray;
+delete colors.coolGray;
+delete colors.blueGray;
+
 export default withMT({
   content: [
     './src/**/*.{mjs,js,ts,jsx,tsx}',
