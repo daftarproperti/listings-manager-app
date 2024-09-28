@@ -1,6 +1,6 @@
-export type FilterWithRange = 'price' | 'lotSize' | 'buildingSize'
+type FilterWithRange = 'price' | 'lotSize' | 'buildingSize'
 
-export const FILTER_WITH_RANGE_ENUM: { [key in FilterWithRange]: string } = {
+const FILTER_WITH_RANGE_ENUM: { [key in FilterWithRange]: string } = {
   price: 'Harga',
   lotSize: 'Luas Tanah',
   buildingSize: 'Luas Bangunan',

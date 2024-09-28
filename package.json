@@ -23,7 +23,7 @@
     "lint": "eslint src --max-warnings=0",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "generate": "openapi-typescript ../daftarproperti/storage/api-docs/api-docs.yaml --output src/api/generated.d.ts",
-    "knip": "knip"
+    "knip": "knip --exclude=devDependencies"
   },
   "eslintIgnore": [
     "src/api/generated.d.ts"

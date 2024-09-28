@@ -112,7 +112,7 @@ const getWithRewardAgreementSchema = () => {
       })
 }
 
-export const baseFormSchema = z.object({
+const baseFormSchema = z.object({
   title: getMandatoryField('Judul Listing').string,
   propertyType: getMandatoryField('Tipe Properti').string,
   listingForSale: z.boolean(),

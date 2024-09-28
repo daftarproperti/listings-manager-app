@@ -8,7 +8,7 @@ import type {
   CancellationStatus,
 } from 'api/types'
 
-export const PROPERTY_TYPE_ENUM: { [key in PropertyType]: string } = {
+const PROPERTY_TYPE_ENUM: { [key in PropertyType]: string } = {
   house: 'Rumah',
   apartment: 'Apartemen',
   warehouse: 'Gudang',
@@ -17,7 +17,7 @@ export const PROPERTY_TYPE_ENUM: { [key in PropertyType]: string } = {
   villa: 'Villa',
   unknown: 'Lainnya',
 }
-export const LISTING_TYPE_ENUM: { [key in ListingType]: string } = {
+const LISTING_TYPE_ENUM: { [key in ListingType]: string } = {
   sale: 'Dijual',
   rent: 'Disewakan',
   unknown: 'Lainnya',

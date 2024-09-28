@@ -37,7 +37,7 @@ import {
 } from 'components/form/constant'
 import ConfirmationDialog from 'components/header/ConfirmationDialog'
 
-export const FILTER_ICON: {
+const FILTER_ICON: {
   [key: string]: JSX.Element
 } = {
   price: <PriceIconSVG />,

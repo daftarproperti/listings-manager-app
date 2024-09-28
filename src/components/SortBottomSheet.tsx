@@ -12,7 +12,7 @@ import { useSearchParams } from 'react-router-dom'
 
 type ListingSort = components['schemas']['ListingSort']
 
-export const LISTING_SORT_ENUM: { [key in ListingSort]: string } = {
+const LISTING_SORT_ENUM: { [key in ListingSort]: string } = {
   price: 'Harga Termahal',
   bedroomCount: 'Kamar Tidur',
   bathroomCount: 'Kamar Mandi',

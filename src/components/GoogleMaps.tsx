@@ -3,8 +3,8 @@ import { Status, Wrapper } from '@googlemaps/react-wrapper'
 import useIsVisible from 'utils/useIsVisible'
 import { Spinner } from '@material-tailwind/react'
 
-export const DEFAULT_MAP_ZOOM = 14
-export const DEFAULT_MAP_CENTER = { lat: -6.175403, lng: 106.824584 }
+const DEFAULT_MAP_ZOOM = 14
+const DEFAULT_MAP_CENTER = { lat: -6.175403, lng: 106.824584 }
 
 type GoogleMapsProps = {
   coord?: google.maps.LatLngLiteral

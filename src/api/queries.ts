@@ -449,7 +449,7 @@ async function fetchCities(inputValue: string): Promise<CityOption[]> {
   }
 }
 
-export const debouncedFetchCities = debounce(
+const debouncedFetchCities = debounce(
   (
     inputValue: string,
     resolve: (result: CityOption[]) => void,
