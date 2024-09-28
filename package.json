@@ -20,7 +20,7 @@
     "test": "vitest",
     "test:run": "vitest run --no-color",
     "test:ui": "vitest --ui",
-    "lint": "eslint src",
+    "lint": "eslint src --max-warnings=0",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "generate": "openapi-typescript ../daftarproperti/storage/api-docs/api-docs.yaml --output src/api/generated.d.ts"
   },

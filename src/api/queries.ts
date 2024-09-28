@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query'
-import axios, { AxiosError } from 'axios'
+import axios, { isAxiosError, AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 import { debounce } from 'lodash'
 import { appPath } from 'utils'
@@ -371,7 +371,7 @@ export const sendOTP = async (
     )
     return response.data
   } catch (error) {
-    if (axios.isAxiosError(error) && error.response?.status === 429) {
+    if (isAxiosError(error) && error.response?.status === 429) {
       throw new Error(
         'Too many attempts, please wait 1 minute before trying again.',
       )
@@ -399,8 +399,7 @@ export const verifyOTP = async (
     )
     return response.data
   } catch (error) {
-    // eslint-disable-next-line import/no-named-as-default-member
-    if (axios.isAxiosError(error) && error.response?.status === 429) {
+    if (isAxiosError(error) && error.response?.status === 429) {
       throw new Error(
         'Too many attempts, please wait 1 minute before trying again.',
       )

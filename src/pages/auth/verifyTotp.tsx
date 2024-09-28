@@ -2,9 +2,8 @@ import { useEffect } from 'react'
 import { Button } from '@material-tailwind/react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-
 import { LogoSVG } from 'assets/icons'
-import { VerifyTOTPReq } from 'api/types'
+import { type VerifyTOTPReq } from 'api/types'
 import { sendOTP, useVerifyTOTP } from 'api/queries'
 
 function VerifyTotp() {

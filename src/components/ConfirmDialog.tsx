@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import {
   Button,
   Dialog,
@@ -6,7 +6,7 @@ import {
   DialogFooter,
   DialogHeader,
 } from '@material-tailwind/react'
-import { size } from '@material-tailwind/react/types/components/dialog'
+import { type size } from '@material-tailwind/react/types/components/dialog'
 
 const ConfirmDialog = ({
   open,
