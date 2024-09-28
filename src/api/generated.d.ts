@@ -73,34 +73,6 @@ export interface paths {
     /** Upload Image */
     post: operations["image.upload"];
   };
-  "/api/app/properties": {
-    /**
-     * Get list of property
-     * @description Returns list of property
-     */
-    get: operations["index"];
-  };
-  "/api/app/properties/{id}": {
-    /** Get property by id */
-    get: operations["show"];
-  };
-  "/api/app/saved-searches": {
-    /**
-     * Get saved search items
-     * @description Returns saved search items
-     */
-    get: operations["saved_searches.index"];
-    /** Create saved search */
-    post: operations["saved_searches.create"];
-  };
-  "/api/app/saved-searches/{id}": {
-    /** Get saved search by id */
-    get: operations["saved_searches.show"];
-    /** Update saved searches */
-    post: operations["saved_searches.update"];
-    /** Delete saved searches */
-    delete: operations["saved_searches.delete"];
-  };
   "/api/app/users/profile": {
     /**
      * Get profile
@@ -188,11 +160,6 @@ export interface components {
       withRewardAgreement?: boolean;
       /** @example true */
       isMultipleUnits?: boolean;
-    };
-    SavedSearchRequest: {
-      /** @example Pak Eko */
-      title?: string;
-      filterSet?: components["schemas"]["FilterSet"];
     };
     UserProfileRequest: {
       /** @example Jono Doe */
@@ -408,8 +375,6 @@ export interface components {
       additionalBathroomCount?: number;
       floorCount?: number;
       electricPower?: number;
-      viewCount?: number;
-      matchFilterCount?: number;
       facing?: components["schemas"]["FacingDirection"];
       ownership?: components["schemas"]["PropertyOwnership"];
       verifyStatus?: components["schemas"]["VerifyStatus"];
@@ -452,40 +417,6 @@ export interface components {
       /** Format: date-time */
       rawExpiredAt?: string;
     };
-    Property: {
-      id?: string;
-      sourceText?: string;
-      title?: string;
-      propertyType?: components["schemas"]["PropertyType"];
-      listingType?: components["schemas"]["ListingType"];
-      listingForSale?: boolean;
-      listingForRent?: boolean;
-      address?: string;
-      description?: string;
-      price?: number;
-      rentPrice?: number;
-      lotSize?: number;
-      buildingSize?: number;
-      carCount?: number;
-      bedroomCount?: number;
-      bathroomCount?: number;
-      floorCount?: number;
-      electricPower?: number;
-      facing?: components["schemas"]["FacingDirection"];
-      ownership?: components["schemas"]["PropertyOwnership"];
-      verifyStatus?: components["schemas"]["VerifyStatus"];
-      cityId?: number;
-      cityName?: string;
-      city?: string;
-      pictureUrls?: string[];
-      coordinate?: {
-        latitude?: number;
-        longitude?: number;
-      };
-      /** Format: date-time */
-      updatedAt?: string;
-      listings?: components["schemas"]["Listing"][];
-    };
     /** @description Representation of a Listing which is available publicly. */
     PublicListing: {
       listingId?: number;
@@ -517,12 +448,6 @@ export interface components {
       };
       /** Format: date-time */
       updatedAt?: string;
-    };
-    SavedSearch: {
-      id?: string;
-      userId?: number;
-      title?: string;
-      filterSet?: components["schemas"]["FilterSet"];
     };
     User: {
       id?: string;
@@ -1053,228 +978,6 @@ export interface operations {
             fileId?: number;
             /** @example image.jpg */
             fileName?: string;
-          };
-        };
-      };
-    };
-  };
-  /**
-   * Get list of property
-   * @description Returns list of property
-   */
-  index: {
-    parameters: {
-      query?: {
-        /** @description Search property by keyword */
-        q?: string;
-        /** @description Minimum price */
-        "price[min]"?: number;
-        /** @description Maximum price */
-        "price[max]"?: number;
-        /** @description Minimum rent price */
-        "rentPrice[min]"?: number;
-        /** @description Maximum rent price */
-        "rentPrice[max]"?: number;
-        /** @description Property type */
-        propertyType?: components["schemas"]["PropertyType"];
-        /** @description Listing for sale */
-        listingForSale?: boolean;
-        /** @description Listing for rent */
-        listingForRent?: boolean;
-        /** @description Bedroom count */
-        bedroomCount?: number;
-        /** @description Minimum Bedroom count */
-        "bedroomCount[min]"?: number;
-        /** @description Maximum Bedroom count */
-        "bedroomCount[max]"?: number;
-        /** @description Bathroom count */
-        bathroomCount?: number;
-        /** @description Minimum Bathroom count */
-        "bathroomCount[min]"?: number;
-        /** @description Maximum Bathroom count */
-        "bathroomCount[max]"?: number;
-        /** @description Minimum lot size */
-        "lotSize[min]"?: number;
-        /** @description Maximum lot size */
-        "lotSize[max]"?: number;
-        /** @description Minimum building size */
-        "buildingSize[min]"?: number;
-        /** @description Maximum building size */
-        "buildingSize[max]"?: number;
-        /** @description Ownership */
-        ownership?: components["schemas"]["PropertyOwnership"];
-        /** @description Car count */
-        carCount?: number;
-        /** @description Minimum Car count */
-        "carCount[min]"?: number;
-        /** @description Maximum Car count */
-        "carCount[max]"?: number;
-        /** @description Electric Power */
-        electricPower?: number;
-        /** @description City Id */
-        cityId?: number;
-        /** @description Sort By */
-        sort?: components["schemas"]["ListingSort"];
-        /** @description Order By */
-        order?: "asc" | "desc";
-      };
-    };
-    responses: {
-      /** @description success */
-      200: {
-        content: {
-          "application/json": {
-            properties?: components["schemas"]["Property"][];
-          };
-        };
-      };
-    };
-  };
-  /** Get property by id */
-  show: {
-    parameters: {
-      path: {
-        /** @description Property Id */
-        id: string;
-      };
-    };
-    responses: {
-      /** @description success */
-      200: {
-        content: {
-          "application/json": components["schemas"]["Property"];
-        };
-      };
-      /** @description Property not found */
-      404: {
-        content: {
-          "application/json": {
-            /** @example Property not found */
-            error?: string;
-          };
-        };
-      };
-    };
-  };
-  /**
-   * Get saved search items
-   * @description Returns saved search items
-   */
-  "saved_searches.index": {
-    responses: {
-      /** @description success */
-      200: {
-        content: {
-          "application/json": {
-            saved_searches?: components["schemas"]["SavedSearch"][];
-          };
-        };
-      };
-    };
-  };
-  /** Create saved search */
-  "saved_searches.create": {
-    requestBody: {
-      content: {
-        "multipart/form-data": components["schemas"]["SavedSearchRequest"];
-      };
-    };
-    responses: {
-      /** @description success */
-      200: {
-        content: {
-          "application/json": {
-            /** @example Saved search created successfully */
-            message?: string;
-          };
-        };
-      };
-    };
-  };
-  /** Get saved search by id */
-  "saved_searches.show": {
-    parameters: {
-      path: {
-        /** @description Saved Search Id */
-        id: string;
-      };
-    };
-    responses: {
-      /** @description success */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SavedSearch"];
-        };
-      };
-      /** @description Saved search not found */
-      404: {
-        content: {
-          "application/json": {
-            /** @example Saved search not found */
-            error?: string;
-          };
-        };
-      };
-    };
-  };
-  /** Update saved searches */
-  "saved_searches.update": {
-    parameters: {
-      path: {
-        /** @description Saved Searches Id */
-        id: string;
-      };
-    };
-    requestBody: {
-      content: {
-        "multipart/form-data": components["schemas"]["SavedSearchRequest"];
-      };
-    };
-    responses: {
-      /** @description success */
-      200: {
-        content: {
-          "application/json": {
-            /** @example Saved search updated successfully */
-            message?: string;
-          };
-        };
-      };
-      /** @description Saved search not found */
-      404: {
-        content: {
-          "application/json": {
-            /** @example Saved search not found */
-            error?: string;
-          };
-        };
-      };
-    };
-  };
-  /** Delete saved searches */
-  "saved_searches.delete": {
-    parameters: {
-      path: {
-        /** @description Saved Searches Id */
-        id: string;
-      };
-    };
-    responses: {
-      /** @description success */
-      200: {
-        content: {
-          "application/json": {
-            /** @example Saved search deleted successfully */
-            message?: string;
-          };
-        };
-      };
-      /** @description Saved search not found */
-      404: {
-        content: {
-          "application/json": {
-            /** @example Saved search not found */
-            error?: string;
           };
         };
       };
