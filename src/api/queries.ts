@@ -16,12 +16,6 @@ import type {
   UpdateProfileRes,
   UserProfileResponse,
   UploadImageRes,
-  SavedSearchListRes,
-  AddSavedSearchReq,
-  AddSavedSearchRes,
-  UpdateSavedSearchRes,
-  UpdateSavedSearchParams,
-  DeleteSavedSearchRes,
   City,
   CityOption,
   CitiesListRes,
@@ -208,61 +202,6 @@ export const useGetListingDetail = ({ id }: { id: string }) =>
     refetchOnWindowFocus: false,
     retry: false,
     staleTime: 0,
-  })
-
-export const useGetSavedSearchList = () =>
-  useQuery<SavedSearchListRes>({
-    queryKey: ['useGetSavedSearchList'],
-    queryFn: async () => {
-      try {
-        const response = await axios.get(`/saved-searches`)
-        return response.data
-      } catch (error) {
-        console.error('Failed to fetch saved search:', error)
-        throw error
-      }
-    },
-    retry: false,
-    staleTime: 0,
-  })
-
-export const useAddSavedSearch = () =>
-  useMutation<AddSavedSearchRes, Error, AddSavedSearchReq>({
-    mutationFn: async (formData) => {
-      try {
-        const response = await axios.post('/saved-searches', formData)
-        return response.data
-      } catch (error) {
-        console.error('Failed to create saved search:', error)
-        throw error
-      }
-    },
-  })
-
-export const useUpdateSavedSearch = () =>
-  useMutation<UpdateSavedSearchRes, Error, UpdateSavedSearchParams>({
-    mutationFn: async ({ id, requestBody }) => {
-      try {
-        const response = await axios.post(`/saved-searches/${id}`, requestBody)
-        return response.data
-      } catch (error) {
-        console.error('Failed to update saved search:', error)
-        throw error
-      }
-    },
-  })
-
-export const useDeleteSavedSearch = () =>
-  useMutation<DeleteSavedSearchRes, Error, { id: string }>({
-    mutationFn: async ({ id }) => {
-      try {
-        const response = await axios.delete(`/saved-searches/${id}`)
-        return response.data
-      } catch (error) {
-        console.error('Failed to delete saved search:', error)
-        throw error
-      }
-    },
   })
 
 // non hook function

@@ -20,8 +20,6 @@ import ListingFilterPage from './listings/filter'
 import ListingListPage from './listings/list'
 import EditUserPage from './user'
 import SimpleForm from './listings/add/SimpleForm'
-import SavedSearchListPage from './saved-searches/list'
-import SavedSearchFormPage from './saved-searches/form'
 import NotFoundPage from './NotFoundPage'
 
 const router = createBrowserRouter(
@@ -154,33 +152,6 @@ const router = createBrowserRouter(
             <MainLayout>
               <Header title="Data Pribadi" />
               <EditUserPage />
-            </MainLayout>
-          ),
-        },
-        {
-          path: '/saved-searches',
-          element: (
-            <MainLayout>
-              <Header title="Permintaan" />
-              <SavedSearchListPage />
-            </MainLayout>
-          ),
-        },
-        {
-          path: '/saved-searches/add',
-          element: (
-            <MainLayout>
-              <Header title="Tambah Permintaan" />
-              <SavedSearchFormPage />
-            </MainLayout>
-          ),
-        },
-        {
-          path: '/saved-searches/edit',
-          element: (
-            <MainLayout>
-              <Header title="Edit Permintaan" />
-              <SavedSearchFormPage />
             </MainLayout>
           ),
         },

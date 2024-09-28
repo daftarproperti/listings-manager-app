@@ -1,16 +1,12 @@
 import { clsx } from 'clsx'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Button } from '@material-tailwind/react'
-import { toast } from 'react-toastify'
 import {
-  searchparamsToSavedSearch,
   useValidateMinMaxValue,
   convertAbbreviationToNumber,
   formatNumber,
 } from 'utils'
 import {
-  useAddSavedSearch,
-  useUpdateSavedSearch,
   fetchDefaultCities,
   getDebouncedCities,
   getCityById,
@@ -91,11 +87,7 @@ export const filterKeyStrings = {
   cityId: 'cityId',
 }
 
-type FilterFormProps = {
-  type: 'listing' | 'property' | 'savedSearch'
-}
-
-const FilterForm = ({ type }: FilterFormProps) => {
+const FilterForm = () => {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const { validationMessage } = useValidateMinMaxValue(searchParams)
@@ -130,12 +122,6 @@ const FilterForm = ({ type }: FilterFormProps) => {
       setDefaultCityOptions(cityOptions)
     })
   }, [cityIdParam])
-
-  const searchId = searchParams.get('searchId')
-
-  const { mutate: addSearch, isPending: loadingAdd } = useAddSavedSearch()
-  const { mutate: updateSearch, isPending: loadingUpdate } =
-    useUpdateSavedSearch()
 
   const listingForRent =
     searchParams.get(filterKeyStrings.listingForRent) === 'true'
@@ -177,91 +163,14 @@ const FilterForm = ({ type }: FilterFormProps) => {
     setSearchParams(searchParams, { replace: true })
   }
 
-  const handleSuccess = () => {
-    toast('Permintaan berhasil disimpan!', { type: 'success' })
-    navigate(-1)
-  }
-
-  const handleError = (error: Error) => {
-    toast(`Mohon maaf, telah terjadi kesalahan (${error?.message})`, {
-      type: 'error',
-    })
-  }
-
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
-    const search = searchparamsToSavedSearch(searchParams)
-    switch (type) {
-      case 'savedSearch':
-        if (searchId) {
-          updateSearch(
-            { id: searchId, requestBody: search },
-            {
-              onSuccess: handleSuccess,
-              onError: handleError,
-            },
-          )
-          break
-        }
-        addSearch(search, {
-          onSuccess: handleSuccess,
-          onError: handleError,
-        })
-        break
-      case 'property':
-        navigate(`/properties?${searchParams}`)
-        break
-      default:
-        navigate(`/?${searchParams}`)
-        break
-    }
+    navigate(`/?${searchParams}`)
   }
 
   return (
     <form onSubmit={onSubmit} className="w-full bg-inherit">
-      {type === 'savedSearch' && (
-        <div className="sticky top-0 z-10 hidden items-center justify-between border-b bg-white p-4 pt-8 lg:flex">
-          <div className="text-xl font-semibold">
-            {searchId ? 'Edit' : 'Tambah'} Permintaan
-          </div>
-          <Button
-            size="sm"
-            color="blue"
-            type="submit"
-            className="flex items-center gap-2 text-sm font-normal capitalize"
-            disabled={loadingAdd || loadingUpdate}
-          >
-            Simpan
-          </Button>
-        </div>
-      )}
-      <div
-        className={`p-4 pb-24 pt-20 ${
-          type === 'savedSearch' ? 'lg:w-4/5 lg:p-4' : 'lg:p-0'
-        }`}
-      >
-        {type === 'savedSearch' && (
-          <>
-            <div className="w-full text-lg font-semibold leading-7 lg:text-sm lg:font-bold lg:uppercase lg:text-slate-500">
-              Judul
-            </div>
-            <div className="mb-6 mt-1 flex w-full">
-              <div className="relative flex grow gap-1 rounded-lg border border-solid border-slate-400 bg-white">
-                <input
-                  required
-                  type="text"
-                  placeholder="cth: Nama calon pembeli"
-                  className="h-full w-full rounded-lg border-none p-3 py-2.5 ring-0"
-                  value={searchParams.get('title') ?? ''}
-                  onChange={(event) =>
-                    controlSearchParams('title', event.target.value)
-                  }
-                />
-              </div>
-            </div>
-          </>
-        )}
+      <div className={`p-4 pb-24 pt-20 lg:p-0`}>
         <div className="w-full text-lg font-semibold leading-7 lg:text-sm lg:font-bold lg:uppercase lg:text-slate-500">
           Tipe Listing
         </div>
@@ -730,11 +639,8 @@ const FilterForm = ({ type }: FilterFormProps) => {
         </div>
       </div>
       <div className="lg:hidden">
-        <BottomStickyButton
-          type="submit"
-          disabled={loadingAdd || loadingUpdate}
-        >
-          {type === 'savedSearch' ? 'Simpan' : 'Lihat Hasil Filter'}
+        <BottomStickyButton type="submit">
+          Lihat Hasil Filter
         </BottomStickyButton>
       </div>
     </form>

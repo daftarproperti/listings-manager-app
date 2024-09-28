@@ -34,15 +34,8 @@ import {
 } from '@heroicons/react/24/solid'
 import FilterForm from 'components/form/FilterForm'
 import { SORT_OPTIONS } from 'components/SortBottomSheet'
-import { useGetSavedSearchList, useGetUserProfile, logout } from 'api/queries'
-import type { SavedSearch } from 'api/types'
-import {
-  countActiveFilters,
-  getSortLabel,
-  isSavedSearchApplied,
-  isSorted,
-  savedSearchToSearchParams,
-} from 'utils'
+import { useGetUserProfile, logout } from 'api/queries'
+import { countActiveFilters, getSortLabel, isSorted } from 'utils'
 import { useDirty } from 'contexts/DirtyContext'
 
 const MENU = [{ name: 'Listing Saya', link: '/', icon: ListingIconSVG }]
@@ -54,12 +47,9 @@ const MainLayout = ({ children }: PropsWithChildren) => {
   const [searchText, setSearchText] = useState(searchParams.get('q'))
   const { isDirty } = useDirty()
 
-  const { data } = useGetSavedSearchList()
-
   const { data: profile } = useGetUserProfile()
 
   const query = searchParams.get('q')
-  const savedSearchTitle = isSavedSearchApplied(searchParams)
   const withSideBar =
     location.pathname === '/' || location.pathname === '/properties'
 
@@ -77,16 +67,6 @@ const MainLayout = ({ children }: PropsWithChildren) => {
       searchParams.set('order', v.order)
     }
     setSearchParams(searchParams)
-  }
-
-  const onClickApplySavedSearch = (search: SavedSearch) => {
-    if (searchParams.get('searchId') === search.id) {
-      const newSearchParams = new URLSearchParams()
-      setSearchParams(newSearchParams)
-    } else {
-      const newSearchParams = savedSearchToSearchParams(search)
-      setSearchParams(newSearchParams)
-    }
   }
 
   const handleNavigation = (
@@ -195,74 +175,6 @@ const MainLayout = ({ children }: PropsWithChildren) => {
         <div className="col-span-2 hidden bg-slate-100 px-1 lg:block">
           <div className="sticky top-0 mr-auto flex h-screen w-full max-w-xs flex-col space-y-2 pb-4 pt-8">
             <div className="w-full space-y-2">
-              {location.pathname === '/properties' && (
-                <Menu>
-                  <MenuHandler>
-                    <Button
-                      size="sm"
-                      color="blue"
-                      variant="outlined"
-                      className="flex w-full items-center justify-center gap-2 bg-white text-sm font-normal capitalize"
-                    >
-                      <Badge
-                        placement="top-start"
-                        invisible={savedSearchTitle === 'Calon Pembeli'}
-                      >
-                        <AccountIconSVG className="h-5 w-5" />
-                      </Badge>
-                      {savedSearchTitle}
-                    </Button>
-                  </MenuHandler>
-                  <MenuList>
-                    {data?.saved_searches?.length ? (
-                      data?.saved_searches?.map((search, index) => (
-                        <MenuItem
-                          key={index}
-                          className="min-w-72 p-0"
-                          onClick={(e) => {
-                            e.preventDefault()
-                            onClickApplySavedSearch(search)
-                          }}
-                        >
-                          <label
-                            htmlFor={`saved-search-${index}`}
-                            className="flex w-full cursor-pointer items-center border-b border-gray-200 p-3"
-                          >
-                            {search.title}
-                            <ListItemSuffix className="mr-3">
-                              <Radio
-                                readOnly
-                                ripple={false}
-                                color="blue-gray"
-                                crossOrigin={undefined}
-                                checked={
-                                  searchParams.get('searchId') === search.id
-                                }
-                                onChange={() => {}}
-                                className="hover:before:opacity-0"
-                                containerProps={{ className: 'p-0' }}
-                                id={`saved-search-${index}`}
-                              />
-                            </ListItemSuffix>
-                          </label>
-                        </MenuItem>
-                      ))
-                    ) : (
-                      <div className="min-w-72 py-2 text-center text-slate-500">
-                        Belum ada permintaan
-                      </div>
-                    )}
-                    <Button
-                      size="sm"
-                      color="blue"
-                      className="mt-3 w-full text-sm font-normal capitalize"
-                      onClick={() => navigate('/saved-searches')}
-                    >
-                      Kelola Calon Pembeli
-                    </Button>
-                  </MenuList>
-                </Menu>
-              )}
               <Menu>
                 <MenuHandler>
                   <Button
@@ -270,7 +182,6 @@ const MainLayout = ({ children }: PropsWithChildren) => {
                     color="blue"
                     variant="outlined"
                     className="flex w-full items-center justify-center gap-2 bg-white text-sm font-normal capitalize"
-                    onClick={() => navigate('/saved-searches')}
                   >
                     <Badge
                       placement="top-start"
@@ -364,7 +275,7 @@ const MainLayout = ({ children }: PropsWithChildren) => {
                   />
                 )}
               </div>
-              <FilterForm type="listing" />
+              <FilterForm />
             </div>
           </div>
         </div>

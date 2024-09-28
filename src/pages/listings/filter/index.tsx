@@ -1,7 +1,7 @@
 import FilterForm from 'components/form/FilterForm'
 
 const FilterPage = () => {
-  return <FilterForm type="listing" />
+  return <FilterForm />
 }
 
 export default FilterPage
