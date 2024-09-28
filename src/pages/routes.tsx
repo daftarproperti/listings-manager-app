@@ -20,9 +20,6 @@ import ListingFilterPage from './listings/filter'
 import ListingListPage from './listings/list'
 import EditUserPage from './user'
 import SimpleForm from './listings/add/SimpleForm'
-import PropertyListPage from './properties/list'
-import PropertiesFilterPage from './properties/filter'
-import PropertyDetailPage from './properties/detail'
 import SavedSearchListPage from './saved-searches/list'
 import SavedSearchFormPage from './saved-searches/form'
 import NotFoundPage from './NotFoundPage'
@@ -157,34 +154,6 @@ const router = createBrowserRouter(
             <MainLayout>
               <Header title="Data Pribadi" />
               <EditUserPage />
-            </MainLayout>
-          ),
-        },
-        {
-          path: '/properties',
-          element: (
-            <MainLayout>
-              <Header title="Daftar Properti" isWithoutBackButton={true} />
-              <PropertyListPage />
-              <FooterIcons />
-            </MainLayout>
-          ),
-        },
-        {
-          path: '/properties/filter',
-          element: (
-            <>
-              <Header title="Filter Properti" />
-              <PropertiesFilterPage />
-            </>
-          ),
-        },
-        {
-          path: '/properties/:id',
-          element: (
-            <MainLayout>
-              <Header title="Properti" />
-              <PropertyDetailPage />
             </MainLayout>
           ),
         },

@@ -5,8 +5,6 @@ import { debounce } from 'lodash'
 import { appPath } from 'utils'
 
 import type {
-  PropertyDetailRes,
-  PropertyListRes,
   ListingListRes,
   ListingDetailRes,
   AddListingRequest,
@@ -72,64 +70,6 @@ axios.interceptors.response.use(
     throw error.response.data
   },
 )
-
-export const useGetPropertyList = ({
-  searchParams,
-}: {
-  searchParams?: URLSearchParams
-}) =>
-  useInfiniteQuery<PropertyListRes>({
-    queryKey: ['useGetPropertyListInfite', searchParams],
-    queryFn: async ({ pageParam }) => {
-      let url = '/properties'
-      if (searchParams?.size) {
-        url += `?${searchParams}`
-        if (pageParam) {
-          url += `&page=${pageParam}`
-        }
-      } else if (pageParam) {
-        url += `?page=${pageParam}`
-      }
-      const response = await axios.get(url)
-      if (!response.data || typeof response.data !== 'object') {
-        throw new Error('Invalid response format')
-      }
-
-      return response.data
-    },
-    initialPageParam: searchParams?.get('page') ?? null,
-    getNextPageParam: (lastPage) => {
-      // Note: links and meta is not available in swagger schema yet
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      const nextFetchLink: string = lastPage?.links?.next
-      if (!nextFetchLink) {
-        return null
-      } else {
-        return new URL(nextFetchLink).searchParams.get('page') ?? null
-      }
-    },
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    retry: false,
-  })
-
-export const useGetPropertyDetail = ({ id }: { id: string }) =>
-  useQuery<PropertyDetailRes>({
-    queryKey: ['useGetPropertyDetail'],
-    queryFn: async () => {
-      try {
-        const response = await axios.get(`/properties/${id}`)
-        return response.data
-      } catch (error) {
-        console.error('Failed to fetch property detail:', error)
-        throw error
-      }
-    },
-    retry: false,
-    staleTime: 0,
-  })
 
 export const useUpdateListing = () => {
   const mutation = useMutation<UpdateListingRes, Error, UpdateListingParams>({
