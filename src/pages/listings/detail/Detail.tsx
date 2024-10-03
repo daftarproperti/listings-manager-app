@@ -25,6 +25,7 @@ import {
   getCancellationStatus,
   getClosingStatus,
 } from 'utils'
+import MarketerLink from 'components/MarketerLink'
 import DetailListingTable from 'components/DetailListingTable'
 import ShareButton from 'components/button/ShareButton'
 import DotsHeaderButton from 'components/header/DotsHeaderButton'
@@ -268,6 +269,7 @@ function ListingDetail({
                         )}
                         <span className="ml-2">
                           {getActiveStatus(data.activeStatus as ActiveStatus)}
+                          <MarketerLink data={data}></MarketerLink>
                         </span>
                       </>
                     )}

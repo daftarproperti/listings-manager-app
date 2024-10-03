@@ -15,6 +15,7 @@ import {
   ArrowDownIconSVG,
   MinusCircleIconSVG,
 } from 'assets/icons'
+import MarketerLink from 'components/MarketerLink'
 import ImageWithAuth from 'components/ImageWithAuth'
 import {
   formatCurrencyToIDRText,
@@ -182,6 +183,7 @@ const Card = ({ data }: { data: Listing }) => {
                 )}
                 <span className="ml-2 pt-0.5">
                   {getActiveStatus(data.activeStatus as ActiveStatus)}
+                  <MarketerLink data={data}></MarketerLink>
                 </span>
               </>
             )}
