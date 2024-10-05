@@ -173,8 +173,8 @@ const MainLayout = ({ children }: PropsWithChildren) => {
       </div>
       {withSideBar && (
         <div className="col-span-2 hidden bg-slate-100 px-1 lg:block">
-          <div className="sticky top-0 mr-auto flex h-screen w-full max-w-xs flex-col space-y-2 pb-4 pt-8">
-            <div className="w-full space-y-2">
+          <div className="sticky top-0 mr-auto flex h-screen w-full max-w-xs flex-col pb-4 pt-8">
+            <div className="w-full space-y-2 pb-4">
               <Menu>
                 <MenuHandler>
                   <Button

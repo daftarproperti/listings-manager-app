@@ -203,10 +203,6 @@ const ListingListPage = () => {
         </div>
       </div>
 
-      {data?.pages[0].listings?.length && !isFetching ? (
-        <hr className="mb-8 mt-4 hidden border-2 lg:block" />
-      ) : null}
-
       <div className="fixed bottom-36 right-4 h-0 w-full max-w-lg text-right lg:hidden">
         <IconButton
           size="lg"
