@@ -226,7 +226,7 @@ const MainLayout = ({ children }: PropsWithChildren) => {
                 </MenuList>
               </Menu>
             </div>
-            <div className="grow space-y-3 overflow-auto rounded-lg bg-blue-100 px-4 py-3">
+            <div className="grow space-y-3 overflow-auto rounded-lg bg-blue-100 px-4 py-3 scrollbar-thin">
               <div className="flex items-center justify-between">
                 <div className="flex gap-2 text-lg font-semibold">
                   <Badge
