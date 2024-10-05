@@ -35,8 +35,6 @@ import type {
   DeleteSecretKeyRes,
 } from './types'
 
-// If x-init-data is in local storage (as a result of login widget), attach it
-// on every request.
 axios.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem('accessToken')

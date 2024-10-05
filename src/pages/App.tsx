@@ -4,7 +4,6 @@ import { RouterProvider } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { ThemeProvider } from '@material-tailwind/react'
-import { BackButton } from '@twa-dev/sdk/react'
 
 import { DirtyProvider } from '../contexts/DirtyContext'
 import routes from './routes'
@@ -13,7 +12,6 @@ const queryClient = new QueryClient()
 
 const App = () => (
   <>
-    <BackButton />
     <main className="mx-auto h-auto min-h-screen w-full overflow-y-scroll bg-white font-inter text-slate-800 scrollbar-thin">
       <ThemeProvider>
         <QueryClientProvider client={queryClient}>

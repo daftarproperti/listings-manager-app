@@ -7,10 +7,9 @@ import type {
   UseFormRegisterReturn,
   UseFormSetError,
 } from 'react-hook-form'
-import { getMobileOperatingSystem, useImageHandler } from 'utils'
+import { useImageHandler } from 'utils'
 import AlertDialog from 'components/AlertDialog'
 import { Button } from '@material-tailwind/react'
-import WebApp from '@twa-dev/sdk'
 import { CameraIcon } from '@heroicons/react/24/solid'
 import type { ExtendedListing } from 'pages/listings/edit/editListing'
 
@@ -126,9 +125,7 @@ const InputFileField: React.FC<InputFileProps> = ({
         <input
           id="image-upload"
           type="file"
-          multiple={
-            getMobileOperatingSystem() === 'Android' ? !WebApp.initData : true
-          }
+          multiple={true}
           {...registerHook}
           ref={fileInputRef}
           onChange={handleImageChange}
