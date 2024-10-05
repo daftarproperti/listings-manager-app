@@ -229,24 +229,25 @@ const MainLayout = ({ children }: PropsWithChildren) => {
             <div className="grow space-y-3 overflow-auto rounded-lg bg-blue-100 px-4 py-3">
               <div className="flex items-center justify-between">
                 <div className="flex gap-2 text-lg font-semibold">
-                  Filter
                   <Badge
                     content={countActiveFilters(searchParams)}
                     invisible={countActiveFilters(searchParams) === 0}
                     className="min-h-5 min-w-5"
-                  />
-                </div>
-                {searchParams?.size > 0 && (
-                  <Button
-                    size="sm"
-                    color="blue"
-                    className="flex items-center gap-1.5 text-sm font-normal capitalize"
-                    onClick={() => navigate(location.pathname)}
                   >
-                    <XCircleIcon className="w-5" />
-                    Reset
-                  </Button>
-                )}
+                    <div className="pr-2">Filter</div>
+                  </Badge>
+                </div>
+                <Button
+                  size="sm"
+                  color="blue"
+                  className={`flex items-center gap-1.5 text-sm font-normal capitalize ${
+                    searchParams?.size > 0 ? 'visible' : 'invisible'
+                  }`}
+                  onClick={() => navigate(location.pathname)}
+                >
+                  <XCircleIcon className="w-5" />
+                  Reset
+                </Button>
               </div>
               <div className="relative flex grow gap-1 rounded-lg border border-solid border-slate-400 bg-white">
                 <MagnifyingGlassIcon className="absolute left-2 top-[50%] h-4 w-4 -translate-y-[50%] text-slate-400" />
