@@ -398,6 +398,14 @@ const AddPage = () => {
           >
             peraturan
           </a>{' '}
+          dan{' '}
+          <a
+            target="_blank"
+            className="text-blue-500 hover:underline"
+            href="/checklist"
+          >
+            <i>checklist</i>
+          </a>{' '}
           Daftar Properti.
           <div className="mt-4 flex items-center">
             <span>Punya teks Listing? Tempelkan disini </span>

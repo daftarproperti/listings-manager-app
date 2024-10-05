@@ -269,6 +269,14 @@ function EditListing({ id }: { id: string }) {
           >
             peraturan
           </a>{' '}
+          dan{' '}
+          <a
+            target="_blank"
+            className="text-blue-500 hover:underline"
+            href="/checklist"
+          >
+            <i>checklist</i>
+          </a>{' '}
           Daftar Properti.
         </div>
         <div className="p-4 lg:w-4/5">
