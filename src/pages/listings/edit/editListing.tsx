@@ -9,7 +9,7 @@ import {
   getDebouncedCities,
   fetchDefaultCities,
 } from 'api/queries'
-import { appPath, dpPath, formatCalculatedPrice } from 'utils'
+import { appPath, formatCalculatedPrice } from 'utils'
 import { schema } from 'components/form/addEditSchema'
 import type { CityOption, Listing as GeneratedListing } from 'api/types'
 import IntuitiveCurrencyInputField from 'components/input/IntuitiveCurrencyInputField'
@@ -23,6 +23,7 @@ import BottomStickyButton from 'components/button/BottomStickyButton'
 import { DEFAULT_LAT_LNG } from 'utils/constant'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import GoogleMaps from 'components/GoogleMaps'
+import AddressTooltip from 'components/AddressTooltip'
 import ConfirmationDialog from 'components/header/ConfirmationDialog'
 import type { CombinedImage } from 'components/input/types'
 import { useDirty } from 'contexts/DirtyContext'
@@ -352,9 +353,7 @@ function EditListing({ id }: { id: string }) {
             registerHook={register('address', { required: true })}
             placeholderValue="Isi alamat lengkap"
             errorFieldName={errors.address}
-            additionalLabel="Pelajari lebih lanjut di "
-            linkHref={dpPath('/peraturan')}
-            linkText="sini"
+            additionalLabel={<AddressTooltip />}
           />
           <CustomSelectField
             control={control}

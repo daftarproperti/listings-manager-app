@@ -72,5 +72,6 @@ export default withMT({
   },
   plugins: [
     require('tailwind-scrollbar'),
+    require('@tailwindcss/typography'),
   ],
 })

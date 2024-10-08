@@ -17,7 +17,7 @@ import type {
   UpdateListingRequest as GeneratedListing,
   CityOption,
 } from 'api/types'
-import { dpPath, formatCalculatedPrice } from 'utils'
+import { formatCalculatedPrice } from 'utils'
 import BottomStickyButton from 'components/button/BottomStickyButton'
 import { schema } from 'components/form/addEditSchema'
 import IntuitiveCurrencyInputField from 'components/input/IntuitiveCurrencyInputField'
@@ -39,6 +39,7 @@ import ConfirmationDialog from 'components/header/ConfirmationDialog'
 import type { CombinedImage } from 'components/input/types'
 import InputModal from 'components/InputModal'
 import { useDirty } from 'contexts/DirtyContext'
+import AddressTooltip from 'components/AddressTooltip'
 
 interface ExtendedListing extends GeneratedListing {
   bedroomCounts?: string
@@ -511,9 +512,7 @@ const AddPage = () => {
             registerHook={register('address', { required: true })}
             placeholderValue="Isi alamat lengkap"
             errorFieldName={errors.address}
-            additionalLabel="Pelajari lebih lanjut di "
-            linkHref={dpPath('/peraturan')}
-            linkText="sini"
+            additionalLabel={<AddressTooltip />}
           />
           <CustomSelectField
             control={control}
