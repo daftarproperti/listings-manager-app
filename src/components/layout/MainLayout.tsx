@@ -38,7 +38,7 @@ import { useGetUserProfile, logout } from 'api/queries'
 import { countActiveFilters, getSortLabel, isSorted } from 'utils'
 import { useDirty } from 'contexts/DirtyContext'
 
-const MENU = [{ name: 'Listing Saya', link: '/', icon: ListingIconSVG }]
+const MENU = [{ name: 'Kelola Listing', link: '/', icon: ListingIconSVG }]
 
 const MainLayout = ({ children }: PropsWithChildren) => {
   const navigate = useNavigate()
@@ -105,7 +105,7 @@ const MainLayout = ({ children }: PropsWithChildren) => {
 
   const phoneNumber = profile?.phoneNumber
   const menu = MENU.concat([
-    { name: `Akun Saya (${phoneNumber})`, link: '/user', icon: AccountIconSVG },
+    { name: `Akun (${phoneNumber})`, link: '/user', icon: AccountIconSVG },
   ])
 
   return (
