@@ -28,7 +28,7 @@ const ListingListPage = () => {
 
   const {
     data,
-    isFetching,
+    isPending,
     isFetchingNextPage,
     error,
     isError,
@@ -150,7 +150,7 @@ const ListingListPage = () => {
         <div className="flex grow flex-col p-4 lg:pt-0">
           {isError ? (
             <div className="my-auto text-center">Error: {error.message}</div>
-          ) : isFetching && !isFetchingNextPage ? (
+          ) : isPending && !isFetchingNextPage ? (
             <div className="my-auto text-center">Loading...</div>
           ) : (
             data?.pages?.length && (
