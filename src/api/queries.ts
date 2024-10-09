@@ -187,7 +187,7 @@ export const useGetListingList = ({
 
 export const useGetListingDetail = ({ id }: { id: string }) =>
   useQuery<ListingDetailRes>({
-    queryKey: ['useGetListingDetail'],
+    queryKey: ['useGetListingDetail:' + id],
     queryFn: async () => {
       try {
         const response = await axios.get(`/listings/${id}`)

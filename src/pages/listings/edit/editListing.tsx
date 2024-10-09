@@ -66,7 +66,7 @@ function EditListing({ id }: { id: string }) {
 
   const {
     data: listingDetails,
-    isLoading,
+    isPending,
     isError,
   } = useGetListingDetail({ id })
 
@@ -230,7 +230,7 @@ function EditListing({ id }: { id: string }) {
     }
   }
 
-  if (isLoading)
+  if (isPending)
     return (
       <div className="flex min-h-screen w-full items-center justify-center">
         Loading...
