@@ -280,12 +280,6 @@ function EditListing({ id }: { id: string }) {
               }
             }}
           />
-          <InputField
-            label="Judul Listing"
-            registerHook={register('title', { required: true })}
-            placeholderValue="Tulis Judul"
-            errorFieldName={errors.title}
-          />
           <div className="mt-3" ref={checkboxSectionRef}>
             <InputLabel label="Tipe Listing" />
             <div className="flex items-center space-x-8">

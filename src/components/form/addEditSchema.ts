@@ -117,7 +117,6 @@ const getWithRewardAgreementSchema = () => {
 }
 
 const baseFormSchema = z.object({
-  title: getMandatoryField('Judul Listing').string,
   propertyType: getMandatoryField('Tipe Properti').nonEmpty,
   listingForSale: z.boolean(),
   listingForRent: z.boolean(),

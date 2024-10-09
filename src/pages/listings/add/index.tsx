@@ -168,7 +168,6 @@ const AddPage = () => {
     }
     setSelectedCity(defaultCity as CityOption)
 
-    setValue('title', extractData.title)
     setValue('address', extractData.address)
     setValue('description', extractData.description)
     setValue('price', price)
@@ -216,7 +215,6 @@ const AddPage = () => {
     }
     setSelectedCity(defaultCity as CityOption)
 
-    setValue('title', extractData.title)
     setValue('address', extractData.address)
     setValue('description', extractData.description)
     setValue('price', price)
@@ -384,7 +382,6 @@ const AddPage = () => {
             ? `${generatedListing.bathroomCount}+${generatedListing.additionalBathroomCount}`
             : `${generatedListing.bathroomCount}`
 
-          setValue('title', generatedListing.title)
           setValue('propertyType', generatedListing.propertyType)
           setValue('listingType', generatedListing.listingType)
           setValue('listingForSale', generatedListing.listingForSale)
@@ -535,13 +532,6 @@ const AddPage = () => {
             />
           </div>
 
-          <InputField
-            label="Judul Listing"
-            registerHook={register('title', { required: true })}
-            placeholderValue="Tulis Judul"
-            errorFieldName={errors.title}
-            halfWidth={false}
-          />
           <div className="mt-3" ref={checkboxSectionRef}>
             <InputLabel label="Tipe Listing" />
             <div className="flex items-center space-x-8">

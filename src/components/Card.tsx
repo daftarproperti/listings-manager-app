@@ -99,13 +99,12 @@ const Card = ({ data }: { data: Listing }) => {
         )}
         <div className="flex flex-1 flex-col">
           <div className="px-3 py-2">
-            <div className="text-xs leading-4 text-slate-500">{data.title}</div>
+            <div className="text-xs leading-4 text-slate-500">
+              {data.address}
+            </div>
             <div className="mt-2 flex flex-col">
               <div className="text-2xl font-semibold leading-8 text-slate-800">
                 {getPriceDisplay(data)}
-              </div>
-              <div className="mt-1.5 line-clamp-3 text-xs leading-4 text-slate-500">
-                {data.address}
               </div>
             </div>
           </div>

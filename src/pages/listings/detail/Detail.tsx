@@ -112,7 +112,7 @@ function ListingDetail({
       </div>
       <ShareButton
         url={listingPublicUrl}
-        title={data?.title || 'Default Title'}
+        title={data?.address || 'Default Address'}
         className="w-full"
       >
         <Button
@@ -167,7 +167,7 @@ function ListingDetail({
                   />
                 )}
                 <h1 className="text-lg font-semibold leading-7 text-slate-500">
-                  {data?.title}
+                  {data?.address}
                 </h1>
                 <div className="text-2xl font-semibold leading-8 text-slate-800">
                   {data.listingForSale && !data.listingForRent
@@ -179,9 +179,6 @@ function ListingDetail({
                         )} / ${formatCurrencyToIDRText(
                           data.rentPrice,
                         )} per tahun`}
-                </div>
-                <div className="mt-1.5 line-clamp-3 text-xs leading-4 text-slate-500">
-                  {data?.address}
                 </div>
                 <div className="mt-1.5 line-clamp-3 text-[10px] leading-4 text-slate-400">
                   Diperbarui pada: {data?.updatedAt}
