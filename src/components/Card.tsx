@@ -16,7 +16,6 @@ import {
   MinusCircleIconSVG,
 } from 'assets/icons'
 import MarketerLink from 'components/MarketerLink'
-import ImageWithAuth from 'components/ImageWithAuth'
 import {
   formatCurrencyToIDRText,
   getLabelForValue,
@@ -26,6 +25,7 @@ import {
   getClosingStatus,
 } from 'utils'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { Img } from 'react-image'
 import { Button } from '@material-tailwind/react'
 import { useState } from 'react'
 
@@ -85,7 +85,17 @@ const Card = ({ data }: { data: Listing }) => {
           </span>
         )}
         {!!data.pictureUrls?.length && (
-          <ImageWithAuth link={data.pictureUrls[0]} />
+          <div className="relative flex w-1/3 flex-col overflow-hidden">
+            <Img
+              src={data.pictureUrls[0]}
+              className="h-full max-h-52 rounded-tl-lg object-cover lg:max-h-80"
+              unloader={
+                <div className="absolute inset-0 flex items-center justify-center rounded-tl-lg bg-slate-300">
+                  <p className="text-xs text-slate-500">Image not found</p>
+                </div>
+              }
+            />
+          </div>
         )}
         <div className="flex flex-1 flex-col">
           <div className="px-3 py-2">

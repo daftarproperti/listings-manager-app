@@ -1,5 +1,5 @@
-import ImageWithAuth from 'components/ImageWithAuth'
 import React from 'react'
+import { Img } from 'react-image'
 import { Pagination, Navigation } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
@@ -35,12 +35,14 @@ const SwiperSlider: React.FC<SwiperSliderProps> = ({ pictures }) => {
             key={index}
             className="flex max-h-52 items-center justify-center lg:max-h-80"
           >
-            <ImageWithAuth
-              link={image}
-              useOrientation={true}
-              noWrapper={true}
-              noRounded={true}
-              useFrom="swiper"
+            <Img
+              src={image}
+              className="h-full max-h-52 object-cover lg:max-h-80"
+              unloader={
+                <div className="inset-0 flex h-16 items-center justify-center bg-slate-300">
+                  <p className="text-xs text-slate-500">Image not found</p>
+                </div>
+              }
             />
           </SwiperSlide>
         )
