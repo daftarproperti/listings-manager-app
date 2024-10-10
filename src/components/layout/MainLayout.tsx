@@ -17,28 +17,27 @@ import {
   MenuItem,
   MenuList,
   Radio,
+  Typography,
 } from '@material-tailwind/react'
-import {
-  AccountIconSVG,
-  ListingIconSVG,
-  LogoSVG,
-  LogoTypeSVG,
-  LogoutIconSVG,
-  WAIconSVG,
-} from 'assets/icons'
+import { LogoSVG, LogoTypeSVG, WAIconSVG } from 'assets/icons'
 import {
   Bars3BottomLeftIcon,
   MagnifyingGlassIcon,
   XCircleIcon,
   XMarkIcon,
 } from '@heroicons/react/24/solid'
+import {
+  ArrowRightStartOnRectangleIcon,
+  BuildingOfficeIcon,
+  UserCircleIcon,
+} from '@heroicons/react/24/outline'
 import FilterForm from 'components/form/FilterForm'
 import { SORT_OPTIONS } from 'components/SortBottomSheet'
 import { useGetUserProfile, logout } from 'api/queries'
 import { countActiveFilters, getSortLabel, isSorted } from 'utils'
 import { useDirty } from 'contexts/DirtyContext'
 
-const MENU = [{ name: 'Kelola Listing', link: '/', icon: ListingIconSVG }]
+const MENU = [{ name: 'Kelola Listing', link: '/', icon: BuildingOfficeIcon }]
 
 const MainLayout = ({ children }: PropsWithChildren) => {
   const navigate = useNavigate()
@@ -105,7 +104,7 @@ const MainLayout = ({ children }: PropsWithChildren) => {
 
   const phoneNumber = profile?.phoneNumber
   const menu = MENU.concat([
-    { name: `Akun (${phoneNumber})`, link: '/user', icon: AccountIconSVG },
+    { name: `Akun (${phoneNumber})`, link: '/user', icon: UserCircleIcon },
   ])
 
   return (
@@ -130,35 +129,42 @@ const MainLayout = ({ children }: PropsWithChildren) => {
                     onClick={(e) => handleNavigation(e, item.link)}
                   >
                     <ListItemPrefix>
-                      <item.icon className="text-inherit" />
+                      <item.icon className="h-6 w-6 text-inherit" />
                     </ListItemPrefix>
                     {item.name}
                   </ListItem>
                 </Link>
               ))}
+              <ListItem
+                className={`hover:bg-blue-100 hover:text-blue-600 focus:bg-inherit focus:text-inherit active:bg-blue-100 active:text-blue-600`}
+                onClick={handleLogout}
+              >
+                <ListItemPrefix>
+                  <ArrowRightStartOnRectangleIcon className="h-6 w-6" />
+                </ListItemPrefix>
+                Keluar
+              </ListItem>
             </List>
           </div>
-          <div className="p-2">
-            Ada pertanyaan?
-            <br />
-            <WAIconSVG className="inline h-5 w-5 translate-y-[-1px]" /> Hubungi{' '}
+          <Typography
+            color="gray"
+            variant="paragraph"
+            className="flex items-center space-x-2 p-2"
+          >
+            <span>Hubungi Kami</span>
             <Link
-              className="text-blue-600 underline transition duration-300 ease-in-out hover:text-blue-800 hover:no-underline focus:text-blue-800 focus:no-underline active:text-blue-900 active:no-underline"
               target="_blank"
               to="https://api.whatsapp.com/send?phone=6285186856707"
             >
-              0851-8685-6707
+              <Button
+                variant="outlined"
+                className="flex items-center space-x-2 p-2"
+              >
+                <WAIconSVG className="inline h-5 w-5 translate-y-[-1px]" />
+                <span>0851-8685-6707</span>
+              </Button>
             </Link>
-          </div>
-          <div className="mt-4">
-            <Button
-              className="flex w-full bg-transparent px-2 text-base font-normal capitalize text-blue-500 shadow-none hover:shadow-none"
-              onClick={handleLogout}
-            >
-              <LogoutIconSVG className="mt-0.5 text-blue-500" />
-              <span>Keluar</span>
-            </Button>
-          </div>
+          </Typography>
           <div className="px-2 text-xs leading-5 text-slate-400">
             Made with love in Indonesia © 2024
           </div>
