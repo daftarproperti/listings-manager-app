@@ -49,7 +49,7 @@ function ListingDetail({
   checkClosings: (closing: number) => void
   setIsApproved: (isApproved: boolean) => void
 }) {
-  const { data, isFetching, isError, refetch } = useGetListingDetail({ id })
+  const { data, isPending, isError, refetch } = useGetListingDetail({ id })
   const navigate = useNavigate()
   const navigateToEditForm = (id: string) => {
     navigate(`/listings/${id}/edit`, { replace: true })
@@ -150,7 +150,7 @@ function ListingDetail({
             </Button>
           </div>
         </div>
-      ) : isFetching ? (
+      ) : isPending ? (
         <div className="flex grow items-center justify-center">Loading...</div>
       ) : (
         data && (
