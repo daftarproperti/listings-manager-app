@@ -88,7 +88,7 @@ const Card = ({ data }: { data: Listing }) => {
           <div className="relative flex w-1/3 flex-col overflow-hidden">
             <Img
               src={data.pictureUrls[0]}
-              className="h-full max-h-52 rounded-tl-lg object-cover lg:max-h-80"
+              className="h-full rounded-tl-lg object-cover lg:max-h-80"
               unloader={
                 <div className="absolute inset-0 flex items-center justify-center rounded-tl-lg bg-slate-300">
                   <p className="text-xs text-slate-500">Image not found</p>
