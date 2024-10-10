@@ -1,0 +1,24 @@
+diff --git a/node_modules/material-ripple-effects/index.js b/node_modules/material-ripple-effects/index.js
+index bb0d0a0..b29f150 100644
+--- a/node_modules/material-ripple-effects/index.js
++++ b/node_modules/material-ripple-effects/index.js
+@@ -50,6 +50,7 @@ module.exports = class Ripple {
+       {
+         duration: 500,
+         easing: 'linear',
++        fill: 'forwards',
+       },
+     );
+   }
+diff --git a/node_modules/material-ripple-effects/ripple.js b/node_modules/material-ripple-effects/ripple.js
+index efefccb..c510a91 100644
+--- a/node_modules/material-ripple-effects/ripple.js
++++ b/node_modules/material-ripple-effects/ripple.js
+@@ -50,6 +50,7 @@ class Ripple {
+       {
+         duration: 500,
+         easing: 'linear',
++        fill: 'forwards',
+       },
+     );
+   }

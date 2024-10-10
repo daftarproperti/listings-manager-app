@@ -23,6 +23,7 @@
     "lint": "eslint src --max-warnings=0",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "generate": "openapi-typescript ../daftarproperti/storage/api-docs/api-docs.yaml --output src/api/generated.d.ts",
+    "postinstall": "patch-package",
     "knip": "knip --exclude=devDependencies"
   },
   "eslintIgnore": [
@@ -81,6 +82,7 @@
     "eslint-plugin-tailwindcss": "^3.13.0",
     "happy-dom": "^12.10.3",
     "knip": "^5.30.6",
+    "patch-package": "^8.0.0",
     "postcss": "^8.4.32",
     "prettier": "3.1.0",
     "tailwindcss": "^3.3.5",
