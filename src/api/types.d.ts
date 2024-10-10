@@ -103,7 +103,7 @@ export type VerifyTOTPReq =
 export type VerifyTOTPRes =
   operations['auth.verify_totp']['responses']['200']['content']['application/json']
 
-export interface PropertyDetailsResponse {
+export interface EasyFindPropertyDetailsResponse {
   data: {
     id: number
     attributes: {
@@ -198,5 +198,44 @@ export interface PropertyDetailsResponse {
         }
       }
     }
+  }
+}
+export interface DaftarPropertyDetailsResponse {
+  listingId: number
+  listingIdStr: string
+  title: string
+  propertyType: string
+  listingForSale: boolean
+  listingForRent: boolean
+  address: string
+  description: string
+  price: number
+  rentPrice: number | null
+  lotSize: number
+  buildingSize: number | null
+  carCount: number | null
+  bedroomCount: number | null
+  bathroomCount: number | null
+  floorCount: number | null
+  electricPower: number | undefined
+  facing: string | null
+  ownership: string
+  isVerified: boolean
+  cityName: string
+  cityId: number
+  pictureUrls: string[]
+  coordinate: {
+    latitude: number
+    longitude: number
+  }
+  withRewardAgreement: boolean
+  isMultipleUnits: boolean
+  updatedAt: string
+  registrant: {
+    name: string
+    phoneNumberEncrypted: string
+    phoneNumberHash: string
+    profilePictureURL: string | null
+    company: string
   }
 }

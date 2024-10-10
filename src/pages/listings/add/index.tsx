@@ -10,11 +10,14 @@ import {
   useGetUserProfile,
   useGenerateListingFromText,
   useGetGenerateResult,
-  fetchPropertyDetails,
+  fetchEasyFindPropertyDetails,
+  fetchDaftarPropertiPropertyDetails,
 } from 'api/queries'
 import type {
   UpdateListingRequest as GeneratedListing,
   CityOption,
+  DaftarPropertyDetailsResponse,
+  EasyFindPropertyDetailsResponse,
 } from 'api/types'
 import { formatCalculatedPrice } from 'utils'
 import BottomStickyButton from 'components/button/BottomStickyButton'
@@ -94,72 +97,150 @@ const AddPage = () => {
   const [selectedCity, setSelectedCity] = useState<CityOption | null>(null)
   const { mutate: generateListing } = useGenerateListingFromText()
   const { mutate: getGenerateResult } = useGetGenerateResult()
-  const [isEasyFindModalOpen, setIsEasyFindModalOpen] = useState(false)
-  const [easyFindId, setEasyFindId] = useState('')
+  const [isExtractPropertyModalOpen, setIsExtractPropertyModalOpen] =
+    useState(false)
+  const [extractPropertyId, setExtractPropertyId] = useState('')
   const [picUrls, setPicUrls] = useState<string[]>([])
   const hash = window.location.hash
+  const [propertyToExtract, setPropertyToExtract] = useState('')
 
   useEffect(() => {
     if (hash.includes('#easyfind')) {
-      setIsEasyFindModalOpen(true)
+      setPropertyToExtract('EasyFind')
+      setIsExtractPropertyModalOpen(true)
+    }
+
+    if (hash.includes('#daftarproperti')) {
+      setPropertyToExtract('DaftarProperti')
+      setIsExtractPropertyModalOpen(true)
     }
   }, [])
 
   const handleCloseModal = () => {
-    setIsEasyFindModalOpen(false)
+    setIsExtractPropertyModalOpen(false)
   }
 
   const handleSaveModal = async () => {
-    setIsEasyFindModalOpen(false)
+    setIsExtractPropertyModalOpen(false)
 
     try {
-      const propertyDetails = await fetchPropertyDetails(easyFindId)
-
-      if (propertyDetails) {
-        const extractData = propertyDetails.data.attributes
-
-        const bedroomCountStr = extractData.bedroomCount.toString()
-        const bathroomCountStr = extractData.bathroomCount.toString()
-        const price = extractData.price * 1000000
-
-        const pictures = extractData.pictures.data || []
-        setPicUrls(pictures.map((picture) => picture.attributes.url))
-
-        const osmId = extractData.city?.data?.attributes?.osmId
-        const cityName = extractData.city?.data?.attributes?.name
-        const defaultCity = {
-          label: cityName,
-          value: osmId,
+      if (propertyToExtract === 'EasyFind') {
+        const fetchResponse =
+          await fetchEasyFindPropertyDetails(extractPropertyId)
+        if (fetchResponse) {
+          extractAndFillDataEasyFind(fetchResponse)
         }
-        setSelectedCity(defaultCity as CityOption)
-
-        setValue('title', extractData.title)
-        setValue('address', extractData.address)
-        setValue('description', extractData.description)
-        setValue('price', price)
-        setValue('lotSize', extractData.lotSize)
-        setValue('buildingSize', extractData.buildingSize)
-        setValue('carCount', extractData.carCount)
-        setValue('bedroomCounts', bedroomCountStr)
-        setValue('bathroomCounts', bathroomCountStr)
-        setValue('floorCount', extractData.floorCount)
-        setValue('facing', extractData.facing)
-        setValue('ownership', extractData.ownership)
-        setValue('cityId', osmId)
-        setValue('pictureUrls', picUrls)
-        if (
-          import.meta.env.VITE_WITH_LATLNG_PICKER &&
-          extractData.latitude &&
-          extractData.longitude
-        ) {
-          setValue('coordinate.latitude', extractData.latitude)
-          setValue('coordinate.longitude', extractData.longitude)
+      } else {
+        const fetchResponse =
+          await fetchDaftarPropertiPropertyDetails(extractPropertyId)
+        if (fetchResponse) {
+          extractAndFillDataDaftarProperti(fetchResponse)
         }
-        setIsLoading(false)
       }
+
+      setIsLoading(false)
     } catch (error) {
       console.error('Error fetching property details:', error)
     }
+  }
+
+  const extractAndFillDataEasyFind = (
+    responseData: EasyFindPropertyDetailsResponse,
+  ) => {
+    const extractData = responseData.data.attributes
+
+    const bedroomCountStr = extractData.bedroomCount?.toString()
+    const bathroomCountStr = extractData.bathroomCount?.toString()
+    const price = extractData.price * 1000000
+
+    const osmId = extractData.city?.data?.attributes?.osmId
+    const cityName = extractData.city?.data?.attributes?.name
+
+    const pictures = extractData.pictures.data || []
+    setPicUrls(pictures.map((picture) => picture.attributes.url))
+
+    const latitude = extractData.latitude
+    const longitude = extractData.longitude
+
+    const defaultCity = {
+      label: cityName,
+      value: osmId,
+    }
+    setSelectedCity(defaultCity as CityOption)
+
+    setValue('title', extractData.title)
+    setValue('address', extractData.address)
+    setValue('description', extractData.description)
+    setValue('price', price)
+    setValue('lotSize', extractData.lotSize ? extractData.lotSize : 0)
+    setValue(
+      'buildingSize',
+      extractData.buildingSize ? extractData.buildingSize : 0,
+    )
+    setValue('carCount', extractData.carCount ? extractData.carCount : 0)
+    setValue('bedroomCounts', bedroomCountStr)
+    setValue('bathroomCounts', bathroomCountStr)
+    setValue('floorCount', extractData.floorCount ? extractData.floorCount : 0)
+    setValue('facing', extractData.facing ? extractData.facing : 'unknown')
+    setValue(
+      'ownership',
+      extractData.ownership ? extractData.ownership : 'unknown',
+    )
+    setValue('cityId', osmId)
+    setValue('pictureUrls', picUrls)
+    if (import.meta.env.VITE_WITH_LATLNG_PICKER && latitude && longitude) {
+      setValue('coordinate.latitude', latitude)
+      setValue('coordinate.longitude', longitude)
+    }
+  }
+
+  const extractAndFillDataDaftarProperti = (
+    responseData: DaftarPropertyDetailsResponse,
+  ) => {
+    const extractData = responseData
+
+    const bedroomCountStr = extractData.bedroomCount?.toString()
+    const bathroomCountStr = extractData.bathroomCount?.toString()
+    const price = extractData.price * 1000000
+
+    const osmId = extractData.cityId
+    const cityName = extractData.cityName
+    setPicUrls(extractData.pictureUrls)
+
+    const latitude = extractData.coordinate.latitude
+    const longitude = extractData.coordinate.longitude
+
+    const defaultCity = {
+      label: cityName,
+      value: osmId,
+    }
+    setSelectedCity(defaultCity as CityOption)
+
+    setValue('title', extractData.title)
+    setValue('address', extractData.address)
+    setValue('description', extractData.description)
+    setValue('price', price)
+    setValue('lotSize', extractData.lotSize ? extractData.lotSize : 0)
+    setValue(
+      'buildingSize',
+      extractData.buildingSize ? extractData.buildingSize : 0,
+    )
+    setValue('carCount', extractData.carCount ? extractData.carCount : 0)
+    setValue('bedroomCounts', bedroomCountStr)
+    setValue('bathroomCounts', bathroomCountStr)
+    setValue('floorCount', extractData.floorCount ? extractData.floorCount : 0)
+    setValue('facing', extractData.facing ? extractData.facing : 'unknown')
+    setValue(
+      'ownership',
+      extractData.ownership ? extractData.ownership : 'unknown',
+    )
+    setValue('cityId', osmId)
+    setValue('pictureUrls', picUrls)
+    if (import.meta.env.VITE_WITH_LATLNG_PICKER && latitude && longitude) {
+      setValue('coordinate.latitude', latitude)
+      setValue('coordinate.longitude', longitude)
+    }
+    setValue('electricPower', extractData.electricPower)
   }
 
   const [coord, setCoord] = useState<google.maps.LatLngLiteral>(DEFAULT_LAT_LNG)
@@ -775,18 +856,18 @@ const AddPage = () => {
         </div>
       )}
       <InputModal
-        isOpen={isEasyFindModalOpen}
+        isOpen={isExtractPropertyModalOpen}
         onClose={handleCloseModal}
         onSave={handleSaveModal}
-        title="Masukkan Easyfind ID Properti"
+        title={`Masukkan ${propertyToExtract} ID Properti`}
       >
         <label className="mb-2 block text-sm font-medium text-gray-700">
           Properti ID
         </label>
         <input
           type="text"
-          value={easyFindId}
-          onChange={(e) => setEasyFindId(e.target.value)}
+          value={extractPropertyId}
+          onChange={(e) => setExtractPropertyId(e.target.value)}
           className="w-full rounded-md border border-gray-300 p-2"
         />
       </InputModal>

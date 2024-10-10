@@ -26,7 +26,8 @@ import type {
   UpdateCancellationNoteParams,
   ClosingListingRes,
   ClosingListingParams,
-  PropertyDetailsResponse,
+  EasyFindPropertyDetailsResponse,
+  DaftarPropertyDetailsResponse,
   GenerateSecretKeyRes,
   VerifyTOTPRes,
   VerifyTOTPReq,
@@ -405,10 +406,35 @@ export const useClosingListing = () => {
   return mutation
 }
 
-export const fetchPropertyDetails = async (
+export const fetchEasyFindPropertyDetails = async (
   propertyId: string,
-): Promise<PropertyDetailsResponse> => {
+): Promise<EasyFindPropertyDetailsResponse> => {
   const url = `https://admin.easyfind.id/api/properties/${propertyId}?populate=*`
+
+  try {
+    const response = await fetch(url)
+    if (!response.ok) {
+      throw new Error(
+        'Failed to fetch property details: ' + response.statusText,
+      )
+    }
+    const data = await response.json()
+    return data
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error('Network error: ' + error.message)
+    } else {
+      throw new Error('An unexpected error occurred')
+    }
+  }
+}
+
+export const fetchDaftarPropertiPropertyDetails = async (
+  propertyId: string,
+): Promise<DaftarPropertyDetailsResponse> => {
+  const url = `${
+    import.meta.env.VITE_DP_HOME
+  }/public/listings/${propertyId}?format=json`
 
   try {
     const response = await fetch(url)
