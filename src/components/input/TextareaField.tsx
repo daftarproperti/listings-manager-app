@@ -19,7 +19,7 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
   additionalClassName,
 }) => {
   const baseClassName =
-    'mt-1 min-h-[127px] w-full items-start justify-center self-stretch whitespace-nowrap rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-white px-3 py-2.5 text-lg leading-7 text-gray-800'
+    'mt-1 min-h-80 w-full items-start justify-center self-stretch whitespace-nowrap rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-white px-3 py-2.5 text-lg leading-7 text-gray-800'
   const textareaClassName = `${baseClassName} ${
     additionalClassName || ''
   }`.trim()
