@@ -246,7 +246,7 @@ function ListingDetail({
               )}
               <div className="border-b border-solid border-t-slate-200 px-3 py-2.5">
                 <div className="flex w-full justify-between gap-5">
-                  <div className="flex text-sm">
+                  <div className="flex items-center space-x-2 text-sm">
                     {data.verifyStatus !== 'approved' ? (
                       <>
                         {data.verifyStatus === 'rejected' ? (
@@ -254,7 +254,7 @@ function ListingDetail({
                         ) : (
                           <NewReleaseIconSVG className="text-slate-500" />
                         )}
-                        <span className="ml-2">
+                        <span>
                           {getVerifyStatus(data.verifyStatus as VerifyStatus)}
                         </span>
                       </>
@@ -267,7 +267,7 @@ function ListingDetail({
                         ) : (
                           <VerifyIconSVG className="text-blue-500" />
                         )}
-                        <span className="ml-2">
+                        <span>
                           {getActiveStatus(data.activeStatus as ActiveStatus)}
                           <MarketerLink data={data}></MarketerLink>
                         </span>

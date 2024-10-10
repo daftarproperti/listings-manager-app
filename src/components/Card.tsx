@@ -170,7 +170,7 @@ const Card = ({ data }: { data: Listing }) => {
       </div>
       <div className="w-full justify-end gap-5 rounded-b-lg bg-blue-100 px-3 py-2.5">
         <div className="flex justify-between gap-4">
-          <div className="flex pb-2 text-sm">
+          <div className="flex items-center space-x-2 pb-2 text-sm">
             {data.verifyStatus !== 'approved' ? (
               <>
                 {data.verifyStatus === 'rejected' ? (
@@ -178,7 +178,7 @@ const Card = ({ data }: { data: Listing }) => {
                 ) : (
                   <NewReleaseIconSVG className="text-slate-500" />
                 )}
-                <span className="ml-2 pt-0.5">
+                <span>
                   {getVerifyStatus(data.verifyStatus as VerifyStatus)}
                 </span>
               </>
@@ -191,7 +191,7 @@ const Card = ({ data }: { data: Listing }) => {
                 ) : (
                   <VerifyIconSVG className="text-blue-500" />
                 )}
-                <span className="ml-2 pt-0.5">
+                <span>
                   {getActiveStatus(data.activeStatus as ActiveStatus)}
                   <MarketerLink data={data}></MarketerLink>
                 </span>
