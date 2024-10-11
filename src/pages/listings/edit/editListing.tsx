@@ -26,6 +26,7 @@ import AddressTooltip from 'components/AddressTooltip'
 import ConfirmationDialog from 'components/header/ConfirmationDialog'
 import type { CombinedImage } from 'components/input/types'
 import { useDirty } from 'contexts/DirtyContext'
+import InputLabel from 'components/input/InputLabel'
 
 import { onSubmit } from './handleFormSubmit'
 import { LISTING_OPTIONS } from './dummy'
@@ -235,24 +236,26 @@ function EditListing({ id }: { id: string }) {
             Simpan
           </Button>
         </div>
-        <div className="items-start justify-center border-b border-solid border-slate-200 bg-slate-50 py-3 pl-4 pr-16 text-sm font-semibold leading-5 text-slate-500">
-          Dengan mengisi formulir listing ini, anda telah memahami{' '}
-          <a
-            target="_blank"
-            className="text-blue-500 hover:underline"
-            href="/peraturan"
-          >
-            peraturan
-          </a>{' '}
-          dan{' '}
-          <a
-            target="_blank"
-            className="text-blue-500 hover:underline"
-            href="/checklist"
-          >
-            <i>checklist</i>
-          </a>{' '}
-          Daftar Properti.
+        <div className="border-b border-solid border-slate-200 bg-slate-50 py-3 pl-4 pr-16">
+          <Typography variant="small" className="font-medium leading-5">
+            Dengan mengisi formulir listing ini, anda telah memahami{' '}
+            <a
+              target="_blank"
+              className="text-blue-500 hover:underline"
+              href="/peraturan"
+            >
+              peraturan
+            </a>{' '}
+            dan{' '}
+            <a
+              target="_blank"
+              className="text-blue-500 hover:underline"
+              href="/checklist"
+            >
+              <i>checklist</i>
+            </a>{' '}
+            Daftar Properti.
+          </Typography>
         </div>
         <div className="p-4 lg:w-4/5">
           <InputFileField
@@ -284,9 +287,7 @@ function EditListing({ id }: { id: string }) {
             errorFieldName={errors.title}
           />
           <div className="mt-3" ref={checkboxSectionRef}>
-            <span className="text-lg font-semibold leading-7 text-gray-800">
-              Tipe Listing
-            </span>
+            <InputLabel label="Tipe Listing" />
             <div className="flex items-center space-x-8">
               <InputCheckboxField
                 label="Dijual"
@@ -308,9 +309,10 @@ function EditListing({ id }: { id: string }) {
           </div>
           <SelectField
             label="Tipe Properti"
+            control={control}
+            name="propertyType"
             registerHook={register('propertyType', { required: false })}
             selectOptions={LISTING_OPTIONS.propertyType.options}
-            defaultOption="Pilih Tipe Properti"
           />
           <div className="my-5">
             <InputCheckboxField
@@ -410,10 +412,11 @@ function EditListing({ id }: { id: string }) {
           </div>
           {propertyType !== 'land' && (
             <SelectField
+              name="facing"
+              control={control}
               label="Bangunan Menghadap"
               registerHook={register('facing', { required: false })}
               selectOptions={LISTING_OPTIONS.facing.options}
-              defaultOption="Pilih Arah"
               errorFieldName={errors.facing}
             />
           )}
@@ -442,19 +445,21 @@ function EditListing({ id }: { id: string }) {
           )}
           {propertyType !== 'land' && (
             <SelectField
+              name="electricPower"
+              control={control}
               label="Daya Listrik"
               registerHook={register('electricPower')}
               selectOptions={LISTING_OPTIONS.electric_power.options}
-              defaultOption="Pilih Daya Listrik"
               errorFieldName={errors.electricPower}
             />
           )}
           {listingForSale && (
             <SelectField
+              name="ownership"
+              control={control}
               label="Jenis Sertifikat"
               registerHook={register('ownership')}
               selectOptions={LISTING_OPTIONS.ownership.options}
-              defaultOption="Pilih Jenis Sertifikat"
               errorFieldName={errors.ownership}
             />
           )}
@@ -515,30 +520,34 @@ function EditListing({ id }: { id: string }) {
               errorFieldName={errors.withRewardAgreement}
             />
           </div>
-        </div>
-        <div className="w-full bg-blue-100 px-4 py-3 text-lg lg:w-4/5">
-          Kontak
-        </div>
-        <div className="bg-slate-50 p-4">
-          {watch('user.profilePictureURL') && (
-            <div className="relative h-16 w-16 overflow-hidden rounded-full">
-              <img
-                loading="lazy"
-                src={watch('user.profilePictureURL')}
-                className="absolute inset-0 h-full w-full object-cover"
-                onError={({ currentTarget }) => {
-                  currentTarget.onerror = null
-                  currentTarget.src = appPath('/logo.svg')
-                }}
-              />
-            </div>
-          )}
-          Nama: {watch('user.name')}
-          <br />
-          No. HP/WA: {watch('user.phoneNumber')}
-          <br />
-          <Link to="/user" className="cursor-pointer text-blue-500">
-            Ubah Profil
+          <div className="mb-2 mt-4 w-full border-t">
+            <Typography variant="h6" className="mb-2 mt-4">
+              Kontak
+            </Typography>
+            <Typography variant="small" className="font-semibold">
+              {watch('user.profilePictureURL') && (
+                <div className="relative h-16 w-16 overflow-hidden rounded-full">
+                  <img
+                    loading="lazy"
+                    src={watch('user.profilePictureURL')}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null
+                      currentTarget.src = appPath('/logo.svg')
+                    }}
+                  />
+                </div>
+              )}
+              {watch('user.name') ?? <span>[tidak ada nama]</span>}
+            </Typography>
+            <Typography variant="small">
+              {watch('user.phoneNumber') ?? ''}
+            </Typography>
+          </div>
+          <Link to="/user">
+            <Button variant="outlined" size="sm">
+              Ubah Profil
+            </Button>
           </Link>
         </div>
         <div className="lg:hidden">

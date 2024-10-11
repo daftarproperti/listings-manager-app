@@ -3,6 +3,8 @@ import { Controller, useController, type Control } from 'react-hook-form'
 import { ArrowDownIconSVG } from 'assets/icons'
 import { type CityOption } from 'api/types'
 
+import InputLabel from './InputLabel'
+
 interface CustomSelectFieldProps {
   control: Control
   name: string
@@ -20,7 +22,7 @@ const customStyles = {
     border: '1px solid #C6CAFF',
     borderRadius: '0.5rem',
     padding: '0.2rem 2.2rem 0.2rem 0.3rem',
-    height: '46px',
+    height: '40px',
     boxShadow: 'none',
     fontSize: '16px',
     display: 'flex',
@@ -59,15 +61,18 @@ const CustomSelectField: React.FC<CustomSelectFieldProps> = ({
 
   return (
     <div className="relative mt-3 w-full">
-      <span className="mb-1 inline-block text-lg font-semibold text-gray-800">
-        {label}
-      </span>
+      <InputLabel label={label} />
       <Controller
         control={control}
         name={name}
         render={({ field: { onChange, onBlur, ref } }) => (
           <AsyncSelect
             ref={ref}
+            classNames={{
+              control: () => '!border-blue-gray-200',
+              menu: () => 'text-sm',
+              singleValue: () => 'text-sm',
+            }}
             placeholder={placeholder}
             noOptionsMessage={() => 'Ketik nama kota untuk mencari'}
             loadOptions={loadOptions}
@@ -93,7 +98,7 @@ const CustomSelectField: React.FC<CustomSelectFieldProps> = ({
             : error.message}
         </p>
       )}
-      <div className="pointer-events-none absolute right-3 top-11 group-hover:pointer-events-auto">
+      <div className="pointer-events-none absolute right-3 top-[38px] group-hover:pointer-events-auto">
         <ArrowDownIconSVG />
       </div>
     </div>

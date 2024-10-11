@@ -39,6 +39,7 @@ import type { CombinedImage } from 'components/input/types'
 import InputModal from 'components/InputModal'
 import { useDirty } from 'contexts/DirtyContext'
 import AddressTooltip from 'components/AddressTooltip'
+import InputLabel from 'components/input/InputLabel'
 
 interface ExtendedListing extends GeneratedListing {
   bedroomCounts?: string
@@ -378,25 +379,30 @@ const AddPage = () => {
             Simpan
           </Button>
         </div>
-        <div className="items-start justify-center border-b border-solid border-slate-200 bg-slate-50 py-3 pl-4 pr-16 text-sm font-semibold leading-5 text-slate-500">
-          Dengan mengisi formulir listing ini, anda telah memahami{' '}
-          <a
-            target="_blank"
-            className="text-blue-500 hover:underline"
-            href="/peraturan"
+        <div className="border-b border-solid border-slate-200 bg-slate-50 py-3 pl-4 pr-16">
+          <Typography variant="small" className="font-medium leading-5">
+            Dengan mengisi formulir listing ini, anda telah memahami{' '}
+            <a
+              target="_blank"
+              className="text-blue-500 hover:underline"
+              href="/peraturan"
+            >
+              peraturan
+            </a>{' '}
+            dan{' '}
+            <a
+              target="_blank"
+              className="text-blue-500 hover:underline"
+              href="/checklist"
+            >
+              <i>checklist</i>
+            </a>{' '}
+            Daftar Properti.
+          </Typography>
+          <Typography
+            variant="small"
+            className="mt-4 flex items-center leading-5"
           >
-            peraturan
-          </a>{' '}
-          dan{' '}
-          <a
-            target="_blank"
-            className="text-blue-500 hover:underline"
-            href="/checklist"
-          >
-            <i>checklist</i>
-          </a>{' '}
-          Daftar Properti.
-          <div className="mt-4 flex items-center">
             <span>Punya teks Listing? Tempelkan disini </span>
             <span
               className="ml-2 cursor-pointer text-blue-500 hover:underline"
@@ -421,7 +427,7 @@ const AddPage = () => {
             >
               <QuestionMarkCircleIcon className="ml-2 h-5 w-5 text-slate-500" />
             </Tooltip>
-          </div>
+          </Typography>
         </div>
         <div className="p-4 lg:w-4/5">
           <div ref={imageSectionRef}>
@@ -456,9 +462,7 @@ const AddPage = () => {
             halfWidth={false}
           />
           <div className="mt-3" ref={checkboxSectionRef}>
-            <span className="text-lg font-semibold leading-7 text-gray-800">
-              Tipe Listing
-            </span>
+            <InputLabel label="Tipe Listing" />
             <div className="flex items-center space-x-8">
               <InputCheckboxField
                 label="Dijual"
@@ -479,10 +483,11 @@ const AddPage = () => {
             )}
           </div>
           <SelectField
+            name="propertyType"
+            control={control}
             label="Tipe Properti"
             registerHook={register('propertyType', { required: true })}
             selectOptions={LISTING_OPTIONS.propertyType.options}
-            defaultOption="Pilih Tipe Properti"
             errorFieldName={errors.propertyType}
           />
           <div className="my-5">
@@ -583,10 +588,11 @@ const AddPage = () => {
           </div>
           {propertyType !== 'land' && (
             <SelectField
+              name="facing"
+              control={control}
               label="Bangunan Menghadap"
               registerHook={register('facing', { required: false })}
               selectOptions={LISTING_OPTIONS.facing.options}
-              defaultOption="Pilih Arah"
               errorFieldName={errors.facing}
             />
           )}
@@ -638,19 +644,21 @@ const AddPage = () => {
             )}
           {propertyType !== 'land' && (
             <SelectField
+              name="electricPower"
+              control={control}
               label="Daya Listrik"
               registerHook={register('electricPower')}
               selectOptions={LISTING_OPTIONS.electric_power.options}
-              defaultOption="Pilih Daya Listrik"
               errorFieldName={errors.electricPower}
             />
           )}
           {listingForSale && (
             <SelectField
+              name="ownership"
+              control={control}
               label="Jenis Sertifikat"
               registerHook={register('ownership')}
               selectOptions={LISTING_OPTIONS.ownership.options}
-              defaultOption="Pilih Jenis Sertifikat"
               errorFieldName={errors.ownership}
             />
           )}

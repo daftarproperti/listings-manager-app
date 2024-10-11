@@ -4,6 +4,8 @@ import { format } from 'date-fns'
 import 'react-datepicker/dist/react-datepicker.css'
 import { type FieldError, Controller, type Control } from 'react-hook-form'
 
+import InputLabel from './InputLabel'
+
 type DateInputFieldProps = {
   label?: ReactNode
   name: string
@@ -24,11 +26,9 @@ const DateInputField: React.FC<DateInputFieldProps> = ({
   return (
     <div className={`mt-3`}>
       <div className="flex justify-between">
-        <div className="min-h-7 text-lg font-semibold leading-7 text-gray-800">
-          {label}
-        </div>
+        <InputLabel label={label} />
       </div>
-      <div className="relative mt-1 w-full">
+      <div className="relative w-full">
         <Controller
           name={name}
           control={control}
@@ -46,7 +46,7 @@ const DateInputField: React.FC<DateInputFieldProps> = ({
               showTimeSelect
               autoComplete="off"
               maxDate={new Date()}
-              className="mt-1 w-96 items-start justify-center self-stretch whitespace-nowrap rounded-lg border border-solid border-slate-300 bg-white px-3 py-2 text-lg leading-7 text-gray-800"
+              className="h-10 w-96 items-start justify-center rounded-[7px] border border-blue-gray-200 bg-white px-3 py-2 text-sm leading-7 focus:border-gray-900 focus:outline-none"
               dateFormat="yyyy-MM-dd HH:mm"
             />
           )}

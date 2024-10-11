@@ -3,6 +3,8 @@ import type { FieldError, UseFormRegisterReturn } from 'react-hook-form'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid'
 import { Checkbox, Tooltip, Typography } from '@material-tailwind/react'
 
+import InputLabel from './InputLabel'
+
 type InputCheckboxFieldProps = {
   title?: string
   label: string
@@ -24,7 +26,7 @@ const InputCheckboxField: React.FC<InputCheckboxFieldProps> = ({
 }) => {
   return (
     <>
-      <div className="mt-2 flex w-auto items-start">
+      <div className="flex w-auto items-start">
         <label
           htmlFor={inputID}
           className="flex items-start gap-1 text-gray-900"
@@ -36,11 +38,13 @@ const InputCheckboxField: React.FC<InputCheckboxFieldProps> = ({
             containerProps={{
               className: 'm-0 mt-0.5 p-0 rounded-none',
             }}
-            className="mr-0 p-0 hover:before:opacity-0"
+            className="mr-0 bg-white p-0 hover:before:opacity-0"
           />
           <div className="ml-1">
-            {title && <h5 className="text-lg leading-7">{title}</h5>}
-            <p>{label}</p>
+            {title && <InputLabel label={title} />}
+            <Typography variant="small" className="leading-6">
+              {label}
+            </Typography>
           </div>
           {showTooltip && (
             <Tooltip

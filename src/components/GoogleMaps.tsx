@@ -128,7 +128,7 @@ export default function GoogleMaps({
         type="text"
         ref={inputRef}
         placeholder="Ketik alamat untuk mencari koordinat"
-        className="relative mt-2 h-full w-full whitespace-nowrap rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-white px-3 py-2.5 text-lg leading-7 text-gray-800 disabled:bg-blue-gray-50"
+        className="relative mt-2 h-10 w-full whitespace-nowrap rounded-[7px] border border-solid border-blue-gray-200 bg-white px-3 py-2.5 text-sm leading-7 text-gray-800 focus:border-gray-900 focus:outline-none disabled:bg-blue-gray-50"
       />
       <Wrapper
         apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string}

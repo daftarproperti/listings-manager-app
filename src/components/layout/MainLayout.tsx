@@ -102,7 +102,7 @@ const MainLayout = ({ children }: PropsWithChildren) => {
     navigate('/login')
   }
 
-  const phoneNumber = profile?.phoneNumber
+  const phoneNumber = profile?.phoneNumber ?? ''
   const menu = MENU.concat([
     { name: `Akun (${phoneNumber})`, link: '/user', icon: UserCircleIcon },
   ])

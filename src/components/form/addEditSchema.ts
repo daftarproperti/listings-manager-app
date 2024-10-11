@@ -6,9 +6,10 @@ const isWithLatLong = !!import.meta.env.VITE_WITH_LATLNG_PICKER
 const mustContainValueRefine = (value: string | number) => {
   if (typeof value === 'number') {
     return true
-  } else {
+  } else if (typeof value === 'string') {
     return value.trim() !== ''
   }
+  return false
 }
 
 const mustContainNumberMoreThanZeroRefine = (value: string | number) => {
@@ -59,6 +60,9 @@ const getOptionalField = (fieldName?: string) => ({
 })
 
 const getMandatoryField = (fieldName: string) => ({
+  nonEmpty: z.any().refine(mustContainValueRefine, {
+    message: `${fieldName} harus diisi`,
+  }),
   string: z.string().refine(mustContainValueRefine, {
     message: `${fieldName} harus diisi`,
   }),
@@ -114,7 +118,7 @@ const getWithRewardAgreementSchema = () => {
 
 const baseFormSchema = z.object({
   title: getMandatoryField('Judul Listing').string,
-  propertyType: getMandatoryField('Tipe Properti').string,
+  propertyType: getMandatoryField('Tipe Properti').nonEmpty,
   listingForSale: z.boolean(),
   listingForRent: z.boolean(),
   address: getMandatoryField('Alamat').string,
@@ -129,7 +133,7 @@ const baseFormSchema = z.object({
   floorCount: getOptionalField('Lantai').number,
   lotSize: getOptionalField('Luas Tanah').number,
   ownership: getMandatoryField('Sertifikat').string,
-  pictureUrls: getOptionalField().picture,
+  pictureUrls: getOptionalField('Foto').picture,
   isPrivate: z.boolean(),
   withRewardAgreement: getWithRewardAgreementSchema(),
   isMultipleUnits: z.boolean(),

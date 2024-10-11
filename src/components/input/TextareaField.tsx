@@ -1,5 +1,8 @@
+import { Textarea } from '@material-tailwind/react'
 import React from 'react'
 import type { FieldError, UseFormRegisterReturn } from 'react-hook-form'
+
+import InputLabel from './InputLabel'
 
 type TextareaFieldProps = {
   label: string
@@ -19,20 +22,22 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
   additionalClassName,
 }) => {
   const baseClassName =
-    'mt-1 min-h-80 w-full items-start justify-center self-stretch whitespace-nowrap rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-white px-3 py-2.5 text-lg leading-7 text-gray-800'
+    'mt-1 min-h-[240px] w-full items-start justify-center self-stretch whitespace-nowrap'
   const textareaClassName = `${baseClassName} ${
     additionalClassName || ''
   }`.trim()
 
   return (
     <div className="w-full self-stretch pt-3">
-      <span className="text-lg font-semibold leading-7 text-gray-800">
-        {label}
-      </span>
-      <textarea
+      <InputLabel label={label} />
+      <Textarea
         {...registerHook}
         placeholder={placeholderValue}
-        className={textareaClassName}
+        className={
+          'mt-0 bg-white !border-t-blue-gray-200 focus:!border-t-gray-900 ' +
+          textareaClassName
+        }
+        labelProps={{ className: 'hidden' }}
       />
       {errorFieldName && (
         <span className="self-stretch text-sm leading-5 text-red-500">

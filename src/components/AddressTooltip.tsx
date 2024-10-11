@@ -1,4 +1,4 @@
-import { Tooltip } from '@material-tailwind/react'
+import { Tooltip, Typography } from '@material-tailwind/react'
 
 const AddressTooltip = () => {
   const AddressExplanation = () => (
@@ -21,7 +21,9 @@ const AddressTooltip = () => {
       className="border border-blue-gray-100 bg-white px-4 py-3 shadow shadow-black/10"
       content={<AddressExplanation />}
     >
-      <div className="select-none underline">Mengapa perlu alamat lengkap?</div>
+      <Typography variant="small" className="select-none underline">
+        Mengapa perlu alamat lengkap?
+      </Typography>
     </Tooltip>
   )
 }

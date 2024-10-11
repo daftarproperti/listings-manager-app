@@ -5,7 +5,9 @@ import {
   type FieldError,
   type FieldValues,
 } from 'react-hook-form'
+import { Input } from '@material-tailwind/react'
 
+import InputLabel from './InputLabel'
 import { convertAbbreviationToNumber, formatNumber } from '../../utils'
 
 type IntuitiveCurrencyInputFieldProps = {
@@ -29,15 +31,15 @@ const IntuitiveCurrencyInputField: React.FC<
 }) => {
   return (
     <div className="mt-3 w-full self-stretch">
-      <span className="text-lg font-semibold leading-7 text-gray-800">
-        {label}
-      </span>
+      <InputLabel label={label} />
       <Controller
         control={control}
         name={name}
         render={({ field: { onChange, value, ...field } }) => (
-          <input
+          <Input
+            crossOrigin={undefined}
             {...field}
+            className="!border-t-blue-gray-200 bg-white focus:!border-t-gray-900"
             placeholder={placeholderValue}
             value={value ? formatNumber(value) : ''}
             onChange={(e) => {
@@ -48,7 +50,7 @@ const IntuitiveCurrencyInputField: React.FC<
               const rawValue = e.target.value.replace(/[Rp. \s]/g, '')
               onChange(convertAbbreviationToNumber(rawValue))
             }}
-            className="mt-1 w-full items-start justify-center self-stretch whitespace-nowrap rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-white px-3 py-2.5 text-lg leading-7 text-gray-800"
+            labelProps={{ className: 'before:content-none after:content-none' }}
             type="text"
           />
         )}

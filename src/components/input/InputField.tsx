@@ -1,5 +1,8 @@
 import React, { type ReactNode } from 'react'
 import { type FieldError, type UseFormRegisterReturn } from 'react-hook-form'
+import { Typography, Input } from '@material-tailwind/react'
+
+import InputLabel from './InputLabel'
 
 type InputFieldProps = {
   halfWidth?: boolean
@@ -29,7 +32,6 @@ const InputField: React.FC<InputFieldProps> = ({
   linkText,
   rightContent,
   allowOnlyNumbersAndPlus,
-  ...inputProps
 }) => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (allowOnlyNumbersAndPlus) {
@@ -58,9 +60,7 @@ const InputField: React.FC<InputFieldProps> = ({
         }`}
     >
       <div className="flex justify-between">
-        <div className="min-h-7 text-lg font-semibold leading-7 text-gray-800">
-          {label}
-        </div>
+        <InputLabel label={label ?? <span>&nbsp;</span>} />
         {additionalLabel && (
           <div className="ml-2 text-sm leading-7 text-gray-500">
             {additionalLabel}
@@ -75,24 +75,26 @@ const InputField: React.FC<InputFieldProps> = ({
           </div>
         )}
       </div>
-      <div className="relative mt-1 w-full self-stretch rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-white">
-        <input
+      <div className="relative w-full self-stretch rounded-lg bg-white">
+        <Input
+          autoComplete="off"
+          crossOrigin={undefined}
           {...registerHook}
           placeholder={placeholderValue}
-          className="h-full w-full items-start justify-center whitespace-nowrap rounded-lg px-3 py-2.5 text-lg leading-7 text-gray-800 disabled:bg-blue-gray-50"
+          className="!border-t-blue-gray-200 bg-white focus:!border-t-gray-900"
+          labelProps={{ className: 'before:content-none after:content-none' }}
           onKeyDown={handleKeyDown}
-          {...inputProps}
         />
         {rightContent && (
-          <div className="absolute right-0 top-0 flex h-full min-w-11 items-center justify-center rounded-r-lg bg-slate-200 text-lg text-slate-700">
+          <div className="absolute right-0 top-0 flex h-full min-w-11 items-center justify-center rounded-r-[6px] bg-slate-200 text-lg text-slate-700">
             <span>{rightContent}</span>
           </div>
         )}
       </div>
       {errorFieldName && (
-        <span className="self-stretch text-sm leading-5 text-red-500">
+        <Typography variant="small" color="red" className="mt-1">
           {errorMessage || errorFieldName?.message}
-        </span>
+        </Typography>
       )}
     </div>
   )

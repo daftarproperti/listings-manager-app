@@ -9,7 +9,7 @@ import BottomStickyButton from 'components/button/BottomStickyButton'
 import { LISTING_OPTIONS } from 'pages/listings/edit/dummy'
 import { useClosingListing, useGetListingDetail } from 'api/queries'
 import { useNavigate } from 'react-router-dom'
-import { Button } from '@material-tailwind/react'
+import { Button, Typography } from '@material-tailwind/react'
 import { formatDate, getClosingStatus } from 'utils'
 
 import { onSubmit } from './handleClosingForm'
@@ -102,15 +102,18 @@ const ClosingForm = ({ id }: { id: string }) => {
         className="flex min-h-screen flex-col gap-2"
       >
         <h3 className="mx-4 mt-8 text-lg font-bold">Form Laporan Closing</h3>
-        <div className="items-start justify-center border-y border-solid border-slate-200 bg-slate-50 py-3 pl-4 pr-16 text-sm font-semibold leading-5 text-slate-500">
-          Silahkan mengisi form ini untuk mengajukan laporan transaksi.
+        <div className="border-y px-4 py-2">
+          <Typography variant="small" className="font-medium">
+            Silahkan mengisi form ini untuk mengajukan laporan transaksi.
+          </Typography>
         </div>
         <div className="px-4 lg:w-4/5">
           <SelectField
+            name="closingType"
+            control={control}
             label="Tipe Closing"
             registerHook={register('closingType', { required: true })}
             selectOptions={LISTING_OPTIONS.closingType.options}
-            defaultOption="Pilih Tipe Closing"
             errorFieldName={errors.closingType}
           />
           <InputField

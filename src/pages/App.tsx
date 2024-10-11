@@ -10,10 +10,77 @@ import routes from './routes'
 
 const queryClient = new QueryClient()
 
+const theme = {
+  input: {
+    styles: {
+      base: {
+        container: {
+          minWidth: 'min-w-[100px]',
+        },
+      },
+      variants: {
+        outlined: {
+          base: {
+            input: {
+              floated: {
+                borderWidth: 'border focus:border-1',
+              },
+            },
+            label: {
+              before: {
+                floated: {
+                  bt: 'before:border-t peer-focus:before:border-t',
+                  bl: 'before:border-l peer-focus:before:border-l',
+                },
+              },
+              after: {
+                floated: {
+                  bt: 'after:border-t peer-focus:after:border-t',
+                  br: 'after:border-r peer-focus:after:border-r',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+  textarea: {
+    styles: {
+      variants: {
+        outlined: {
+          base: {
+            textarea: {
+              floated: {
+                borderWidth: 'border focus:border-1',
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+  select: {
+    styles: {
+      variants: {
+        outlined: {
+          states: {
+            open: {
+              select: {
+                borderWidth: 'border',
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+}
+
 const App = () => (
   <>
     <main className="mx-auto h-auto min-h-screen w-full overflow-y-scroll bg-white font-inter text-slate-800 scrollbar-thin">
-      <ThemeProvider>
+      <ThemeProvider value={theme}>
         <QueryClientProvider client={queryClient}>
           <DirtyProvider>
             <RouterProvider router={routes} />

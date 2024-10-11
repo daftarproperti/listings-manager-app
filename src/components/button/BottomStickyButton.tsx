@@ -10,7 +10,7 @@ const BottomStickyButton = ({
   HTMLButtonElement
 >) => {
   return (
-    <div className="fixed bottom-0 w-full max-w-lg bg-white px-4 py-2">
+    <div className="fixed bottom-0 w-full bg-white px-4 py-2">
       <Button
         fullWidth
         color="blue"

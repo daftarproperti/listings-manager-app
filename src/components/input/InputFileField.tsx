@@ -9,10 +9,11 @@ import type {
 } from 'react-hook-form'
 import { useImageHandler } from 'utils'
 import AlertDialog from 'components/AlertDialog'
-import { Button } from '@material-tailwind/react'
+import { Button, Typography } from '@material-tailwind/react'
 import { CameraIcon } from '@heroicons/react/24/solid'
 import type { ExtendedListing } from 'pages/listings/edit/editListing'
 
+import InputLabel from './InputLabel'
 import { SortableList } from './components/Sortable'
 import type { CombinedImage } from './types'
 
@@ -115,13 +116,13 @@ const InputFileField: React.FC<InputFileProps> = ({
 
   return (
     <div className="w-auto">
-      <div className="mb-1 text-lg font-semibold leading-7 text-gray-800">
-        {label}
-      </div>
+      <InputLabel label={label} />
       {additionalLabel && (
-        <div className="mb-4 text-sm text-gray-500">{additionalLabel}</div>
+        <Typography variant="small" className="mb-2 text-gray-500">
+          {additionalLabel}
+        </Typography>
       )}
-      <div className="mb-4 flex flex-col">
+      <div className="flex flex-col">
         <input
           id="image-upload"
           type="file"
@@ -188,9 +189,9 @@ const InputFileField: React.FC<InputFileProps> = ({
         )}
       </div>
       {errorFieldName && (
-        <span className="self-stretch text-sm leading-5 text-red-500">
+        <Typography variant="small" color="red" className="mt-1">
           {errorFieldName?.message}
-        </span>
+        </Typography>
       )}
       <AlertDialog
         isOpen={isAlertOpen}

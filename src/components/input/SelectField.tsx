@@ -1,50 +1,66 @@
-import { ArrowDownIconSVG } from 'assets/icons'
 import React from 'react'
-import type { FieldError, UseFormRegisterReturn } from 'react-hook-form'
+import {
+  Controller,
+  type FieldError,
+  type UseFormRegisterReturn,
+  type Control,
+} from 'react-hook-form'
+import { Select, Typography, Option } from '@material-tailwind/react'
+
+import InputLabel from './InputLabel'
 
 type SelectFieldProps = {
+  control: Control
   label: string
+  name: string
   registerHook: UseFormRegisterReturn<string>
   selectOptions: {
     label: string
     value: string
   }[]
-  defaultOption: string
   errorFieldName?: FieldError
   errorMessage?: string
 }
 
 const SelectField: React.FC<SelectFieldProps> = ({
+  control,
   label,
-  registerHook,
+  name,
   selectOptions,
-  defaultOption,
   errorFieldName,
   errorMessage,
 }) => {
   return (
     <div className="relative mt-3 w-full self-stretch">
-      <span className="text-lg font-semibold leading-7 text-gray-800">
-        {label}
-      </span>
-      <select
-        {...registerHook}
-        className="mt-1 w-full appearance-none items-start justify-center self-stretch whitespace-nowrap rounded-lg border border-solid border-[color:var(--royal-blue-200,#C6CAFF)] bg-white px-3 py-2 text-lg leading-7 text-gray-800"
-      >
-        <option value="">{defaultOption}</option>
-        {selectOptions.map((option, index) => (
-          <option key={index} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-      <div className="pointer-events-none absolute right-3 top-11 group-hover:pointer-events-auto">
-        <ArrowDownIconSVG />
-      </div>
+      <InputLabel label={label} />
+      <Controller
+        name={name}
+        control={control}
+        render={({ field: { onChange, value } }) => (
+          <Select
+            name={name}
+            label={label}
+            labelProps={{ className: 'hidden' }}
+            className="border-blue-gray-200 bg-white aria-[expanded=true]:border-gray-900"
+            value={value ? String(value) : undefined}
+            onChange={(selectedOption) => {
+              if (selectedOption !== null) {
+                onChange(selectedOption)
+              }
+            }}
+          >
+            {selectOptions.map((option) => (
+              <Option key={option.value} value={option.value}>
+                {option.label}
+              </Option>
+            ))}
+          </Select>
+        )}
+      ></Controller>
       {errorFieldName && (
-        <span className="self-stretch text-sm leading-5 text-red-500">
+        <Typography variant="small" className="mt-1" color="red">
           {errorMessage || errorFieldName?.message}
-        </span>
+        </Typography>
       )}
     </div>
   )

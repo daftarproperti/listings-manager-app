@@ -19,6 +19,7 @@ export default withMT({
   theme: {
     fontFamily: {
       inter: ['Inter', 'sans-serif'],
+      sans: ['Inter', 'sans-serif'],
     },
     colors: {
       ...colors,
