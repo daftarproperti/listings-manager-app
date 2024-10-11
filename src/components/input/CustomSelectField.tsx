@@ -69,6 +69,7 @@ const CustomSelectField: React.FC<CustomSelectFieldProps> = ({
           <AsyncSelect
             ref={ref}
             placeholder={placeholder}
+            noOptionsMessage={() => 'Ketik nama kota untuk mencari'}
             loadOptions={loadOptions}
             defaultOptions={defaultOptions || true}
             value={defaultValue}

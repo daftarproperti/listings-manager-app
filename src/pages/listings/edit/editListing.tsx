@@ -7,7 +7,6 @@ import {
   useGetListingDetail,
   useUpdateListing,
   getDebouncedCities,
-  fetchDefaultCities,
 } from 'api/queries'
 import { appPath, formatCalculatedPrice } from 'utils'
 import { schema } from 'components/form/addEditSchema'
@@ -79,7 +78,6 @@ function EditListing({ id }: { id: string }) {
   const price = watch('price')
   const lotSize = watch('lotSize')
 
-  const [defaultCityOptions, setDefaultCityOptions] = useState<CityOption[]>([])
   const [selectedCity, setSelectedCity] = useState<{
     label: string
     value: number
@@ -138,9 +136,6 @@ function EditListing({ id }: { id: string }) {
     }
   }, [listingDetails])
 
-  const cityId = watch('cityId')
-  const cityName = watch('cityName')
-
   useEffect(() => {
     if (listingDetails && !selectedCity) {
       const defaultCity = {
@@ -151,26 +146,6 @@ function EditListing({ id }: { id: string }) {
       setValue('cityId', defaultCity.value)
     }
   }, [listingDetails, selectedCity])
-
-  useEffect(() => {
-    fetchDefaultCities().then((cities) => {
-      const cityOptions = cities.map((city) => ({
-        label: city.name || 'Unknown city',
-        value: city.id || 0,
-      }))
-      setDefaultCityOptions(cityOptions)
-
-      if (cityId && cityName && typeof cityName === 'string') {
-        const initialCity = cityOptions.find(
-          (option) => option.value === cityId,
-        ) || {
-          label: cityName,
-          value: cityId,
-        }
-        setSelectedCity(initialCity as CityOption)
-      }
-    })
-  }, [cityId, cityName])
 
   useEffect(() => {
     if (errors.listingType && Object.keys(errors).length === 1) {
@@ -198,7 +173,6 @@ function EditListing({ id }: { id: string }) {
 
   const handleCityChange = (cityOption: SetStateAction<CityOption | null>) => {
     setSelectedCity(cityOption)
-    listingDetails && resetFormValues(listingDetails)
   }
 
   const confirmTitle = 'Apakah Anda yakin tidak menyetujui persetujuan imbalan?'
@@ -361,7 +335,7 @@ function EditListing({ id }: { id: string }) {
             placeholder="Pilih Kota"
             label="Kota"
             loadOptions={getDebouncedCities}
-            defaultOptions={defaultCityOptions}
+            defaultOptions={[]}
             defaultValue={selectedCity ?? undefined}
             onCityChange={handleCityChange}
           />

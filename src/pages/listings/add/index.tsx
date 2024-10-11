@@ -7,7 +7,6 @@ import { Button, Tooltip, Typography } from '@material-tailwind/react'
 import {
   useAddListing,
   getDebouncedCities,
-  fetchDefaultCities,
   useGetUserProfile,
   useGenerateListingFromText,
   useGetGenerateResult,
@@ -90,7 +89,6 @@ const AddPage = () => {
   const price = watch('price')
   const lotSize = watch('lotSize')
 
-  const [defaultCityOptions, setDefaultCityOptions] = useState<CityOption[]>([])
   const { data: userProfile, isFetched } = useGetUserProfile()
   const [selectedCity, setSelectedCity] = useState<CityOption | null>(null)
   const { mutate: generateListing } = useGenerateListingFromText()
@@ -190,16 +188,6 @@ const AddPage = () => {
       }
     }
   }, [userProfile, isFetched])
-
-  useEffect(() => {
-    fetchDefaultCities().then((cities) => {
-      const cityOptions = cities.map((city) => ({
-        label: city.name || 'Unknown city',
-        value: city.id || 0,
-      }))
-      setDefaultCityOptions(cityOptions)
-    })
-  }, [])
 
   useEffect(() => {
     if (selectedCity) {
@@ -520,7 +508,7 @@ const AddPage = () => {
             placeholder="Pilih Kota"
             label="Kota"
             loadOptions={getDebouncedCities}
-            defaultOptions={defaultCityOptions}
+            defaultOptions={[]}
             defaultValue={selectedCity ?? undefined}
             onCityChange={handleCityChange}
           />
