@@ -5,7 +5,6 @@ import {
   useGetUserProfile,
   useUpdateUserProfile,
   getDebouncedCities,
-  fetchDefaultCities,
   useGenerateSecretKey,
   useDeleteSecretKey,
 } from 'api/queries'
@@ -31,7 +30,7 @@ function EditUser() {
     watch,
     setValue,
   } = useForm<UpdateProfileRequest>()
-  const { data: userDetails, isLoading } = useGetUserProfile()
+  const { data: userDetails, isLoading, isPending } = useGetUserProfile()
   const { mutate } = useUpdateUserProfile()
   const { mutate: deleteSecretKey } = useDeleteSecretKey()
   const { mutate: generateSecretKey, data: user } = useGenerateSecretKey()
@@ -41,10 +40,7 @@ function EditUser() {
   const [isSecretKeyVisible, setIsSecretKeyVisible] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [defaultCityOptions, setDefaultCityOptions] = useState<CityOption[]>([])
   const [selectedCity, setSelectedCity] = useState<CityOption | null>(null)
-  const cityId = watch('cityId')
-  const cityName = watch('cityName')
   const picture = watch('picture')
   const phoneNumber = userDetails?.phoneNumber
 
@@ -54,6 +50,8 @@ function EditUser() {
   }
 
   const [shouldReset, setShouldReset] = useState(true)
+
+  console.log('selected city', selectedCity)
 
   useEffect(() => {
     if (userDetails && shouldReset) {
@@ -68,6 +66,7 @@ function EditUser() {
     }
   }, [userDetails, reset, shouldReset])
 
+  // TODO: This is glitchy. Find an alternative to sync city name with city ID.
   useEffect(() => {
     if (userDetails?.cityId && !selectedCity) {
       const defaultCity = {
@@ -78,26 +77,6 @@ function EditUser() {
       setValue('cityId', defaultCity.value)
     }
   }, [userDetails, selectedCity])
-
-  useEffect(() => {
-    fetchDefaultCities().then((cities) => {
-      const cityOptions = cities.map((city) => ({
-        label: city.name || 'Unknown city',
-        value: city.id || 0,
-      }))
-      setDefaultCityOptions(cityOptions)
-
-      if (cityId && cityName && typeof cityName === 'string' && shouldReset) {
-        const initialCity = cityOptions.find(
-          (option) => option.value === cityId,
-        ) || {
-          label: cityName,
-          value: cityId,
-        }
-        setSelectedCity(initialCity as CityOption)
-      }
-    })
-  }, [cityId, cityName, setValue])
 
   useEffect(() => {
     if (!user?.secretKey) return
@@ -121,7 +100,9 @@ function EditUser() {
 
   const phoneNumberPattern = /^(\+[1-9]\d{1,14}|0\d{5,14})$/
 
-  return (
+  return isPending ? (
+    <div>loading</div>
+  ) : (
     <div className="min-h-screen">
       <form
         className="w-full bg-slate-100 pb-20 pt-16 lg:pb-4 lg:pt-0"
@@ -183,7 +164,7 @@ function EditUser() {
             placeholder="Pilih Kota"
             label="Kota"
             loadOptions={getDebouncedCities}
-            defaultOptions={defaultCityOptions}
+            defaultOptions={[]}
             defaultValue={selectedCity ?? undefined}
             onCityChange={handleCityChange}
             required={false}

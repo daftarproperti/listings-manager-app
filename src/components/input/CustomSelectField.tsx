@@ -69,6 +69,7 @@ const CustomSelectField: React.FC<CustomSelectFieldProps> = ({
           <AsyncSelect
             ref={ref}
             classNames={{
+              placeholder: () => 'text-sm',
               control: () => '!border-blue-gray-200',
               menu: () => 'text-sm',
               singleValue: () => 'text-sm',
@@ -98,7 +99,7 @@ const CustomSelectField: React.FC<CustomSelectFieldProps> = ({
             : error.message}
         </p>
       )}
-      <div className="pointer-events-none absolute right-3 top-[38px] group-hover:pointer-events-auto">
+      <div className="pointer-events-none absolute right-3 top-[36px] group-hover:pointer-events-auto">
         <ArrowDownIconSVG />
       </div>
     </div>
