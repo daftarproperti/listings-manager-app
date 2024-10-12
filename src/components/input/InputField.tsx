@@ -6,7 +6,6 @@ import InputLabel from './InputLabel'
 
 type InputFieldProps = {
   halfWidth?: boolean
-  leftPosition?: boolean
   label?: ReactNode
   registerHook?: UseFormRegisterReturn<string>
   placeholderValue: string
@@ -21,7 +20,6 @@ type InputFieldProps = {
 
 const InputField: React.FC<InputFieldProps> = ({
   halfWidth,
-  leftPosition,
   label,
   registerHook,
   placeholderValue,
@@ -55,9 +53,7 @@ const InputField: React.FC<InputFieldProps> = ({
   return (
     <div
       className={`mt-3
-        ${halfWidth ? 'w-1/2' : 'w-full'} ${
-          leftPosition ? 'mr-1' : halfWidth ? 'ml-1' : 'ml-0'
-        }`}
+        ${halfWidth ? 'w-1/2' : 'w-full'}`}
     >
       <div className="flex justify-between">
         <InputLabel label={label ?? <span>&nbsp;</span>} />

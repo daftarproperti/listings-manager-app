@@ -52,7 +52,9 @@ const MainLayout = ({ children }: PropsWithChildren) => {
   const withSideBar =
     location.pathname === '/' || location.pathname === '/properties'
 
-  const isActive = (pathname: string) => location.pathname === pathname
+  const isActive = (pathname: string) =>
+    location.pathname === pathname ||
+    (pathname === '/' && location.pathname.startsWith('/listings'))
 
   const onClickApplySort = (v: (typeof SORT_OPTIONS)[0]) => {
     if (

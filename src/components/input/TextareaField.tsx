@@ -22,7 +22,7 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
   additionalClassName,
 }) => {
   const baseClassName =
-    'mt-1 min-h-[240px] w-full items-start justify-center self-stretch whitespace-nowrap'
+    'min-h-[240px] w-full items-start justify-center self-stretch whitespace-nowrap'
   const textareaClassName = `${baseClassName} ${
     additionalClassName || ''
   }`.trim()
@@ -34,7 +34,7 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
         {...registerHook}
         placeholder={placeholderValue}
         className={
-          'mt-0 bg-white !border-t-blue-gray-200 focus:!border-t-gray-900 ' +
+          'block bg-white !border-t-blue-gray-200 focus:!border-t-gray-900 ' +
           textareaClassName
         }
         labelProps={{ className: 'hidden' }}

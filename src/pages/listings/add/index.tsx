@@ -561,7 +561,7 @@ const AddPage = () => {
             selectOptions={LISTING_OPTIONS.propertyType.options}
             errorFieldName={errors.propertyType}
           />
-          <div className="my-5">
+          <div className="mt-3">
             <InputCheckboxField
               label="Listing dengan Multi Unit"
               registerHook={register('isMultipleUnits')}
@@ -612,11 +612,10 @@ const AddPage = () => {
               errorFieldName={errors.rentPrice}
             />
           )}
-          <div className="flex w-full">
+          <div className="flex w-full space-x-2">
             {propertyType !== 'apartment' && (
               <InputField
                 halfWidth={true}
-                leftPosition={true}
                 label="Luas Tanah"
                 registerHook={register('lotSize', { required: true })}
                 placeholderValue="Luas Tanah"
@@ -668,10 +667,9 @@ const AddPage = () => {
             />
           )}
           {propertyType !== 'land' && propertyType !== 'warehouse' && (
-            <div className="flex w-full">
+            <div className="flex w-full space-x-2">
               <InputField
                 halfWidth={true}
-                leftPosition={true}
                 label="Kamar Tidur"
                 registerHook={register('bedroomCounts', { required: true })}
                 placeholderValue="Contoh: 3 atau 3+1"
@@ -693,10 +691,9 @@ const AddPage = () => {
           {propertyType !== 'land' &&
             propertyType !== 'warehouse' &&
             propertyType !== 'apartment' && (
-              <div className="flex w-full">
+              <div className="flex w-full space-x-2">
                 <InputField
                   halfWidth={true}
-                  leftPosition={true}
                   label="Lantai"
                   registerHook={register('floorCount', { required: true })}
                   placeholderValue="Silahkan isi"
@@ -735,10 +732,9 @@ const AddPage = () => {
           )}
           {import.meta.env.VITE_WITH_LATLNG_PICKER && (
             <>
-              <div className="flex w-full">
+              <div className="flex w-full space-x-2">
                 <InputField
                   halfWidth
-                  leftPosition
                   label={
                     <span className="flex items-center gap-1">
                       Koordinat{' '}

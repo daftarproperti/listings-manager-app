@@ -308,7 +308,7 @@ function EditListing({ id }: { id: string }) {
             registerHook={register('propertyType', { required: false })}
             selectOptions={LISTING_OPTIONS.propertyType.options}
           />
-          <div className="my-5">
+          <div className="mt-3">
             <InputCheckboxField
               label="Listing dengan Multi Unit"
               registerHook={register('isMultipleUnits')}
@@ -359,11 +359,10 @@ function EditListing({ id }: { id: string }) {
               errorFieldName={errors.rentPrice}
             />
           )}
-          <div className="flex w-full">
+          <div className="flex w-full space-x-2">
             {propertyType !== 'apartment' && (
               <InputField
                 halfWidth={true}
-                leftPosition={true}
                 label="Luas Tanah"
                 registerHook={register('lotSize', { required: true })}
                 placeholderValue="Luas Tanah"
@@ -415,10 +414,9 @@ function EditListing({ id }: { id: string }) {
             />
           )}
           {propertyType !== 'land' && propertyType !== 'warehouse' && (
-            <div className="flex w-full">
+            <div className="flex w-full space-x-2">
               <InputField
                 halfWidth={true}
-                leftPosition={true}
                 label="Kamar Tidur"
                 registerHook={register('bedroomCounts', { required: true })}
                 placeholderValue="Contoh: 3 atau 3+1"
@@ -437,6 +435,28 @@ function EditListing({ id }: { id: string }) {
               />
             </div>
           )}
+          {propertyType !== 'land' &&
+            propertyType !== 'warehouse' &&
+            propertyType !== 'apartment' && (
+              <div className="flex w-full space-x-2">
+                <InputField
+                  halfWidth={true}
+                  label="Lantai"
+                  registerHook={register('floorCount', { required: true })}
+                  placeholderValue="Silahkan isi"
+                  errorFieldName={errors.floorCount}
+                  type="number"
+                />
+                <InputField
+                  halfWidth={true}
+                  label="Kapasitas Mobil"
+                  registerHook={register('carCount', { required: false })}
+                  placeholderValue="Silahkan isi"
+                  errorFieldName={errors.carCount}
+                  type="number"
+                />
+              </div>
+            )}
           {propertyType !== 'land' && (
             <SelectField
               name="electricPower"
@@ -459,10 +479,9 @@ function EditListing({ id }: { id: string }) {
           )}
           {import.meta.env.VITE_WITH_LATLNG_PICKER && (
             <>
-              <div className="flex w-full">
+              <div className="flex w-full space-x-2">
                 <InputField
                   halfWidth={true}
-                  leftPosition={true}
                   label={
                     <span className="flex items-center gap-1">
                       Koordinat{' '}
