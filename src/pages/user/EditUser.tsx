@@ -14,7 +14,7 @@ import CustomSelectField from 'components/input/CustomSelectField'
 import InputSingleFileField from 'components/input/InputSingleFileField'
 import BottomStickyButton from 'components/button/BottomStickyButton'
 import ConfirmDialog from 'components/ConfirmDialog'
-import { Button, IconButton } from '@material-tailwind/react'
+import { Button, IconButton, Typography } from '@material-tailwind/react'
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline'
 import QRCode from 'react-qr-code'
 
@@ -50,8 +50,6 @@ function EditUser() {
   }
 
   const [shouldReset, setShouldReset] = useState(true)
-
-  console.log('selected city', selectedCity)
 
   useEffect(() => {
     if (userDetails && shouldReset) {
@@ -113,7 +111,7 @@ function EditUser() {
         })}
       >
         <div className="sticky top-0 z-10 hidden items-center justify-between border-b bg-white p-4 pt-8 lg:flex">
-          <div className="text-xl font-semibold">Informasi Profil Saya</div>
+          <Typography variant="h5">Informasi Profil Saya</Typography>
           <Button
             size="sm"
             color="blue"

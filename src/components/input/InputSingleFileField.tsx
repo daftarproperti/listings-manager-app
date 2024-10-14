@@ -4,6 +4,8 @@ import { CameraIcon } from '@heroicons/react/24/solid'
 import { type UseFormRegisterReturn } from 'react-hook-form'
 import { validateImageFiles } from 'utils'
 
+import InputLabel from './InputLabel'
+
 type InputSingleFileProps = {
   label: string
   registerHook: UseFormRegisterReturn<string>
@@ -47,9 +49,7 @@ const InputSingleFileField: React.FC<InputSingleFileProps> = ({
 
   return (
     <div className="space-y-2">
-      <div className="text-lg font-semibold leading-7 text-gray-800">
-        {label}
-      </div>
+      <InputLabel label={label} />
       <div className="mb-4 flex items-center gap-4">
         <input
           id="image-upload"

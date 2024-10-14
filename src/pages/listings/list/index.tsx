@@ -13,7 +13,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { InformationCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { countActiveFilters, isSorted } from 'utils'
-import { Badge, Button, IconButton } from '@material-tailwind/react'
+import { Badge, Button, IconButton, Typography } from '@material-tailwind/react'
 
 const ListingListPage = () => {
   const navigate = useNavigate()
@@ -134,7 +134,7 @@ const ListingListPage = () => {
           </div>
         </div>
         <div className="sticky top-0 z-10 hidden items-center justify-between bg-slate-100 p-4 pt-8 lg:flex">
-          <div className="text-lg font-semibold">Listing Saya</div>
+          <Typography variant="h5">Listing Saya</Typography>
           <Button
             size="sm"
             color="blue"
