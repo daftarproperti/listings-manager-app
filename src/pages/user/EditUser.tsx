@@ -17,6 +17,7 @@ import ConfirmDialog from 'components/ConfirmDialog'
 import { Button, IconButton, Typography } from '@material-tailwind/react'
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline'
 import QRCode from 'react-qr-code'
+import { updateCityName } from 'utils/updateCityName'
 
 import { onSubmit } from './handleUserForm'
 
@@ -30,7 +31,12 @@ function EditUser() {
     watch,
     setValue,
   } = useForm<UpdateProfileRequest>()
-  const { data: userDetails, isLoading, isPending } = useGetUserProfile()
+  const {
+    data: userDetails,
+    isLoading,
+    isPending,
+    isFetching,
+  } = useGetUserProfile()
   const { mutate } = useUpdateUserProfile()
   const { mutate: deleteSecretKey } = useDeleteSecretKey()
   const { mutate: generateSecretKey, data: user } = useGenerateSecretKey()
@@ -64,17 +70,11 @@ function EditUser() {
     }
   }, [userDetails, reset, shouldReset])
 
-  // TODO: This is glitchy. Find an alternative to sync city name with city ID.
   useEffect(() => {
     if (userDetails?.cityId && !selectedCity) {
-      const defaultCity = {
-        label: userDetails.cityName,
-        value: userDetails.cityId,
-      }
-      setSelectedCity((defaultCity as CityOption) || null)
-      setValue('cityId', defaultCity.value)
+      updateCityName(isFetching, userDetails.cityId, setSelectedCity)
     }
-  }, [userDetails, selectedCity])
+  }, [isFetching, userDetails, selectedCity])
 
   useEffect(() => {
     if (!user?.secretKey) return

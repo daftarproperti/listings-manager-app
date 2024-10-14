@@ -27,6 +27,7 @@ import ConfirmationDialog from 'components/header/ConfirmationDialog'
 import type { CombinedImage } from 'components/input/types'
 import { useDirty } from 'contexts/DirtyContext'
 import InputLabel from 'components/input/InputLabel'
+import { updateCityName } from 'utils/updateCityName'
 
 import { onSubmit } from './handleFormSubmit'
 import { LISTING_OPTIONS } from './dummy'
@@ -67,6 +68,7 @@ function EditListing({ id }: { id: string }) {
   const {
     data: listingDetails,
     isPending,
+    isFetching,
     isError,
   } = useGetListingDetail({ id })
 
@@ -138,15 +140,10 @@ function EditListing({ id }: { id: string }) {
   }, [listingDetails])
 
   useEffect(() => {
-    if (listingDetails && !selectedCity) {
-      const defaultCity = {
-        label: listingDetails.cityName,
-        value: listingDetails.cityId,
-      }
-      setSelectedCity(defaultCity as CityOption)
-      setValue('cityId', defaultCity.value)
+    if (listingDetails?.cityId && !selectedCity) {
+      updateCityName(isFetching, listingDetails.cityId, setSelectedCity)
     }
-  }, [listingDetails, selectedCity])
+  }, [isFetching, listingDetails, selectedCity])
 
   useEffect(() => {
     if (errors.listingType && Object.keys(errors).length === 1) {

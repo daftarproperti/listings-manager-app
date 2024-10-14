@@ -43,6 +43,7 @@ import InputModal from 'components/InputModal'
 import { useDirty } from 'contexts/DirtyContext'
 import AddressTooltip from 'components/AddressTooltip'
 import InputLabel from 'components/input/InputLabel'
+import { updateCityName } from 'utils/updateCityName'
 
 interface ExtendedListing extends GeneratedListing {
   bedroomCounts?: string
@@ -93,7 +94,7 @@ const AddPage = () => {
   const price = watch('price')
   const lotSize = watch('lotSize')
 
-  const { data: userProfile, isFetched } = useGetUserProfile()
+  const { data: userProfile, isFetching } = useGetUserProfile()
   const [selectedCity, setSelectedCity] = useState<CityOption | null>(null)
   const { mutate: generateListing } = useGenerateListingFromText()
   const { mutate: getGenerateResult } = useGetGenerateResult()
@@ -252,22 +253,10 @@ const AddPage = () => {
   }, [price, lotSize])
 
   useEffect(() => {
-    if (isFetched) {
-      if (userProfile && userProfile.cityName && userProfile.cityId != null) {
-        const defaultCity = {
-          label: userProfile.cityName,
-          value: userProfile.cityId,
-        }
-        setSelectedCity(defaultCity as CityOption)
-
-        if (selectedCity) {
-          setValue('cityId', selectedCity.value, { shouldValidate: true })
-        }
-      } else {
-        setSelectedCity(null)
-      }
+    if (userProfile?.cityId && !selectedCity) {
+      updateCityName(isFetching, userProfile.cityId, setSelectedCity)
     }
-  }, [userProfile, isFetched])
+  }, [isFetching, userProfile, selectedCity])
 
   useEffect(() => {
     if (selectedCity) {
