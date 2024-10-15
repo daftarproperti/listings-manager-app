@@ -13,7 +13,13 @@ import { Fragment, useEffect, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { InformationCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { countActiveFilters, isSorted } from 'utils'
-import { Badge, Button, IconButton, Typography } from '@material-tailwind/react'
+import {
+  Badge,
+  Button,
+  IconButton,
+  Input,
+  Typography,
+} from '@material-tailwind/react'
 
 const ListingListPage = () => {
   const navigate = useNavigate()
@@ -75,12 +81,14 @@ const ListingListPage = () => {
       <div className="flex min-h-dvh w-full flex-col bg-slate-100 pb-20 pt-16 lg:p-0">
         <div className="bg-white p-4 lg:hidden">
           <div className="relative mb-4">
-            <MagnifyingGlassIcon className="absolute left-2 top-[50%] h-4 w-4 -translate-y-[50%] text-slate-400" />
-            <input
+            <Input
+              autoComplete="off"
+              crossOrigin={undefined}
+              label="Cari"
               type="text"
               name="listing-search"
               id="listing-search"
-              className="block w-full rounded border border-slate-300 p-4 py-2 pl-8 text-lg text-gray-900"
+              icon={<MagnifyingGlassIcon />}
               placeholder="Kata kunci pencarian"
               value={searchText}
               onChange={handleChangeSearchText}
