@@ -162,7 +162,9 @@ function ListingDetail({
         data && (
           <>
             {!!data?.pictureUrls?.length && (
-              <SwiperSlider pictures={data?.pictureUrls} />
+              <div className="m-4 mb-0">
+                <SwiperSlider pictures={data?.pictureUrls} />
+              </div>
             )}
             <div className="grow py-4">
               {(data.listingType || data.propertyType) && (
