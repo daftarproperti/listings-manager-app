@@ -1,7 +1,13 @@
 import SwiperSlider from 'components/SwiperSlider'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Button, type ButtonProps, Chip } from '@material-tailwind/react'
+import {
+  Button,
+  type ButtonProps,
+  Card,
+  Chip,
+  Typography,
+} from '@material-tailwind/react'
 import { useGetListingDetail } from 'api/queries'
 import {
   BathIconSVG,
@@ -158,7 +164,34 @@ function ListingDetail({
             {!!data?.pictureUrls?.length && (
               <SwiperSlider pictures={data?.pictureUrls} />
             )}
-            <div className="grow py-4 lg:pt-2">
+            <div className="grow py-4">
+              {(data.listingType || data.propertyType) && (
+                <>
+                  <div className="flex gap-2 px-4">
+                    <Chip
+                      variant="outlined"
+                      size="sm"
+                      value={getLabelForValue(
+                        'propertyType',
+                        data.propertyType || 'defaultType',
+                      )}
+                    ></Chip>
+                    <Chip
+                      variant="outlined"
+                      size="sm"
+                      value={
+                        data.listingForSale && data.listingForRent
+                          ? 'Dijual/Disewa'
+                          : data.listingForSale
+                            ? 'Dijual'
+                            : data.listingForRent
+                              ? 'Disewa'
+                              : null
+                      }
+                    ></Chip>
+                  </div>
+                </>
+              )}
               <div className="px-4">
                 {data?.isPrivate && (
                   <Chip
@@ -166,10 +199,10 @@ function ListingDetail({
                     className="mb-1.5 w-fit rounded-full border-2 border-sky-500 bg-indigo-900 px-1.5 py-0.5 shadow"
                   />
                 )}
-                <h1 className="text-lg font-semibold leading-7 text-slate-500">
+                <Typography variant="h6" className="mt-3 leading-tight">
                   {data?.address}
-                </h1>
-                <div className="text-2xl font-semibold leading-8 text-slate-800">
+                </Typography>
+                <Typography variant="h4" className="mt-2">
                   {data.listingForSale && !data.listingForRent
                     ? formatCurrencyToIDRText(data.price)
                     : data.listingForRent && !data.listingForSale
@@ -179,71 +212,51 @@ function ListingDetail({
                         )} / ${formatCurrencyToIDRText(
                           data.rentPrice,
                         )} per tahun`}
-                </div>
-                <div className="mt-1.5 line-clamp-3 text-[10px] leading-4 text-slate-400">
-                  Diperbarui pada: {data?.updatedAt}
-                </div>
+                </Typography>
+                <Typography variant="small" className="mt-2 flex">
+                  <span className="w-20">Diposting:</span>{' '}
+                  <span>{data?.createdAt}</span>
+                </Typography>
+                <Typography variant="small" className="flex">
+                  <span className="w-20">Diperbarui:</span> {data?.updatedAt}
+                </Typography>
               </div>
-              <div className="mt-4 flex flex-wrap content-start items-stretch gap-4 border-y border-solid border-y-[color:var(--slate-200,#E2E8F0)] py-2 pl-4 pr-14">
-                <span className="flex items-center justify-between gap-1">
+              <Typography variant="small" className="mt-2 flex gap-4 px-4 py-2">
+                <span className="flex items-center gap-1">
                   <BedIconSVG />
-                  <div className="grow self-stretch whitespace-nowrap text-base leading-6 text-slate-800">
+                  <span>
                     {data?.bedroomCount}
                     {data.additionalBedroomCount
                       ? `+` + `${data.additionalBedroomCount}`
                       : ''}{' '}
                     KT
-                  </div>
+                  </span>
                 </span>
-                <span className="flex items-center justify-between gap-1">
+                <span className="flex items-center gap-1">
                   <BathIconSVG />
-                  <div className="grow self-stretch whitespace-nowrap text-base leading-6 text-slate-800">
+                  <span>
                     {data?.bathroomCount}
                     {data.additionalBathroomCount
                       ? `+` + `${data.additionalBathroomCount}`
                       : ''}{' '}
                     KM
-                  </div>
+                  </span>
                 </span>
-                <span className="flex items-center justify-between gap-1">
+                <span className="flex items-center gap-1">
                   <HouseIconSVG />
-                  <div className="grow self-stretch whitespace-nowrap text-base leading-6 text-slate-800">
-                    {data?.buildingSize} m2
-                  </div>
+                  <span>{data?.buildingSize} m&sup2;</span>
                 </span>
-                <span className="flex items-center justify-between gap-1">
+                <span className="flex items-center gap-1">
                   <LotIconSVG />
-                  <div className="grow self-stretch whitespace-nowrap text-base leading-6 text-slate-800">
-                    {data?.lotSize} m2
-                  </div>
+                  <span>{data?.lotSize} m&sup2;</span>
                 </span>
-              </div>
-              {(data.listingType || data.propertyType) && (
-                <>
-                  <div className="flex flex-wrap content-start gap-x-4 gap-y-1 border-b border-solid border-t-slate-200 px-4 py-2 text-[10px] text-slate-400">
-                    <div className="flex items-center justify-between gap-1">
-                      Tipe Listing:{' '}
-                      {data.listingForSale && data.listingForRent
-                        ? 'Dijual/Disewa'
-                        : data.listingForSale
-                          ? 'Dijual'
-                          : data.listingForRent
-                            ? 'Disewa'
-                            : null}
-                    </div>
-                    <div className="flex items-center justify-between gap-1">
-                      Tipe Properti:{' '}
-                      {getLabelForValue(
-                        'propertyType',
-                        data.propertyType || 'defaultType',
-                      )}
-                    </div>
-                  </div>
-                </>
-              )}
-              <div className="border-b border-solid border-t-slate-200 px-3 py-2.5">
+              </Typography>
+              <div className="px-3 py-2.5">
                 <div className="flex w-full justify-between gap-5">
-                  <div className="flex items-center space-x-2 text-sm">
+                  <Typography
+                    variant="small"
+                    className="flex items-center space-x-2"
+                  >
                     {data.verifyStatus !== 'approved' ? (
                       <>
                         {data.verifyStatus === 'rejected' ? (
@@ -271,15 +284,15 @@ function ListingDetail({
                       </>
                     )}
                     {isExpired && (
-                      <div className="py-0.5 pr-3 text-sm font-semibold">
+                      <div className="py-0.5 pr-3 font-semibold">
                         &nbsp;-&nbsp;
                         <span className="text-red-500">
                           Masa berlaku listing telah berakhir
                         </span>
                       </div>
                     )}
-                  </div>
-                  <div className="flex-1 justify-end text-right text-sm lg:max-w-96">
+                  </Typography>
+                  <div className="flex-1 justify-end text-right lg:max-w-96">
                     {data?.cancellationNote?.status !== undefined && (
                       <div className="inline-block">
                         Status Pembatalan:
@@ -343,25 +356,27 @@ function ListingDetail({
                   </div>
                 )}
               </div>
-              <div className="px-4 py-1 text-sm">
-                <h2 className="text-sm font-semibold leading-7 text-slate-500">
-                  Detail Listing
-                </h2>
-                {data && <DetailListingTable dataTable={data} />}
-              </div>
-              {data && data.description && (
-                <div className="px-4 py-1">
-                  <h2 className="text-sm font-semibold leading-7 text-slate-500">
-                    Deskripsi
-                  </h2>
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: replaceWithBr(data.description),
-                    }}
-                    className="whitespace-pre-wrap text-sm"
-                  />
+              <Card className="mx-4 my-1 bg-slate-50 p-3">
+                <div>
+                  <Typography variant="h6" className="">
+                    Detail Listing
+                  </Typography>
+                  <div className="mt-2">
+                    {data && <DetailListingTable dataTable={data} />}
+                  </div>
                 </div>
-              )}
+                {data && data.description && (
+                  <div className="mt-3">
+                    <Typography variant="h6">Deskripsi</Typography>
+                    <Typography
+                      variant="small"
+                      className="mt-2 whitespace-pre-wrap text-sm leading-6"
+                    >
+                      {data.description}
+                    </Typography>
+                  </div>
+                )}
+              </Card>
             </div>
             <div className="sticky bottom-0 border-t lg:border-0">
               {data?.user?.name && (
