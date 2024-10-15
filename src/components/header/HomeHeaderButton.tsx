@@ -1,4 +1,4 @@
-import { MoreIconSVG, LogoutIconSVG, WAIconSVG } from 'assets/icons'
+import { WAIconSVG } from 'assets/icons'
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import {
@@ -7,8 +7,13 @@ import {
   MenuHandler,
   MenuItem,
   MenuList,
+  Typography,
 } from '@material-tailwind/react'
 import { logout } from 'api/queries'
+import {
+  EllipsisVerticalIcon,
+  ArrowRightStartOnRectangleIcon,
+} from '@heroicons/react/24/outline'
 
 const HomeHeaderButton = () => {
   const [showDropdown, setShowDropdown] = useState(false)
@@ -30,24 +35,24 @@ const HomeHeaderButton = () => {
       >
         <MenuHandler>
           <IconButton variant="text" className="rounded-full">
-            <MoreIconSVG />
+            <EllipsisVerticalIcon className="h-5 w-5" />
           </IconButton>
         </MenuHandler>
         <MenuList className="px-0 py-1">
           <MenuItem
             onClick={handleLogout}
-            className="flex items-center rounded-none bg-white text-lg"
+            className="flex items-center gap-2 rounded-none bg-white"
           >
-            <LogoutIconSVG className="mt-2 h-8 w-auto text-gray-400" />
-            <span>Keluar</span>
+            <ArrowRightStartOnRectangleIcon className="h-5 w-5 text-gray-400" />
+            <Typography variant="small">Keluar</Typography>
           </MenuItem>
-          <MenuItem className="flex items-center rounded-none bg-white text-lg">
-            <WAIconSVG className="mr-[12px] h-5 w-auto text-gray-400" />
+          <MenuItem className="flex items-center gap-2 rounded-none bg-white">
+            <WAIconSVG className="h-5 w-5 text-gray-400" />
             <Link
               target="_blank"
               to="https://api.whatsapp.com/send?phone=6285186856707"
             >
-              <span>Hubungi</span>
+              <Typography variant="small">Hubungi</Typography>
             </Link>
           </MenuItem>
         </MenuList>

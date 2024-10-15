@@ -1,4 +1,8 @@
-import { MoreIconSVG, TrashIconSVG, FactCheckIconSVG } from 'assets/icons'
+import {
+  DocumentCheckIcon,
+  EllipsisVerticalIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline'
 import React, { useState } from 'react'
 import {
   IconButton,
@@ -6,6 +10,7 @@ import {
   MenuHandler,
   MenuItem,
   MenuList,
+  Typography,
 } from '@material-tailwind/react'
 
 import ConfirmationDialog from './ConfirmationDialog'
@@ -56,7 +61,7 @@ const DotsHeaderButton: React.FC<DotsButtonProps> = ({
       >
         <MenuHandler>
           <IconButton variant="text" className="rounded-full">
-            <MoreIconSVG />
+            <EllipsisVerticalIcon className="h-5 w-5" />
           </IconButton>
         </MenuHandler>
         <MenuList className="px-0 py-1">
@@ -80,9 +85,9 @@ const DotsHeaderButton: React.FC<DotsButtonProps> = ({
                   : undefined
               }
             >
-              <FactCheckIconSVG className="w-6" />
+              <DocumentCheckIcon className="h-5 w-5" />
               <div>
-                <div>Laporan Closing</div>
+                <Typography variant="small">Laporan Closing</Typography>
                 {closings > 0 && !multipleUnit && (
                   <div className="text-[12px] text-slate-400">
                     Listing ini sudah pernah dilaporkan
@@ -93,11 +98,11 @@ const DotsHeaderButton: React.FC<DotsButtonProps> = ({
           )}
           {!isApproved && (
             <MenuItem
-              className="flex items-center gap-2 rounded-none text-lg"
+              className="flex items-center gap-2 rounded-none"
               onClick={initiateDelete}
             >
-              <TrashIconSVG className="w-6" />
-              Hapus
+              <TrashIcon className="h-5 w-5" />
+              <Typography variant="small">Hapus</Typography>
             </MenuItem>
           )}
         </MenuList>

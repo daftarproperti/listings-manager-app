@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
-
-import { ListingIconSVG, AccountIconSVG } from '../../assets/icons'
+import { BuildingOfficeIcon, UserCircleIcon } from '@heroicons/react/24/outline'
 
 type FooterIconsProps = {
   activeIcon?: boolean
@@ -22,7 +21,7 @@ const FooterIcons: React.FC<FooterIconsProps> = () => {
             isActive('/'),
           )}`}
         >
-          <ListingIconSVG className="inline-block" />
+          <BuildingOfficeIcon className="inline-block h-5 w-5" />
           <span className="block pt-2 text-xs">Listing Saya</span>
         </Link>
         <Link
@@ -31,7 +30,7 @@ const FooterIcons: React.FC<FooterIconsProps> = () => {
             isActive('/user'),
           )}`}
         >
-          <AccountIconSVG className="inline-block" />
+          <UserCircleIcon className="inline-block h-5 w-5" />
           <span className="block pt-2 text-xs">Akun</span>
         </Link>
       </div>
