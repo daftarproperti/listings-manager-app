@@ -23,7 +23,6 @@ import {
 import {
   formatCurrencyToIDRText,
   appPath,
-  dpPath,
   getLabelForValue,
   replaceWithBr,
   getVerifyStatus,
@@ -33,7 +32,6 @@ import {
 } from 'utils'
 import MarketerLink from 'components/MarketerLink'
 import DetailListingTable from 'components/DetailListingTable'
-import ShareButton from 'components/button/ShareButton'
 import DotsHeaderButton from 'components/header/DotsHeaderButton'
 import type {
   VerifyStatus,
@@ -62,9 +60,6 @@ function ListingDetail({
   }
   const location = useLocation()
   const updateSuccess = location.state?.updateSuccess
-  const listingPublicUrl = dpPath(
-    `/public/listings/${data?.listingIdStr || ''}`,
-  )
 
   const [showAdminNote, setShowAdminNote] = useState(false)
 
@@ -116,20 +111,6 @@ function ListingDetail({
           Edit
         </Button>
       </div>
-      <ShareButton
-        url={listingPublicUrl}
-        title={data?.address || 'Default Address'}
-        className="w-full"
-      >
-        <Button
-          fullWidth
-          size={size}
-          color="blue"
-          className="h-full text-sm font-normal capitalize"
-        >
-          Bagikan
-        </Button>
-      </ShareButton>
       <div className="hidden w-fit lg:block">
         <DotsHeaderButton propertyId={id} />
       </div>
