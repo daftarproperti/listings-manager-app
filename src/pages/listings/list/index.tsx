@@ -4,6 +4,7 @@ import {
   Bars3BottomLeftIcon,
   MagnifyingGlassIcon,
   PlusIcon,
+  QuestionMarkCircleIcon,
 } from '@heroicons/react/24/solid'
 import { useGetListingList } from 'api/queries'
 import NewListingSheet from 'components/NewListingSheet'
@@ -18,6 +19,7 @@ import {
   Button,
   IconButton,
   Input,
+  Tooltip,
   Typography,
 } from '@material-tailwind/react'
 
@@ -44,6 +46,12 @@ const ListingListPage = () => {
   } = useGetListingList({
     searchParams,
   })
+
+  const listingsLength = data?.pages?.[0]?.listings?.length || 0
+
+  const maxListings = Number(
+    (import.meta.env.VITE_MAX_LISTINGS_PER_USER as string) || '10',
+  )
 
   const handleChangeSearchText = (event: React.ChangeEvent<HTMLInputElement>) =>
     setSearchText(event.target.value)
@@ -142,11 +150,33 @@ const ListingListPage = () => {
           </div>
         </div>
         <div className="sticky top-0 z-10 hidden items-center justify-between bg-slate-100 p-4 pt-8 lg:flex">
-          <Typography variant="h5">Listing Saya</Typography>
+          <div className="flex items-center gap-1">
+            <Typography variant="h5">
+              Listing Saya ({listingsLength}/{maxListings})
+            </Typography>
+            <Tooltip
+              className="border border-blue-gray-100 bg-white px-4 py-3 shadow shadow-black/10"
+              content={
+                <div className="w-60">
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal opacity-80"
+                  >
+                    Anda memiliki kuota listing yang tersisa sebanyak{' '}
+                    {maxListings - listingsLength}
+                  </Typography>
+                </div>
+              }
+            >
+              <QuestionMarkCircleIcon className="h-5 w-5 text-slate-500" />
+            </Tooltip>
+          </div>
           <Button
             size="sm"
             color="blue"
             variant="outlined"
+            disabled={listingsLength >= maxListings}
             className="flex items-center gap-2 bg-white text-sm font-normal capitalize"
             onClick={() => navigate('/listings/add')}
           >
