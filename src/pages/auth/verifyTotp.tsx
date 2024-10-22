@@ -63,6 +63,7 @@ function VerifyTotp() {
               Masukkan kode verifikasi
             </label>
             <input
+              autoComplete="off"
               required
               type="text"
               id="totpCode"

@@ -101,6 +101,7 @@ function Verify() {
               Masukkan kode verifikasi
             </label>
             <input
+              autoComplete="off"
               type="text"
               id="verificationCode"
               name="verificationCode"
