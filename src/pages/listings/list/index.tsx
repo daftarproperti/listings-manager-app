@@ -87,68 +87,71 @@ const ListingListPage = () => {
   return (
     <>
       <div className="flex min-h-dvh w-full flex-col bg-slate-100 pb-20 pt-16 lg:p-0">
-        <div className="bg-white p-4 lg:hidden">
-          <div className="relative mb-4">
-            <Input
-              autoComplete="off"
-              crossOrigin={undefined}
-              label="Cari"
-              type="text"
-              name="listing-search"
-              id="listing-search"
-              icon={<MagnifyingGlassIcon />}
-              placeholder="Kata kunci pencarian"
-              value={searchText}
-              onChange={handleChangeSearchText}
-            />
-          </div>
-          <div className="flex flex-row gap-2">
-            <Badge
-              content={activeFilterCount}
-              invisible={activeFilterCount === 0}
-              className="min-h-5 min-w-5"
-            >
-              <Link to={`/listings/filter?${searchParams}`}>
-                <Button
-                  size="sm"
-                  color="blue"
-                  variant="outlined"
-                  className="relative flex items-center gap-1.5 text-sm font-normal capitalize"
+        {data?.pages[0]?.listings?.length !== undefined &&
+          data.pages[0].listings.length > 0 && (
+            <div className="bg-white p-4 lg:hidden">
+              <div className="relative mb-4">
+                <Input
+                  autoComplete="off"
+                  crossOrigin={undefined}
+                  label="Cari"
+                  type="text"
+                  name="listing-search"
+                  id="listing-search"
+                  icon={<MagnifyingGlassIcon />}
+                  placeholder="Kata kunci pencarian"
+                  value={searchText}
+                  onChange={handleChangeSearchText}
+                />
+              </div>
+              <div className="flex flex-row gap-2">
+                <Badge
+                  content={activeFilterCount}
+                  invisible={activeFilterCount === 0}
+                  className="min-h-5 min-w-5"
                 >
-                  <AdjustmentsHorizontalIcon className="w-5" />
-                  Filter
-                </Button>
-              </Link>
-            </Badge>
-            <Badge
-              content="1"
-              invisible={!isSortedList}
-              className="min-h-5 min-w-5"
-            >
-              <Button
-                size="sm"
-                color="blue"
-                variant="outlined"
-                className="relative flex items-center gap-1.5 text-sm font-normal capitalize"
-                onClick={() => setIsFilterBottomBarOpen(true)}
-              >
-                <Bars3BottomLeftIcon className="w-5" />
-                Urutkan
-              </Button>
-            </Badge>
-            {searchParams?.size > 0 && (
-              <Button
-                size="sm"
-                color="blue"
-                className="flex items-center gap-1.5 text-sm font-normal capitalize"
-                onClick={() => onClickReset(true)}
-              >
-                <XCircleIcon className="w-5" />
-                Reset
-              </Button>
-            )}
-          </div>
-        </div>
+                  <Link to={`/listings/filter?${searchParams}`}>
+                    <Button
+                      size="sm"
+                      color="blue"
+                      variant="outlined"
+                      className="relative flex items-center gap-1.5 text-sm font-normal capitalize"
+                    >
+                      <AdjustmentsHorizontalIcon className="w-5" />
+                      Filter
+                    </Button>
+                  </Link>
+                </Badge>
+                <Badge
+                  content="1"
+                  invisible={!isSortedList}
+                  className="min-h-5 min-w-5"
+                >
+                  <Button
+                    size="sm"
+                    color="blue"
+                    variant="outlined"
+                    className="relative flex items-center gap-1.5 text-sm font-normal capitalize"
+                    onClick={() => setIsFilterBottomBarOpen(true)}
+                  >
+                    <Bars3BottomLeftIcon className="w-5" />
+                    Urutkan
+                  </Button>
+                </Badge>
+                {searchParams?.size > 0 && (
+                  <Button
+                    size="sm"
+                    color="blue"
+                    className="flex items-center gap-1.5 text-sm font-normal capitalize"
+                    onClick={() => onClickReset(true)}
+                  >
+                    <XCircleIcon className="w-5" />
+                    Reset
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
         <div className="sticky top-0 z-10 hidden items-center justify-between bg-slate-100 p-4 pt-8 lg:flex">
           <div className="flex items-center gap-1">
             <Typography variant="h5">
