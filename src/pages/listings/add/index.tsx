@@ -435,7 +435,7 @@ const AddPage = () => {
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="sticky top-0 z-10 hidden items-center justify-between border-b bg-white p-4 pt-8 lg:flex">
-          <div className="text-xl font-semibold">Tambah Properti</div>
+          <div className="text-xl font-semibold">Tambah Listing</div>
           <Button
             size="sm"
             color="blue"
