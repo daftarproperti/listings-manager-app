@@ -172,17 +172,19 @@ const ListingListPage = () => {
               <QuestionMarkCircleIcon className="h-5 w-5 text-slate-500" />
             </Tooltip>
           </div>
-          <Button
-            size="sm"
-            color="blue"
-            variant="outlined"
-            disabled={listingsLength >= maxListings}
-            className="flex items-center gap-2 bg-white text-sm font-normal capitalize"
-            onClick={() => navigate('/listings/add')}
-          >
-            <PlusIcon className="w-5" />
-            Tambah Listing Baru
-          </Button>
+          {listingsLength > 0 ? (
+            <Button
+              size="sm"
+              color="blue"
+              variant="outlined"
+              disabled={listingsLength >= maxListings}
+              className="flex items-center gap-2 bg-white text-sm font-normal capitalize"
+              onClick={() => navigate('/listings/add')}
+            >
+              <PlusIcon className="w-5" />
+              Tambah Listing Baru
+            </Button>
+          ) : null}
         </div>
 
         <div className="flex grow flex-col p-4 lg:pt-0">
@@ -205,25 +207,60 @@ const ListingListPage = () => {
                       ) : (
                         <div className="my-auto space-y-3">
                           {`${searchParams}` === '' ? (
-                            <div className="flex space-x-2 rounded-lg bg-blue-100 p-3">
-                              <div className="shrink-0">
-                                <InformationCircleIcon className="h-5 w-5 text-slate-800" />
+                            <>
+                              <div className="flex space-x-2 rounded-lg bg-blue-100 p-3">
+                                <div className="shrink-0">
+                                  <InformationCircleIcon className="h-5 w-5 text-slate-800" />
+                                </div>
+                                <Typography className="text-center text-sm">
+                                  Anda memiliki maksimal {maxListings} kuota
+                                  listing.
+                                </Typography>
                               </div>
-                              <div className="text-center text-sm">
-                                Anda belum mempunyai listing.{' '}
-                                <Link
-                                  className="text-blue-600 underline transition duration-300 ease-in-out hover:text-blue-800 hover:no-underline focus:text-blue-800 focus:no-underline active:text-blue-900 active:no-underline"
-                                  to="/listings/add"
+                              <Typography variant="h6" className="my-2">
+                                Tentang Daftar Properti
+                              </Typography>
+                              <Typography variant="small" className="mb-2">
+                                Tidak seperti papan iklan, listing yang
+                                terdaftar di Daftar Properti harus transparan
+                                lokasi nya sehingga kami bisa menjamin 1
+                                properti = 1 pendaftar.
+                              </Typography>
+                              <Typography variant="small" className="mb-2">
+                                Listing yang terdaftar akan tersebar ke jaringan
+                                pemasar kami, salah satunya{' '}
+                                <a
+                                  target="_blank"
+                                  href="https://jelajahrumah.id/"
+                                  className="text-blue-500"
+                                  rel="noreferrer"
                                 >
-                                  Tambahkan listing baru
-                                </Link>
+                                  Jelajah Rumah
+                                </a>
                                 .
+                              </Typography>
+                              <Typography variant="small" className="mb-2">
+                                Ke depannya jaringan pemasar akan bertambah
+                                banyak, maka daftarkan listing anda sekarang,
+                                nikmati jaminan menjadi pendaftar eksklusif dan
+                                nantikan pertumbuhannya!
+                              </Typography>
+                              <div className="mx-auto p-3">
+                                <Button
+                                  color="blue"
+                                  variant="filled"
+                                  className="mx-auto flex items-center gap-2 text-sm font-normal capitalize"
+                                  onClick={() => navigate('/listings/add')}
+                                >
+                                  <PlusIcon className="w-5" />
+                                  Tambah Listing Baru
+                                </Button>
                               </div>
-                            </div>
+                            </>
                           ) : (
-                            <div className="text-center">
-                              Data Tidak Tersedia
-                            </div>
+                            <Typography className="text-center">
+                              Listing tidak tersedia
+                            </Typography>
                           )}
                         </div>
                       )}
