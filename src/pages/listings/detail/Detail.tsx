@@ -182,6 +182,9 @@ function ListingDetail({
                     className="mb-1.5 w-fit rounded-full border-2 border-sky-500 bg-indigo-900 px-1.5 py-0.5 shadow"
                   />
                 )}
+                <Typography variant="small" className="mt-3">
+                  Listing ID: {data?.listingIdStr}
+                </Typography>
                 <Typography variant="h6" className="mt-3 leading-tight">
                   {data?.address}
                 </Typography>
