@@ -19,9 +19,10 @@ import {
   Button,
   IconButton,
   Input,
-  Tooltip,
   Typography,
 } from '@material-tailwind/react'
+import Header from 'components/header/Header'
+import Tooltip from 'components/Tooltip'
 
 const ListingListPage = () => {
   const navigate = useNavigate()
@@ -84,109 +85,147 @@ const ListingListPage = () => {
     if (isFetchMoreInView) fetchNextPage()
   }, [isFetchMoreInView])
 
+  const Title = () => (
+    <div className="flex items-center gap-1">
+      <Typography variant="h6" className="lg:text-xl">
+        Listing Saya ({listingsLength}/{maxListings})
+      </Typography>
+      <Tooltip
+        content={
+          <Typography variant="small">
+            {listingsLength >= maxListings ? (
+              <>
+                Kuota listing anda sudah habis,{' '}
+                {
+                  <Link
+                    target="_blank"
+                    tabIndex={-1}
+                    className="text-blue-500"
+                    to="https://api.whatsapp.com/send?phone=6285186856707"
+                  >
+                    hubungi Daftar Properti
+                  </Link>
+                }{' '}
+                untuk permintaan tambahan kuota.
+              </>
+            ) : (
+              <>
+                Anda memiliki kuota listing yang tersisa sebanyak{' '}
+                {maxListings - listingsLength}
+              </>
+            )}
+          </Typography>
+        }
+      >
+        <QuestionMarkCircleIcon className="h-5 w-5 text-slate-500" />
+      </Tooltip>
+    </div>
+  )
+
   return (
     <>
+      <Header title={<Title />} isWithHomeHeaderButton={true} />
       <div className="flex min-h-dvh w-full flex-col bg-slate-100 pb-20 pt-16 lg:p-0">
-        {data?.pages[0]?.listings?.length !== undefined &&
-          data.pages[0].listings.length > 0 && (
-            <div className="bg-white p-4 lg:hidden">
-              <div className="relative mb-4">
-                <Input
-                  autoComplete="off"
-                  crossOrigin={undefined}
-                  label="Cari"
-                  type="text"
-                  name="listing-search"
-                  id="listing-search"
-                  icon={<MagnifyingGlassIcon />}
-                  placeholder="Kata kunci pencarian"
-                  value={searchText}
-                  onChange={handleChangeSearchText}
-                />
-              </div>
-              <div className="flex flex-row gap-2">
-                <Badge
-                  content={activeFilterCount}
-                  invisible={activeFilterCount === 0}
-                  className="min-h-5 min-w-5"
-                >
-                  <Link to={`/listings/filter?${searchParams}`}>
-                    <Button
-                      size="sm"
-                      color="blue"
-                      variant="outlined"
-                      className="relative flex items-center gap-1.5 text-sm font-normal capitalize"
-                    >
-                      <AdjustmentsHorizontalIcon className="w-5" />
-                      Filter
-                    </Button>
-                  </Link>
-                </Badge>
-                <Badge
-                  content="1"
-                  invisible={!isSortedList}
-                  className="min-h-5 min-w-5"
-                >
+        {listingsLength > 0 && (
+          <div className="bg-white p-4 lg:hidden">
+            <div className="relative mb-4">
+              <Input
+                autoComplete="off"
+                crossOrigin={undefined}
+                label="Cari"
+                type="text"
+                name="listing-search"
+                id="listing-search"
+                icon={<MagnifyingGlassIcon />}
+                placeholder="Kata kunci pencarian"
+                value={searchText}
+                onChange={handleChangeSearchText}
+              />
+            </div>
+            <div className="flex flex-row gap-2">
+              <Badge
+                content={activeFilterCount}
+                invisible={activeFilterCount === 0}
+                className="min-h-5 min-w-5"
+              >
+                <Link to={`/listings/filter?${searchParams}`}>
                   <Button
                     size="sm"
                     color="blue"
                     variant="outlined"
                     className="relative flex items-center gap-1.5 text-sm font-normal capitalize"
-                    onClick={() => setIsFilterBottomBarOpen(true)}
                   >
-                    <Bars3BottomLeftIcon className="w-5" />
-                    Urutkan
+                    <AdjustmentsHorizontalIcon className="w-5" />
+                    Filter
                   </Button>
-                </Badge>
-                {searchParams?.size > 0 && (
-                  <Button
-                    size="sm"
-                    color="blue"
-                    className="flex items-center gap-1.5 text-sm font-normal capitalize"
-                    onClick={() => onClickReset(true)}
-                  >
-                    <XCircleIcon className="w-5" />
-                    Reset
-                  </Button>
-                )}
-              </div>
+                </Link>
+              </Badge>
+              <Badge
+                content="1"
+                invisible={!isSortedList}
+                className="min-h-5 min-w-5"
+              >
+                <Button
+                  size="sm"
+                  color="blue"
+                  variant="outlined"
+                  className="relative flex items-center gap-1.5 text-sm font-normal capitalize"
+                  onClick={() => setIsFilterBottomBarOpen(true)}
+                >
+                  <Bars3BottomLeftIcon className="w-5" />
+                  Urutkan
+                </Button>
+              </Badge>
+              {searchParams?.size > 0 && (
+                <Button
+                  size="sm"
+                  color="blue"
+                  className="flex items-center gap-1.5 text-sm font-normal capitalize"
+                  onClick={() => onClickReset(true)}
+                >
+                  <XCircleIcon className="w-5" />
+                  Reset
+                </Button>
+              )}
             </div>
-          )}
+          </div>
+        )}
         <div className="sticky top-0 z-10 hidden items-center justify-between bg-slate-100 p-4 pt-8 lg:flex">
-          <div className="flex items-center gap-1">
-            <Typography variant="h5">
-              Listing Saya ({listingsLength}/{maxListings})
-            </Typography>
+          <Title />
+          {listingsLength > 0 ? (
             <Tooltip
-              className="border border-blue-gray-100 bg-white px-4 py-3 shadow shadow-black/10"
+              open={listingsLength >= maxListings}
               content={
-                <div className="w-60">
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal opacity-80"
-                  >
-                    Anda memiliki kuota listing yang tersisa sebanyak{' '}
-                    {maxListings - listingsLength}
-                  </Typography>
-                </div>
+                <Typography variant="small">
+                  Kuota listing anda sudah habis,{' '}
+                  {
+                    <Link
+                      target="_blank"
+                      tabIndex={-1}
+                      className="text-blue-500"
+                      to="https://api.whatsapp.com/send?phone=6285186856707"
+                    >
+                      hubungi Daftar Properti
+                    </Link>
+                  }{' '}
+                  untuk permintaan tambahan kuota.
+                </Typography>
               }
             >
-              <QuestionMarkCircleIcon className="h-5 w-5 text-slate-500" />
+              <div className="inline-block">
+                <Button
+                  size="sm"
+                  color="blue"
+                  variant="outlined"
+                  disabled={listingsLength >= maxListings}
+                  className={`flex items-center gap-2 bg-white text-sm font-normal capitalize`}
+                  onClick={() => navigate('/listings/add')}
+                >
+                  <PlusIcon className="w-5" />
+                  Tambah Listing Baru
+                </Button>
+              </div>
             </Tooltip>
-          </div>
-          {listingsLength > 0 ? (
-            <Button
-              size="sm"
-              color="blue"
-              variant="outlined"
-              disabled={listingsLength >= maxListings}
-              className="flex items-center gap-2 bg-white text-sm font-normal capitalize"
-              onClick={() => navigate('/listings/add')}
-            >
-              <PlusIcon className="w-5" />
-              Tambah Listing Baru
-            </Button>
           ) : null}
         </div>
 
@@ -281,18 +320,42 @@ const ListingListPage = () => {
         </div>
       </div>
 
-      <div className="fixed bottom-36 right-4 h-0 w-full max-w-lg text-right lg:hidden">
-        <IconButton
-          size="lg"
-          color="blue"
-          className="rounded-full drop-shadow-lg"
-          // TODO if tambah listing cara cepat already to use, change this to open NewListingSheet
-          // onClick={() => setIsNewListingSheetOpen(true)}
-          onClick={() => navigate('/listings/add')}
-        >
-          <PlusIcon className="h-6 w-6 text-white" />
-        </IconButton>
-      </div>
+      {listingsLength > 0 ? (
+        <div className="fixed bottom-36 right-4 h-0 w-full max-w-lg text-right lg:hidden">
+          <Tooltip
+            open={listingsLength >= maxListings}
+            placement="top-end"
+            content={
+              <Typography variant="small">
+                Kuota listing anda sudah habis,{' '}
+                {
+                  <Link
+                    target="_blank"
+                    tabIndex={-1}
+                    className="text-blue-500"
+                    to="https://api.whatsapp.com/send?phone=6285186856707"
+                  >
+                    hubungi Daftar Properti
+                  </Link>
+                }{' '}
+                untuk permintaan tambahan kuota.
+              </Typography>
+            }
+          >
+            <div className="inline-block">
+              <IconButton
+                size="lg"
+                color="blue"
+                disabled={listingsLength >= maxListings}
+                className="rounded-full drop-shadow-lg"
+                onClick={() => navigate('/listings/add')}
+              >
+                <PlusIcon className="h-6 w-6 text-white" />
+              </IconButton>
+            </div>
+          </Tooltip>
+        </div>
+      ) : null}
 
       <SortBottomSheet
         isOpen={isFilterBottomSheetOpen}

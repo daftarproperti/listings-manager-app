@@ -1,8 +1,8 @@
 import { ArrowLeftIcon } from '@heroicons/react/24/solid'
-import React from 'react'
+import { type ReactNode } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { LogoSVG } from 'assets/icons'
-import { IconButton } from '@material-tailwind/react'
+import { IconButton, Typography } from '@material-tailwind/react'
 import { useDirty } from 'contexts/DirtyContext'
 
 import DotsHeaderButton from './DotsHeaderButton'
@@ -10,7 +10,7 @@ import ResetHeaderButton from './ResetHeaderButton'
 import HomeHeaderButton from './HomeHeaderButton'
 
 type HeaderProps = {
-  title?: string
+  title?: ReactNode
   canEdit?: boolean
   multipleUnit?: boolean
   closings?: number
@@ -63,7 +63,11 @@ const Header: React.FC<HeaderProps> = ({
           </IconButton>
         )}
         <LogoSVG />
-        <h2 className="font-semibold">{title}</h2>
+        {typeof title === 'string' ? (
+          <Typography variant="h6">{title}</Typography>
+        ) : (
+          title
+        )}
       </div>
       {id && canEdit ? (
         <DotsHeaderButton
