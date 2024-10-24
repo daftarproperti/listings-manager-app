@@ -108,6 +108,14 @@ const getMandatoryField = (fieldName: string) => ({
 const isRewardAgreementOptional =
   localStorage.getItem('optional-agreement') === 'true'
 
+const isValidNumberAndGreaterThan0 = (value: string | number | undefined) => {
+  if (typeof value === 'number') {
+    return value > 0
+  }
+  const parsed = parseFloat(value ?? '')
+  return !isNaN(parsed) && parsed > 0
+}
+
 const getWithRewardAgreementSchema = () => {
   return isRewardAgreementOptional
     ? z.boolean()
@@ -170,6 +178,25 @@ export const schema = baseFormSchema.superRefine((data, ctx) => {
       message: 'Harga Jual harus diisi untuk listing jual',
       code: z.ZodIssueCode.custom,
     })
+  }
+  if (data.listingForSale) {
+    if (!data.price || !isValidNumberAndGreaterThan0(data.price)) {
+      ctx.addIssue({
+        path: ['price'],
+        message: 'Harga Jual harus diisi dan lebih dari 0 untuk listing jual',
+        code: z.ZodIssueCode.custom,
+      })
+    }
+  }
+
+  if (data.listingForRent) {
+    if (!data.rentPrice || !isValidNumberAndGreaterThan0(data.rentPrice)) {
+      ctx.addIssue({
+        path: ['rentPrice'],
+        message: 'Harga Sewa harus diisi dan lebih dari 0 untuk listing sewa',
+        code: z.ZodIssueCode.custom,
+      })
+    }
   }
   if (
     data.listingForRent &&
