@@ -144,6 +144,7 @@ const baseFormSchema = z.object({
   isPrivate: z.boolean(),
   withRewardAgreement: getWithRewardAgreementSchema(),
   isMultipleUnits: z.boolean(),
+  revision: z.coerce.number().int().optional().nullable(),
   price: getOptionalField('Harga Jual').number,
   rentPrice: getOptionalField('Harga Sewa').number,
   coordinate: isWithLatLong
