@@ -61,7 +61,7 @@ function ListingDetail({
   const location = useLocation()
   const updateSuccess = location.state?.updateSuccess
 
-  const [showAdminNote, setShowAdminNote] = useState(false)
+  const [showAdminNote, setShowAdminNote] = useState(true)
 
   const toggleAdminNote = () => {
     setShowAdminNote((prev) => !prev)
@@ -331,7 +331,7 @@ function ListingDetail({
                 </div>
                 {showAdminNote && data.adminNote?.message && (
                   <div className="lg:flex lg:justify-between">
-                    <div className="my-4 rounded-lg border border-solid border-slate-300 bg-slate-200 p-4 py-3 text-justify lg:ml-auto lg:w-1/2">
+                    <div className="my-4 rounded-lg border border-solid border-slate-300 bg-amber-100 p-4 py-3 text-justify lg:ml-auto lg:w-1/2">
                       <p
                         dangerouslySetInnerHTML={{
                           __html: replaceWithBr(data.adminNote.message),

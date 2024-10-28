@@ -43,7 +43,7 @@ const Card = ({ data }: { data: Listing }) => {
   const searchParams = new URLSearchParams(location.search)
   const listingForSaleParam = searchParams.get('listingForSale') === 'true'
   const listingForRentParam = searchParams.get('listingForRent') === 'true'
-  const [showAdminNote, setShowAdminNote] = useState(false)
+  const [showAdminNote, setShowAdminNote] = useState(true)
 
   const toggleAdminNote = () => {
     setShowAdminNote((prev) => !prev)
@@ -243,7 +243,7 @@ const Card = ({ data }: { data: Listing }) => {
           </div>
         </div>
         {showAdminNote && data.adminNote?.message && (
-          <div className="mb-2 block w-full rounded-lg border border-solid border-slate-300 bg-slate-200 p-4 py-3 text-justify">
+          <div className="mb-2 block w-full rounded-lg border border-solid border-slate-300 bg-amber-100 p-4 py-3 text-justify">
             <p
               dangerouslySetInnerHTML={{
                 __html: replaceWithBr(data.adminNote.message),
