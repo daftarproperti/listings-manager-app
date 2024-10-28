@@ -126,9 +126,6 @@ function EditListing({ id }: { id: string }) {
       }`
       setValue('bathroomCounts', bathroomCombinedValue)
 
-      const { revision } = listingDetails
-      setValue('revision', revision)
-
       resetFormValues(listingDetails)
       if (
         listingDetails.coordinate?.latitude &&
@@ -192,27 +189,15 @@ function EditListing({ id }: { id: string }) {
   }
 
   const submitProcess = async (data: GeneratedListing) => {
-    const formData = {
-      ...data,
-      revision: data.revision ?? 0,
-    }
-
     if (localStorage.getItem('optional-agreement') === 'true') {
-      if (!formData.withRewardAgreement) {
+      if (!data.withRewardAgreement) {
         setIsDialogOpen(true)
       } else {
-        onSubmit(
-          id,
-          formData,
-          mutate,
-          navigate,
-          setIsSubmitting,
-          combinedImages,
-        )
+        onSubmit(id, data, mutate, navigate, setIsSubmitting, combinedImages)
         setDirty(false)
       }
     } else {
-      onSubmit(id, formData, mutate, navigate, setIsSubmitting, combinedImages)
+      onSubmit(id, data, mutate, navigate, setIsSubmitting, combinedImages)
       setDirty(false)
     }
   }

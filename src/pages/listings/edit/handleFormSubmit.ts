@@ -9,10 +9,6 @@ import type { CombinedImage } from 'components/input/types'
 import type { NavigateFunction } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
-interface APIError {
-  message?: string
-}
-
 export const onSubmit = async (
   id: string,
   formData: UpdateListingRequest,
@@ -44,14 +40,7 @@ export const onSubmit = async (
         setIsSubmitting(false)
       },
       onError: (error: unknown) => {
-        const apiError = error as APIError
-
-        const errorMessage = apiError.message
-        if (errorMessage) {
-          toast(`Error editing Listing: ${errorMessage}`, { type: 'error' })
-        } else {
-          toast(`Error submitting form: ${error}`, { type: 'error' })
-        }
+        toast(`Error submitting form: ${error}`, { type: 'error' })
         setIsSubmitting(false)
       },
     },

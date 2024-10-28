@@ -107,6 +107,8 @@ export interface components {
       image?: string;
     };
     ListingRequest: {
+      /** @example Rumah dijual di daerah pasteur */
+      title?: string;
       /** @example Jl. Pendidikan No. 1 */
       address?: string;
       /** @example Rumah bagus */
@@ -158,8 +160,6 @@ export interface components {
       withRewardAgreement?: boolean;
       /** @example true */
       isMultipleUnits?: boolean;
-      /** @example 0 */
-      revision?: number;
     };
     UserProfileRequest: {
       /** @example Jono Doe */
@@ -357,6 +357,7 @@ export interface components {
       listingId?: number;
       listingIdStr?: string;
       sourceText?: string;
+      title?: string;
       propertyType?: components["schemas"]["PropertyType"];
       listingType?: components["schemas"]["ListingType"];
       listingForSale?: boolean;
@@ -415,12 +416,12 @@ export interface components {
       expiredAt?: string;
       /** Format: date-time */
       rawExpiredAt?: string;
-      revision?: number;
     };
     /** @description Representation of a Listing which is available publicly. */
     PublicListing: {
       listingId?: number;
       listingIdStr?: string;
+      title?: string;
       propertyType?: components["schemas"]["PropertyType"];
       listingForSale?: boolean;
       listingForRent?: boolean;
@@ -953,8 +954,8 @@ export interface operations {
             connectedListings?: {
                 /** @example listing-id-1 */
                 id?: string;
-                /** @example address */
-                address?: string;
+                /** @example title-1 */
+                title?: string;
               }[];
           };
         };
