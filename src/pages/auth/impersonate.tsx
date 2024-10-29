@@ -73,6 +73,7 @@ function Impersonate() {
               </Tooltip>
             </div>
             <input
+              inputMode="tel"
               type="text"
               id="phone"
               name="phone"

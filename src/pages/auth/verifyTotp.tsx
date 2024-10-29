@@ -64,6 +64,7 @@ function VerifyTotp() {
             </label>
             <input
               autoComplete="off"
+              inputMode="numeric"
               required
               type="text"
               id="totpCode"

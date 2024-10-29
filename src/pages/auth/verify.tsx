@@ -102,6 +102,7 @@ function Verify() {
             </label>
             <input
               autoComplete="off"
+              inputMode="numeric"
               type="text"
               id="verificationCode"
               name="verificationCode"
