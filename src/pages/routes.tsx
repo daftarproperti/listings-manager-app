@@ -21,6 +21,7 @@ import ListingListPage from './listings/list'
 import EditUserPage from './user'
 import SimpleForm from './listings/add/SimpleForm'
 import NotFoundPage from './NotFoundPage'
+import DelegatePage from './auth/delegate'
 
 const router = createBrowserRouter(
   [
@@ -151,6 +152,15 @@ const router = createBrowserRouter(
             <MainLayout>
               <Header title="Data Pribadi" />
               <EditUserPage />
+            </MainLayout>
+          ),
+        },
+        {
+          path: '/delegate',
+          element: (
+            <MainLayout>
+              <Header title="Delegate" />
+              <DelegatePage />
             </MainLayout>
           ),
         },

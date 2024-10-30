@@ -129,6 +129,21 @@ export const useUpdateUserProfile = () =>
     },
   })
 
+export const useGetDelegateUserProfile = (phoneNumber: string) =>
+  useQuery<UserProfileResponse>({
+    queryKey: ['getDelegateUserProfile', phoneNumber],
+    queryFn: async () =>
+      phoneNumber
+        ? (
+            await axios.get(
+              '/delegates/user/' + encodeURIComponent(phoneNumber),
+            )
+          ).data
+        : null,
+    retry: false,
+    staleTime: 0,
+  })
+
 export const useGenerateSecretKey = () =>
   useMutation<GenerateSecretKeyRes>({
     mutationFn: async () => {

@@ -30,6 +30,7 @@ import {
   ArrowRightStartOnRectangleIcon,
   BuildingOfficeIcon,
   UserCircleIcon,
+  UserGroupIcon,
 } from '@heroicons/react/24/outline'
 import FilterForm from 'components/form/FilterForm'
 import { SORT_OPTIONS } from 'components/SortBottomSheet'
@@ -105,9 +106,15 @@ const MainLayout = ({ children }: PropsWithChildren) => {
   }
 
   const phoneNumber = profile?.phoneNumber ?? ''
-  const menu = MENU.concat([
+  let menu = MENU.concat([
     { name: `Akun (${phoneNumber})`, link: '/user', icon: UserCircleIcon },
   ])
+
+  if (profile?.delegatePhone) {
+    menu = menu.concat([
+      { name: 'Delegasi', link: '/delegate', icon: UserGroupIcon },
+    ])
+  }
 
   return (
     <div className="grid max-h-dvh grid-cols-7">
