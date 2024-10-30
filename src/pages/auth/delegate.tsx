@@ -1,5 +1,6 @@
 import { Typography } from '@material-tailwind/react'
 import { useGetUserProfile, useGetDelegateUserProfile } from 'api/queries'
+import WhatsAppLinkContact from 'components/WhatsAppLinkContact'
 
 function Delegate() {
   const { data: userProfile } = useGetUserProfile()
@@ -25,7 +26,7 @@ function Delegate() {
             </Typography>
             <Typography variant="small" className="mb-4">
               Untuk mengubah atau menghapus akses delegasi,{' '}
-              <span className="text-blue-700">Hubungi Daftar Properti</span>.
+              <WhatsAppLinkContact />.
             </Typography>
           </div>
         ) : (
@@ -34,9 +35,8 @@ function Delegate() {
               Tidak ada delegasi aktif
             </Typography>
             <Typography variant="small" className="mb-2">
-              <span className="text-blue-700">Hubungi Daftar Properti</span>{' '}
-              untuk mendapatkan bantuan delegasi pengelola listing atas nama
-              anda.
+              <WhatsAppLinkContact /> untuk mendapatkan bantuan delegasi
+              pengelola listing atas nama anda.
             </Typography>
           </div>
         )}

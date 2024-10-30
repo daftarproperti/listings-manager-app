@@ -22,6 +22,7 @@ import EditUserPage from './user'
 import SimpleForm from './listings/add/SimpleForm'
 import NotFoundPage from './NotFoundPage'
 import DelegatePage from './auth/delegate'
+import DelegateAssignPage from './auth/delegateAssign'
 
 const router = createBrowserRouter(
   [
@@ -159,8 +160,17 @@ const router = createBrowserRouter(
           path: '/delegate',
           element: (
             <MainLayout>
-              <Header title="Delegate" />
+              <Header title="Delegasi" />
               <DelegatePage />
+            </MainLayout>
+          ),
+        },
+        {
+          path: '/delegate/assign/:phoneNumber',
+          element: (
+            <MainLayout>
+              <Header title="Delegasi Akses Kelola Listing" />
+              <DelegateAssignPage />
             </MainLayout>
           ),
         },
