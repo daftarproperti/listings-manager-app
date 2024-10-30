@@ -28,7 +28,7 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
   }`.trim()
 
   return (
-    <div className="w-full self-stretch pt-3">
+    <div className="mt-3 w-full self-stretch">
       <InputLabel label={label} />
       <Textarea
         {...registerHook}

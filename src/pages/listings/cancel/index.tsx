@@ -10,7 +10,7 @@ const CancelListingPage = () => {
     <>
       <Header title="Closing Listing" />
       {id && (
-        <div className="w-full bg-slate-50 pb-20 pt-16 lg:pb-4 lg:pt-0">
+        <div className="min-h-dvh w-full bg-slate-50 pb-20 pt-16 lg:pb-4 lg:pt-0">
           <CancelForm id={id} />
         </div>
       )}

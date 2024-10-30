@@ -101,7 +101,7 @@ function EditUser() {
   return isPending ? (
     <div>loading</div>
   ) : (
-    <div className="min-h-screen">
+    <div className="min-h-dvh">
       <form
         className="w-full bg-slate-100 pb-20 pt-16 lg:pb-4 lg:pt-0"
         onSubmit={handleSubmit((formData) => {

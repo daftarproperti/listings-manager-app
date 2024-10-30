@@ -40,7 +40,7 @@ function Impersonate() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100">
+    <div className="flex min-h-dvh flex-col items-center justify-center bg-gray-100">
       <div className="w-full max-w-xs rounded bg-white p-8 shadow-md">
         <div className="mb-4 flex justify-center">
           <LogoSVG />

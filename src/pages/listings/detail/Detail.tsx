@@ -118,7 +118,7 @@ function ListingDetail({
   )
 
   return (
-    <div className="flex min-h-screen flex-col break-words bg-slate-100 pt-16 lg:pt-0">
+    <div className="flex min-h-dvh flex-col break-words bg-slate-100 pt-16 lg:pt-0">
       <div className="sticky top-0 z-10 hidden items-center justify-between border-b bg-white p-4 pt-8 lg:flex">
         <div className="text-xl font-semibold">Rincian Listing</div>
         <div className="flex gap-3">{actionButton({ size: 'sm' })}</div>
@@ -365,31 +365,29 @@ function ListingDetail({
               </Card>
             </div>
             <div className="sticky bottom-0 border-t lg:border-0">
-              {data?.user?.name && (
-                <div className="flex items-stretch justify-between gap-5 bg-blue-100 px-4 py-3">
-                  <div className="flex items-center justify-between gap-2">
-                    {data?.user?.profilePictureURL && (
-                      <img
-                        loading="lazy"
-                        src={data?.user?.profilePictureURL}
-                        className="my-auto aspect-square w-8 max-w-full shrink-0 overflow-hidden rounded-full border border-white object-contain object-center shadow-sm"
-                        onError={({ currentTarget }) => {
-                          currentTarget.onerror = null
-                          currentTarget.src = appPath('/logo.svg')
-                        }}
-                      />
-                    )}
-                    <span className="flex grow basis-[0%] flex-col items-stretch justify-center self-stretch">
-                      <div className="whitespace-nowrap text-sm font-semibold leading-5 text-slate-800">
-                        {data?.user?.name}
-                      </div>
-                      <div className="whitespace-nowrap text-sm leading-5 text-slate-500">
-                        {data?.user?.phoneNumber}
-                      </div>
-                    </span>
-                  </div>
+              <div className="flex items-stretch justify-between gap-5 bg-blue-100 px-4 py-3">
+                <div className="flex items-center justify-between gap-2">
+                  {data?.user?.profilePictureURL && (
+                    <img
+                      loading="lazy"
+                      src={data?.user?.profilePictureURL}
+                      className="my-auto aspect-square w-8 max-w-full shrink-0 overflow-hidden rounded-full border border-white object-contain object-center shadow-sm"
+                      onError={({ currentTarget }) => {
+                        currentTarget.onerror = null
+                        currentTarget.src = appPath('/logo.svg')
+                      }}
+                    />
+                  )}
+                  <span className="flex grow basis-[0%] flex-col items-stretch justify-center self-stretch">
+                    <div className="whitespace-nowrap text-sm font-semibold leading-5 text-slate-800">
+                      {data?.user?.name ?? '[tidak ada nama]'}
+                    </div>
+                    <div className="whitespace-nowrap text-sm leading-5 text-slate-500">
+                      {data?.user?.phoneNumber}
+                    </div>
+                  </span>
                 </div>
-              )}
+              </div>
               {data?.userCanEdit && (
                 <div className="flex w-full max-w-lg items-stretch gap-4 bg-sky-50 px-4 py-2 lg:hidden">
                   {actionButton({ size: 'md' })}

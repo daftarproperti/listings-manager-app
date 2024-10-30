@@ -79,7 +79,7 @@ const theme = {
 
 const App = () => (
   <>
-    <main className="mx-auto h-auto min-h-screen w-full overflow-y-scroll bg-white font-inter text-slate-800 scrollbar-thin">
+    <main className="mx-auto w-full overflow-y-scroll bg-white font-inter text-slate-800 scrollbar-thin">
       <ThemeProvider value={theme}>
         <QueryClientProvider client={queryClient}>
           <DirtyProvider>

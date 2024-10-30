@@ -110,9 +110,9 @@ const MainLayout = ({ children }: PropsWithChildren) => {
   ])
 
   return (
-    <div className="grid max-h-screen grid-cols-7">
+    <div className="grid max-h-dvh grid-cols-7">
       <div className="col-span-2 hidden lg:block">
-        <div className="sticky top-0 mx-auto flex h-screen w-full max-w-xs flex-col p-4 pt-8">
+        <div className="sticky top-0 mx-auto flex h-dvh w-full max-w-xs flex-col p-4 pt-8">
           <div className="grow">
             <div className="flex items-center gap-3 px-2">
               <LogoSVG />
@@ -181,7 +181,7 @@ const MainLayout = ({ children }: PropsWithChildren) => {
       </div>
       {withSideBar && (
         <div className="col-span-2 hidden bg-slate-100 px-1 lg:block">
-          <div className="sticky top-0 mr-auto flex h-screen w-full max-w-xs flex-col pb-4 pt-8">
+          <div className="sticky top-0 mr-auto flex h-dvh w-full max-w-xs flex-col pb-4 pt-8">
             <div className="w-full space-y-2 pb-4">
               <Menu>
                 <MenuHandler>

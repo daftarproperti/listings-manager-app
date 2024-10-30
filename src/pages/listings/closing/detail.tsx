@@ -22,11 +22,11 @@ const ClosingDetailListingPage = () => {
   }, [data, closingId])
 
   return (
-    <div className="flex min-h-screen flex-col break-words bg-slate-100 pt-16 lg:pt-0">
+    <div className="flex min-h-dvh flex-col break-words bg-slate-100 pt-16 lg:pt-0">
       <div className="sticky top-0 z-10 hidden items-center justify-between border-b bg-white p-4 pt-8 lg:flex">
         <div className="text-xl font-semibold">Rincian Closing</div>
       </div>
-      <div className="flex min-h-screen flex-col">
+      <div className="flex flex-col">
         <table className="m-4 max-w-lg table-auto text-sm">
           <tbody>
             {dataClosing ? (
