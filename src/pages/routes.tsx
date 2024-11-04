@@ -1,5 +1,4 @@
 import Header from 'components/header/Header'
-import FooterIcons from 'components/footer/FooterIcons'
 import { createBrowserRouter, Outlet } from 'react-router-dom'
 import ScrollRestoration from 'components/ScrollRestoration'
 import MainLayout from 'components/layout/MainLayout'
@@ -23,6 +22,7 @@ import SimpleForm from './listings/add/SimpleForm'
 import NotFoundPage from './NotFoundPage'
 import DelegatePage from './auth/delegate'
 import DelegateAssignPage from './auth/delegateAssign'
+import Title from './listings/list/Title'
 
 const router = createBrowserRouter(
   [
@@ -71,8 +71,12 @@ const router = createBrowserRouter(
           path: '/',
           element: (
             <MainLayout>
+              <Header
+                title={<Title />}
+                isWithoutBackButton
+                isWithHomeHeaderButton
+              />
               <ListingListPage />
-              <FooterIcons />
             </MainLayout>
           ),
         },
@@ -151,7 +155,11 @@ const router = createBrowserRouter(
           path: '/user',
           element: (
             <MainLayout>
-              <Header title="Data Pribadi" />
+              <Header
+                title="Informasi Profil"
+                isWithoutBackButton
+                isWithHomeHeaderButton
+              />
               <EditUserPage />
             </MainLayout>
           ),
@@ -160,7 +168,11 @@ const router = createBrowserRouter(
           path: '/delegate',
           element: (
             <MainLayout>
-              <Header title="Delegasi" />
+              <Header
+                title="Delegasi"
+                isWithoutBackButton
+                isWithHomeHeaderButton
+              />
               <DelegatePage />
             </MainLayout>
           ),

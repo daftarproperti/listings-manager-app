@@ -11,6 +11,17 @@ import routes from './routes'
 const queryClient = new QueryClient()
 
 const theme = {
+  dialog: {
+    styles: {
+      sizes: {
+        xxl: {
+          height: 'h-dvh',
+          minHeight: 'min-h-dvh',
+          maxHeight: 'max-h-dvh',
+        },
+      },
+    },
+  },
   input: {
     styles: {
       base: {

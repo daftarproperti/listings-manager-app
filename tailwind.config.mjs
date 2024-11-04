@@ -4,11 +4,11 @@ import colors from 'tailwindcss/colors'
 import withMT from '@material-tailwind/react/utils/withMT'
 
 // Remove old colors to suppress warnings.
-delete colors.lightBlue;
-delete colors.warmGray;
-delete colors.trueGray;
-delete colors.coolGray;
-delete colors.blueGray;
+delete colors.lightBlue
+delete colors.warmGray
+delete colors.trueGray
+delete colors.coolGray
+delete colors.blueGray
 
 export default withMT({
   content: [
@@ -71,8 +71,5 @@ export default withMT({
       },
     },
   },
-  plugins: [
-    require('tailwind-scrollbar'),
-    require('@tailwindcss/typography'),
-  ],
+  plugins: [require('tailwind-scrollbar'), require('@tailwindcss/typography')],
 })

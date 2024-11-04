@@ -4,7 +4,6 @@ import {
   Bars3BottomLeftIcon,
   MagnifyingGlassIcon,
   PlusIcon,
-  QuestionMarkCircleIcon,
 } from '@heroicons/react/24/solid'
 import { useGetListingList } from 'api/queries'
 import NewListingSheet from 'components/NewListingSheet'
@@ -21,8 +20,9 @@ import {
   Input,
   Typography,
 } from '@material-tailwind/react'
-import Header from 'components/header/Header'
 import Tooltip from 'components/Tooltip'
+
+import Title from './Title'
 
 const ListingListPage = () => {
   const navigate = useNavigate()
@@ -85,47 +85,9 @@ const ListingListPage = () => {
     if (isFetchMoreInView) fetchNextPage()
   }, [isFetchMoreInView])
 
-  const Title = () => (
-    <div className="flex items-center gap-1">
-      <Typography variant="h6" className="lg:text-xl">
-        Listing Saya ({listingsLength}/{maxListings})
-      </Typography>
-      <Tooltip
-        content={
-          <Typography variant="small">
-            {listingsLength >= maxListings ? (
-              <>
-                Kuota listing anda sudah habis,{' '}
-                {
-                  <Link
-                    target="_blank"
-                    tabIndex={-1}
-                    className="text-blue-500"
-                    to="https://api.whatsapp.com/send?phone=6285186856707"
-                  >
-                    hubungi Daftar Properti
-                  </Link>
-                }{' '}
-                untuk permintaan tambahan kuota.
-              </>
-            ) : (
-              <>
-                Anda memiliki kuota listing yang tersisa sebanyak{' '}
-                {maxListings - listingsLength}
-              </>
-            )}
-          </Typography>
-        }
-      >
-        <QuestionMarkCircleIcon className="h-5 w-5 text-slate-500" />
-      </Tooltip>
-    </div>
-  )
-
   return (
     <>
-      <Header title={<Title />} isWithHomeHeaderButton={true} />
-      <div className="flex min-h-dvh w-full flex-col bg-slate-100 pb-20 pt-16 lg:p-0">
+      <div className="flex min-h-dvh w-full flex-col bg-slate-100 pt-16 lg:p-0">
         {listingsLength > 0 && (
           <div className="bg-white p-4 lg:hidden">
             <div className="relative mb-4">
@@ -321,7 +283,7 @@ const ListingListPage = () => {
       </div>
 
       {listingsLength > 0 ? (
-        <div className="fixed bottom-36 right-4 h-0 w-full max-w-lg text-right lg:hidden">
+        <div className="fixed bottom-16 right-4 h-0 w-full max-w-lg text-right lg:hidden">
           <Tooltip
             open={listingsLength >= maxListings}
             placement="top-end"

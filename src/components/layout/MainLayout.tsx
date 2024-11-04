@@ -26,36 +26,24 @@ import {
   XCircleIcon,
   XMarkIcon,
 } from '@heroicons/react/24/solid'
-import {
-  ArrowRightStartOnRectangleIcon,
-  BuildingOfficeIcon,
-  UserCircleIcon,
-  UserGroupIcon,
-} from '@heroicons/react/24/outline'
-import FilterForm from 'components/form/FilterForm'
+import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/24/outline'
 import { SORT_OPTIONS } from 'components/SortBottomSheet'
-import { useGetUserProfile, logout } from 'api/queries'
 import { countActiveFilters, getSortLabel, isSorted } from 'utils'
-import { useDirty } from 'contexts/DirtyContext'
+import FilterForm from 'components/form/FilterForm'
 
-const MENU = [{ name: 'Kelola Listing', link: '/', icon: BuildingOfficeIcon }]
+import useMenuList from './useMenuList'
 
 const MainLayout = ({ children }: PropsWithChildren) => {
   const navigate = useNavigate()
   const location = useLocation()
   const [searchParams, setSearchParams] = useSearchParams()
   const [searchText, setSearchText] = useState(searchParams.get('q'))
-  const { isDirty } = useDirty()
 
-  const { data: profile } = useGetUserProfile()
+  const { menu, isActive, handleLogout, handleNavigation } = useMenuList()
 
   const query = searchParams.get('q')
   const withSideBar =
     location.pathname === '/' || location.pathname === '/properties'
-
-  const isActive = (pathname: string) =>
-    location.pathname === pathname ||
-    (pathname === '/' && location.pathname.startsWith('/listings'))
 
   const onClickApplySort = (v: (typeof SORT_OPTIONS)[0]) => {
     if (
@@ -71,50 +59,9 @@ const MainLayout = ({ children }: PropsWithChildren) => {
     setSearchParams(searchParams)
   }
 
-  const handleNavigation = (
-    event: React.MouseEvent<HTMLElement>,
-    path: string,
-  ) => {
-    event.preventDefault()
-    if (isDirty) {
-      const confirmLeave = window.confirm(
-        'You have unsaved changes. Do you really want to leave?',
-      )
-      if (!confirmLeave) {
-        return
-      }
-    }
-    navigate(path)
-  }
-
   useEffect(() => {
     setSearchText(query)
   }, [query])
-
-  const handleLogout = () => {
-    if (isDirty) {
-      const confirmLeave = window.confirm(
-        'You have unsaved changes. Do you really want to leave?',
-      )
-      if (!confirmLeave) {
-        return
-      }
-    }
-    localStorage.clear()
-    logout()
-    navigate('/login')
-  }
-
-  const phoneNumber = profile?.phoneNumber ?? ''
-  let menu = MENU.concat([
-    { name: `Akun (${phoneNumber})`, link: '/user', icon: UserCircleIcon },
-  ])
-
-  if (profile?.delegatePhone) {
-    menu = menu.concat([
-      { name: 'Delegasi', link: '/delegate', icon: UserGroupIcon },
-    ])
-  }
 
   return (
     <div className="grid max-h-dvh grid-cols-7">
