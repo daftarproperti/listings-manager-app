@@ -61,7 +61,7 @@ function DelegateAssign() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-dvh">
       <div className="w-full bg-slate-100 pb-20 pt-16 lg:pb-4 lg:pt-0">
         <div className="sticky top-0 z-10 hidden items-center justify-between border-b bg-white p-4 pt-8 lg:flex">
           <Typography variant="h5">Delegasi Akses Kelola Listing</Typography>

@@ -9,6 +9,7 @@ import LoginPage from './auth/login'
 import VerifyPage from './auth/verify'
 import VerifyTotpPage from './auth/verifyTotp'
 import ImpersonatePage from './auth/impersonate'
+import PrincipalsPage from './auth/principals'
 import AddPage from './listings/add'
 import ListingDetailPage from './listings/detail'
 import EditListingPage from './listings/edit'
@@ -183,6 +184,15 @@ const router = createBrowserRouter(
             <MainLayout>
               <Header title="Delegasi Akses Kelola Listing" />
               <DelegateAssignPage />
+            </MainLayout>
+          ),
+        },
+        {
+          path: '/principals',
+          element: (
+            <MainLayout>
+              <Header title="Principals" />
+              <PrincipalsPage />
             </MainLayout>
           ),
         },

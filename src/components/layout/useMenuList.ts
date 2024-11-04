@@ -51,6 +51,9 @@ const useMenuList = () => {
     ...(data?.delegatePhone
       ? [{ name: 'Delegasi', link: '/delegate', icon: UserGroupIcon }]
       : []),
+    ...(data?.isDelegateEligible
+      ? [{ name: 'Principals', link: '/principals', icon: UserGroupIcon }]
+      : []),
   ]
 
   return {

@@ -376,8 +376,16 @@ export const impersonate = async (
     const response = await axios.post(
       '/impersonate',
       { phoneNumber },
-      { baseURL: `${import.meta.env.VITE_DP_HOME}/api/auth` },
+      {
+        baseURL: `${import.meta.env.VITE_DP_HOME}/api/auth`,
+        validateStatus: () => true, // disable status validation since we don't want axios interceptor to handle 403
+      },
     )
+
+    if (response.status !== 200) {
+      throw new Error('Failed to impersonate. Please try again.')
+    }
+
     return response.data
   } catch (error) {
     throw new Error('Failed to impersonate. Please try again.')
