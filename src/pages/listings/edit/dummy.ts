@@ -26,6 +26,7 @@ export const VERIFY_STATUS_ENUM: { [key in VerifyStatus]: string } = {
   on_review: 'Sedang ditinjau',
   approved: 'Disetujui',
   rejected: 'Ditolak',
+  post_approval_change: 'Perubahan data',
 }
 export const ACTIVE_STATUS_ENUM: { [key in ActiveStatus]: string } = {
   waitlisted: 'Dalam Antrian',

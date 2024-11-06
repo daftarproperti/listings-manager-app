@@ -252,7 +252,7 @@ export interface components {
      * @example approved
      * @enum {string}
      */
-    VerifyStatus: "on_review" | "approved" | "rejected";
+    VerifyStatus: "on_review" | "approved" | "rejected" | "post_approval_change";
     /**
      * @description Facing Direction
      * @example east
