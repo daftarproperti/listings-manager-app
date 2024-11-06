@@ -30,7 +30,7 @@ const useMenuList = () => {
     navigate(path)
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     if (isDirty) {
       const confirmLeave = window.confirm(
         'You have unsaved changes. Do you really want to leave?',
@@ -39,8 +39,8 @@ const useMenuList = () => {
         return
       }
     }
+    await logout()
     localStorage.clear()
-    logout()
     navigate('/login')
   }
 
