@@ -3,14 +3,14 @@ import { ClipboardIcon } from '@heroicons/react/24/solid'
 import { useGetUserProfile, impersonate } from 'api/queries'
 import { toast } from 'react-toastify'
 import { useState } from 'react'
-import { useNavigate, useResolvedPath } from 'react-router-dom'
+import { useNavigate, useHref } from 'react-router-dom'
 
 function Principals() {
   const [phoneNumber, setPhoneNumber] = useState('')
   const { data: userProfile } = useGetUserProfile()
   const delegateRequestLink =
     window.location.origin +
-    useResolvedPath('/delegate/assign/').pathname +
+    useHref('/delegate/assign/') +
     (userProfile?.phoneNumber ?? '')
   const navigate = useNavigate()
 
