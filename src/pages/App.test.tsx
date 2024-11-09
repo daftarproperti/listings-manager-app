@@ -32,6 +32,15 @@ describe('App', () => {
 
     render(<App />)
 
-    await waitFor(() => expect(mockedNavigate).toHaveBeenCalledWith('/login'))
+    await waitFor(() =>
+      expect(mockedNavigate).toHaveBeenCalledWith(
+        '/login',
+        expect.objectContaining({
+          state: expect.objectContaining({
+            redirectTo: '/',
+          }),
+        }),
+      ),
+    )
   })
 })

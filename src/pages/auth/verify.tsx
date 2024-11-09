@@ -46,6 +46,8 @@ function Verify() {
         setError('An unexpected error occurred. Please try again.')
       }
     } finally {
+      const redirectTo = location.state?.redirectTo || '/'
+      navigate(redirectTo)
       setLoading(false)
     }
   }

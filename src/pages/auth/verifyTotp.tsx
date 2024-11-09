@@ -24,16 +24,18 @@ function VerifyTotp() {
   }
 
   const handleSendOTP = async () => {
+    const redirectTo = location.state?.redirectTo || '/'
     const { token, timestamp } = await sendOTP({ phoneNumber: phone }, true)
-    navigate('/verify', { state: { phone, token, timestamp } })
+    navigate('/verify', { state: { phone, token, timestamp, redirectTo } })
   }
 
   useEffect(() => {
     if (!data?.accessToken) return
     const { accessToken } = data
     localStorage.setItem('accessToken', accessToken)
-    navigate('/', { state: { accessToken } })
-  }, [data, navigate])
+    const redirectTo = location.state?.redirectTo || '/'
+    navigate(redirectTo, { state: { accessToken } })
+  }, [data, navigate, location.state])
 
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center bg-gray-100">

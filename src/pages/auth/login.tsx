@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Tooltip, Typography } from '@material-tailwind/react'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid'
 import { sendOTP } from 'api/queries'
@@ -12,6 +12,7 @@ function Login() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
   const queryClient = useQueryClient()
 
   const handleLogin = async (event: React.FormEvent) => {
@@ -21,11 +22,12 @@ function Login() {
 
     try {
       const { token, timestamp, totp } = await sendOTP({ phoneNumber: phone })
+      const redirectTo = location.state?.redirectTo || '/'
       queryClient.invalidateQueries()
       if (totp) {
-        navigate('/verify-totp', { state: { phone } })
+        navigate('/verify-totp', { state: { phone, redirectTo } })
       } else {
-        navigate('/verify', { state: { phone, token, timestamp } })
+        navigate('/verify', { state: { phone, token, timestamp, redirectTo } })
       }
     } catch (error) {
       if (error instanceof Error) {

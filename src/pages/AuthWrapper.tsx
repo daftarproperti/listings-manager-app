@@ -1,5 +1,5 @@
 import { type ReactNode, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import LoadingPage from './Loading'
 
@@ -9,6 +9,7 @@ const AuthenticationWrapper = ({ children }: { children: ReactNode }) => {
     accessToken ? true : undefined,
   )
   const navigate = useNavigate()
+  const location = useLocation()
 
   // Initialize authentication state just once
   useEffect(() => {
@@ -23,9 +24,10 @@ const AuthenticationWrapper = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (isAuth === false) {
-      navigate('/login')
+      const redirectTo = location.pathname
+      navigate('/login', { state: { redirectTo } })
     }
-  }, [isAuth, navigate])
+  }, [isAuth, location.pathname, navigate])
 
   if (isAuth === undefined) {
     return <LoadingPage message="Authenticating . . ." />
