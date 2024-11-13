@@ -105,6 +105,43 @@ const AddPage = () => {
   const hash = window.location.hash
   const [propertyToExtract, setPropertyToExtract] = useState('')
 
+  function determinePropertyTypeFromTitle(
+    title: string,
+  ):
+    | 'unknown'
+    | 'house'
+    | 'apartment'
+    | 'warehouse'
+    | 'shophouse'
+    | 'land'
+    | 'villa'
+    | undefined {
+    const propertyTypes: { [key: string]: string[] } = {
+      house: ['rumah', 'kost', 'penginapan'],
+      apartment: ['apartment', 'hotel'],
+      warehouse: ['gudang', 'warehouse'],
+      shophouse: ['ruko', 'toko', 'kios'],
+      land: ['tanah', 'lahan'],
+      villa: ['villa'],
+      unknown: ['gedung'],
+    }
+
+    const normalizedTitle = title.toLowerCase()
+
+    for (const [type, keywords] of Object.entries(propertyTypes)) {
+      if (keywords.some((keyword) => normalizedTitle.includes(keyword))) {
+        return type as
+          | 'house'
+          | 'apartment'
+          | 'warehouse'
+          | 'shophouse'
+          | 'land'
+          | 'villa'
+      }
+    }
+    return undefined
+  }
+
   useEffect(() => {
     if (hash.includes('#easyfind')) {
       setPropertyToExtract('EasyFind')
@@ -149,6 +186,12 @@ const AddPage = () => {
     responseData: EasyFindPropertyDetailsResponse,
   ) => {
     const extractData = responseData.data.attributes
+
+    const title = extractData.title
+    if (!propertyType) {
+      const determinedPropertyType = determinePropertyTypeFromTitle(title)
+      setValue('propertyType', determinedPropertyType)
+    }
 
     const bedroomCountStr = extractData.bedroomCount?.toString()
     const bathroomCountStr = extractData.bathroomCount?.toString()
