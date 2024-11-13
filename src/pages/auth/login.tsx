@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button, Tooltip, Typography } from '@material-tailwind/react'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid'
 import { sendOTP } from 'api/queries'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { LogoSVG } from '../../assets/icons/LogoSVG'
 
@@ -11,6 +12,7 @@ function Login() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -19,6 +21,7 @@ function Login() {
 
     try {
       const { token, timestamp, totp } = await sendOTP({ phoneNumber: phone })
+      queryClient.invalidateQueries()
       if (totp) {
         navigate('/verify-totp', { state: { phone } })
       } else {

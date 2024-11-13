@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button, Tooltip, Typography } from '@material-tailwind/react'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid'
 import { impersonate } from 'api/queries'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { LogoSVG } from '../../assets/icons/LogoSVG'
 
@@ -11,6 +12,7 @@ function Impersonate() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const handleImpersonate = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -20,6 +22,7 @@ function Impersonate() {
     try {
       const { accessToken } = await impersonate(phone)
       localStorage.setItem('accessToken', accessToken)
+      queryClient.invalidateQueries()
       navigate('/', { state: { accessToken } })
     } catch (error) {
       if (error instanceof Error) {

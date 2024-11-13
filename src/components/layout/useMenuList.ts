@@ -2,6 +2,7 @@ import { type MouseEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { logout, useGetUserProfile } from 'api/queries'
 import { useDirty } from 'contexts/DirtyContext'
+import { useQueryClient } from '@tanstack/react-query'
 import {
   BuildingOfficeIcon,
   UserCircleIcon,
@@ -12,6 +13,7 @@ const useMenuList = () => {
   const navigate = useNavigate()
   const { isDirty } = useDirty()
   const { data } = useGetUserProfile()
+  const queryClient = useQueryClient()
 
   const isActive = (pathname: string) =>
     location.pathname === pathname ||
@@ -39,8 +41,10 @@ const useMenuList = () => {
         return
       }
     }
+
     await logout()
     localStorage.clear()
+    queryClient.invalidateQueries()
     navigate('/login')
   }
 
