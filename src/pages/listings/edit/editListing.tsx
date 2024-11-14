@@ -41,6 +41,7 @@ function EditListing({ id }: { id: string }) {
   const navigate = useNavigate()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [isApprovedListing, setIsApprovedListing] = useState(false)
   const [coord, setCoord] = useState<google.maps.LatLngLiteral>(DEFAULT_LAT_LNG)
   const { setDirty } = useDirty()
 
@@ -139,6 +140,8 @@ function EditListing({ id }: { id: string }) {
           lng: listingDetails.coordinate.longitude,
         })
       }
+
+      setIsApprovedListing(listingDetails.verifyStatus === 'approved')
     }
   }, [listingDetails])
 
@@ -195,6 +198,11 @@ function EditListing({ id }: { id: string }) {
     const formData = {
       ...data,
       revision: data.revision ?? 0,
+    }
+
+    if (isApprovedListing) {
+      setIsDialogOpen(true)
+      return
     }
 
     if (localStorage.getItem('optional-agreement') === 'true') {
@@ -588,6 +596,17 @@ function EditListing({ id }: { id: string }) {
         <ConfirmationDialog
           title={confirmTitle}
           subtitle={confirmSubtitle}
+          buttonText="Ya, saya yakin"
+          isOpen={isDialogOpen}
+          setIsOpen={handleCancel}
+          onConfirm={handleConfirmation}
+        />
+      )}
+
+      {isApprovedListing && (
+        <ConfirmationDialog
+          title="Anda melakukan perubahan data listing yang telah disetujui. Apakah anda yakin ingin melanjutkan?"
+          subtitle="Perubahan listing akan melalui proses persetujuan admin."
           buttonText="Ya, saya yakin"
           isOpen={isDialogOpen}
           setIsOpen={handleCancel}
