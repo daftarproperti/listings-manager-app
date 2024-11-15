@@ -1,5 +1,5 @@
 import { type MouseEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { logout, useGetUserProfile } from 'api/queries'
 import { useDirty } from 'contexts/DirtyContext'
 import { useQueryClient } from '@tanstack/react-query'
@@ -15,9 +15,11 @@ const useMenuList = () => {
   const { data } = useGetUserProfile()
   const queryClient = useQueryClient()
 
+  const routerLocation = useLocation()
+
   const isActive = (pathname: string) =>
-    location.pathname === pathname ||
-    (pathname === '/' && location.pathname.startsWith('/listings'))
+    routerLocation.pathname === pathname ||
+    (pathname === '/' && routerLocation.pathname.startsWith('/listings'))
 
   const handleNavigation = (e: MouseEvent<HTMLElement>, path: string) => {
     e.preventDefault()
