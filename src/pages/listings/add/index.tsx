@@ -44,6 +44,7 @@ import { useDirty } from 'contexts/DirtyContext'
 import AddressTooltip from 'components/AddressTooltip'
 import InputLabel from 'components/input/InputLabel'
 import { updateCityName } from 'utils/updateCityName'
+import ExternalLink from 'components/ExternalLink'
 
 interface ExtendedListing extends GeneratedListing {
   bedroomCounts?: string
@@ -817,7 +818,12 @@ const AddPage = () => {
           )}
           <div className="relative mt-3 w-full self-stretch">
             <InputCheckboxField
-              title="Persetujuan Imbalan"
+              title={
+                <span>
+                  Persetujuan Imbalan (
+                  <ExternalLink to="/persetujuan">Selengkapnya</ExternalLink>)
+                </span>
+              }
               label="Saya setuju dengan persetujuan imbalan (0,5% jual / 1% sewa) ketika properti mendapatkan pembeli/penyewa melalui jaringan pemasar Daftar Properti"
               registerHook={register('withRewardAgreement')}
               inputID="withRewardAgreement"

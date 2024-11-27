@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { type ReactNode } from 'react'
 import type { FieldError, UseFormRegisterReturn } from 'react-hook-form'
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid'
 import { Checkbox, Tooltip, Typography } from '@material-tailwind/react'
@@ -6,7 +6,7 @@ import { Checkbox, Tooltip, Typography } from '@material-tailwind/react'
 import InputLabel from './InputLabel'
 
 type InputCheckboxFieldProps = {
-  title?: string
+  title?: ReactNode
   label: string
   registerHook: UseFormRegisterReturn<string>
   inputID: string

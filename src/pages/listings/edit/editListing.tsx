@@ -28,6 +28,7 @@ import type { CombinedImage } from 'components/input/types'
 import { useDirty } from 'contexts/DirtyContext'
 import InputLabel from 'components/input/InputLabel'
 import { updateCityName } from 'utils/updateCityName'
+import ExternalLink from 'components/ExternalLink'
 
 import { onSubmit } from './handleFormSubmit'
 import { LISTING_OPTIONS } from './dummy'
@@ -546,8 +547,13 @@ function EditListing({ id }: { id: string }) {
           )}
           <div className="relative mt-3 w-full self-stretch">
             <InputCheckboxField
-              title="Persetujuan Imbalan"
-              label="Saya setuju dengan persetujuan imbalan (0,5% jual / 1% sewa) ketika properti mendapatkan pembeli/penyewa melalui jaringan pemasar Daftar Properti"
+              title={
+                <span>
+                  Persetujuan Imbalan (
+                  <ExternalLink to="/persetujuan">Selengkapnya</ExternalLink>)
+                </span>
+              }
+              label="Saya setuju dengan persetujuan imbalan (0,5% jual / 1% sewa) ketika properti mendapatkan pembeli/penyewa melalui jaringan pemasar Daftar Properti."
               registerHook={register('withRewardAgreement')}
               inputID="withRewardAgreement"
               errorFieldName={errors.withRewardAgreement}
