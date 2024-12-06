@@ -24,6 +24,7 @@ import NotFoundPage from './NotFoundPage'
 import DelegatePage from './auth/delegate'
 import DelegateAssignPage from './auth/delegateAssign'
 import Title from './listings/list/Title'
+import AgreementPage from './AgreementPage'
 
 const router = createBrowserRouter(
   [
@@ -211,6 +212,15 @@ const router = createBrowserRouter(
               <Header title="Halaman tidak Ditemukan" />
               <NotFoundPage />
             </>
+          ),
+        },
+        {
+          path: '/persetujuan',
+          element: (
+            <MainLayout>
+              <Header title="Persetujuan" />
+              <AgreementPage />
+            </MainLayout>
           ),
         },
       ],

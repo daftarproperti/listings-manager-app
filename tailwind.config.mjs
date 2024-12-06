@@ -20,6 +20,7 @@ export default withMT({
     fontFamily: {
       inter: ['Inter', 'sans-serif'],
       sans: ['Inter', 'sans-serif'],
+      times: ['Times New Roman', 'serif'],
     },
     colors: {
       ...colors,

@@ -5,6 +5,7 @@ import { useDirty } from 'contexts/DirtyContext'
 import { useQueryClient } from '@tanstack/react-query'
 import {
   BuildingOfficeIcon,
+  ScaleIcon,
   UserCircleIcon,
   UserGroupIcon,
 } from '@heroicons/react/24/outline'
@@ -59,6 +60,9 @@ const useMenuList = () => {
       : []),
     ...(data?.isDelegateEligible
       ? [{ name: 'Principals', link: '/principals', icon: UserGroupIcon }]
+      : []),
+    ...(import.meta.env.VITE_SHOW_AGREEMENT
+      ? [{ name: 'Persetujuan', link: '/persetujuan', icon: ScaleIcon }]
       : []),
   ]
 
